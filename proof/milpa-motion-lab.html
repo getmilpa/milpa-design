@@ -1,0 +1,57 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&family=Space+Mono:wght@400&display=swap');
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.ml{font-family:'Space Grotesk',sans-serif;padding:1rem 0;color:#ECE6D8}
+.ml *{box-sizing:border-box}
+.ml .card{background:#1C160F;border:1px solid #33291E;border-radius:14px;padding:18px 20px;margin-bottom:12px}
+.ml .lab{font-family:'Space Mono',monospace;font-size:11px;color:#E8B14C;margin-bottom:14px}
+.ml .lab span{color:#9A9078}
+.ml .erow{display:flex;align-items:center;gap:14px;margin:11px 0}
+.ml .ename{width:160px;flex:none;font-size:13px;color:#ECE6D8}
+.ml .ename em{font-style:normal;color:#9A9078;font-family:'Space Mono',monospace;font-size:10.5px;display:block}
+.ml .etrack{position:relative;flex:1;height:16px}
+.ml .rail{position:absolute;top:7px;left:0;right:0;height:2px;background:#2A2118;border-radius:2px}
+.ml .edot{position:absolute;top:1px;left:0;width:14px;height:14px;border-radius:50%;background:#E8B14C;animation-name:travel;animation-duration:2.2s;animation-iteration-count:infinite}
+@keyframes travel{0%{left:0;opacity:0}8%{opacity:1}14%{left:0}54%{left:calc(100% - 14px)}82%{left:calc(100% - 14px);opacity:1}92%{opacity:0}100%{left:0;opacity:0}}
+.ml .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ml .stage{height:120px;display:flex;align-items:center;justify-content:center}
+.ml .chip{background:#211A12;border:1px solid #5a4520;color:#E8B14C;font-family:'Space Mono',monospace;font-size:12px;padding:8px 16px;border-radius:8px;animation:germ 2.6s cubic-bezier(0.16,1,0.3,1) infinite}
+@keyframes germ{0%{opacity:0;transform:translateY(16px)}18%{opacity:1;transform:none}72%{opacity:1;transform:none}88%{opacity:0;transform:translateY(-6px)}100%{opacity:0;transform:translateY(16px)}}
+.ml .cap{font-family:'Space Mono',monospace;font-size:10.5px;color:#9A9078;text-align:center;margin-top:8px}
+.ml .grano{animation-name:assemble;animation-duration:3.4s;animation-iteration-count:infinite;animation-timing-function:cubic-bezier(0.16,1,0.3,1);transform-box:fill-box}
+@keyframes assemble{0%{opacity:0;transform:translateY(14px)}15%{opacity:1;transform:translateY(0)}75%{opacity:1;transform:translateY(0)}88%{opacity:0;transform:translateY(-7px)}100%{opacity:0;transform:translateY(14px)}}
+@media(max-width:640px){.ml .two{grid-template-columns:1fr}.ml .ename{width:120px}}
+@media (prefers-reduced-motion: reduce){.ml .edot,.ml .chip,.ml .grano{animation-duration:1ms!important;animation-iteration-count:infinite!important}}
+</style>
+<h2 class="sr-only">Laboratorio de motion de Milpa en vivo: comparación de curvas de easing, la primitiva germinate, y el logo ensamblándose grano por grano.</h2>
+<div class="ml">
+<div class="card">
+<div class="lab">easings <span>· la curva es el carácter</span></div>
+<div class="erow"><div class="ename">settle<em>entradas</em></div><div class="etrack"><div class="rail"></div><div class="edot" style="animation-timing-function:cubic-bezier(0.2,0.8,0.2,1)"></div></div></div>
+<div class="erow"><div class="ename">grano<em>ensamblar · firma</em></div><div class="etrack"><div class="rail"></div><div class="edot" style="animation-timing-function:cubic-bezier(0.16,1,0.3,1)"></div></div></div>
+<div class="erow"><div class="ename">standard<em>general</em></div><div class="etrack"><div class="rail"></div><div class="edot" style="animation-timing-function:cubic-bezier(0.4,0,0.2,1)"></div></div></div>
+<div class="erow"><div class="ename">in<em>salidas</em></div><div class="etrack"><div class="rail"></div><div class="edot" style="animation-timing-function:cubic-bezier(0.4,0,1,1)"></div></div></div>
+</div>
+<div class="two">
+<div class="card">
+<div class="lab">germinate <span>· primitiva</span></div>
+<div class="stage"><div class="chip">Plugin sembrado</div></div>
+<div class="cap">rise + fade · settle · 480ms</div>
+</div>
+<div class="card">
+<div class="lab">firma <span>· logo ensamblándose</span></div>
+<div class="stage">
+<svg width="110" height="110" viewBox="0 0 60 60" aria-label="La M se ensambla grano por grano">
+<g fill="#E8B14C">
+<rect class="grano" style="animation-delay:0s" x="0" y="0" width="10" height="10" rx="2.5"/><rect class="grano" style="animation-delay:.07s" x="48" y="0" width="10" height="10" rx="2.5"/>
+<rect class="grano" style="animation-delay:.14s" x="0" y="12" width="10" height="10" rx="2.5"/><rect class="grano" style="animation-delay:.21s" x="12" y="12" width="10" height="10" rx="2.5"/><rect class="grano" style="animation-delay:.28s" x="36" y="12" width="10" height="10" rx="2.5"/><rect class="grano" style="animation-delay:.35s" x="48" y="12" width="10" height="10" rx="2.5"/>
+<rect class="grano" style="animation-delay:.42s" x="0" y="24" width="10" height="10" rx="2.5"/><rect class="grano" style="animation-delay:.49s" x="24" y="24" width="10" height="10" rx="2.5"/><rect class="grano" style="animation-delay:.56s" x="48" y="24" width="10" height="10" rx="2.5"/>
+<rect class="grano" style="animation-delay:.63s" x="0" y="36" width="10" height="10" rx="2.5"/><rect class="grano" style="animation-delay:.70s" x="48" y="36" width="10" height="10" rx="2.5"/>
+<rect class="grano" style="animation-delay:.77s" x="0" y="48" width="10" height="10" rx="2.5"/><rect class="grano" style="animation-delay:.84s" x="48" y="48" width="10" height="10" rx="2.5"/>
+</g>
+</svg>
+</div>
+<div class="cap">stagger 70ms · grano · muy sutil</div>
+</div>
+</div>
+</div>

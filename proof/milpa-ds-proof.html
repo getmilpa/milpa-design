@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Milpa · Design System — Prueba visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============ MILPA TOKENS (corregidos · verificados AA) ============ */
+:root{
+  /* primitivas oro / tierra / success / warning / danger (sin cambios) */
+  --oro-100:#FFE8C2; --oro-200:#FFD286; --oro-300:#E8B14C; --oro-400:#DC9E12; --oro-500:#C18900; --oro-600:#A27200; --oro-700:#825B00; --oro-800:#624400; --oro-950:#211400;
+
+  /* secundario (rampa viva, inyectada por JS): --c-50 .. --c-950 */
+
+  /* ===== semántico · DARK (default) ===== */
+  --bg:#17120D; --surface:#372F27; --raised:#51483F;
+  --border-subtle:#51483F; --border:#6B6157; --border-strong:#847A70;
+  --text:#FAF5EF; --text-2:#CBBFB4; --text-muted:#B4A99E;            /* muted FIX 500→400 */
+  --accent:#E8B14C; --accent-hover:#FFD286; --accent-active:#DC9E12; --accent-subtle:#211400; --accent-text:#E8B14C; --on-accent:#17120D;
+  --secondary:var(--c-500); --secondary-text:var(--c-400); --secondary-subtle:var(--c-950); --secondary-border:var(--c-800); --on-secondary:#17120D;
+  --success:#5EC478; --success-bg:#001E08; --success-border:#005A26;
+  --warning:#F78A47; --warning-bg:#2A0E00; --warning-border:#763400;
+  --danger:#FF7F71; --danger-bg:#310504; --danger-border:#82241E; --on-danger:#17120D;  /* on-danger NUEVO */
+  --info:#6CADFF; --info-bg:#001735; --info-border:#1A5395;          /* info = cielo (fijo) */
+  --focus:#E8B14C;
+  --sh-sm:0 1px 2px rgba(0,0,0,.4); --sh:0 2px 8px rgba(0,0,0,.45); --sh-md:0 8px 24px rgba(0,0,0,.5); --sh-lg:0 16px 48px rgba(0,0,0,.55);
+
+  --font:'Space Grotesk',system-ui,sans-serif; --mono:'Space Mono',ui-monospace,monospace;
+  --r-sm:.375rem; --r:.625rem; --r-lg:.875rem; --r-xl:1.25rem;
+  /* z-index semántico */
+  --z-sticky:1100; --z-toast:1600;
+}
+[data-theme="light"]{
+  --bg:#ECE6D8; --surface:#FAF5EF; --raised:#FAF5EF;
+  --border-subtle:#CBBFB4; --border:#847A70; --border-strong:#6B6157;   /* borders FIX */
+  --text:#17120D; --text-2:#51483F; --text-muted:#6B6157;               /* secondary 800 / muted 700 */
+  --accent:#A27200; --accent-hover:#825B00; --accent-active:#624400; --accent-subtle:#FFE8C2; --accent-text:#825B00; --on-accent:#17120D;
+  --secondary:var(--c-800); --secondary-text:var(--c-700); --secondary-subtle:var(--c-100); --secondary-border:var(--c-300); --on-secondary:#FAF5EF;
+  --success:#0F7737; --success-bg:#CAFAD2; --success-border:#81D995;     /* semánticos FIX -700 */
+  --warning:#9C4700; --warning-bg:#FFE5D8; --warning-border:#FFAB7B;
+  --danger:#A8372F; --danger-bg:#FFE4E0; --danger-border:#FFA79B; --on-danger:#FAF5EF;
+  --info:#1E63B2; --info-bg:#DFEDFF; --info-border:#97C5FF;
+  --focus:#825B00;
+  --sh-sm:0 1px 2px rgba(23,18,13,.08); --sh:0 2px 8px rgba(23,18,13,.10); --sh-md:0 8px 24px rgba(23,18,13,.12); --sh-lg:0 16px 48px rgba(23,18,13,.14);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:var(--font); font-size:16px; line-height:1.5;
+  transition:background-color .32s cubic-bezier(.2,.8,.2,1), color .32s cubic-bezier(.2,.8,.2,1);
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:var(--mono)}
+h1,h2,h3{margin:0; letter-spacing:-.02em; font-weight:500; text-wrap:balance}
+section{max-width:1080px; margin:0 auto; padding:clamp(2.5rem,6vw,5rem) clamp(1.25rem,4vw,2rem)}
+.kicker{font-family:var(--mono); font-size:.6875rem; letter-spacing:.04em; color:var(--secondary-text); text-transform:uppercase}
+.lede{color:var(--text-2); max-width:65ch}
+
+/* ---- toolbar ---- */
+.bar{
+  position:sticky; top:0; z-index:var(--z-sticky);
+  display:flex; gap:1rem; align-items:center; flex-wrap:wrap;
+  padding:.75rem clamp(1.25rem,4vw,2rem);
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border-subtle);
+}
+.bar .brand{font-weight:700; letter-spacing:-.03em; font-size:1.05rem}
+.bar .brand i{font-style:normal; position:relative}
+.bar .grano-dot{display:inline-block; width:.34em; height:.34em; background:var(--accent); border-radius:2px; transform:translateY(-.62em); margin-left:-.04em}
+.bar .spacer{flex:1}
+.pickwrap{display:flex; gap:.4rem; align-items:center; flex-wrap:wrap}
+.pickwrap .lbl{font-family:var(--mono); font-size:.625rem; color:var(--text-muted); letter-spacing:.03em}
+.pick{
+  border:1px solid var(--border); background:var(--surface); color:var(--text-2);
+  font-family:var(--mono); font-size:.6875rem; padding:.32rem .55rem; border-radius:var(--r-sm);
+  cursor:pointer; display:flex; align-items:center; gap:.35rem;
+  transition:border-color .12s, color .12s, transform .12s cubic-bezier(.2,.8,.2,1);
+}
+.pick:hover{color:var(--text); transform:translateY(-1px)}
+.pick[aria-pressed="true"]{border-color:var(--secondary-text); color:var(--text)}
+.pick .dot{width:.7rem; height:.7rem; border-radius:50%}
+.toggle{
+  border:1px solid var(--border); background:var(--surface); color:var(--text);
+  font-family:var(--mono); font-size:.6875rem; padding:.4rem .7rem; border-radius:var(--r-sm); cursor:pointer;
+  transition:border-color .12s, transform .12s cubic-bezier(.2,.8,.2,1);
+}
+.toggle:hover{border-color:var(--accent); transform:translateY(-1px)}
+:focus-visible{outline:2px solid var(--focus); outline-offset:2px; border-radius:3px}
+
+/* ---- hero ---- */
+.hero{display:grid; grid-template-columns:1.3fr .7fr; gap:2rem; align-items:center}
+.hero h1{font-size:clamp(2.75rem,9vw,5rem); letter-spacing:-.04em; line-height:1; font-weight:700}
+.hero h1 .i{position:relative}
+.hero h1 .i::after{content:""; position:absolute; top:-.06em; left:50%; transform:translateX(-50%); width:.16em; height:.16em; background:var(--accent); border-radius:.03em}
+.hero .tag{font-family:var(--mono); color:var(--text-2); margin-top:1rem; font-size:.95rem}
+.hero .sub{margin-top:1.25rem; color:var(--text-muted); max-width:46ch; font-size:.95rem}
+.granoM{justify-self:center; filter:drop-shadow(0 8px 24px rgba(0,0,0,.4))}
+@media (max-width:720px){ .hero{grid-template-columns:1fr} .granoM{order:-1} }
+
+/* ---- ramps ---- */
+.ramp{margin:1.4rem 0}
+.ramp .name{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:.5rem}
+.ramp .name b{font-weight:500; font-size:.95rem}
+.ramp .name span{font-family:var(--mono); font-size:.6875rem; color:var(--text-muted)}
+.chips{display:grid; grid-template-columns:repeat(11,1fr); gap:.3rem}
+.chip{aspect-ratio:1/1.15; border-radius:var(--r-sm); display:flex; flex-direction:column; justify-content:flex-end;
+  padding:.3rem; font-family:var(--mono); font-size:.55rem; position:relative; border:1px solid rgba(255,255,255,.04)}
+.chip b{font-weight:700; font-size:.62rem}
+.chip.anchor::before{content:"★"; position:absolute; top:.25rem; right:.3rem; font-size:.6rem; opacity:.85}
+@media (max-width:720px){ .chips{grid-template-columns:repeat(6,1fr)} }
+
+/* ---- surface stack ---- */
+.surf{background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:1.5rem; box-shadow:var(--sh)}
+.surf .raised{background:var(--raised); border:1px solid var(--border); border-radius:var(--r); padding:1.1rem; margin-top:1rem; box-shadow:var(--sh-sm)}
+.tline{display:flex; align-items:center; gap:.6rem; margin:.25rem 0}
+.tag{font-family:var(--mono); font-size:.6rem; padding:.1rem .35rem; border-radius:4px; border:1px solid var(--success-border); color:var(--success); background:var(--success-bg); white-space:nowrap}
+
+/* ---- grid of panels ---- */
+.cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.25rem}
+.panel{background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:1.4rem}
+.panel h3{font-size:1rem; margin-bottom:.2rem}
+.panel .hint{color:var(--text-muted); font-size:.85rem; margin:.2rem 0 1rem}
+
+/* forced theme mini-canvas (para mostrar dark y light a la vez) */
+.mini{border-radius:var(--r); padding:1.1rem; background:var(--bg); color:var(--text); border:1px solid var(--border)}
+.mini .cap{font-family:var(--mono); font-size:.62rem; color:var(--text-muted); margin-bottom:.7rem; display:flex; gap:.4rem; align-items:center}
+
+/* ---- controls ---- */
+.btn{font-family:var(--font); font-weight:500; font-size:.9rem; padding:.6rem 1.1rem; border-radius:var(--r); cursor:pointer;
+  border:1px solid transparent; transition:transform .12s cubic-bezier(.2,.8,.2,1), background-color .12s, border-color .12s, color .12s; display:inline-flex; align-items:center; gap:.45rem}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:var(--accent); color:var(--on-accent); border-color:var(--accent-active)}
+.btn-primary:hover{background:var(--accent-hover)}
+[data-theme="light"] .btn-primary{ background:transparent; color:var(--accent-text); border:1.5px solid var(--accent) }
+[data-theme="light"] .btn-primary:hover{ background:var(--accent-subtle) }
+.btn-secondary{background:var(--secondary-subtle); color:var(--secondary-text); border-color:var(--secondary-border)}
+.btn-secondary:hover{border-color:var(--secondary-text)}
+.btn-danger{background:var(--danger); color:var(--on-danger); border-color:var(--danger-border)}
+.btn-ghost{background:transparent; color:var(--text-2); border-color:var(--border)}
+.btn-ghost:hover{color:var(--text); border-color:var(--border-strong)}
+.btn-bad{background:#E8B14C; color:#FAF5EF; border:1px solid #E8B14C}  /* a propósito mal (light): oro-300 fill */
+
+.field{display:flex; flex-direction:column; gap:.35rem; margin-bottom:1rem}
+.field label{font-size:.8rem; color:var(--text-2)}
+.input{font-family:var(--font); font-size:.9rem; padding:.6rem .75rem; border-radius:var(--r); background:var(--bg); color:var(--text); border:1px solid var(--border-strong)}
+.input::placeholder{color:var(--text-muted)}
+.input:focus{outline:2px solid var(--focus); outline-offset:1px; border-color:var(--accent)}
+.input.invalid{border-color:var(--danger)}
+.err{font-size:.75rem; color:var(--danger); font-family:var(--mono)}
+
+.badges{display:flex; gap:.5rem; flex-wrap:wrap}
+.badge{font-family:var(--mono); font-size:.68rem; padding:.2rem .55rem; border-radius:999px; border:1px solid}
+.badge.s{color:var(--success); background:var(--success-bg); border-color:var(--success-border)}
+.badge.w{color:var(--warning); background:var(--warning-bg); border-color:var(--warning-border)}
+.badge.d{color:var(--danger); background:var(--danger-bg); border-color:var(--danger-border)}
+.badge.i{color:var(--info); background:var(--info-bg); border-color:var(--info-border)}
+.badge.a{color:var(--accent-text); background:var(--accent-subtle); border-color:var(--accent-active)}
+
+.alert{display:flex; gap:.7rem; padding:.85rem 1rem; border-radius:var(--r); border:1px solid; margin-bottom:.7rem; font-size:.88rem}
+.alert .ic{font-family:var(--mono); font-weight:700}
+.alert.s{background:var(--success-bg); border-color:var(--success-border); color:var(--text)}
+.alert.s .ic{color:var(--success)}
+.alert.d{background:var(--danger-bg); border-color:var(--danger-border); color:var(--text)}
+.alert.d .ic{color:var(--danger)}
+.alert.i{background:var(--info-bg); border-color:var(--info-border); color:var(--text)}
+.alert.i .ic{color:var(--info)}
+
+.cbadge{font-family:var(--mono); font-size:.6rem; padding:.08rem .4rem; border-radius:4px; border:1px solid currentColor; margin-left:.4rem}
+.pass{color:var(--success)} .fail{color:var(--danger)}
+
+.two-up{display:grid; grid-template-columns:1fr 1fr; gap:1rem}
+@media (max-width:640px){ .two-up{grid-template-columns:1fr} }
+
+footer{border-top:1px solid var(--border-subtle); margin-top:2rem}
+footer ul{color:var(--text-2); line-height:1.7; padding-left:1.1rem}
+.decision{background:var(--surface); border:1px solid var(--secondary-border); border-radius:var(--r-lg); padding:1.4rem; margin-top:1rem}
+
+/* reveal: el contenido SIEMPRE está visible. El motion es solo realce del hero al
+   cargar — nunca se condiciona la visibilidad a un observer (eso deja secciones en
+   blanco en renders headless / pestañas ocultas). */
+.reveal{opacity:1}
+@media (prefers-reduced-motion:no-preference){
+  .hero.reveal{animation:rise .55s cubic-bezier(.16,1,.3,1) both}
+}
+@keyframes rise{from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:none}}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:1ms !important; transition-duration:1ms !important}
+}
+.grano-cell{animation:assemble 3.6s cubic-bezier(.16,1,.3,1) infinite}
+@keyframes assemble{0%{opacity:0;transform:translateY(12px)}16%{opacity:1;transform:none}78%{opacity:1}90%{opacity:0;transform:translateY(-6px)}100%{opacity:0;transform:translateY(12px)}}
+@media (prefers-reduced-motion:reduce){ .grano-cell{animation:none; opacity:1} }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="brand">m<i>i<span class="grano-dot"></span></i>lpa<span style="color:var(--text-muted); font-weight:400"> · design system</span></span>
+  <span class="spacer"></span>
+  <span class="pickwrap"><span class="lbl">secundario:</span><span id="picker"></span></span>
+  <button class="toggle" id="themeBtn" aria-label="Cambiar tema">◐ dark</button>
+</div>
+
+<!-- HERO -->
+<section class="hero reveal">
+  <div>
+    <div class="kicker">prueba visual · tokens corregidos · contraste verificado AA</div>
+    <h1 style="margin-top:.6rem">m<span class="i">i</span>lpa</h1>
+    <div class="tag">siembra módulos, cosecha aplicaciones.</div>
+    <p class="sub">Precisión de infraestructura de IA × calidez de la milpa. Oro = el grano cosechado · <b style="color:var(--secondary-text)">verde = la milpa viva que germina</b> · tierra = el suelo. Dark-first. Cambiá el tema y el verde arriba ↗</p>
+  </div>
+  <svg class="granoM" width="150" height="150" viewBox="0 0 60 60" aria-label="La M de Milpa, ensamblada grano por grano">
+    <g fill="var(--accent)">
+      <rect class="grano-cell" style="animation-delay:0s" x="0" y="0" width="10" height="10" rx="2.5"/><rect class="grano-cell" style="animation-delay:.07s" x="48" y="0" width="10" height="10" rx="2.5"/>
+      <rect class="grano-cell" style="animation-delay:.14s" x="0" y="12" width="10" height="10" rx="2.5"/><rect class="grano-cell" style="animation-delay:.21s" x="12" y="12" width="10" height="10" rx="2.5"/><rect class="grano-cell" style="animation-delay:.28s" x="36" y="12" width="10" height="10" rx="2.5"/><rect class="grano-cell" style="animation-delay:.35s" x="48" y="12" width="10" height="10" rx="2.5"/>
+      <rect class="grano-cell" style="animation-delay:.42s" x="0" y="24" width="10" height="10" rx="2.5"/><rect class="grano-cell" style="animation-delay:.49s" x="24" y="24" width="10" height="10" rx="2.5"/><rect class="grano-cell" style="animation-delay:.56s" x="48" y="24" width="10" height="10" rx="2.5"/>
+      <rect class="grano-cell" style="animation-delay:.63s" x="0" y="36" width="10" height="10" rx="2.5"/><rect class="grano-cell" style="animation-delay:.70s" x="48" y="36" width="10" height="10" rx="2.5"/>
+      <rect class="grano-cell" style="animation-delay:.77s" x="0" y="48" width="10" height="10" rx="2.5"/><rect class="grano-cell" style="animation-delay:.84s" x="48" y="48" width="10" height="10" rx="2.5"/>
+    </g>
+  </svg>
+</section>
+
+<!-- RAMPS -->
+<section class="reveal">
+  <div class="kicker">01 · foundations</div>
+  <h2 style="margin:.4rem 0 .3rem">Rampas</h2>
+  <p class="lede">★ marca el paso ancla / de marca. El secundario es la rampa viva — cambialo con el selector. <b>info</b> es cielo y es semántico (no es la marca).</p>
+  <div id="ramps" style="margin-top:1.5rem"></div>
+</section>
+
+<!-- SURFACES -->
+<section class="reveal">
+  <div class="kicker">02 · superficies & texto</div>
+  <h2 style="margin:.4rem 0 .3rem">Elevación sutil, definida por bordes</h2>
+  <p class="lede">Regla 1: las superficies son elevaciones sutiles; la definición la dan los bordes. Cada texto cumple AA (verificado).</p>
+  <div class="surf" style="margin-top:1.5rem">
+    <div class="tline"><b>Superficie (surface)</b> <span class="tag" data-pair="text,surface"></span></div>
+    <div class="tline" style="color:var(--text-2)">Texto secundario sobre superficie <span class="tag" data-pair="text-2,surface"></span></div>
+    <div class="tline" style="color:var(--text-muted)">Texto muted (FIX: dark→tierra-400) <span class="tag" data-pair="text-muted,surface"></span></div>
+    <div class="raised">
+      <div class="tline"><b>Superficie elevada (raised)</b> <span class="tag" data-pair="text,raised"></span></div>
+      <div class="tline" style="color:var(--text-muted)">muted sobre raised <span class="tag" data-pair="text-muted,raised"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- GOLD PROBLEM -->
+<section class="reveal">
+  <div class="kicker">03 · el problema del oro</div>
+  <h2 style="margin:.4rem 0 .3rem">El oro no puede ser botón primario sólido en light</h2>
+  <p class="lede">Medido: oro como fill sobre crema da boundary 1.56:1 y su etiqueta falla en ambos sentidos. En dark funciona perfecto. En light el primario es <b>ghost</b> (texto oro-700 + borde oro-600 = 4.9:1).</p>
+  <div class="two-up" style="margin-top:1.5rem">
+    <div class="mini" data-theme="dark">
+      <div class="cap">DARK · oro fill <span class="cbadge pass">9.6:1 ✓</span></div>
+      <button class="btn btn-primary">Sembrar plugin</button>
+    </div>
+    <div class="mini" data-theme="light">
+      <div class="cap">LIGHT · ✗ fill oro-300 <span class="cbadge fail">1.6:1</span> &nbsp; vs &nbsp; ✓ ghost <span class="cbadge pass">4.9:1</span></div>
+      <button class="btn btn-bad" style="margin-right:.6rem">Sembrar (mal)</button>
+      <button class="btn btn-primary">Sembrar plugin</button>
+    </div>
+  </div>
+</section>
+
+<!-- BRAND GREEN vs SUCCESS -->
+<section class="reveal">
+  <div class="kicker">04 · la decisión clave</div>
+  <h2 style="margin:.4rem 0 .3rem">Verde de marca × verde de “éxito”</h2>
+  <p class="lede">Si la marca es verde, tiene que vivir lejos del verde de <b>success</b> (hue 150°) para no confundir “marca” con “estado ok”. Olivo está a 26°: lee <b>caqui/campo</b>, success lee <b>pasto</b>. Mirá si te separan lo suficiente.</p>
+  <div class="cols" style="margin-top:1.5rem">
+    <div class="panel">
+      <h3>Marca (secundario) <span id="secName" class="mono" style="color:var(--secondary-text); font-size:.8rem"></span></h3>
+      <div class="hint">el verde vivo de Milpa · germinación</div>
+      <div style="display:flex; gap:.6rem; align-items:center">
+        <div style="width:64px; height:64px; border-radius:var(--r); background:var(--secondary)"></div>
+        <div class="badge" style="color:var(--secondary-text); background:var(--secondary-subtle); border-color:var(--secondary-border)">secundario</div>
+        <a href="#" style="color:var(--secondary-text); font-weight:500">enlace</a>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Success <span class="mono" style="color:var(--success); font-size:.8rem">estado ok</span></h3>
+      <div class="hint">verde semántico · “se sembró bien”</div>
+      <div style="display:flex; gap:.6rem; align-items:center">
+        <div style="width:64px; height:64px; border-radius:var(--r); background:var(--success)"></div>
+        <div class="badge s">success</div>
+        <span style="color:var(--success); font-weight:500">✓ listo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENTS -->
+<section class="reveal">
+  <div class="kicker">05 · en acción</div>
+  <h2 style="margin:.4rem 0 .3rem">Componentes (battle-test)</h2>
+  <div class="cols" style="margin-top:1.5rem">
+    <div class="panel">
+      <h3>Acciones</h3>
+      <div class="hint">primario (oro) · secundario (verde) · destructivo · ghost</div>
+      <div style="display:flex; gap:.6rem; flex-wrap:wrap">
+        <button class="btn btn-primary">Primario</button>
+        <button class="btn btn-secondary">Secundario</button>
+        <button class="btn btn-danger">Eliminar</button>
+        <button class="btn btn-ghost">Cancelar</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Formulario</h3>
+      <div class="hint">label · focus · error (aria-invalid)</div>
+      <div class="field">
+        <label for="a">Nombre del plugin</label>
+        <input class="input" id="a" placeholder="ej. MailPlugin">
+      </div>
+      <div class="field">
+        <label for="b">Slug</label>
+        <input class="input invalid" id="b" value="Mail Plugin!" aria-invalid="true">
+        <span class="err">solo minúsculas y guiones</span>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Badges</h3>
+      <div class="hint">estados semánticos + marca</div>
+      <div class="badges">
+        <span class="badge a">marca</span>
+        <span class="badge s">success</span>
+        <span class="badge w">warning</span>
+        <span class="badge d">danger</span>
+        <span class="badge i">info</span>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Alerts (borde completo, sin franja lateral)</h3>
+      <div class="hint">success · info · danger</div>
+      <div class="alert s"><span class="ic">✓</span><span>Plugin sembrado y habilitado.</span></div>
+      <div class="alert i"><span class="ic">i</span><span>Hay 2 migraciones pendientes.</span></div>
+      <div class="alert d"><span class="ic">!</span><span>El contrato requires no se satisface.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<section class="reveal" style="padding-top:2.5rem">
+  <div class="kicker">resumen</div>
+  <h2 style="margin:.4rem 0 .6rem">Estado del pulido</h2>
+  <ul>
+    <li><b>Dark:</b> AA limpio (texto 17:1, accent 9.6:1, semánticos 7-8:1). Fix aplicado: muted → tierra-400.</li>
+    <li><b>Light:</b> los 9 fallos AA resueltos — semánticos a -700, bordes a tierra-600/700, muted a tierra-700, focus a oro-700, primario = ghost. Todo verificado ≥4.5 / ≥3.</li>
+    <li><b>Tokens nuevos:</b> <span class="mono">--on-danger</span> (dark/light) y <span class="mono">--on-accent</span> ahora existen.</li>
+    <li><b>info = cielo</b> (semántico, independiente de la marca) — el azul se retira de la marca pero sigue diciendo “info”.</li>
+  </ul>
+  <div class="decision">
+    <div class="kicker">decisiones abiertas (vos)</div>
+    <ul style="margin-bottom:0">
+      <li><b>¿Qué verde?</b> Olivo (Arcana-match, recomendado) · Jade (joya/teal) · Musgo (más brillante). Probalos arriba.</li>
+      <li><b>Tema light:</b> la referencia Arcana es crema-first → vale invertir en light (hoy crema + olivo + casi-negro = ese look).</li>
+      <li><b>Siguiente:</b> elegís verde → horneo tokens finales en css/json/tailwind, arreglo las 4 contradicciones del DESIGN.md, y lo integramos al plan.</li>
+    </ul>
+  </div>
+  <p class="mono" style="color:var(--text-muted); font-size:.7rem; margin-top:1.5rem">milpa · milpa.lat · getmilpa.com · milpahq.com</p>
+</section>
+</footer>
+
+<script>
+const RAMPS = {
+  tierra:{50:"#FAF5EF",100:"#ECE6D8",200:"#E3D7CC",300:"#CBBFB4",400:"#B4A99E",500:"#9D9388",600:"#847A70",700:"#6B6157",800:"#51483F",900:"#372F27",950:"#17120D"},
+  oro:{50:"#FFF4E3",100:"#FFE8C2",200:"#FFD286",300:"#E8B14C",400:"#DC9E12",500:"#C18900",600:"#A27200",700:"#825B00",800:"#624400",900:"#422C00",950:"#211400"},
+  success:{50:"#E1FFE6",100:"#CAFAD2",200:"#A7EDB5",300:"#81D995",400:"#5EC478",500:"#41AE61",600:"#27934B",700:"#0F7737",800:"#005A26",900:"#003C17",950:"#001E08"},
+  warning:{50:"#FFF3ED",100:"#FFE5D8",200:"#FFCDB2",300:"#FFAB7B",400:"#F78A47",500:"#E07227",600:"#C15A04",700:"#9C4700",800:"#763400",900:"#502100",950:"#2A0E00"},
+  danger:{50:"#FFF3F1",100:"#FFE4E0",200:"#FFCBC4",300:"#FFA79B",400:"#FF7F71",500:"#EA6356",600:"#CB4C41",700:"#A8372F",800:"#82241E",900:"#5A1410",950:"#310504"},
+  cielo:{50:"#F0F6FF",100:"#DFEDFF",200:"#C0DCFF",300:"#97C5FF",400:"#6CADFF",500:"#4796F5",600:"#317CD5",700:"#1E63B2",800:"#1A5395",900:"#033061",950:"#001735"},
+};
+const SECONDARIES = {
+  olivo:{50:"#F4F7F0",100:"#E8EEDD",200:"#D3DFBE",300:"#B7CA94",400:"#9CB668",500:"#85A143",600:"#6D882D",700:"#566D19",800:"#485C17",900:"#293701",950:"#121B00"},
+  jade:{50:"#EDF9F5",100:"#D8F2EA",200:"#B2E6D7",300:"#78D6BE",400:"#03C6A5",500:"#00AD90",600:"#009178",700:"#007460",800:"#006251",900:"#003A2F",950:"#001D16"},
+  musgo:{50:"#F4F7EE",100:"#E8EEDA",200:"#D3DFB9",300:"#B8CB8A",400:"#9DB756",500:"#86A224",600:"#6E8800",700:"#586D00",800:"#4A5C00",900:"#2B3600",950:"#141B00"},
+  cielo:RAMPS.cielo,
+  anil:{50:"#F4F5FF",100:"#E7E9FF",200:"#D2D5FF",300:"#B7BAFF",400:"#9D9EFF",500:"#8785F4",600:"#706CD4",700:"#5954B1",800:"#4A4794",900:"#2B2760",950:"#141135"},
+};
+const SEC_LABEL = {olivo:"olivo · Arcana",jade:"jade · joya",musgo:"musgo · brillante",cielo:"cielo · azul",anil:"añil · el descartado"};
+const STEPS=[50,100,200,300,400,500,600,700,800,900,950];
+const ANCHORS={tierra:[100,950],oro:[300],success:[400],warning:[400],danger:[400],cielo:[400]};
+
+const hx=h=>{h=h.replace('#','');return[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255)};
+const lin=c=>c<=.04045?c/12.92:((c+.055)/1.055)**2.4;
+const Y=h=>{const[r,g,b]=hx(h).map(lin);return .2126*r+.7152*g+.0722*b};
+const CR=(f,b)=>{const a=Y(f),c=Y(b),hi=Math.max(a,c),lo=Math.min(a,c);return (hi+.05)/(lo+.05)};
+const readable=bg=>CR("#17120D",bg)>=CR("#FAF5EF",bg)?"#17120D":"#FAF5EF";
+const cssVar=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim()||
+  getComputedStyle(document.body).getPropertyValue(n).trim();
+
+let current="olivo";
+
+function setSecondary(name){
+  current=name;
+  const r=SECONDARIES[name];
+  STEPS.forEach(s=>document.documentElement.style.setProperty('--c-'+s, r[s]));
+  document.querySelectorAll('#picker .pick').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===name));
+  const sn=document.getElementById('secName'); if(sn) sn.textContent='· '+SEC_LABEL[name];
+  refreshTags();
+}
+function buildPicker(){
+  const p=document.getElementById('picker');
+  p.innerHTML='';
+  Object.keys(SECONDARIES).forEach(k=>{
+    const b=document.createElement('button');
+    b.className='pick'; b.dataset.k=k; b.setAttribute('aria-pressed', k===current);
+    b.innerHTML='<span class="dot" style="background:'+SECONDARIES[k][500]+'"></span>'+k;
+    b.onclick=()=>setSecondary(k);
+    p.appendChild(b);
+  });
+}
+function rampEl(name, ramp){
+  const wrap=document.createElement('div'); wrap.className='ramp';
+  const anchors=ANCHORS[name]||[];
+  wrap.innerHTML='<div class="name"><b>'+name+'</b><span>'+(anchors.length?'★ '+anchors.map(a=>name+'-'+a).join(' · '):'')+'</span></div>';
+  const chips=document.createElement('div'); chips.className='chips';
+  STEPS.forEach(s=>{
+    const c=document.createElement('div'); c.className='chip'+(anchors.includes(s)?' anchor':'');
+    c.style.background=ramp[s]; c.style.color=readable(ramp[s]);
+    c.innerHTML='<span>'+s+'</span><b>'+ramp[s].replace('#','')+'</b>';
+    chips.appendChild(c);
+  });
+  wrap.appendChild(chips); return wrap;
+}
+function buildRamps(){
+  const host=document.getElementById('ramps'); host.innerHTML='';
+  host.appendChild(rampEl('tierra',RAMPS.tierra));
+  host.appendChild(rampEl('oro',RAMPS.oro));
+  const sec=rampEl('secundario',SECONDARIES[current]); sec.id='secRamp'; host.appendChild(sec);
+  ['success','warning','danger','cielo'].forEach(n=>host.appendChild(rampEl(n==='cielo'?'info (cielo)':n, RAMPS[n])));
+}
+function refreshTags(){
+  // re-render live secondary ramp + contrast tags after theme/secondary change
+  const old=document.getElementById('secRamp');
+  if(old){const fresh=rampEl('secundario',SECONDARIES[current]); fresh.id='secRamp'; old.replaceWith(fresh);}
+  document.querySelectorAll('.tag[data-pair]').forEach(t=>{
+    const[f,b]=t.dataset.pair.split(',');
+    const fc=cssVar('--'+f), bc=cssVar('--'+b);
+    if(!fc||!bc){t.textContent='—';return;}
+    const r=CR(fc,bc), ok=r>=4.5;
+    t.textContent=r.toFixed(2)+':1';
+    t.style.color=ok?'var(--success)':'var(--danger)';
+    t.style.background=ok?'var(--success-bg)':'var(--danger-bg)';
+    t.style.borderColor=ok?'var(--success-border)':'var(--danger-border)';
+  });
+}
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',cur);
+  document.getElementById('themeBtn').textContent=(cur==='light'?'◑ light':'◐ dark');
+  requestAnimationFrame(refreshTags);
+}
+document.getElementById('themeBtn').onclick=toggleTheme;
+
+buildPicker(); buildRamps(); setSecondary('olivo');
+
+// (sin scroll-reveal: el contenido es visible por defecto; el realce vive en CSS)
+</script>
+</body>
+</html>

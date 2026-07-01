@@ -1,0 +1,29 @@
+/* Milpa motion — primitives. Requires milpa-tokens.css for --dur / --ease / --rise. */
+@keyframes milpa-rise     { from { opacity: 0; transform: translateY(var(--rise-base)); } to { opacity: 1; transform: none; } }
+@keyframes milpa-fade     { from { opacity: 0; } to { opacity: 1; } }
+@keyframes milpa-scale-in { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+
+.m-rise { animation: milpa-rise var(--dur-slow) var(--ease-grano) both; }
+.m-fade { animation: milpa-fade var(--dur-base) var(--ease-standard) both; }
+.m-pop  { animation: milpa-scale-in var(--dur-moderate) var(--ease-settle) both; }
+
+/* state feedback (hover / press / toggle) */
+.m-transition {
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color     var(--dur-fast) var(--ease-standard),
+    color            var(--dur-fast) var(--ease-standard),
+    transform        var(--dur-fast) var(--ease-settle),
+    opacity          var(--dur-fast) var(--ease-standard);
+}
+
+/* GOVERNANCE: reduced-motion contract — nothing animates against the user's preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  .m-rise, .m-pop { animation: milpa-fade 1ms both; }
+}

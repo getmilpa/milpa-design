@@ -1,0 +1,5 @@
+; Config de publish — se carga SOLO con `npm run release` (via --userconfig).
+; No es .npmrc a propósito: un .npmrc de proyecto con ${NPM_TOKEN} rompe TODOS
+; los comandos npm (incluido npm test y CI) cuando la variable no está definida.
+; El token vive en .env (gitignoreado); este archivo NO contiene secretos.
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}

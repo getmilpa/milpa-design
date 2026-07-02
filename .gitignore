@@ -4,5 +4,7 @@ node_modules/
 npm-debug.log*
 .env
 .env.*
-# dist/ SÍ se versiona por ahora (baseline hand-authored verificado AA).
-# Cuando el build de Style Dictionary sea la fuente de dist/, ignorar y publicar en CI.
+# nunca un .npmrc de proyecto (podría contener un token real; el de publish es .npmrc.publish, sin secretos)
+.npmrc
+# dist/ SÍ se versiona: es generado (npm run build) pero el drift gate de npm test
+# garantiza que siempre coincide con tokens/milpa-tokens.json.

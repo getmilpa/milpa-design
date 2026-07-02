@@ -23,7 +23,10 @@
   "scripts": {
     "build": "node scripts/build-tokens.mjs",
     "test": "node scripts/verify-contrast.mjs && node scripts/verify-governance.mjs && node scripts/build-tokens.mjs --check",
-    "proof": "python3 -m http.server 4321"
+    "proof": "python3 -m http.server 4321",
+    "prepublishOnly": "npm test",
+    "release:dry": "set -a; . ./.env; set +a; npm publish --dry-run --userconfig ./.npmrc.publish",
+    "release": "set -a; . ./.env; set +a; npm publish --userconfig ./.npmrc.publish"
   },
   "keywords": ["milpa", "design-system", "design-tokens", "dtcg", "dark-mode", "oklch", "tailwind", "motion"],
   "homepage": "https://milpa.lat",

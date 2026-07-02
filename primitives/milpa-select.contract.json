@@ -1,0 +1,85 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "select",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-select",
+  "summary": "Selección nativa: <select> con appearance none dentro de .mui-select-wrap. Mismo lenguaje que .mui-input (fondo var(--bg) hundido, definición por borde — regla 1). El chevrón es geometría CSS decorativa en ::after; el popup de opciones lo pinta el UA (teclado y semántica gratis). [multiple] se vuelve listbox inline sin chevrón.",
+  "element": [
+    "select"
+  ],
+  "anatomy": {
+    "root": ".mui-select — el control; padding-inline-end var(--space-8) reserva el espacio del chevrón",
+    "wrap": ".mui-select-wrap — envoltura position:relative; requerida: aloja el chevrón",
+    "wrap::after": "chevrón decorativo — dos bordes de un cuadrado rotado 45° en currentColor (var(--text-muted)); pointer-events none; invisible para AT (pseudo sin contenido, equivale a aria-hidden). Se atenúa con [disabled] y se oculta con [multiple] vía :has()"
+  },
+  "variants": {
+    "size": {
+      "sm": ".mui-select--sm — 2rem / text-xs / radius-sm",
+      "md": "default — 2.5rem / text-sm / radius-base",
+      "lg": ".mui-select--lg — 3rem / text-base"
+    },
+    "mode": {
+      "multiple": "select[multiple] (atributo nativo, no clase) — height auto, min-height 5rem, padding-block var(--space-2), sin chevrón (no hay popup)"
+    }
+  },
+  "states": {
+    "focus": ":focus-visible — outline 2px var(--focus) offset 1px + borde var(--focus)",
+    "invalid": "[aria-invalid=\"true\"] — borde var(--danger); su :focus-visible también en danger",
+    "disabled": "[disabled] — opacity .5, cursor not-allowed; el chevrón se atenúa a la par",
+    "open": "el popup abierto es nativo del UA — no se estiliza desde el componente; para que acompañe al tema, el documento debe declarar color-scheme acorde a data-theme"
+  },
+  "tokens": [
+    "--bg",
+    "--text",
+    "--text-muted",
+    "--border-strong",
+    "--danger",
+    "--focus",
+    "--font-display",
+    "--text-xs",
+    "--text-sm",
+    "--text-base",
+    "--space-2",
+    "--space-3",
+    "--space-8",
+    "--radius-sm",
+    "--radius-base",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "label": "SIEMPRE dentro de .mui-field con <label for> (o aria-label si el diseño lo oculta — usar .mui-sr-only)",
+    "aria": [
+      "error → aria-invalid=\"true\" + aria-describedby apuntando al id del .mui-field__error",
+      "la primera opción vacía (<option value=\"\">Elegí…</option>) no sustituye al label",
+      "[multiple] → documentar la interacción en un .mui-field__hint asociado con aria-describedby"
+    ],
+    "keyboard": [
+      "nativo del <select>: flechas navegan, Enter/Space abren, Escape cierra, type-ahead busca por texto",
+      "[multiple]: Ctrl/Cmd + clic y Shift + flechas para selección múltiple",
+      "el focus ring es visible sobre cualquier superficie (par focus/surface verificado)"
+    ],
+    "contrast": "texto var(--text) sobre var(--bg) y chevrón var(--text-muted) (≥3:1 como glifo UI) verificados en ambos temas por el gate (npm test)",
+    "surfaces": "asentar el control sobre var(--bg) o var(--surface). En dark NO sobre --surface-raised/--overlay (modales, popovers): el boundary no llega a 3:1 (border-strong 2.13:1, fill 2.08:1 — WCAG 1.4.11). En light el borde sí define sobre cualquier superficie (5.58:1)."
+  },
+  "motion": {
+    "transitions": "border-color/background en --dur-fast --ease-standard; el chevrón no anima (estático, sin rebote)",
+    "reducedMotion": "contrato global de milpa-motion.css (degrada a cambio instantáneo de 1 frame)"
+  },
+  "examples": [
+    {
+      "title": "Campo completo (field + select)",
+      "html": "<div class=\"mui-field\"><label class=\"mui-field__label\" for=\"region\">Región</label><div class=\"mui-select-wrap\"><select class=\"mui-select\" id=\"region\"><option value=\"\">Elegí una región…</option><option value=\"mx\">Mesoamérica</option><option value=\"an\">Andes</option><option value=\"cb\">Caribe</option></select></div></div>"
+    },
+    {
+      "title": "Inválido, tamaño sm",
+      "html": "<div class=\"mui-field\"><label class=\"mui-field__label\" for=\"env\">Entorno <span class=\"mui-field__required\" aria-hidden=\"true\">*</span></label><div class=\"mui-select-wrap\"><select class=\"mui-select mui-select--sm\" id=\"env\" required aria-invalid=\"true\" aria-describedby=\"env-err\"><option value=\"\">Elegí un entorno…</option><option value=\"dev\">Desarrollo</option><option value=\"prod\">Producción</option></select></div><p class=\"mui-field__error\" id=\"env-err\">Elegí un entorno antes de sembrar.</p></div>"
+    },
+    {
+      "title": "Múltiple (listbox inline)",
+      "html": "<div class=\"mui-field\"><label class=\"mui-field__label\" for=\"mods\">Módulos a sembrar</label><div class=\"mui-select-wrap\"><select class=\"mui-select\" id=\"mods\" multiple size=\"4\" aria-describedby=\"mods-hint\"><option value=\"auth\">auth</option><option value=\"mail\">mail</option><option value=\"cache\">cache</option><option value=\"queue\">queue</option></select></div><p class=\"mui-field__hint\" id=\"mods-hint\">Ctrl/Cmd + clic para seleccionar varios.</p></div>"
+    }
+  ]
+}

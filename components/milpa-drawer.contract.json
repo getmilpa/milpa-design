@@ -1,0 +1,81 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "drawer",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-drawer",
+  "summary": "Panel lateral modal sobre <dialog> nativo, anclado al inline-end: alto completo, radio 0, definido por su borde inline-start (no consume --z-*: vive en el top layer). Mismo contrato de foco/teclado que Modal. Entra deslizando desde el borde (keyframe propio mui-drawer-in, solo transform+opacity).",
+  "element": [
+    "dialog"
+  ],
+  "anatomy": {
+    "root": ".mui-drawer — el <dialog> lateral; columna header/body/footer cuando está [open]",
+    "header": ".mui-drawer__header — flex space-between: título + botón cerrar (composición .mui-btn--ghost --icon --sm)",
+    "title": ".mui-drawer__title — text-lg medium",
+    "body": ".mui-drawer__body — contenido scrolleable; text-sm var(--text-secondary)",
+    "footer": ".mui-drawer__footer — anclado al fondo (margin-block-start auto), acciones al final, borde superior var(--border-subtle)"
+  },
+  "variants": {
+    "placement": {
+      "end": "default y único en v0 — anclado al inline-end (derecha en LTR); un lado inline-start se agregaría como .mui-drawer--start con su propio keyframe"
+    }
+  },
+  "states": {
+    "open": "[open] — el UA lo pone al llamar showModal(); dispara mui-drawer-in y el fade del ::backdrop",
+    "closed": "sin [open] — display none del UA; no hay clase de estado",
+    "focus": ":focus-visible en el propio dialog — outline 2px var(--focus) offset -2px (el panel toca el borde del viewport: el anillo va por dentro)"
+  },
+  "tokens": [
+    "--surface",
+    "--bg",
+    "--border",
+    "--border-subtle",
+    "--text",
+    "--text-secondary",
+    "--focus",
+    "--shadow-lg",
+    "--font-display",
+    "--text-lg",
+    "--text-sm",
+    "--weight-medium",
+    "--leading-snug",
+    "--leading-normal",
+    "--space-2",
+    "--space-3",
+    "--space-5",
+    "--radius-none",
+    "--dur-moderate",
+    "--ease-grano",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "SIEMPRE <dialog> abierto con dialog.showModal() — top layer, focus trap, Esc y fondo inerte nativos; nunca show() ni un aside posicionado",
+    "aria": [
+      "aria-labelledby en el <dialog> apuntando al id del __title",
+      "el botón cerrar del header requiere aria-label (ej. \"Cerrar panel\")"
+    ],
+    "keyboard": [
+      "Esc cierra (cancel/close nativos)",
+      "Tab queda atrapado dentro (top layer)",
+      "cerrar sin JS: <form method=\"dialog\"> en los botones de cerrar/cancelar, con type=\"submit\" explícito — el submit-que-cierra es intencional"
+    ],
+    "behavior": [
+      "retorno de foco (JS consumidor): guardar document.activeElement antes de showModal() y devolverle el foco en el evento close",
+      "para drawers no modales (que no bloquean la página) NO usar este componente: eso es otro patrón (panel inline), no un dialog"
+    ],
+    "contrast": "text y text-secondary sobre surface, focus sobre surface y border sobre bg — pares ya verificados por npm test. El separador del footer (var(--border-subtle)) es un delimitador decorativo, no sujeto al piso de 3:1. · Los .mui-btn outline default dentro de __footer reciben borde var(--border-strong) (boundary 3.13 dark / 5.58 light sobre surface — par en el gate); el default border/surface daría 2.17 en dark."
+  },
+  "motion": {
+    "enter": "[open] → mui-drawer-in var(--dur-moderate) var(--ease-grano) both — translateX(100%)→0 + fade, germina desde el borde y se asienta; ::backdrop → milpa-fade var(--dur-moderate) var(--ease-standard)",
+    "exit": "cierre nativo instantáneo (sale del top layer); sin animación de salida en v0",
+    "reducedMotion": "contrato global de milpa-motion.css: el slide degrada a 1 frame estático (aparece asentado)",
+    "rtl": "mui-drawer-in usa translateX(100%) (físico): en dir=\"rtl\" el panel queda en inline-end (izquierda) pero entraría desde la derecha; si servís RTL, redefiní el keyframe en tu capa"
+  },
+  "examples": [
+    {
+      "title": "Panel de configuración",
+      "html": "<dialog class=\"mui-drawer\" id=\"drw-ajustes\" aria-labelledby=\"drw-ajustes-title\"><header class=\"mui-drawer__header\"><h2 class=\"mui-drawer__title\" id=\"drw-ajustes-title\">Ajustes del módulo</h2><form method=\"dialog\"><button type=\"submit\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm\" aria-label=\"Cerrar panel\"><span aria-hidden=\"true\">✕</span></button></form></header><div class=\"mui-drawer__body\"><div class=\"mui-field\"><label class=\"mui-field__label\" for=\"drw-nombre\">Nombre del terreno</label><input class=\"mui-input\" id=\"drw-nombre\" value=\"milpa-prod\"></div></div><footer class=\"mui-drawer__footer\"><form method=\"dialog\"><button type=\"submit\" class=\"mui-btn\">Cancelar</button></form><button type=\"button\" class=\"mui-btn mui-btn--primary\">Guardar</button></footer></dialog><!-- JS consumidor: trigger.onclick = () => drw.showModal(); drw.addEventListener('close', () => trigger.focus()) -->"
+    }
+  ]
+}

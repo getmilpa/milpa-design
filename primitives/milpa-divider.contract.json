@@ -1,0 +1,69 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "divider",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-divider",
+  "summary": "Separación de contenido: una línea var(--border-subtle), sin peso visual (regla 1: la definición la dan los bordes). <hr> para el caso simple; vertical vía aria-orientation=\"vertical\" (el atributo ES el hook de estilo); --label (en <div role=\"separator\">) centra un rótulo mono entre dos líneas.",
+  "element": [
+    "hr",
+    "div"
+  ],
+  "anatomy": {
+    "root": ".mui-divider — la línea (border-top sobre <hr>)",
+    "label": "contenido de texto del modificador --label; color en --_label-color (default var(--text-secondary)); las líneas laterales son pseudos ::before/::after decorativos"
+  },
+  "variants": {
+    "orientation": {
+      "horizontal": "default — <hr>, margen vertical var(--space-4)",
+      "vertical": ".mui-divider[aria-orientation=\"vertical\"] o .mui-divider--vertical — el atributo ARIA correcto produce el estilo correcto (una sola fuente de verdad); la clase es azúcar opcional. Línea inline (min-height 1em); en contenedores flex se estira sola (align-self: stretch)"
+    },
+    "label": {
+      "label": ".mui-divider--label — <div role=\"separator\"> con rótulo mono 2xs en var(--_label-color) (default var(--text-secondary)), uppercase, centrado entre líneas"
+    }
+  },
+  "states": {
+    "static": "sin estados; no recibe foco (separador estático, no un splitter redimensionable)"
+  },
+  "tokens": [
+    "--border-subtle",
+    "--text-secondary",
+    "--font-mono",
+    "--text-2xs",
+    "--tracking-wide",
+    "--space-2",
+    "--space-3",
+    "--space-4"
+  ],
+  "a11y": {
+    "element": "<hr> ya es role=separator nativo. La variante --label usa <div role=\"separator\"> (hr no admite contenido). En vertical basta aria-orientation=\"vertical\": el atributo es a la vez la semántica y el hook de estilo — no pueden desincronizarse",
+    "aria": [
+      "si el divider es puramente decorativo (la estructura ya la dan headings/listas), marcarlo aria-hidden=\"true\" para no ensuciar el árbol de accesibilidad",
+      "el rótulo de --label es contenido real y lo lee el lector de pantalla"
+    ],
+    "contrast": "rótulo en var(--_label-color) = var(--text-secondary) por defecto: AA verificado sobre bg, surface y surface-raised en ambos temas (peor caso 4.96 en raised dark; pares en el gate). El consumidor puede bajar a var(--text-muted) vía --_label-color SOLO sobre bg/surface — sobre surface-raised en dark mide 3.88 < 4.5 (medido con la fórmula del gate)."
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (contrato global vigente)"
+  },
+  "examples": [
+    {
+      "title": "Simple",
+      "html": "<hr class=\"mui-divider\">"
+    },
+    {
+      "title": "Vertical (toolbar) — el atributo es el hook",
+      "html": "<hr class=\"mui-divider\" aria-orientation=\"vertical\">"
+    },
+    {
+      "title": "Con label",
+      "html": "<div class=\"mui-divider mui-divider--label\" role=\"separator\">continuar con</div>"
+    },
+    {
+      "title": "Decorativo",
+      "html": "<hr class=\"mui-divider\" aria-hidden=\"true\">"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "kbd",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-kbd",
+  "summary": "Tecla o atajo de teclado en línea. Keycap sutil: mono 2xs sobre var(--surface-raised) con borde var(--border) y borde inferior de 2px — la 'tecla' la da el borde, no una sombra (regla 1).",
+  "element": [
+    "kbd"
+  ],
+  "anatomy": {
+    "root": ".mui-kbd — un <kbd> por tecla; las combinaciones se separan con '+' como texto normal, fuera del keycap"
+  },
+  "variants": {},
+  "states": {
+    "static": "sin estados: es contenido tipográfico, no un control"
+  },
+  "tokens": [
+    "--text",
+    "--surface-raised",
+    "--border",
+    "--font-mono",
+    "--text-2xs",
+    "--leading-snug",
+    "--space-0_5",
+    "--space-1_5",
+    "--radius-xs"
+  ],
+  "a11y": {
+    "element": "usar el elemento nativo <kbd> — semántica de entrada de teclado gratis",
+    "aria": [
+      "una tecla por <kbd>; el separador '+' queda fuera, como texto, para que el lector lo lea natural",
+      "símbolos ambiguos ('⌘') mejor acompañados de su nombre si la audiencia lo requiere"
+    ],
+    "contrast": "var(--text) sobre var(--surface-raised) verificado AA (npm test). Alcance del boundary del keycap (medido con la fórmula del gate): var(--border) pasa 3:1 sobre el bg de página (3.08 dark / 3.38 light) y sobre cualquier superficie en light (3.88); en dark dentro de surface (2.17) o surface-raised (1.48) el borde queda decorativo — no es fallo WCAG duro porque el kbd es contenido tipográfico, no un control, y su texto lleva AA en todos los contextos; el keycap se sigue insinuando por el fondo raised y el borde inferior de 2px."
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (contrato global vigente)"
+  },
+  "examples": [
+    {
+      "title": "Atajo compuesto",
+      "html": "<p>Abrí la paleta con <kbd class=\"mui-kbd\">Ctrl</kbd> + <kbd class=\"mui-kbd\">K</kbd></p>"
+    },
+    {
+      "title": "Tecla única",
+      "html": "<p>Presioná <kbd class=\"mui-kbd\">Esc</kbd> para cerrar.</p>"
+    }
+  ]
+}

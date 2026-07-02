@@ -1,0 +1,71 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "button",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-btn",
+  "summary": "Acción. Default = neutral outline (definido por borde). El primario es oro y hay uno por vista; en light el primario es ghost (regla 2: el oro no contrasta como fill sobre crema).",
+  "element": ["button", "a"],
+  "anatomy": {
+    "root": ".mui-btn — contenido inline-flex; admite texto, íconos SVG (1em) y ambos"
+  },
+  "variants": {
+    "intent": {
+      "default": "neutral outline — borde var(--border), texto var(--text-secondary)",
+      "primary": ".mui-btn--primary — dark: fill var(--accent) + tinta var(--text-on-accent) + auto-borde var(--accent-active). light: ghost — borde var(--accent), texto var(--accent-text), hover var(--accent-subtle)",
+      "secondary": ".mui-btn--secondary — fill var(--secondary) + var(--on-secondary), auto-borde var(--secondary-active)",
+      "subtle": ".mui-btn--subtle — tinte var(--secondary-subtle) + var(--secondary-text)",
+      "danger": ".mui-btn--danger — fill var(--danger) + var(--on-danger), auto-borde var(--danger-active)",
+      "ghost": ".mui-btn--ghost — sin borde; hover var(--surface-raised)"
+    },
+    "size": {
+      "sm": ".mui-btn--sm — 2rem / text-xs / radius-sm",
+      "md": "default — 2.5rem / text-sm / radius-base",
+      "lg": ".mui-btn--lg — 3rem / text-base / radius-md"
+    },
+    "layout": {
+      "icon": ".mui-btn--icon — cuadrado (width = height), padding 0; requiere aria-label",
+      "full": ".mui-btn--full — width 100%"
+    }
+  },
+  "states": {
+    "hover": ":hover — translateY(-1px) + cambio de fill/borde según intent",
+    "active": ":active — vuelve a translateY(0); fill al token -active",
+    "focus": ":focus-visible — outline 2px var(--focus) offset 2px",
+    "disabled": "[disabled] o [aria-disabled=\"true\"] — opacity .5, sin interacción",
+    "loading": "[aria-busy=\"true\"] — spinner ::before (anillo currentColor), pointer-events none; el texto permanece visible"
+  },
+  "tokens": [
+    "--accent", "--accent-hover", "--accent-active", "--accent-subtle", "--accent-text",
+    "--text-on-accent", "--secondary", "--secondary-hover", "--secondary-active",
+    "--secondary-subtle", "--secondary-border", "--secondary-text", "--on-secondary",
+    "--danger", "--danger-hover", "--danger-active", "--on-danger",
+    "--border", "--border-strong", "--surface-raised", "--text", "--text-secondary",
+    "--focus", "--font-display", "--text-xs", "--text-sm", "--text-base",
+    "--weight-medium", "--tracking-normal", "--space-2", "--space-3", "--space-4", "--space-5",
+    "--radius-sm", "--radius-base", "--radius-md", "--radius-full",
+    "--dur-fast", "--dur-deliberate", "--ease-standard", "--ease-settle"
+  ],
+  "a11y": {
+    "element": "usar <button type=\"button|submit\"> para acciones, <a class=\"mui-btn\"> solo para navegación",
+    "keyboard": ["Enter/Space activan (nativo de <button>)", "focus visible obligatorio vía :focus-visible"],
+    "aria": [
+      ".mui-btn--icon requiere aria-label",
+      "estado cargando = aria-busy=\"true\" (no quitar el label)",
+      "deshabilitado con tooltip: envolver en un wrapper focusable, no usar pointer-events del propio botón"
+    ],
+    "contrast": "todos los pares verificados en scripts/verify-contrast.mjs (npm test)"
+  },
+  "motion": {
+    "transitions": "background/border/color en --dur-fast --ease-standard; transform en --ease-settle. Germina y se asienta: nunca rebota.",
+    "loading": "spinner mui-spin --dur-deliberate linear infinite",
+    "reducedMotion": "contrato global de milpa-motion.css: transiciones a 1ms y el spinner queda como anillo estático (la semántica la lleva aria-busy)"
+  },
+  "examples": [
+    { "title": "Primario", "html": "<button type=\"button\" class=\"mui-btn mui-btn--primary\">Sembrar plugin</button>" },
+    { "title": "Neutral + danger", "html": "<button type=\"button\" class=\"mui-btn\">Cancelar</button> <button type=\"button\" class=\"mui-btn mui-btn--danger\">Eliminar</button>" },
+    { "title": "Icon-only", "html": "<button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon\" aria-label=\"Ajustes\"><svg aria-hidden=\"true\" width=\"16\" height=\"16\"><!-- … --></svg></button>" },
+    { "title": "Cargando", "html": "<button type=\"button\" class=\"mui-btn mui-btn--primary\" aria-busy=\"true\">Cosechando…</button>" }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "card",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-card",
+  "summary": "Superficie contenida (regla 1): fill var(--surface), definición por borde sutil + sombra sm — nunca sombras dramáticas. El padding vive en los elementos, no en el root, para permitir contenido edge-to-edge (tablas, listas). Interactiva SOLO como <a> o <button> envolvente con --interactive.",
+  "element": [
+    "article",
+    "section",
+    "div",
+    "a (--interactive)",
+    "button (--interactive)"
+  ],
+  "anatomy": {
+    "root": ".mui-card — flex column, sin padding propio (prop privada --_pad para los elementos)",
+    "header": ".mui-card__header — flex space-between + align-center + gap; título a la izquierda, slot de acciones a la derecha (botones sm/ghost, menús)",
+    "title": ".mui-card__title — display base/medium; no impone nivel de heading, usar el <h*> correcto para el outline",
+    "body": ".mui-card__body — padding --_pad, flex:1 (iguala alturas en grids); si sigue a un __header pierde el padding-top (selector adyacente)",
+    "footer": ".mui-card__footer — border-top var(--border-subtle); flex row con gap para acciones/meta"
+  },
+  "variants": {
+    "density": {
+      "default": "padding --space-5",
+      "compact": ".mui-card--compact — --_pad: --space-4, densidad para dashboards"
+    },
+    "elevation": {
+      "default": "var(--surface) + var(--shadow-sm)",
+      "raised": ".mui-card--raised — var(--surface-raised) + var(--shadow-base), un paso para destacar. Regla 2 (light, medido): surface-raised == surface (crema, 1.00:1) — el fill NO diferencia, así que [data-theme=\"light\"] refuerza el borde a var(--border) (3.88:1 sobre el fill, 3.38:1 sobre --bg) para que el paso de elevación siga visible y no dependa solo de la sombra (alpha 0.1); paridad medida con el salto de fill dark (surface-raised/surface 1.47:1). LÍMITE medido (dark): texto var(--text-muted)/var(--success)/var(--danger) sobre surface-raised NO alcanza AA — dentro de una raised usar --text/--text-secondary (los Stat completos van en cards default)"
+    },
+    "behavior": {
+      "interactive": ".mui-card--interactive — la card entera es un <a> o <button>; cursor pointer, hover borde var(--border) + translateY(-1px) + var(--shadow-base), focus ring var(--focus)"
+    }
+  },
+  "states": {
+    "hover": "solo --interactive — :hover: borde var(--border), shadow-base, translateY(-1px)",
+    "active": "solo --interactive — :active: vuelve a translateY(0) (se asienta)",
+    "focus": "solo --interactive — :focus-visible: outline 2px var(--focus) offset 2px"
+  },
+  "tokens": [
+    "--surface",
+    "--surface-raised",
+    "--border-subtle",
+    "--border",
+    "--text",
+    "--focus",
+    "--shadow-sm",
+    "--shadow-base",
+    "--radius-lg",
+    "--font-display",
+    "--text-base",
+    "--weight-medium",
+    "--leading-snug",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-5",
+    "--dur-fast",
+    "--ease-standard",
+    "--ease-settle"
+  ],
+  "a11y": {
+    "element": "no interactiva: <article>/<section>/<div> según semántica. Interactiva: <a> para navegar, <button type=\"button\"> para acciones — como <button> el contenido interno debe ser phrasing (usar <span>, no <div>/<h*>)",
+    "keyboard": [
+      "--interactive hereda el foco nativo de <a>/<button>; el ring var(--focus) está verificado sobre --bg y --surface"
+    ],
+    "aria": [
+      "no anidar controles interactivos dentro de una card --interactive (un solo tap target); las acciones secundarias van fuera o la card no es interactiva",
+      ".mui-card__title: elegir <h2>/<h3>… según el documento, no por estética"
+    ],
+    "contrast": "título var(--text) sobre --surface y --surface-raised verificado AA (npm test). Medido: border/surface da 2.17 en dark, por eso el hover de --interactive nunca depende solo del borde (motion + sombra) y el asiento recomendado es var(--bg) (border/bg ≥3 verificado). --raised en light lleva borde var(--border): 3.88:1 sobre su propio fill y 3.38:1 sobre --bg (verificado, par border/surface-raised light en el gate)"
+  },
+  "motion": {
+    "transitions": "solo --interactive: border-color/box-shadow en --dur-fast --ease-standard; transform en --ease-settle. Germina y se asienta: -1px al hover, de vuelta al presionar — nunca rebota.",
+    "reducedMotion": "contrato global de milpa-motion.css: transiciones a 1ms; el hover queda como cambio instantáneo de borde/sombra"
+  },
+  "examples": [
+    {
+      "title": "Card completa (header + body + footer)",
+      "html": "<article class=\"mui-card\"><header class=\"mui-card__header\"><h3 class=\"mui-card__title\">Plugins sembrados</h3><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--sm\">Ver todos</button></header><div class=\"mui-card__body\"><p>MailPlugin, AuthPlugin y 6 más germinaron esta semana.</p></div><footer class=\"mui-card__footer\"><button type=\"button\" class=\"mui-btn mui-btn--sm\">Exportar</button></footer></article>"
+    },
+    {
+      "title": "Interactiva (link envolvente)",
+      "html": "<a class=\"mui-card mui-card--interactive\" href=\"/plugins/mail\"><div class=\"mui-card__body\"><h3 class=\"mui-card__title\">MailPlugin</h3><p>Cola de correo transaccional con eventos.</p></div></a>"
+    },
+    {
+      "title": "Compacta con Stat (dashboard)",
+      "html": "<div class=\"mui-card mui-card--compact\"><div class=\"mui-card__body\"><div class=\"mui-stat\"><span class=\"mui-stat__label\">Módulos activos</span><span class=\"mui-stat__value\">128</span></div></div></div>"
+    }
+  ]
+}

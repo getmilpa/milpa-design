@@ -1,0 +1,37 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "field",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-field",
+  "summary": "Envoltura de cualquier control de formulario: label + control + hint/error. Es la pieza que garantiza el quality floor de formularios (label asociado, describedby, error accesible).",
+  "element": ["div"],
+  "anatomy": {
+    "root": ".mui-field — columna con gap --space-1_5",
+    "label": ".mui-field__label — <label for> asociado al control",
+    "required": ".mui-field__required — marcador * en var(--danger), aria-hidden",
+    "hint": ".mui-field__hint — ayuda en var(--text-muted); id referenciado por aria-describedby",
+    "error": ".mui-field__error — mono, var(--danger); id referenciado por aria-describedby"
+  },
+  "variants": {
+    "layout": { "row": ".mui-field--row — label y control en línea (checkbox/switch)" }
+  },
+  "states": {},
+  "tokens": ["--space-1_5", "--space-2", "--text-secondary", "--text-muted", "--danger", "--font-display", "--font-mono", "--text-sm", "--text-xs", "--weight-medium"],
+  "a11y": {
+    "label": "el <label> lleva for= hacia el id del control; nunca label vacío",
+    "aria": [
+      "hint y error llevan id; el control los referencia con aria-describedby (ambos, separados por espacio, si coexisten)",
+      "cuando hay error el control lleva aria-invalid=\"true\""
+    ],
+    "contrast": "label/hint/error verificados AA sobre bg y surface (npm test)"
+  },
+  "motion": { "transitions": "ninguna", "reducedMotion": "n/a" },
+  "examples": [
+    {
+      "title": "Field con hint",
+      "html": "<div class=\"mui-field\"><label class=\"mui-field__label\" for=\"dom\">Dominio</label><input class=\"mui-input\" id=\"dom\" aria-describedby=\"dom-hint\"><p class=\"mui-field__hint\" id=\"dom-hint\">Sin https:// — solo el host.</p></div>"
+    }
+  ]
+}

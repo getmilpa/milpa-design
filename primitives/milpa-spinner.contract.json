@@ -1,0 +1,47 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "spinner",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-spinner",
+  "summary": "Actividad indeterminada. Anillo de 1em en currentColor (escala con el font-size y hereda el color del contexto) con un cuarto transparente, girando con el keyframe compartido mui-spin. La semántica la lleva role=\"status\" + texto (visible o .mui-sr-only), nunca el giro.",
+  "element": [
+    "span"
+  ],
+  "anatomy": {
+    "root": ".mui-spinner — el anillo, siempre aria-hidden; vive dentro de un contenedor role=\"status\" que aporta el texto"
+  },
+  "variants": {},
+  "states": {
+    "static": "sin estados propios: existe mientras hay actividad; al terminar se remueve junto con su texto de estado"
+  },
+  "tokens": [
+    "--radius-full",
+    "--dur-deliberate"
+  ],
+  "a11y": {
+    "element": "<span class=\"mui-spinner\" aria-hidden=\"true\"> dentro de un contenedor con role=\"status\"",
+    "behavior": "montar el contenedor role=\"status\" y poblar su texto al iniciar la actividad (los live regions anuncian cambios, no contenido inicial); al terminar, vaciar o remover",
+    "aria": [
+      "el anillo SIEMPRE con aria-hidden=\"true\"",
+      "el texto de estado es obligatorio: visible o .mui-sr-only",
+      "para progreso con valor conocido usar Progress, no Spinner"
+    ],
+    "contrast": "currentColor — hereda un color de texto que ya cumple AA en su contexto"
+  },
+  "motion": {
+    "transitions": "animation: mui-spin var(--dur-deliberate) linear infinite (keyframe del molde — no se redefine)",
+    "reducedMotion": "contrato global: queda en 1 frame — anillo estático con el cuarto abierto, legible como 'cargando'; el anuncio lo hace role=\"status\""
+  },
+  "examples": [
+    {
+      "title": "Solo (texto sr-only)",
+      "html": "<span role=\"status\"><span class=\"mui-spinner\" aria-hidden=\"true\"></span><span class=\"mui-sr-only\">Cargando módulos…</span></span>"
+    },
+    {
+      "title": "Con texto visible",
+      "html": "<p role=\"status\"><span class=\"mui-spinner\" aria-hidden=\"true\"></span> Germinando la milpa…</p>"
+    }
+  ]
+}

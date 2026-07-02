@@ -1,0 +1,79 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "shell",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-shell",
+  "summary": "Grid raíz del admin: sidebar (ocupa las dos filas) + topbar + main sobre var(--bg). Dark-first, elevación contenida definida por bordes (regla 1). En ≤960px pasa a una columna y la sidebar se vuelve drawer off-canvas (cerrado = oculto también del teclado y del árbol de accesibilidad).",
+  "element": [
+    "div"
+  ],
+  "anatomy": {
+    "root": ".mui-shell — grid [16rem 1fr] × [3.5rem 1fr] con áreas sidebar/topbar/main; min-height 100dvh, bg var(--bg)",
+    "skip": ".mui-shell__skip — skip-link, PRIMER hijo del shell; invisible hasta :focus-visible, href al id del <main>",
+    "main": ".mui-shell__main — <main> en grid-area main; padding clamp(space-5..space-8), max-width 90rem centrado (margin-inline auto)"
+  },
+  "variants": {
+    "layout": {
+      "rail": ".mui-shell--rail — columna sidebar de 4.5rem, solo íconos. Aplica SOLO en >960px; en mobile el drawer siempre sale completo (ver contrato sidebar)",
+      "wide": ".mui-shell__main--wide — libera el max-width del main (tablas anchas, kanban)"
+    },
+    "nav": {
+      "nav-open": ".mui-shell--nav-open — SOLO ≤960px: muestra el drawer (translateX(0) + visibility visible + shadow-md). Modificador de layout que alterna el JS del consumidor; la semántica de estado la lleva aria-expanded en el toggle del topbar"
+    }
+  },
+  "states": {
+    "drawer-closed": "≤960px default — sidebar position fixed, translateX(-100%) + visibility hidden (flipa al TERMINAR el slide-out, delay --dur-moderate): fuera del lienzo, del tab order y del árbol de accesibilidad (z var(--z-drawer)). El JS del consumidor refuerza con `inert`",
+    "drawer-open": "≤960px + .mui-shell--nav-open — sidebar en translateX(0), visibility visible (flip instantáneo al abrir) con var(--shadow-md); cubre la topbar (z-drawer > z-sticky)",
+    "skip-focus": ".mui-shell__skip:focus-visible — el skip-link entra al viewport con outline 2px var(--focus) offset 2px"
+  },
+  "tokens": [
+    "--bg",
+    "--surface",
+    "--text",
+    "--border-strong",
+    "--focus",
+    "--font-display",
+    "--text-sm",
+    "--weight-medium",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-5",
+    "--space-8",
+    "--radius-base",
+    "--z-toast",
+    "--z-drawer",
+    "--shadow-md",
+    "--dur-moderate",
+    "--ease-grano",
+    "--ease-linear"
+  ],
+  "a11y": {
+    "landmarks": "estructura obligatoria: <nav aria-label=\"principal\"> (sidebar) + <header> (topbar) + <main id> (uno solo por página, destino del skip-link)",
+    "skipLink": ".mui-shell__skip como PRIMER hijo del shell, href=\"#main\" — visible únicamente al foco de teclado",
+    "behavior": [
+      "toggle (≤960px, JS del consumidor): click en .mui-topbar__nav-toggle alterna .mui-shell--nav-open en el shell Y aria-expanded en el botón (aria-controls → id de la sidebar)",
+      "mientras el drawer está CERRADO en ≤960px, el JS del consumidor mantiene `inert` en la sidebar y lo quita al abrir — cinturón y tirantes sobre el visibility:hidden del CSS (garantiza que lectores de pantalla y foco programático no entren a la navegación oculta; WCAG 2.4.3/2.4.7)",
+      "Escape cierra el drawer y devuelve el foco al toggle",
+      "al abrir, mover el foco al primer .mui-sidebar__item; al activar un item, cerrar el drawer",
+      "backdrop opcional del consumidor en var(--z-backdrop) si la superficie lo pide"
+    ],
+    "contrast": "skip-link: text/surface y border-strong/surface verificados (npm test)"
+  },
+  "motion": {
+    "transitions": "drawer: transform en --dur-moderate --ease-grano — germina desde el borde y se asienta, nunca rebota. visibility acompaña sin animar: delay --dur-moderate al cerrar (flipa al terminar el slide-out), 0s al abrir. El skip-link aparece instantáneo (sin transición, sobriedad)",
+    "reducedMotion": "contrato global de milpa-motion.css: el transform cae a 1ms — el drawer aparece/desaparece en 1 frame estático. El flip de visibility conserva su delay al cerrar (~320ms) pero no produce movimiento: es un cambio discreto que el `inert` del consumidor ya cubre"
+  },
+  "examples": [
+    {
+      "title": "Esqueleto completo del admin",
+      "html": "<div class=\"mui-shell\"><a class=\"mui-shell__skip\" href=\"#main\">Saltar al contenido</a><nav class=\"mui-sidebar\" id=\"nav-principal\" aria-label=\"principal\"><!-- ver contrato sidebar --></nav><header class=\"mui-topbar\"><!-- ver contrato topbar --></header><main class=\"mui-shell__main\" id=\"main\"><header class=\"mui-page-header\"><!-- ver contrato page-header --></header><!-- contenido --></main></div>"
+    },
+    {
+      "title": "Rail (solo íconos) + main ancho",
+      "html": "<div class=\"mui-shell mui-shell--rail\"><a class=\"mui-shell__skip\" href=\"#main\">Saltar al contenido</a><nav class=\"mui-sidebar\" id=\"nav-principal\" aria-label=\"principal\"><!-- … --></nav><header class=\"mui-topbar\"><!-- … --></header><main class=\"mui-shell__main mui-shell__main--wide\" id=\"main\"><!-- tabla ancha --></main></div>"
+    }
+  ]
+}

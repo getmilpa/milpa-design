@@ -1,0 +1,64 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "breadcrumbs",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-breadcrumbs",
+  "summary": "Rastro de ubicación en la jerarquía. Metadata de navegación: text-xs, enlaces muted que suben a var(--text) en hover. El separador \"/\" es CSS puro (mono, alt vacío) — el markup no lleva separadores. La miga actual se declara con aria-current=\"page\" (texto, sin link), nunca con una clase.",
+  "element": [
+    "nav[aria-label] > ol > li"
+  ],
+  "anatomy": {
+    "root": ".mui-breadcrumbs — el <nav aria-label=\"breadcrumb\">; fija font-display y text-xs",
+    "list": ".mui-breadcrumbs__list — el <ol>: flex wrap, gap var(--space-2), sin list-style ni margin/padding",
+    "item": ".mui-breadcrumbs__item — cada <li>; a partir del segundo genera el separador \"/\" vía ::before (mono, var(--text-muted), alt vacío)",
+    "link": ".mui-breadcrumbs__link — <a> de las migas ancestro: var(--text-muted), sin subrayado en reposo"
+  },
+  "variants": {
+    "size": {
+      "xs": "default (única en v0) — text-xs: es metadata, no compite con el contenido"
+    }
+  },
+  "states": {
+    "hover": ".mui-breadcrumbs__link:hover — color var(--text) + underline con text-underline-offset 3px",
+    "focus": ":focus-visible — outline 2px var(--focus) offset 2px (radius-xs para que el ring no sea un rectángulo duro)",
+    "current": "[aria-current=\"page\"] — color var(--text-secondary) + weight-medium; es un <span>, no un enlace"
+  },
+  "tokens": [
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--focus",
+    "--font-display",
+    "--font-mono",
+    "--text-xs",
+    "--weight-medium",
+    "--space-2",
+    "--radius-xs",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "<nav class=\"mui-breadcrumbs\" aria-label=\"breadcrumb\"> con <ol> dentro: el orden de la lista ES la jerarquía (localizable, p.ej. aria-label=\"migas de pan\")",
+    "aria": [
+      "la página actual lleva aria-current=\"page\" y NO es enlace (un <span>)",
+      "el separador \"/\" es ::before con alt vacío (content: \"/\" / \"\") — decorativo, los lectores de pantalla no lo anuncian; no poner separadores en el markup",
+      "si hay truncado de migas intermedias, el consumidor lo resuelve en el markup (…) — no ocultar con CSS"
+    ],
+    "keyboard": [
+      "navegación nativa de enlaces (Tab); focus ring visible sobre bg y surface (pares focus verificados)"
+    ],
+    "contrast": "enlaces var(--text-muted) y actual var(--text-secondary) sobre bg/surface: pares ya verificados AA (npm test). Sobre surface-raised usar con criterio: text-muted no está verificado ahí."
+  },
+  "motion": {
+    "transitions": "color del enlace en --dur-fast --ease-standard; nada se mueve — solo cambia el énfasis",
+    "reducedMotion": "contrato global de milpa-motion.css: la transición cae a 1ms (cambio instantáneo, sin pérdida)"
+  },
+  "examples": [
+    {
+      "title": "Rastro de tres niveles",
+      "html": "<nav class=\"mui-breadcrumbs\" aria-label=\"breadcrumb\"><ol class=\"mui-breadcrumbs__list\"><li class=\"mui-breadcrumbs__item\"><a class=\"mui-breadcrumbs__link\" href=\"/\">Inicio</a></li><li class=\"mui-breadcrumbs__item\"><a class=\"mui-breadcrumbs__link\" href=\"/plugins\">Plugins</a></li><li class=\"mui-breadcrumbs__item\"><span aria-current=\"page\">MailPlugin</span></li></ol></nav>"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "badge",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-badge",
+  "summary": "Etiqueta de metadato/estado en línea. Pill mono definida por borde; default neutral transparente. Las semánticas usan texto de color + tinte *-bg + borde *-border (patrón del proof): el AA lo lleva el texto, el borde es refuerzo. No es interactiva — para acciones usar Button.",
+  "element": [
+    "span"
+  ],
+  "anatomy": {
+    "root": ".mui-badge — inline-flex; el contenido es texto corto (versión, estado, conteo)",
+    "dot": "::before del modificador --dot — grano de 0.5em en currentColor; pseudo decorativo sin contenido accesible (invisible para lectores)"
+  },
+  "variants": {
+    "intent": {
+      "default": "neutral — texto var(--text-secondary), borde var(--border), fondo transparente",
+      "accent": ".mui-badge--accent — var(--accent-text) sobre var(--accent-subtle), borde var(--accent-active)",
+      "secondary": ".mui-badge--secondary — var(--secondary-text) sobre var(--secondary-subtle), borde var(--secondary-border)",
+      "success": ".mui-badge--success — var(--success) sobre var(--success-bg), borde var(--success-border)",
+      "warning": ".mui-badge--warning — var(--warning) sobre var(--warning-bg), borde var(--warning-border)",
+      "danger": ".mui-badge--danger — var(--danger) sobre var(--danger-bg), borde var(--danger-border)",
+      "info": ".mui-badge--info — var(--info) sobre var(--info-bg), borde var(--info-border)"
+    },
+    "marker": {
+      "dot": ".mui-badge--dot — antepone un punto currentColor (estado \"vivo\")"
+    }
+  },
+  "states": {
+    "static": "sin estados interactivos: el badge muestra, no acciona. Lo que comunica se elige por variante, no por atributos."
+  },
+  "tokens": [
+    "--text-secondary",
+    "--border",
+    "--accent-text",
+    "--accent-subtle",
+    "--accent-active",
+    "--secondary-text",
+    "--secondary-subtle",
+    "--secondary-border",
+    "--success",
+    "--success-bg",
+    "--success-border",
+    "--warning",
+    "--warning-bg",
+    "--warning-border",
+    "--danger",
+    "--danger-bg",
+    "--danger-border",
+    "--info",
+    "--info-bg",
+    "--info-border",
+    "--font-mono",
+    "--text-2xs",
+    "--weight-regular",
+    "--leading-snug",
+    "--space-1",
+    "--radius-full"
+  ],
+  "a11y": {
+    "element": "usar <span>: es contenido, no control — nunca recibe foco ni handlers",
+    "aria": [
+      "el punto de --dot es un pseudo decorativo; el significado SIEMPRE va en el texto del badge",
+      "no comunicar solo por color: la variante acompaña al texto ('activo', 'caído'), no lo sustituye"
+    ],
+    "contrast": "texto de cada variante sobre su tinte verificado ≥4.5 en dark y light — pares success|warning|danger|info sobre su *-bg, accent-text/accent-subtle y secondary-text/secondary-subtle cableados en scripts/verify-contrast.mjs (npm test, 95/95). Bordes: el de --accent pasa 3:1 sobre su tinte (accent-active/accent-subtle, en el gate); los bordes *-border de las variantes semánticas NO llegan a 3:1 contra su propio tinte — medidos con la fórmula del gate: dark success 2.09, warning 1.95, danger 1.92, info 2.31, secondary 2.38; light 1.47–1.55 — y quedan sancionados como refuerzo decorativo porque la semántica y el AA los lleva el texto (≥4.88 en todos) y las variantes exigen texto, no solo color. Badge default (fondo transparente): su borde var(--border) pasa 3:1 sobre bg (3.08 dark / 3.38 light) y sobre cualquier superficie en light (3.88); en dark sobre surface (2.17) y surface-raised (1.48) el boundary queda decorativo — el texto var(--text-secondary) conserva AA en todos los contextos (par en el gate)."
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Neutral (versión)",
+      "html": "<span class=\"mui-badge\">v0.1.0</span>"
+    },
+    {
+      "title": "Estados con dot",
+      "html": "<span class=\"mui-badge mui-badge--success mui-badge--dot\">activo</span> <span class=\"mui-badge mui-badge--danger mui-badge--dot\">caído</span>"
+    },
+    {
+      "title": "Marca + info",
+      "html": "<span class=\"mui-badge mui-badge--accent\">core</span> <span class=\"mui-badge mui-badge--secondary\">plugin</span> <span class=\"mui-badge mui-badge--info\">beta</span>"
+    }
+  ]
+}

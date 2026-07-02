@@ -1,0 +1,64 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "empty-state",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-empty",
+  "summary": "El terreno antes de sembrar: columna centrada y sobria que explica el vacío y ofrece la primera acción. Sin ilustraciones dramáticas — un glifo muted, texto claro y botones. Va directo sobre --bg/--surface o dentro de .mui-card__body.",
+  "element": [
+    "div",
+    "section"
+  ],
+  "anatomy": {
+    "root": ".mui-empty — flex column centrada, padding --space-12, text-align center",
+    "icon": ".mui-empty__icon — glifo unicode o SVG a 2rem (1em), var(--text-muted), decorativo (aria-hidden)",
+    "title": ".mui-empty__title — display base/medium, var(--text); usar el <h*> correcto para el outline",
+    "desc": ".mui-empty__desc — sm var(--text-muted), max-width 40ch para línea legible",
+    "actions": ".mui-empty__actions — flex gap --space-2 con wrap, margin-top --space-5; botones .mui-btn (un primario máximo)"
+  },
+  "variants": {},
+  "states": {
+    "static": "sin estados propios; los estados viven en los botones de __actions"
+  },
+  "tokens": [
+    "--text",
+    "--text-muted",
+    "--font-display",
+    "--text-base",
+    "--text-sm",
+    "--weight-medium",
+    "--leading-normal",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--space-5",
+    "--space-12"
+  ],
+  "a11y": {
+    "element": "<div> dentro de una región ya nombrada; como sección independiente, <section aria-labelledby> apuntando al id del título",
+    "aria": [
+      "__icon SIEMPRE con aria-hidden=\"true\" — es decorativo, el mensaje vive en __title/__desc",
+      "si el vacío aparece tras una acción del usuario (filtro sin resultados), anunciar con aria-live=\"polite\" en la región contenedora",
+      "__title con nivel de heading acorde al documento"
+    ],
+    "keyboard": [
+      "solo los botones de __actions son focusables (nativo de .mui-btn)"
+    ],
+    "contrast": "título var(--text) y desc/icon var(--text-muted) verificados AA sobre --bg y --surface (npm test); el glifo muted supera de sobra el mínimo 3:1 de UI"
+  },
+  "motion": {
+    "transitions": "ninguna propia; para la entrada usar .m-rise / .m-fade de milpa-motion (germina y se asienta)",
+    "reducedMotion": "n/a (sin animación propia); .m-rise degrada globalmente a fade de 1ms"
+  },
+  "examples": [
+    {
+      "title": "Sin módulos aún (primera siembra)",
+      "html": "<div class=\"mui-empty\"><span class=\"mui-empty__icon\" aria-hidden=\"true\">⌕</span><h3 class=\"mui-empty__title\">Aún no hay módulos</h3><p class=\"mui-empty__desc\">Tu milpa está lista para la primera siembra. Instalá un módulo del marketplace para empezar a cosechar.</p><div class=\"mui-empty__actions\"><button type=\"button\" class=\"mui-btn mui-btn--primary\">Sembrar módulo</button><button type=\"button\" class=\"mui-btn\">Ver documentación</button></div></div>"
+    },
+    {
+      "title": "Filtro sin resultados (con anuncio)",
+      "html": "<div aria-live=\"polite\"><div class=\"mui-empty\"><h3 class=\"mui-empty__title\">Sin resultados para «auth»</h3><p class=\"mui-empty__desc\">Probá con otro término o limpiá los filtros.</p><div class=\"mui-empty__actions\"><button type=\"button\" class=\"mui-btn\">Limpiar filtros</button></div></div></div>"
+    }
+  ]
+}

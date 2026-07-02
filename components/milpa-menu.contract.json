@@ -1,0 +1,103 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "menu",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-menu",
+  "summary": "Panel de dropdown. Fondo var(--overlay) con borde var(--border-strong) — no border-subtle (en dark es el mismo paso de tierra que overlay) ni border a secas (2.17:1 sobre --surface en dark): border-strong asegura el boundary 3:1 sobre --bg y --surface, los fondos típicos de un dropdown (regla 1: el borde define). Cerrado con [hidden]; al abrir germina con milpa-scale-in desde el trigger. El CSS es el artefacto; el comportamiento (foco, teclas, click-fuera) lo implementa el consumidor según a11y.behavior.",
+  "element": [
+    "div[role=menu]",
+    "items: button[role=menuitem] | a[role=menuitem] | button[role=menuitemcheckbox|menuitemradio]"
+  ],
+  "anatomy": {
+    "root": ".mui-menu — el panel: position absolute (con insets auto cae bajo el trigger hermano dentro de un contenedor position:relative; overridable con JS de posicionamiento), min-width 12rem, z var(--z-dropdown)",
+    "item": ".mui-menu__item — <button> o <a>; flex con gap --space-2, admite ícono inicial (svg 1em, aria-hidden) y .mui-menu__kbd al final",
+    "sep": ".mui-menu__sep — <hr>, separador full-bleed (rol nativo separator; decorativo, exento de 1.4.11)",
+    "label": ".mui-menu__label — encabezado de grupo, mono 2xs uppercase; asociarlo con role=group + aria-labelledby",
+    "kbd": ".mui-menu__kbd — slot de atajo al final del item (margin-inline-start auto); tipografía mono 2xs propia sobre un <kbd> sin clase. TODO: cuando exista la primitiva .mui-kbd (hoy NO está en el repo) este slot podrá envolverla"
+  },
+  "variants": {
+    "intent": {
+      "default": "item neutral — texto var(--text-secondary); hover/focus → fondo var(--accent-subtle) + texto var(--text)",
+      "danger": ".mui-menu__item--danger — texto var(--danger-hover) (el paso AA sobre overlay en ambos temas; --danger a secas mide 3.6:1 en dark); hover/focus → fondo var(--danger-bg)"
+    }
+  },
+  "states": {
+    "closed": "[hidden] en .mui-menu — display none; al quitarlo la animación de entrada se re-ejecuta",
+    "hover": ":hover — fondo var(--accent-subtle), texto var(--text)",
+    "focus": ":focus-visible — mismo fill que hover + outline 2px var(--focus) offset 2px",
+    "active": "[aria-current=\"page|true\"] o [aria-checked=\"true\"] — fondo var(--accent-subtle), texto var(--text), weight-medium (no usar aria-current=\"false\": quitar el atributo)",
+    "disabled": "[disabled] o [aria-disabled=\"true\"] — opacity .5, sin interacción"
+  },
+  "tokens": [
+    "--overlay",
+    "--border-strong",
+    "--border",
+    "--shadow-md",
+    "--z-dropdown",
+    "--text",
+    "--text-secondary",
+    "--accent-subtle",
+    "--danger-hover",
+    "--danger-bg",
+    "--focus",
+    "--radius-md",
+    "--radius-sm",
+    "--space-1",
+    "--space-1_5",
+    "--space-2",
+    "--font-display",
+    "--font-mono",
+    "--text-sm",
+    "--text-2xs",
+    "--weight-regular",
+    "--weight-medium",
+    "--leading-snug",
+    "--tracking-wide",
+    "--dur-fast",
+    "--ease-standard",
+    "--ease-grano"
+  ],
+  "a11y": {
+    "roles": "panel role=\"menu\" + aria-labelledby apuntando al trigger; items role=\"menuitem\" (o menuitemcheckbox/menuitemradio con aria-checked); grupos con role=\"group\" + aria-labelledby al id del .mui-menu__label; <hr class=mui-menu__sep> ya expone separator",
+    "aria": [
+      "trigger: aria-haspopup=\"menu\" + aria-expanded=\"true|false\" + aria-controls al id del panel",
+      "atajos: aria-keyshortcuts en el item; el .mui-menu__kbd visual lleva aria-hidden=\"true\"",
+      "items deshabilitados navegables: preferir aria-disabled=\"true\" (siguen siendo enfocables y anunciables)"
+    ],
+    "behavior": {
+      "nota": "JS del consumidor — el DS no lo incluye",
+      "open": "Enter/Space/ArrowDown en el trigger abren y mueven el foco al primer item (ArrowUp: al último); quitar [hidden] + aria-expanded=true",
+      "navigate": "ArrowDown/ArrowUp mueven el foco entre items (roving tabindex, con wrap); Home/End van al primero/último; typeahead opcional",
+      "close": "Esc cierra y DEVUELVE el foco al trigger; Tab cierra; click-fuera cierra; activar un item cierra (salvo menuitemcheckbox/radio si el patrón lo pide)",
+      "focus": "el foco vive en los items, no en el panel; un solo tabstop (roving tabindex)"
+    },
+    "keyboard": [
+      "todo operable por teclado según behavior; anillo :focus-visible verificado sobre overlay en ambos temas"
+    ],
+    "limits": [
+      "boundary del panel: border-strong garantiza ≥3:1 sobre --bg y --surface en ambos temas; en dark, sobre --surface-raised (mismo paso de tierra que overlay) mide 2.13:1 y la separación la aporta shadow-md — evitar anclar dropdowns directamente sobre surface-raised en dark"
+    ],
+    "contrast": "pares nuevos verificados con scripts/verify-contrast.mjs en dark y light: text-secondary/overlay 4.96·8.25, text/accent-subtle 16.63·15.57, danger-hover/overlay 4.79·8.73, danger-hover/danger-bg 9.75·7.85, focus/overlay 4.61·5.62; boundary border-strong/surface 3.13·5.58 y border-strong/bg 4.43·4.86 (pares ya gateados en CI)"
+  },
+  "motion": {
+    "enter": "milpa-scale-in (keyframe de milpa-motion.css) --dur-fast --ease-grano, transform-origin top: el panel germina desde el trigger y se asienta — nunca rebota",
+    "transitions": "background/color de items en --dur-fast --ease-standard",
+    "reducedMotion": "contrato global de milpa-motion.css: la entrada cae a 1ms → 1 frame estático final (el panel simplemente aparece); las transiciones de items igual"
+  },
+  "examples": [
+    {
+      "title": "Dropdown completo (trigger + grupo + atajo + separador + destructivo)",
+      "html": "<div style=\"position:relative\"><button type=\"button\" class=\"mui-btn\" id=\"plg-trigger\" aria-haspopup=\"menu\" aria-expanded=\"true\" aria-controls=\"plg-menu\">Opciones</button><div class=\"mui-menu\" id=\"plg-menu\" role=\"menu\" aria-labelledby=\"plg-trigger\"><div role=\"group\" aria-labelledby=\"plg-g1\"><span class=\"mui-menu__label\" id=\"plg-g1\" role=\"presentation\">Plugin</span><button type=\"button\" class=\"mui-menu__item\" role=\"menuitem\" aria-keyshortcuts=\"Control+D\">Duplicar<span class=\"mui-menu__kbd\" aria-hidden=\"true\"><kbd>Ctrl D</kbd></span></button><button type=\"button\" class=\"mui-menu__item\" role=\"menuitem\" aria-disabled=\"true\">Exportar</button></div><hr class=\"mui-menu__sep\"><button type=\"button\" class=\"mui-menu__item mui-menu__item--danger\" role=\"menuitem\">Desraizar plugin</button></div></div>"
+    },
+    {
+      "title": "Items chequeables (menuitemcheckbox)",
+      "html": "<div class=\"mui-menu\" role=\"menu\" aria-label=\"Columnas visibles\"><button type=\"button\" class=\"mui-menu__item\" role=\"menuitemcheckbox\" aria-checked=\"true\">Nombre</button><button type=\"button\" class=\"mui-menu__item\" role=\"menuitemcheckbox\" aria-checked=\"false\">Versión</button></div>"
+    },
+    {
+      "title": "Navegación (items <a> + aria-current)",
+      "html": "<div class=\"mui-menu\" role=\"menu\" aria-label=\"Secciones\"><a class=\"mui-menu__item\" role=\"menuitem\" href=\"/terreno\" aria-current=\"page\">Terreno</a><a class=\"mui-menu__item\" role=\"menuitem\" href=\"/semillas\">Semillas</a></div>"
+    }
+  ]
+}

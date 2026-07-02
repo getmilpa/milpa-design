@@ -1,0 +1,79 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "avatar",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-avatar",
+  "summary": "Identidad visual de persona u organización. Círculo con <img> (object-fit cover) o iniciales como fallback (tinte olivo — par secondary-text/secondary-subtle verificado). --square para apps/orgs; .mui-avatar-group apila con solape de ¼ y ring doble: 2px de --_ring (default var(--surface)) + delimitador de 1px var(--border).",
+  "element": [
+    "span",
+    "div"
+  ],
+  "anatomy": {
+    "root": ".mui-avatar — contenedor; con <img> hijo muestra la foto, sin él muestra las iniciales que contenga (uppercase vía CSS)",
+    "img": "<img> hijo directo — width/height 100%, object-fit cover",
+    "group": ".mui-avatar-group — fila apilada; cada avatar lleva ring de 2px en var(--_ring) (default var(--surface); el consumidor lo setea al color de la superficie contenedora, p.ej. style=\"--_ring: var(--surface-raised)\") + delimitador de 1px var(--border), y solape de ¼ del tamaño (escala con --_size)"
+  },
+  "variants": {
+    "size": {
+      "sm": ".mui-avatar--sm — 1.5rem",
+      "md": "default — 2rem",
+      "lg": ".mui-avatar--lg — 2.5rem",
+      "xl": ".mui-avatar--xl — 3rem"
+    },
+    "shape": {
+      "circle": "default — var(--radius-full), para personas",
+      "square": ".mui-avatar--square — var(--radius-base), para apps/organizaciones"
+    }
+  },
+  "states": {
+    "static": "sin estados interactivos; si el avatar acciona o navega, lo envuelve un control (button/a) que aporta foco y hover"
+  },
+  "tokens": [
+    "--secondary-subtle",
+    "--secondary-text",
+    "--surface",
+    "--border",
+    "--font-display",
+    "--weight-medium",
+    "--tracking-normal",
+    "--radius-full",
+    "--radius-base"
+  ],
+  "a11y": {
+    "element": "con <img>: alt = nombre ('Rosa Díaz'), o alt=\"\" si el nombre ya está visible al lado. Con iniciales: role=\"img\" + aria-label con el nombre completo",
+    "behavior": "fallback de imagen: si el <img> dispara onerror, el consumidor lo remueve y deja/inserta las iniciales como texto — el CSS estiliza ambos casos sin cambios",
+    "aria": [
+      "en .mui-avatar-group, si se truncan miembros ('+3'), ese avatar lleva el conteo como texto real con aria-label descriptivo ('3 personas más')",
+      "el ring del grupo es separación decorativa: la identidad de cada miembro la lleva SIEMPRE su aria-label/alt, nunca el ring"
+    ],
+    "contrast": "iniciales var(--secondary-text) sobre var(--secondary-subtle) verificado AA (npm test). Ring del grupo (medido con la fórmula del gate): el ring de 2px en var(--surface) solo mide 1.35 (dark) / 1.09 (light) contra el tinte del fallback, por eso el delimitador de 1px var(--border) — 2.94 (dark) / 3.54 (light) contra el tinte — hace perceptible la separación sin reclamar 3:1 (es decorativa). Setear --_ring al color de la superficie contenedora evita el efecto halo cuando el grupo no vive sobre var(--surface) (surface sobre bg mide 1.42 en dark)."
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (contrato global vigente)"
+  },
+  "examples": [
+    {
+      "title": "Foto",
+      "html": "<span class=\"mui-avatar\"><img src=\"/u/rosa.jpg\" alt=\"Rosa Díaz\"></span>"
+    },
+    {
+      "title": "Iniciales (fallback)",
+      "html": "<span class=\"mui-avatar mui-avatar--lg\" role=\"img\" aria-label=\"Rosa Díaz\">rd</span>"
+    },
+    {
+      "title": "Organización",
+      "html": "<span class=\"mui-avatar mui-avatar--square\" role=\"img\" aria-label=\"Milpa HQ\">m</span>"
+    },
+    {
+      "title": "Grupo apilado",
+      "html": "<div class=\"mui-avatar-group\"><span class=\"mui-avatar\" role=\"img\" aria-label=\"Rosa Díaz\">rd</span><span class=\"mui-avatar\" role=\"img\" aria-label=\"Juan Pérez\">jp</span><span class=\"mui-avatar\" role=\"img\" aria-label=\"3 personas más\">+3</span></div>"
+    },
+    {
+      "title": "Grupo sobre panel raised (--_ring)",
+      "html": "<div class=\"mui-avatar-group\" style=\"--_ring: var(--surface-raised)\"><span class=\"mui-avatar\" role=\"img\" aria-label=\"Rosa Díaz\">rd</span><span class=\"mui-avatar\" role=\"img\" aria-label=\"Juan Pérez\">jp</span></div>"
+    }
+  ]
+}

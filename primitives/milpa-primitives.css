@@ -1,0 +1,604 @@
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — primitives (el grano) · @milpa/design
+   Requiere: dist/milpa-tokens.css (+ motion/milpa-motion.css, que aporta
+   el contrato global de prefers-reduced-motion).
+
+   EL MOLDE (HANDOFF T2 — todo componente nuevo sigue estas convenciones):
+   · Naming BEM: bloque .mui-x · variante .mui-x--y · elemento .mui-x__z
+   · El estado se estiliza vía atributos nativos/ARIA — el hook de estilo
+     ES la semántica: [disabled], [aria-invalid="true"], [aria-busy="true"],
+     [aria-selected="true"], [aria-current="page"], [aria-sort], [open].
+     Nunca una clase .is-active donde exista un atributo ARIA.
+   · Color SOLO vía tokens semánticos (--bg, --accent, …): la paridad
+     light/dark sale gratis. Prohibido hex/rgb/hsl literal.
+   · Fills sólidos llevan auto-borde = su token `-active` (regla 4:
+     un paso más oscuro de su propio color, define el boundary).
+   · Regla 2: el primario en light NO es fill oro — es ghost. La única
+     estructura por tema se escribe con [data-theme="light"] .mui-… .
+   · Focus: outline 2px solid var(--focus) + offset 2px, SOLO en
+     :focus-visible. Jamás outline:none sin reemplazo.
+   · Motion: transition con --dur-* / --ease-*; germina y se asienta,
+     nunca rebota. El reduce lo cubre milpa-motion.css globalmente.
+   · Alturas de control: sm 2rem · md 2.5rem · lg 3rem (props privadas --_h).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- base · box model + utilidades compartidas ---------- */
+[class^="mui-"], [class*=" mui-"],
+[class^="mui-"]::before, [class*=" mui-"]::before,
+[class^="mui-"]::after, [class*=" mui-"]::after { box-sizing: border-box; }
+
+/* screen-reader only — para labels de switches, checkboxes de tabla, etc. */
+.mui-sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+@keyframes mui-spin { to { transform: rotate(360deg); } }
+/* Bajo reduced-motion el contrato global (milpa-motion.css) deja el spin en
+   1 frame: anillo estático. La semántica la lleva [aria-busy], no el giro. */
+
+/* ---------- Button · .mui-btn ----------
+   Default (sin variante) = neutral outline: definido por borde, funciona
+   sobre cualquier superficie. El primario es oro y hay UNO por vista. */
+.mui-btn {
+  --_h: 2.5rem; --_px: var(--space-4); --_fs: var(--text-sm);
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--space-2);
+  height: var(--_h); padding: 0 var(--_px);
+  font-family: var(--font-display); font-size: var(--_fs);
+  font-weight: var(--weight-medium); line-height: 1;
+  letter-spacing: var(--tracking-normal); white-space: nowrap;
+  text-decoration: none; user-select: none; cursor: pointer;
+  background: transparent; color: var(--text-secondary);
+  border: 1px solid var(--border); border-radius: var(--radius-base);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color     var(--dur-fast) var(--ease-standard),
+    color            var(--dur-fast) var(--ease-standard),
+    transform        var(--dur-fast) var(--ease-settle);
+}
+.mui-btn:hover  { color: var(--text); border-color: var(--border-strong); transform: translateY(-1px); }
+.mui-btn:active { transform: translateY(0); }
+.mui-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-btn[disabled], .mui-btn[aria-disabled="true"] {
+  opacity: 0.5; cursor: not-allowed; pointer-events: none;
+}
+
+/* primario — oro. Dark: fill claro + tinta oscura. */
+.mui-btn--primary {
+  background: var(--accent); color: var(--text-on-accent);
+  border-color: var(--accent-active);
+}
+.mui-btn--primary:hover  { background: var(--accent-hover); color: var(--text-on-accent); }
+.mui-btn--primary:active { background: var(--accent-active); }
+/* regla 2: en light el oro no contrasta como fill sobre crema → ghost */
+[data-theme="light"] .mui-btn--primary {
+  background: transparent; color: var(--accent-text);
+  border-color: var(--accent);
+}
+[data-theme="light"] .mui-btn--primary:hover {
+  background: var(--accent-subtle); color: var(--accent-text);
+  border-color: var(--accent-hover);
+}
+[data-theme="light"] .mui-btn--primary:active { background: var(--accent-subtle); }
+
+/* secundario — olivo sólido (la milpa viva). on-secondary se invierte por tema. */
+.mui-btn--secondary {
+  background: var(--secondary); color: var(--on-secondary);
+  border-color: var(--secondary-active);
+}
+.mui-btn--secondary:hover  { background: var(--secondary-hover); color: var(--on-secondary); }
+.mui-btn--secondary:active { background: var(--secondary-active); }
+
+/* subtle — tinte olivo, para acciones de marca de bajo énfasis */
+.mui-btn--subtle {
+  background: var(--secondary-subtle); color: var(--secondary-text);
+  border-color: var(--secondary-border);
+}
+.mui-btn--subtle:hover { color: var(--secondary-text); border-color: var(--secondary-text); }
+
+/* danger — destructivo, sólido. */
+.mui-btn--danger {
+  background: var(--danger); color: var(--on-danger);
+  border-color: var(--danger-active);
+}
+.mui-btn--danger:hover  { background: var(--danger-hover); color: var(--on-danger); }
+.mui-btn--danger:active { background: var(--danger-active); }
+
+/* ghost — sin borde, para toolbars e iconos */
+.mui-btn--ghost { border-color: transparent; }
+.mui-btn--ghost:hover { background: var(--surface-raised); border-color: transparent; }
+
+/* tamaños */
+.mui-btn--sm { --_h: 2rem;  --_px: var(--space-3); --_fs: var(--text-xs); border-radius: var(--radius-sm); }
+.mui-btn--lg { --_h: 3rem;  --_px: var(--space-5); --_fs: var(--text-base); border-radius: var(--radius-md); }
+.mui-btn--icon { width: var(--_h); padding: 0; flex: none; }
+.mui-btn--full { width: 100%; }
+
+/* loading — la semántica es aria-busy; el spinner es consecuencia */
+.mui-btn[aria-busy="true"] { pointer-events: none; }
+.mui-btn[aria-busy="true"]::before {
+  content: ""; width: 1em; height: 1em; flex: none;
+  border-radius: var(--radius-full);
+  border: 2px solid currentColor; border-inline-end-color: transparent;
+  animation: mui-spin var(--dur-deliberate) linear infinite;
+}
+
+/* ---------- Field · .mui-field ----------
+   Envoltura de cualquier control de formulario: label + control + hint/error.
+   El error se asocia con aria-describedby y el control lleva aria-invalid. */
+.mui-field { display: flex; flex-direction: column; gap: var(--space-1_5); }
+.mui-field__label {
+  font-family: var(--font-display); font-size: var(--text-sm);
+  font-weight: var(--weight-medium); color: var(--text-secondary);
+}
+.mui-field__label .mui-field__required { color: var(--danger); }
+.mui-field__hint  { font-size: var(--text-xs); color: var(--text-muted); }
+.mui-field__error {
+  font-family: var(--font-mono); font-size: var(--text-xs); color: var(--danger);
+}
+.mui-field--row { flex-direction: row; align-items: center; gap: var(--space-2); }
+
+/* ---------- Input · .mui-input ----------
+   bg = var(--bg): un paso hundido respecto a la superficie (inset sutil,
+   la definición la da el borde — regla 1). */
+.mui-input {
+  --_h: 2.5rem;
+  width: 100%; height: var(--_h); padding: 0 var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  color: var(--text); background: var(--bg);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  transition:
+    border-color     var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard);
+}
+.mui-input::placeholder { color: var(--text-muted); opacity: 1; }
+.mui-input:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 1px;
+  border-color: var(--focus);
+}
+.mui-input[aria-invalid="true"] { border-color: var(--danger); }
+.mui-input[aria-invalid="true"]:focus-visible { outline-color: var(--danger); border-color: var(--danger); }
+.mui-input[disabled] { opacity: 0.5; cursor: not-allowed; }
+.mui-input[readonly] { background: var(--surface); }
+.mui-input--sm { --_h: 2rem; font-size: var(--text-xs); border-radius: var(--radius-sm); }
+.mui-input--lg { --_h: 3rem; font-size: var(--text-base); }
+
+/* input-group — prefijo/sufijo (ícono, unidad, kbd) superpuesto al input */
+.mui-input-group { position: relative; display: block; }
+.mui-input-group__prefix, .mui-input-group__suffix {
+  position: absolute; top: 0; bottom: 0; display: inline-flex;
+  align-items: center; color: var(--text-muted);
+  font-size: var(--text-sm); pointer-events: none;
+}
+.mui-input-group__prefix { inset-inline-start: var(--space-3); }
+.mui-input-group__suffix { inset-inline-end: var(--space-3); }
+.mui-input-group--prefix > .mui-input { padding-inline-start: var(--space-8); }
+.mui-input-group--suffix > .mui-input { padding-inline-end: var(--space-8); }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · form-extras
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — primitives · form-extras (Textarea + Select) · @milpa/design
+   Requiere: dist/milpa-tokens.css + primitives/milpa-primitives.css
+   (aporta .mui-field y el molde) + motion/milpa-motion.css (contrato
+   global de prefers-reduced-motion).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Textarea · .mui-textarea ----------
+   Mismo lenguaje que .mui-input: bg = var(--bg), un paso hundido respecto
+   a la superficie; la definición la da el borde (regla 1). Multi-línea:
+   padding en bloque, line-height de lectura y resize SOLO vertical
+   (el ancho lo gobierna el layout, no el usuario). */
+.mui-textarea {
+  width: 100%; min-height: 5rem;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text); background: var(--bg);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  resize: vertical;
+  transition:
+    border-color     var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard);
+}
+.mui-textarea::placeholder { color: var(--text-muted); opacity: 1; }
+.mui-textarea:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 1px;
+  border-color: var(--focus);
+}
+.mui-textarea[aria-invalid="true"] { border-color: var(--danger); }
+.mui-textarea[aria-invalid="true"]:focus-visible { outline-color: var(--danger); border-color: var(--danger); }
+.mui-textarea[disabled] { opacity: 0.5; cursor: not-allowed; resize: none; }
+.mui-textarea[readonly] { background: var(--surface); }
+
+/* ---------- Select · .mui-select ----------
+   <select> nativo con appearance none dentro de .mui-select-wrap. El
+   chevrón es geometría CSS pura en ::after (pseudo decorativo — invisible
+   para AT — con pointer-events none): dos bordes de un cuadrado rotado
+   45°, currentColor resuelto a var(--text-muted). El popup de opciones
+   es del UA: teclado (flechas, type-ahead) y semántica salen gratis. */
+.mui-select-wrap { position: relative; display: block; }
+.mui-select-wrap::after {
+  content: ""; position: absolute;
+  top: 50%; inset-inline-end: var(--space-3);
+  width: 0.5rem; height: 0.5rem;
+  color: var(--text-muted);
+  border-inline-end: 2px solid currentColor;
+  border-block-end:  2px solid currentColor;
+  /* -75%: compensa el centro óptico del chevrón rotado */
+  transform: translateY(-75%) rotate(45deg);
+  pointer-events: none;
+}
+
+.mui-select {
+  --_h: 2.5rem;
+  width: 100%; height: var(--_h);
+  padding-block: 0; padding-inline: var(--space-3) var(--space-8);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  color: var(--text); background: var(--bg);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  appearance: none; cursor: pointer;
+  transition:
+    border-color     var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard);
+}
+.mui-select:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 1px;
+  border-color: var(--focus);
+}
+.mui-select[aria-invalid="true"] { border-color: var(--danger); }
+.mui-select[aria-invalid="true"]:focus-visible { outline-color: var(--danger); border-color: var(--danger); }
+.mui-select[disabled] { opacity: 0.5; cursor: not-allowed; }
+/* el chevrón acompaña el estado del control (es decorativo: sin fallback) */
+.mui-select-wrap:has(.mui-select[disabled])::after { opacity: 0.5; }
+
+/* tamaños — mismas alturas de control que .mui-input */
+.mui-select--sm { --_h: 2rem; font-size: var(--text-xs); border-radius: var(--radius-sm); }
+.mui-select--lg { --_h: 3rem; font-size: var(--text-base); }
+
+/* multiple — listbox inline: altura libre, sin chevrón (no hay popup) */
+.mui-select[multiple] {
+  height: auto; min-height: 5rem;
+  padding-block: var(--space-2); padding-inline-end: var(--space-3);
+}
+.mui-select-wrap:has(.mui-select[multiple])::after { display: none; }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · selection-controls
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — selection controls (el grano que elige) · @milpa/design
+   Checkbox · Radio · Switch + patrón de etiqueta .mui-choice.
+   Requiere: dist/milpa-tokens.css + primitives/milpa-primitives.css
+   (aporta el box-sizing base y .mui-sr-only) + motion/milpa-motion.css
+   (contrato global de prefers-reduced-motion).
+
+   Inputs nativos con appearance:none — la semántica (checked /
+   indeterminate / disabled / grupos de radio) sigue siendo del
+   navegador; aquí solo se pinta. Glifos = geometría CSS pura
+   (clip-path sobre currentColor), nunca imágenes ni SVG externo.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- base compartida · .mui-checkbox + .mui-radio ----------
+   Caja 1.125rem sobre var(--bg): hundida un paso respecto a la
+   superficie, definida por el borde (regla 1). checked en DARK = fill
+   var(--accent) + auto-borde var(--accent-active) (regla 4). En LIGHT
+   el oro NO es fill sólido (regla 2): checked se espeja del primario
+   ghost — ver override [data-theme="light"] más abajo. */
+.mui-checkbox, .mui-radio {
+  --_s: 1.125rem;
+  appearance: none; -webkit-appearance: none;
+  position: relative; flex: none;
+  width: var(--_s); height: var(--_s); margin: 0;
+  cursor: pointer;
+  background: var(--bg);
+  color: var(--text-on-accent); /* currentColor del glifo (dark: tinta sobre oro) */
+  border: 1px solid var(--border-strong);
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color     var(--dur-fast) var(--ease-standard);
+}
+.mui-checkbox:hover, .mui-radio:hover { border-color: var(--text-muted); }
+.mui-checkbox:focus-visible, .mui-radio:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 1px;
+}
+.mui-checkbox:checked, .mui-checkbox:indeterminate, .mui-radio:checked {
+  background: var(--accent); border-color: var(--accent-active);
+}
+/* regla 2: en light el oro NUNCA es fill sólido → checked es ghost,
+   espejo del .mui-btn--primary light: borde 2px var(--accent) + glifo
+   var(--accent-text) sobre var(--bg). Medido: boundary accent 3.41 (bg)
+   / 3.92 (surface, raised) y glifo accent-text 4.90 sobre bg. */
+[data-theme="light"] .mui-checkbox:checked,
+[data-theme="light"] .mui-checkbox:indeterminate,
+[data-theme="light"] .mui-radio:checked {
+  background: var(--bg);
+  border-width: 2px; border-color: var(--accent);
+  color: var(--accent-text);
+}
+.mui-checkbox[aria-invalid="true"], .mui-radio[aria-invalid="true"] { border-color: var(--danger); }
+.mui-checkbox[aria-invalid="true"]:focus-visible,
+.mui-radio[aria-invalid="true"]:focus-visible { outline-color: var(--danger); }
+/* checked+invalid: un borde danger de 1px sería ilegible contra el fill
+   oro (danger/accent 1.27 dark · 1.52 light) → la señal se refuerza con
+   fill danger completo, válido en ambos temas (on-danger/danger ≥4.5
+   gateado; boundary = el fill: danger ≥3 sobre bg/surface/surface-raised).
+   Declarado después del override light: gana también ahí. */
+.mui-checkbox[aria-invalid="true"]:checked,
+.mui-checkbox[aria-invalid="true"]:indeterminate,
+.mui-radio[aria-invalid="true"]:checked {
+  background: var(--danger);
+  border-width: 1px; border-color: var(--danger-active);
+  color: var(--on-danger);
+}
+.mui-checkbox[disabled], .mui-radio[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------- Checkbox · .mui-checkbox ---------- */
+.mui-checkbox { border-radius: var(--radius-xs); }
+/* glifo ✓ — clip-path sobre currentColor; content:"" = invisible para AT
+   (la semántica la lleva :checked, no el dibujo) */
+.mui-checkbox:checked::before {
+  content: ""; position: absolute; inset: 0;
+  background: currentColor;
+  clip-path: polygon(14% 52%, 26% 40%, 42% 56%, 74% 22%, 86% 34%, 42% 80%);
+}
+/* mixto (selección parcial — solo alcanzable por JS): barra horizontal */
+.mui-checkbox:indeterminate::before {
+  content: ""; position: absolute; inset: 0;
+  background: currentColor;
+  clip-path: inset(41% 22%);
+}
+
+/* ---------- Radio · .mui-radio ---------- */
+.mui-radio { border-radius: var(--radius-full); }
+/* dot central — círculo en currentColor */
+.mui-radio:checked::after {
+  content: ""; position: absolute; inset: 0; margin: auto;
+  width: 0.5rem; height: 0.5rem;
+  background: currentColor; border-radius: var(--radius-full);
+}
+
+/* ---------- Switch · .mui-switch ----------
+   <input type="checkbox" role="switch"> — efecto inmediato, sin submit.
+   Track 2.25×1.25rem; el thumb se desliza exactamente 1rem con
+   --ease-settle: germina y se asienta, nunca rebota. Unchecked =
+   surface-raised con borde var(--text-muted) — NO border-strong, que
+   sobre surface-raised/overlay en dark mide 2.13 (<3): el switch debe
+   funcionar dentro de modales/drawers. text-muted como boundary: 3.88
+   sobre raised dark · 8.07 sobre bg · ≥4.86 en light. Thumb en
+   text-secondary (4.96 dark / 8.25 light sobre el track). */
+.mui-switch {
+  --_w: 2.25rem; --_h: 1.25rem; --_thumb: 0.875rem;
+  appearance: none; -webkit-appearance: none;
+  position: relative; flex: none;
+  width: var(--_w); height: var(--_h); margin: 0;
+  cursor: pointer;
+  background: var(--surface-raised);
+  border: 1px solid var(--text-muted); border-radius: var(--radius-full);
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color     var(--dur-fast) var(--ease-standard);
+}
+/* thumb — decorativo (content:""); el estado es :checked */
+.mui-switch::before {
+  content: ""; position: absolute;
+  top: 50%; inset-inline-start: var(--space-0_5);
+  width: var(--_thumb); height: var(--_thumb);
+  background: var(--text-secondary); border-radius: var(--radius-full);
+  transform: translateY(-50%);
+  transition:
+    transform        var(--dur-fast) var(--ease-settle),
+    background-color var(--dur-fast) var(--ease-standard);
+}
+.mui-switch:hover { border-color: var(--text-secondary); }
+.mui-switch:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.mui-switch:checked { background: var(--accent); border-color: var(--accent-active); }
+.mui-switch:checked::before {
+  background: var(--text-on-accent);
+  transform: translate(var(--space-4), -50%); /* recorrido exacto = 1rem */
+}
+/* transform no es lógico: :dir() resuelve la direccionalidad COMPUTADA
+   (atributo dir o CSS direction), incluidos islotes ltr dentro de rtl */
+.mui-switch:checked:dir(rtl)::before { transform: translate(calc(-1 * var(--space-4)), -50%); }
+/* regla 2: en light el oro no es fill sólido → track var(--accent-subtle)
+   + borde var(--accent) + thumb var(--accent-text), espejo del primario
+   ghost light (mismo esquema que su hover). Medido: thumb 5.10 sobre el
+   track; borde 3.56 contra su propio track y 3.41–3.92 contra el host. */
+[data-theme="light"] .mui-switch:checked {
+  background: var(--accent-subtle); border-color: var(--accent);
+}
+[data-theme="light"] .mui-switch:checked::before { background: var(--accent-text); }
+.mui-switch[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------- Choice · .mui-choice ----------
+   Patrón de etiqueta para los tres controles: <label> implícito que
+   envuelve control + texto (+ hint) — click en cualquier parte activa. */
+.mui-choice {
+  display: inline-flex; align-items: flex-start; gap: var(--space-2);
+  cursor: pointer; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+/* alinea la caja de 1.125rem con la primera línea del texto sm */
+.mui-choice > .mui-checkbox, .mui-choice > .mui-radio { margin-top: var(--space-px); }
+.mui-choice__text {
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: var(--leading-normal); color: var(--text-secondary);
+}
+/* hint en text-secondary, NO en text-muted: el hábitat canónico de estos
+   controles son paneles/modales (--overlay = surface-raised en dark) y
+   text-muted ahí mide 3.88 (<4.5 AA texto). Quality floor > spec del
+   cluster; la jerarquía la da el tamaño (xs vs sm). */
+.mui-choice__hint {
+  display: block; margin-top: var(--space-0_5);
+  font-size: var(--text-xs); color: var(--text-secondary);
+}
+/* [disabled] adentro → se atenúa el label completo; el control interno
+   no se atenúa dos veces (la opacidad ya la puso el label) */
+.mui-choice:has([disabled]) { opacity: 0.5; cursor: not-allowed; }
+.mui-choice:has([disabled]) [disabled] { opacity: 1; }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · display-bits
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — primitives · display-bits · @milpa/design
+   Badge · Kbd · Avatar · Spinner · Progress · Divider
+   Requiere: dist/milpa-tokens.css + primitives/milpa-primitives.css
+   (aporta el box-model mui-*, .mui-sr-only y @keyframes mui-spin) +
+   motion/milpa-motion.css (contrato global de prefers-reduced-motion).
+   Piezas de display puras: sin estados interactivos, sin foco propio.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Badge · .mui-badge ----------
+   Etiqueta de metadato/estado. Pill mono definida por borde; default
+   neutral transparente. Semánticas = texto de color + tinte *-bg +
+   borde *-border (patrón del proof): el AA lo lleva el texto (≥4.5,
+   pares cableados en el gate), el borde es refuerzo decorativo. */
+.mui-badge {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 0.2em 0.55em;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-regular); line-height: var(--leading-snug);
+  white-space: nowrap;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border); border-radius: var(--radius-full);
+}
+.mui-badge--accent    { color: var(--accent-text);    background: var(--accent-subtle);    border-color: var(--accent-active); }
+.mui-badge--secondary { color: var(--secondary-text); background: var(--secondary-subtle); border-color: var(--secondary-border); }
+.mui-badge--success   { color: var(--success); background: var(--success-bg); border-color: var(--success-border); }
+.mui-badge--warning   { color: var(--warning); background: var(--warning-bg); border-color: var(--warning-border); }
+.mui-badge--danger    { color: var(--danger);  background: var(--danger-bg);  border-color: var(--danger-border); }
+.mui-badge--info      { color: var(--info);    background: var(--info-bg);    border-color: var(--info-border); }
+/* dot — grano de estado "vivo"; decorativo, hereda el color del texto */
+.mui-badge--dot::before {
+  content: ""; width: 0.5em; height: 0.5em; flex: none;
+  border-radius: var(--radius-full); background: currentColor;
+}
+
+/* ---------- Kbd · .mui-kbd ----------
+   Keycap sutil: la "tecla" la da el borde inferior de 2px, no una
+   sombra (regla 1: la definición viene de los bordes). Boundary 3:1
+   sobre bg; en superficies raised de dark queda decorativo (el AA
+   siempre lo lleva el texto — ratios en el contrato). */
+.mui-kbd {
+  display: inline-block;
+  padding: var(--space-0_5) var(--space-1_5);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  line-height: var(--leading-snug);
+  color: var(--text);
+  background: var(--surface-raised);
+  border: 1px solid var(--border); border-bottom-width: 2px;
+  border-radius: var(--radius-xs);
+  vertical-align: middle;
+}
+
+/* ---------- Avatar · .mui-avatar ----------
+   Círculo con <img> (cover) o iniciales como fallback (tinte olivo —
+   par secondary-text/secondary-subtle ya verificado). El tamaño vive
+   en --_size: iniciales y solape del grupo escalan solos. */
+.mui-avatar {
+  --_size: 2rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--_size); height: var(--_size); flex: none;
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: calc(var(--_size) * 0.4);
+  font-weight: var(--weight-medium); line-height: 1;
+  letter-spacing: var(--tracking-normal); text-transform: uppercase;
+  color: var(--secondary-text);
+  background: var(--secondary-subtle);
+  border-radius: var(--radius-full);
+  user-select: none; vertical-align: middle;
+}
+.mui-avatar > img { width: 100%; height: 100%; object-fit: cover; }
+.mui-avatar--sm { --_size: 1.5rem; }
+.mui-avatar--lg { --_size: 2.5rem; }
+.mui-avatar--xl { --_size: 3rem; }
+.mui-avatar--square { border-radius: var(--radius-base); } /* apps/orgs */
+
+/* grupo apilado — ring doble y plano (ring, no sombra): 2px de --_ring
+   (el color de la superficie contenedora; default var(--surface) — el
+   consumidor lo sube si el grupo vive en otra superficie) + delimitador
+   de 1px var(--border) para que los fallbacks apilados no se fundan */
+.mui-avatar-group { --_ring: var(--surface); display: inline-flex; align-items: center; }
+.mui-avatar-group .mui-avatar {
+  box-shadow: 0 0 0 2px var(--_ring), 0 0 0 3px var(--border);
+}
+.mui-avatar-group .mui-avatar + .mui-avatar { margin-inline-start: calc(var(--_size) / -4); }
+
+/* ---------- Spinner · .mui-spinner ----------
+   Anillo de 1em: escala con el font-size y hereda el color del
+   contexto (currentColor). REUSA @keyframes mui-spin del molde.
+   La semántica la lleva role="status" + texto, nunca el giro; bajo
+   reduced-motion queda en 1 frame (anillo estático, cuarto abierto). */
+.mui-spinner {
+  display: inline-block; width: 1em; height: 1em; flex: none;
+  border: 2px solid currentColor; border-inline-end-color: transparent;
+  border-radius: var(--radius-full);
+  animation: mui-spin var(--dur-deliberate) linear infinite;
+  vertical-align: middle;
+}
+
+/* ---------- Progress · .mui-progress ----------
+   Track hundido (surface-raised) con boundary var(--border): el extent
+   del track pasa 3:1 sobre el bg de página en ambos temas. El fill ES
+   el indicador — pares fill/track ≥3:1 cableados en el gate. El
+   consumidor pone width inline y aria-valuenow (mismo valor). */
+.mui-progress {
+  display: block; width: 100%; height: var(--space-2);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.mui-progress__bar {
+  display: block; height: 100%;
+  background: var(--accent);
+  border-radius: var(--radius-full);
+  transition: width var(--dur-moderate) var(--ease-settle); /* se asienta */
+}
+.mui-progress--success .mui-progress__bar { background: var(--success); }
+.mui-progress--warning .mui-progress__bar { background: var(--warning); }
+.mui-progress--danger  .mui-progress__bar { background: var(--danger); }
+
+/* ---------- Divider · .mui-divider ----------
+   Separación = una línea sutil, sin peso visual. <hr> para el caso
+   simple; --label vive en un <div role="separator"> (hr no admite
+   contenido). */
+.mui-divider {
+  margin-block: var(--space-4); margin-inline: 0;
+  border: 0; border-top: 1px solid var(--border-subtle);
+}
+/* vertical — el atributo ARIA correcto ES el hook de estilo (una sola
+   fuente de verdad); la clase queda como azúcar opcional. En flex se
+   estira solo (align-self). */
+.mui-divider--vertical,
+.mui-divider[aria-orientation="vertical"] {
+  display: inline-block; width: 0; height: auto; min-height: 1em;
+  align-self: stretch;
+  margin-block: 0; margin-inline: var(--space-2);
+  border-top: 0; border-inline-start: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+/* con label — rótulo mono centrado; las líneas son pseudos decorativos.
+   --_label-color default text-secondary: AA también dentro de paneles
+   raised en dark (4.96) — bajable a muted solo sobre bg/surface. */
+.mui-divider--label {
+  --_label-color: var(--text-secondary);
+  display: flex; align-items: center; gap: var(--space-3);
+  border: 0;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide); text-transform: uppercase;
+  color: var(--_label-color);
+}
+.mui-divider--label::before,
+.mui-divider--label::after {
+  content: ""; flex: 1; border-top: 1px solid var(--border-subtle);
+}

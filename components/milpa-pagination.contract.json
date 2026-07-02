@@ -1,0 +1,82 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "pagination",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-pagination",
+  "summary": "Navegación entre páginas de un dataset. <nav aria-label> con lista real; el ítem ES el <button>/<a>. La página actual se declara con aria-current=\"page\": tinte var(--accent-subtle) + texto var(--accent-text) + borde var(--accent) — el mismo trío pasa AA en dark y light sin override por tema.",
+  "element": [
+    "nav > ul > li > (button | a)"
+  ],
+  "anatomy": {
+    "root": ".mui-pagination — el <nav aria-label>: flex con wrap, envuelve lista e info",
+    "list": ".mui-pagination__list — <ul> flex gap --space-1, sin viñetas",
+    "item": ".mui-pagination__item — <button> (cambio por JS) o <a href> (URL por página): cuadrado 2rem (min-width, crece con 3+ dígitos), mono xs tabular-nums, borde transparente en reposo",
+    "ellipsis": ".mui-pagination__ellipsis — <span aria-hidden=\"true\">…</span> muted, no interactivo, mismo footprint que un ítem",
+    "info": ".mui-pagination__info — resumen del rango (\"1–20 de 240\"): mono xs muted, tabular-nums"
+  },
+  "variants": {
+    "element": {
+      "button": "<button type=\"button\" class=\"mui-pagination__item\"> — cuando el cambio de página es acción JS",
+      "a": "<a class=\"mui-pagination__item\" href> — cuando cada página tiene URL propia (SSR, listados indexables)"
+    }
+  },
+  "states": {
+    "hover": ":hover — texto var(--text) + borde var(--border-strong) (no --border: border/surface da 2.17 en dark; mismo hover-border que .mui-btn)",
+    "current": "[aria-current=\"page\"] — bg var(--accent-subtle), texto var(--accent-text), borde var(--accent), weight-bold; declarado después del hover: la página actual no muta al pasar el mouse",
+    "focus": ":focus-visible — outline 2px var(--focus) offset 2px",
+    "disabled": "[disabled] o [aria-disabled=\"true\"] — opacity .5, sin interacción (prev en página 1, next en la última)"
+  },
+  "tokens": [
+    "--accent",
+    "--accent-subtle",
+    "--accent-text",
+    "--border-strong",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--focus",
+    "--font-mono",
+    "--text-xs",
+    "--weight-bold",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--radius-sm",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "<nav> con aria-label único (\"Paginación\" o más específico si hay varias en la vista); lista <ul>/<li> real para que AT anuncie posición y total de ítems",
+    "keyboard": [
+      "Tab recorre los ítems en orden; Enter/Space activan (nativo de button/a)",
+      "los extremos usan [disabled] real: salen del tab order sin perder el foco del usuario"
+    ],
+    "aria": [
+      "página actual → aria-current=\"page\" (nunca aria-selected ni una clase de estado)",
+      "prev/next → aria-label (\"Página anterior\" / \"Página siguiente\") con glifo ‹/› dentro de <span aria-hidden=\"true\">",
+      "la elipsis es <span aria-hidden=\"true\"> — es ruido para AT, no aporta semántica",
+      "si el rango debe anunciarse al cambiar, el consumidor puede marcar __info con aria-live=\"polite\""
+    ],
+    "behavior": [
+      "cambio de página (JS del consumidor): mover aria-current=\"page\" al ítem activo y recalcular el ventaneo (primera/última siempre visibles, vecinas de la actual, __ellipsis en los huecos)",
+      "deshabilitar prev en la página 1 y next en la última con [disabled]"
+    ],
+    "contrast": "accent-text/accent-subtle ya en el gate; accent/accent-subtle (9.29 dark / 3.56 light) y accent/surface (6.77 / 3.92) verificados ≥3 en ambos temas y presentes en scripts/verify-contrast.mjs"
+  },
+  "motion": {
+    "transitions": "background/border/color en --dur-fast --ease-standard — feedback micro, sin transform ni rebote",
+    "reducedMotion": "contrato global de milpa-motion.css (transiciones a 1ms; el estado final es idéntico)"
+  },
+  "examples": [
+    {
+      "title": "Paginación completa (botones + info)",
+      "html": "<nav class=\"mui-pagination\" aria-label=\"Paginación de plugins\"><ul class=\"mui-pagination__list\"><li><button type=\"button\" class=\"mui-pagination__item\" aria-label=\"Página anterior\" disabled><span aria-hidden=\"true\">‹</span></button></li><li><button type=\"button\" class=\"mui-pagination__item\" aria-current=\"page\">1</button></li><li><button type=\"button\" class=\"mui-pagination__item\">2</button></li><li><button type=\"button\" class=\"mui-pagination__item\">3</button></li><li><span class=\"mui-pagination__ellipsis\" aria-hidden=\"true\">…</span></li><li><button type=\"button\" class=\"mui-pagination__item\">12</button></li><li><button type=\"button\" class=\"mui-pagination__item\" aria-label=\"Página siguiente\"><span aria-hidden=\"true\">›</span></button></li></ul><p class=\"mui-pagination__info\">1–20 de 240</p></nav>"
+    },
+    {
+      "title": "Con enlaces (URL por página)",
+      "html": "<nav class=\"mui-pagination\" aria-label=\"Paginación\"><ul class=\"mui-pagination__list\"><li><a class=\"mui-pagination__item\" href=\"?p=1\" aria-label=\"Página anterior\"><span aria-hidden=\"true\">‹</span></a></li><li><a class=\"mui-pagination__item\" href=\"?p=1\">1</a></li><li><a class=\"mui-pagination__item\" href=\"?p=2\" aria-current=\"page\">2</a></li><li><a class=\"mui-pagination__item\" href=\"?p=3\">3</a></li><li><a class=\"mui-pagination__item\" href=\"?p=3\" aria-label=\"Página siguiente\"><span aria-hidden=\"true\">›</span></a></li></ul></nav>"
+    }
+  ]
+}

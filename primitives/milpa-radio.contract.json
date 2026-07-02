@@ -1,0 +1,68 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "radio",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-radio",
+  "summary": "Selección única dentro de un grupo (mismo name). Mismo esquema que checkbox pero radius-full y dot circular ::after: dark = fill var(--accent) + dot var(--text-on-accent); light (regla 2, sin fill oro) = ghost — borde 2px var(--accent) + dot var(--accent-text). La exclusividad y la navegación por flechas son nativas del navegador — cero JS.",
+  "element": [
+    "input[type=radio]"
+  ],
+  "anatomy": {
+    "root": ".mui-radio — el control (círculo 1.125rem, radius-full); ::after es el dot, decorativo (content:\"\" — invisible para lectores de pantalla)",
+    "choice": "se etiqueta con .mui-choice — patrón documentado en el contrato de checkbox (hint en var(--text-secondary), no muted: AA sobre overlay/surface-raised)"
+  },
+  "variants": {},
+  "states": {
+    "checked": ":checked — dark: fill var(--accent) + borde var(--accent-active), dot ::after de 0.5rem centrado en var(--text-on-accent). light (regla 2): borde 2px var(--accent) + dot en var(--accent-text) sobre var(--bg)",
+    "hover": ":hover — borde var(--text-muted); solo se percibe unchecked",
+    "focus": ":focus-visible — outline 2px var(--focus) offset 1px",
+    "invalid": "[aria-invalid=\"true\"] — borde var(--danger); se aplica a cada radio del grupo. checked+invalid refuerza: fill var(--danger) + borde var(--danger-active) + dot var(--on-danger)",
+    "disabled": "[disabled] — opacity .5; dentro de .mui-choice se atenúa el label completo"
+  },
+  "tokens": [
+    "--bg",
+    "--accent",
+    "--accent-active",
+    "--accent-text",
+    "--text-on-accent",
+    "--border-strong",
+    "--text-muted",
+    "--danger",
+    "--danger-active",
+    "--on-danger",
+    "--focus",
+    "--radius-full",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "label": "cada radio con .mui-choice (o <label for>); el grupo SIEMPRE en <fieldset> con <legend> que lo nombra",
+    "keyboard": [
+      "flechas mueven el foco Y seleccionan dentro del grupo (roving nativo)",
+      "Tab entra y sale del grupo como una sola parada",
+      "Space selecciona el radio enfocado"
+    ],
+    "aria": [
+      "grupo inválido → aria-invalid=\"true\" en cada radio + aria-describedby en el <fieldset> apuntando al .mui-field__error",
+      "todos los radios del grupo comparten name: radios sueltos rompen la exclusividad y la navegación por flechas"
+    ],
+    "surfaces": "usable sobre bg, surface, surface-raised y overlay: unchecked, el boundary lo da el borde contra el interior propio var(--bg); checked, el oro contra el host (accent ≥3 en los tres niveles)",
+    "contrast": "mismos pares medidos que checkbox (fórmula de scripts/verify-contrast.mjs, ambos temas): dot dark text-on-accent/accent 9.59 (gateado en dark); dot light accent-text/bg 4.90 (gateado); boundary accent 3.41–9.59 y accent-active 3.81–8.26 sobre bg/surface/surface-raised; invalid danger 3.63–7.55. Los pares que aún no están en CI van declarados en pairsUsed del cluster"
+  },
+  "motion": {
+    "transitions": "background-color/border-color en --dur-fast --ease-standard; el dot aparece con el estado, sin animación propia",
+    "reducedMotion": "contrato global de milpa-motion.css — degrada a 1 frame estático"
+  },
+  "examples": [
+    {
+      "title": "Grupo (fieldset + legend)",
+      "html": "<fieldset class=\"mui-field\"><legend class=\"mui-field__label\">Canal de siembra</legend><label class=\"mui-choice\"><input type=\"radio\" class=\"mui-radio\" name=\"canal\" value=\"estable\" checked><span class=\"mui-choice__text\">Estable</span></label><label class=\"mui-choice\"><input type=\"radio\" class=\"mui-radio\" name=\"canal\" value=\"beta\"><span class=\"mui-choice__text\">Beta<span class=\"mui-choice__hint\">Cosechas semanales; puede traer maleza</span></span></label></fieldset>"
+    },
+    {
+      "title": "Grupo inválido",
+      "html": "<fieldset class=\"mui-field\" aria-describedby=\"plan-err\"><legend class=\"mui-field__label\">Plan</legend><label class=\"mui-choice\"><input type=\"radio\" class=\"mui-radio\" name=\"plan\" value=\"semilla\" required aria-invalid=\"true\"><span class=\"mui-choice__text\">Semilla</span></label><label class=\"mui-choice\"><input type=\"radio\" class=\"mui-radio\" name=\"plan\" value=\"cosecha\" required aria-invalid=\"true\"><span class=\"mui-choice__text\">Cosecha</span></label><p class=\"mui-field__error\" id=\"plan-err\">Elegí un plan para continuar.</p></fieldset>"
+    }
+  ]
+}

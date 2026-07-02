@@ -1,0 +1,94 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "alert",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-alert",
+  "summary": "Aviso inline que vive en el flujo del contenido (no flota). Default = neutral (surface + borde). Las variantes semánticas tiñen fondo/borde con los tokens -bg/-border; __icon y __title llevan el color de estado y el cuerpo permanece en var(--text). La urgencia la declara el role (status/alert) — el color solo la refuerza.",
+  "element": [
+    "div",
+    "section"
+  ],
+  "anatomy": {
+    "root": ".mui-alert — flex row: __icon + __content + __dismiss",
+    "icon": ".mui-alert__icon — slot decorativo (unicode o SVG 1em) con aria-hidden; en variantes toma el color de estado",
+    "content": ".mui-alert__content — columna: título, descripción y acciones",
+    "title": ".mui-alert__title — medium; en variantes toma el color de estado",
+    "desc": ".mui-alert__desc — cuerpo, permanece en var(--text)",
+    "actions": ".mui-alert__actions — fila de .mui-btn--sm (gap --space-2, wrap); los .mui-btn outline default toman border-color var(--border-strong) para boundary ≥3 sobre los fondos teñidos (los fills conservan su auto-borde -active y el ghost su transparencia)",
+    "dismiss": ".mui-alert__dismiss — SOLO posiciona en la esquina; se compone con .mui-btn .mui-btn--ghost .mui-btn--icon .mui-btn--sm + aria-label"
+  },
+  "variants": {
+    "intent": {
+      "default": "neutral — bg var(--surface), borde var(--border), para notas sin semántica de estado",
+      "success": ".mui-alert--success — bg var(--success-bg), borde var(--success-border), ícono/título var(--success)",
+      "warning": ".mui-alert--warning — bg var(--warning-bg), borde var(--warning-border), ícono/título var(--warning)",
+      "danger": ".mui-alert--danger — bg var(--danger-bg), borde var(--danger-border), ícono/título var(--danger)",
+      "info": ".mui-alert--info — bg var(--info-bg), borde var(--info-border), ícono/título var(--info)"
+    }
+  },
+  "states": {
+    "dismissed": "[hidden] — el consumidor descarta poniendo hidden o removiendo el nodo; nunca una clase de estado. El CSS incluye .mui-alert[hidden]{display:none} para que hidden le gane al display:flex del componente.",
+    "focus": "el foco vive en los .mui-btn internos (__actions / __dismiss), que traen su propio :focus-visible"
+  },
+  "tokens": [
+    "--surface",
+    "--border",
+    "--border-strong",
+    "--text",
+    "--success",
+    "--success-bg",
+    "--success-border",
+    "--warning",
+    "--warning-bg",
+    "--warning-border",
+    "--danger",
+    "--danger-bg",
+    "--danger-border",
+    "--info",
+    "--info-bg",
+    "--info-border",
+    "--font-display",
+    "--text-sm",
+    "--weight-medium",
+    "--leading-normal",
+    "--space-0_5",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--radius-md"
+  ],
+  "a11y": {
+    "role": "success/info → role=\"status\" (anuncio polite); warning/danger → role=\"alert\" (anuncio assertive). El role va en el root; el default sin variante no necesita role.",
+    "aria": [
+      "__icon siempre aria-hidden=\"true\" — decorativo: el estado ya lo dice el texto",
+      "__dismiss requiere aria-label (ej. \"Cerrar aviso\")",
+      "si el alert se inyecta dinámicamente, el contenedor con role debe existir ANTES de insertar el texto para que el lector lo anuncie"
+    ],
+    "behavior": [
+      "descartar (JS consumidor): remover el nodo o poner hidden; si el foco estaba dentro, devolverlo a un punto lógico del flujo",
+      "no mover el foco al alert al aparecer — es un aviso inline; el live region lo anuncia solo"
+    ],
+    "contrast": "var(--text) y var(--text-secondary) (labels de .mui-btn) sobre cada X-bg ≥4.5, var(--X) sobre su X-bg ≥4.5 y var(--border-strong) (boundary de los .mui-btn outline en __actions) sobre cada X-bg ≥3 — verificados en ambos temas; pares en el gate de scripts/verify-contrast.mjs (npm test). Los bordes del contenedor son delimitadores DECORATIVOS no sujetos al piso de 3:1 (X-border/X-bg ≈1.9–2.3 dark · ≈1.5 light; border/surface 2.17 dark): el alert no es interactivo y su estado lo llevan role + ícono/título ≥4.5 y el fondo teñido, no el filete."
+  },
+  "motion": {
+    "transitions": "ninguna propia — el alert es contenido estático; si entra dinámicamente, componer con .m-rise (milpa-motion.css)",
+    "reducedMotion": "contrato global de milpa-motion.css"
+  },
+  "examples": [
+    {
+      "title": "Success (status)",
+      "html": "<div class=\"mui-alert mui-alert--success\" role=\"status\"><span class=\"mui-alert__icon\" aria-hidden=\"true\">✓</span><div class=\"mui-alert__content\"><p class=\"mui-alert__title\">Plugin sembrado</p><p class=\"mui-alert__desc\">MailPlugin quedó activo en el terreno.</p></div></div>"
+    },
+    {
+      "title": "Danger con acciones y dismiss (alert)",
+      "html": "<div class=\"mui-alert mui-alert--danger\" role=\"alert\"><span class=\"mui-alert__icon\" aria-hidden=\"true\">!</span><div class=\"mui-alert__content\"><p class=\"mui-alert__title\">La cosecha falló</p><p class=\"mui-alert__desc\">No se pudo compilar el módulo. Revisá el log de siembra.</p><div class=\"mui-alert__actions\"><button type=\"button\" class=\"mui-btn mui-btn--sm\">Ver log</button><button type=\"button\" class=\"mui-btn mui-btn--sm mui-btn--ghost\">Reintentar</button></div></div><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-alert__dismiss\" aria-label=\"Cerrar aviso\"><span aria-hidden=\"true\">✕</span></button></div>"
+    },
+    {
+      "title": "Neutral (nota sin estado)",
+      "html": "<div class=\"mui-alert\"><div class=\"mui-alert__content\"><p class=\"mui-alert__desc\">Los contratos de componente son introspectables por agentes.</p></div></div>"
+    }
+  ]
+}

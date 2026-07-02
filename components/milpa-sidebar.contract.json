@@ -1,0 +1,93 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "sidebar",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-sidebar",
+  "summary": "Navegación lateral del admin sobre var(--surface). El item actual se declara con aria-current=\"page\" y recibe la firma: la barra oro que germina en su arranque. Sticky al viewport en desktop; drawer off-canvas en ≤960px (lo orquesta el shell) que, cerrado, queda fuera del teclado y del árbol de accesibilidad.",
+  "element": [
+    "nav",
+    "aside"
+  ],
+  "anatomy": {
+    "root": ".mui-sidebar — <nav aria-label=\"principal\">; flex column, sticky top 0, height 100dvh; grid-area sidebar (dos filas del shell)",
+    "brand": ".mui-sidebar__brand — <a> a home; slot del símbolo Grano (SVG aria-hidden) + wordmark; 3.5rem, border-bottom subtle",
+    "wordmark": ".mui-sidebar__wordmark — texto de marca dentro de __brand; en rail queda sr-only",
+    "nav": ".mui-sidebar__nav — zona scrolleable (flex 1, overflow-y auto, padding space-3)",
+    "section": ".mui-sidebar__section — grupo de items; role=\"group\" + aria-labelledby recomendado",
+    "section-label": ".mui-sidebar__section-label — label mono 2xs uppercase muted (la voz de la máquina)",
+    "item": ".mui-sidebar__item — <a> flex con gap space-3, radius-base, texto sm var(--text-secondary)",
+    "item-icon": ".mui-sidebar__item-icon — slot 1.25rem flex none (SVG aria-hidden)",
+    "item-label": ".mui-sidebar__item-label — texto del item (ellipsis); en rail queda sr-only pero los lectores lo siguen anunciando",
+    "item-badge": ".mui-sidebar__item-badge — margin-inline-start auto; compone .mui-badge — contrato badge PENDIENTE (HANDOFF): hasta que aterrice, el span rinde sin estilo propio",
+    "footer": ".mui-sidebar__footer — border-top subtle, padding space-3; slot para user-card mini"
+  },
+  "variants": {
+    "context": {
+      "rail": "activado por .mui-shell--rail (>960px): 4.5rem, íconos centrados, wordmark/labels/badges ocultos accesiblemente; el item actual conserva la barra",
+      "drawer": "≤960px (automático): position fixed off-canvas, 16rem con labels visibles; cerrado lleva visibility hidden (fuera del teclado y del árbol de a11y); lo abre .mui-shell--nav-open (ver contrato shell)"
+    }
+  },
+  "states": {
+    "hover": ".mui-sidebar__item:hover — color var(--text), fondo var(--bg) (el item se hunde al lienzo)",
+    "focus": ":focus-visible — outline 2px var(--focus) offset 2px (items y brand)",
+    "current": "[aria-current=\"page\"] — color var(--accent-text), fondo var(--accent-subtle), weight-medium, ::before = barra 3px×1.25rem oro (var(--accent)) radius-full en inset-inline-start; gana al hover (declarado después)",
+    "drawer-closed": "≤960px sin .mui-shell--nav-open — translateX(-100%) + visibility hidden: oculto del teclado y del árbol de accesibilidad; el JS del consumidor además mantiene `inert` (ver contrato shell)"
+  },
+  "tokens": [
+    "--surface",
+    "--bg",
+    "--border-subtle",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--accent",
+    "--accent-text",
+    "--accent-subtle",
+    "--focus",
+    "--font-display",
+    "--font-mono",
+    "--text-sm",
+    "--text-2xs",
+    "--weight-medium",
+    "--tracking-tight",
+    "--tracking-wide",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--radius-base",
+    "--radius-full",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "usar <nav aria-label=\"principal\"> (o <aside> envolviendo un <nav>); darle id para el aria-controls del toggle",
+    "aria": [
+      "item actual → aria-current=\"page\" (nunca una clase); la barra ::before es decorativa, la semántica la lleva el atributo",
+      "íconos y glifos → aria-hidden=\"true\"; el nombre accesible del item es su __item-label (visible o sr-only en rail)",
+      "secciones → role=\"group\" + aria-labelledby apuntando al id del __section-label (recomendado)"
+    ],
+    "keyboard": [
+      "navegación nativa de <a> con Tab; focus ring visible sobre surface (par focus/surface verificado)",
+      "drawer CERRADO en ≤960px: visibility hidden (CSS) + `inert` (JS del consumidor) sacan toda la navegación del tab order y del árbol de accesibilidad — nadie tabea por links fuera del viewport (WCAG 2.4.3/2.4.7)",
+      "en drawer: Escape cierra y devuelve el foco al toggle (JS del consumidor, ver contrato shell)"
+    ],
+    "behavior": [
+      "el consumidor alterna `inert` en la sidebar al cerrar/abrir el drawer en ≤960px (cinturón y tirantes sobre el visibility:hidden del CSS) — ver contrato shell para la coreografía completa del toggle"
+    ],
+    "contrast": "text-secondary/surface, text/bg, text-muted/surface y accent-text/accent-subtle verificados por npm test; barra accent/accent-subtle 9.29 dark · 3.56 light (≥3). El border-inline-end (border-subtle) es DECORATIVO — 1.47 dark · 1.66 light sobre surface, <3:1 a propósito (el gate lo excluye): la separación sidebar/main la da el salto surface→bg (regla 1), no el borde. Si el pulido de canvas pide más definición en light, subir SOLO ese borde a var(--border) (3.88:1 sobre surface en light)"
+  },
+  "motion": {
+    "transitions": "items: background/color en --dur-fast --ease-standard (feedback micro)",
+    "drawer": "el desplazamiento off-canvas (transform --dur-moderate --ease-grano + flip de visibility sin animar) lo posee el shell — germina desde el borde y se asienta",
+    "reducedMotion": "contrato global de milpa-motion.css: todo cae a 1ms — estados y drawer cambian en 1 frame"
+  },
+  "examples": [
+    {
+      "title": "Sidebar completa (brand + secciones + footer)",
+      "html": "<nav class=\"mui-sidebar\" id=\"nav-principal\" aria-label=\"principal\"><a class=\"mui-sidebar__brand\" href=\"/\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\"><!-- símbolo Grano --></svg><span class=\"mui-sidebar__wordmark\">milpa</span></a><div class=\"mui-sidebar__nav\"><div class=\"mui-sidebar__section\" role=\"group\" aria-labelledby=\"nav-lbl-cultivo\"><span class=\"mui-sidebar__section-label\" id=\"nav-lbl-cultivo\">cultivo</span><a class=\"mui-sidebar__item\" href=\"/plugins\" aria-current=\"page\"><span class=\"mui-sidebar__item-icon\" aria-hidden=\"true\"><svg width=\"20\" height=\"20\"><!-- … --></svg></span><span class=\"mui-sidebar__item-label\">Plugins</span><span class=\"mui-sidebar__item-badge mui-badge\">3</span></a><a class=\"mui-sidebar__item\" href=\"/modulos\"><span class=\"mui-sidebar__item-icon\" aria-hidden=\"true\"><svg width=\"20\" height=\"20\"><!-- … --></svg></span><span class=\"mui-sidebar__item-label\">Módulos</span></a></div></div><div class=\"mui-sidebar__footer\"><!-- user-card mini --></div></nav>"
+    }
+  ]
+}

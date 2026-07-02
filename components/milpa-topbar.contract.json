@@ -1,0 +1,57 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "topbar",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-topbar",
+  "summary": "Barra superior sticky del admin: velo del lienzo (color-mix var(--bg) 85% + blur 10px, idioma del proof) definido por su border-bottom. Es un contenedor de slots que COMPONEN primitivas: breadcrumbs/toggle, búsqueda (.mui-input-group) y acciones (.mui-btn--ghost, .mui-avatar).",
+  "element": [
+    "header"
+  ],
+  "anatomy": {
+    "root": ".mui-topbar — <header>; grid-area topbar, 3.5rem, sticky top 0 en var(--z-sticky), flex con gap space-4",
+    "start": ".mui-topbar__start — slot inicial: breadcrumbs y, en mobile, el toggle del drawer",
+    "nav-toggle": ".mui-topbar__nav-toggle — compone .mui-btn mui-btn--ghost mui-btn--icon; display none en desktop, visible ≤960px",
+    "search": ".mui-topbar__search — slot de búsqueda (flex 1, max-width 24rem); compone .mui-input-group",
+    "end": ".mui-topbar__end — slot final (margin-inline-start auto, gap space-1): icon-buttons ghost + .mui-avatar — contrato avatar PENDIENTE (HANDOFF): hasta que aterrice, el elemento rinde sin estilo propio"
+  },
+  "variants": {},
+  "states": {
+    "sticky": "siempre pegada al top del scroll (position sticky, z var(--z-sticky)); el contenido pasa por debajo tras el velo"
+  },
+  "tokens": [
+    "--bg",
+    "--border-subtle",
+    "--z-sticky",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--space-5"
+  ],
+  "a11y": {
+    "element": "<header> directo en el shell → landmark banner",
+    "aria": [
+      "toggle: aria-label (\"Abrir navegación\"), aria-expanded reflejando el drawer y aria-controls con el id de la sidebar",
+      "búsqueda: el input lleva aria-label o un <label> sr-only (el placeholder no sustituye al label — contrato input)",
+      "icon-buttons de __end requieren aria-label (contrato button)"
+    ],
+    "behavior": [
+      "el toggle del drawer es JS del consumidor: alterna .mui-shell--nav-open + aria-expanded, y alterna `inert` en la sidebar (activo mientras el drawer está cerrado en ≤960px); Escape cierra y devuelve el foco (ver contrato shell)"
+    ],
+    "keyboard": [
+      "todo el contenido son primitivas focuseables por Tab; ningún control queda detrás del velo"
+    ],
+    "contrast": "el velo es var(--bg) al 85% + blur: el contenido lee sobre bg efectivo — pares text/bg, accent-text/bg, border/bg ya verificados (npm test). El border-bottom (border-subtle) es divisor decorativo (<3:1, excluido del gate a propósito)"
+  },
+  "motion": {
+    "transitions": "ninguna propia — el feedback lo llevan las primitivas compuestas (btn, input)",
+    "reducedMotion": "contrato global de milpa-motion.css (no hay animación que degradar)"
+  },
+  "examples": [
+    {
+      "title": "Topbar completa (toggle + búsqueda + acciones)",
+      "html": "<header class=\"mui-topbar\"><div class=\"mui-topbar__start\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-topbar__nav-toggle\" aria-label=\"Abrir navegación\" aria-expanded=\"false\" aria-controls=\"nav-principal\"><svg aria-hidden=\"true\" width=\"16\" height=\"16\"><!-- ≡ --></svg></button><!-- breadcrumbs --></div><div class=\"mui-topbar__search\"><div class=\"mui-input-group mui-input-group--prefix\"><input class=\"mui-input mui-input--sm\" type=\"search\" aria-label=\"Buscar\" placeholder=\"Buscar módulos…\"><span class=\"mui-input-group__prefix\" aria-hidden=\"true\">⌕</span></div></div><div class=\"mui-topbar__end\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon\" aria-label=\"Notificaciones\"><svg aria-hidden=\"true\" width=\"16\" height=\"16\"><!-- … --></svg></button><!-- .mui-avatar --></div></header>"
+    }
+  ]
+}

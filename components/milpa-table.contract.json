@@ -1,0 +1,103 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "table",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-table",
+  "summary": "Tabla de datos — el corazón del admin. La tabla ES una card: .mui-table-wrap aporta superficie, borde y radio (regla 1: la elevación la definen los bordes). El estado vive en atributos ARIA — orden con th[aria-sort], selección con tr[aria-selected] — nunca en clases.",
+  "element": [
+    "table (siempre dentro de <div class=\"mui-table-wrap\">)"
+  ],
+  "anatomy": {
+    "wrap": ".mui-table-wrap — card + scroll container (overflow-x auto): bg var(--surface), borde var(--border-subtle), radius-lg, isolation. Declara la prop privada --_z-thead (calc sobre --z-base) que consume el thead sticky — el z queda anclado a la escala y contenido por el isolate. Con max-height el thead sticky queda pegado; entonces lleva tabindex=\"0\" + role=\"region\" + aria-labelledby (al caption) para scroll por teclado",
+    "root": ".mui-table — la <table>: width 100%, border-collapse separate + border-spacing 0 (los bordes viajan con el th sticky), text-sm",
+    "sort": ".mui-table__sort — <button> ghost dentro de th[aria-sort]: hereda la voz mono del th; indicador ↕/▲/▼ decorativo en ::after (content con alt vacío)",
+    "lead": ".mui-table__lead — celda de énfasis (típicamente la primera columna): var(--text) + weight-medium",
+    "num": ".mui-table__num — celda numérica: align end + tabular-nums; en td además mono text-xs (en th solo alinea, conserva la voz del encabezado)",
+    "actions": ".mui-table__actions — align end, nowrap, padding-block reducido; compone .mui-btn mui-btn--ghost mui-btn--sm mui-btn--icon",
+    "check": ".mui-table__check — columna de selección (2.5rem, centrada); compone .mui-checkbox"
+  },
+  "variants": {
+    "density": {
+      "default": "padding de celda --space-3 / --space-4",
+      "compact": ".mui-table--compact — padding --space-2 / --space-3 para datasets densos"
+    }
+  },
+  "states": {
+    "hover": "tbody tr:hover — las celdas se hunden a var(--bg) (inset sutil, paridad en ambos temas)",
+    "selected": "tr[aria-selected=\"true\"] — celdas var(--accent-subtle) + texto var(--text); el .mui-checkbox de la fila refleja el mismo estado",
+    "sortable": "th[aria-sort=\"none\"] — indicador ↕ neutro atenuado (var(--border-strong), ≥3:1 sobre surface)",
+    "sorted": "th[aria-sort=\"ascending\"|\"descending\"] — indicador ▲/▼ en var(--accent-text)",
+    "focus": ":focus-visible en .mui-table__sort y en el wrap — outline 2px var(--focus) offset 2px",
+    "empty": "sin estilos propios — componer .mui-empty dentro de <td colspan>",
+    "loading": "sin estilos propios — componer .mui-skeleton en las celdas (o en un <td colspan>) mientras llega el dato"
+  },
+  "tokens": [
+    "--surface",
+    "--bg",
+    "--accent-subtle",
+    "--accent-text",
+    "--border-subtle",
+    "--border-strong",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--focus",
+    "--font-display",
+    "--font-mono",
+    "--text-2xs",
+    "--text-xs",
+    "--text-sm",
+    "--weight-regular",
+    "--weight-medium",
+    "--tracking-wide",
+    "--leading-snug",
+    "--space-1",
+    "--space-1_5",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--radius-lg",
+    "--z-base",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "<table> semántica siempre; <caption> obligatorio (visible o .mui-sr-only). Si el wrap scrollea (max-height u overflow horizontal), el wrap lleva role=\"region\" + aria-labelledby apuntando al caption + tabindex=\"0\"",
+    "keyboard": [
+      "Tab llega a cada .mui-table__sort; Enter/Space ordenan (nativo de <button>)",
+      "el wrap focusable permite scroll con flechas cuando hay overflow",
+      "la selección se opera desde los .mui-checkbox de __check, no desde la fila"
+    ],
+    "aria": [
+      "columna ordenable sin orden → aria-sort=\"none\"; la ordenada → \"ascending\"|\"descending\" (solo una a la vez)",
+      "fila seleccionada → aria-selected=\"true\" en el <tr>; el control accesible real es el .mui-checkbox de la fila (con aria-label por fila)",
+      "el indicador de orden es ::after decorativo (content con alt vacío) — el estado lo anuncia aria-sort",
+      "celda de acciones: botones icon-only siempre con aria-label; svg decorativos con aria-hidden=\"true\""
+    ],
+    "behavior": [
+      "orden (JS del consumidor): click en __sort → alterna ascending↔descending en su th, pone aria-sort=\"none\" en el resto y reordena las filas",
+      "selección (JS del consumidor): el checkbox de fila alterna aria-selected de su <tr>; el checkbox del thead selecciona todo (indeterminate si es parcial)"
+    ],
+    "contrast": "text/accent-subtle (fila seleccionada) ≥4.5 en ambos temas — en el gate. Separador del thead = border-strong/surface: sostiene ≥3 también en dark (3.13 / 5.58 light; border/surface daba 2.17), par ya en el gate. Los separadores de fila (border-subtle, 1.47 dark) son decorativos y exentos de WCAG 1.4.11: no son boundary de componente y la jerarquía la dan tipografía y zebra de hover, no la línea. Indicador de orden: reposo border-strong/surface ≥3, activo accent-text/surface ≥4.5 (ambos en el gate)"
+  },
+  "motion": {
+    "transitions": "background de celdas y color del indicador de orden en --dur-fast --ease-standard; sin @keyframes propios — germina y se asienta, nunca rebota",
+    "reducedMotion": "contrato global de milpa-motion.css: las transiciones caen a 1ms (estado final directo, sin pérdida semántica)"
+  },
+  "examples": [
+    {
+      "title": "Tabla ordenable (card completa, header sticky)",
+      "html": "<div class=\"mui-table-wrap\" role=\"region\" aria-labelledby=\"plugins-cap\" tabindex=\"0\"><table class=\"mui-table\"><caption class=\"mui-sr-only\" id=\"plugins-cap\">Plugins sembrados</caption><thead><tr><th aria-sort=\"ascending\"><button type=\"button\" class=\"mui-table__sort\">Plugin</button></th><th aria-sort=\"none\"><button type=\"button\" class=\"mui-table__sort\">Estado</button></th><th class=\"mui-table__num\" aria-sort=\"none\"><button type=\"button\" class=\"mui-table__sort\">Descargas</button></th><th><span class=\"mui-sr-only\">Acciones</span></th></tr></thead><tbody><tr><td class=\"mui-table__lead\">MailPlugin</td><td>activo</td><td class=\"mui-table__num\">12 480</td><td class=\"mui-table__actions\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--sm mui-btn--icon\" aria-label=\"Editar MailPlugin\"><svg aria-hidden=\"true\" width=\"16\" height=\"16\"><!-- … --></svg></button></td></tr><tr><td class=\"mui-table__lead\">AuthPlugin</td><td>activo</td><td class=\"mui-table__num\">9 034</td><td class=\"mui-table__actions\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--sm mui-btn--icon\" aria-label=\"Editar AuthPlugin\"><svg aria-hidden=\"true\" width=\"16\" height=\"16\"><!-- … --></svg></button></td></tr></tbody></table></div>"
+    },
+    {
+      "title": "Selección de filas (columna __check + aria-selected)",
+      "html": "<div class=\"mui-table-wrap\"><table class=\"mui-table mui-table--compact\"><caption class=\"mui-sr-only\">Módulos</caption><thead><tr><th class=\"mui-table__check\"><input type=\"checkbox\" class=\"mui-checkbox\" aria-label=\"Seleccionar todo\"></th><th>Módulo</th><th>Versión</th></tr></thead><tbody><tr aria-selected=\"true\"><td class=\"mui-table__check\"><input type=\"checkbox\" class=\"mui-checkbox\" checked aria-label=\"Seleccionar CartModule\"></td><td class=\"mui-table__lead\">CartModule</td><td>2.1.0</td></tr><tr><td class=\"mui-table__check\"><input type=\"checkbox\" class=\"mui-checkbox\" aria-label=\"Seleccionar BlogModule\"></td><td class=\"mui-table__lead\">BlogModule</td><td>1.0.3</td></tr></tbody></table></div>"
+    },
+    {
+      "title": "Estado vacío (componer .mui-empty en td colspan)",
+      "html": "<div class=\"mui-table-wrap\"><table class=\"mui-table\"><caption class=\"mui-sr-only\">Cosechas</caption><thead><tr><th>Módulo</th><th class=\"mui-table__num\">Cosechas</th></tr></thead><tbody><tr><td colspan=\"2\"><div class=\"mui-empty\">Todavía no sembraste módulos.</div></td></tr></tbody></table></div>"
+    }
+  ]
+}

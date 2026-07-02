@@ -29,6 +29,20 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 - `package.json`: exports `./primitives.css`, `./components.css`, `./primitives/*`,
   `./components/*`, `./logo/*`; `npm run proof` ahora sirve la raíz del repo.
 
+- **CI (T3):** `.github/workflows/ci.yml` corre `npm test` en cada push/PR. `npm test` ahora
+  encadena el gate de contraste (135 AA) + `scripts/verify-governance.mjs` nuevo: token-purity
+  (sin hex/rampas/!important/z-index crudo/duraciones hardcodeadas), toda `var()` existente, y
+  los 32 contratos JSON válidos con campos requeridos y tokens declarados reales.
+- **LICENSE (T7):** texto completo canónico de Apache-2.0.
+- **Snippet oficial del wordmark (T8.3)** en `logo/README.txt` + regla en DESIGN §2.
+
+### Changed
+- **`mui-stat__delta` desacopla dirección y valencia (T8.1):** `--up/--down` solo orientan la
+  flecha; el color lo dan `--positive` (success) / `--negative` (danger). Antes `--down` implicaba
+  danger, lo que mentía en KPIs donde bajar es mejorar (tiempo de build, incidencias).
+- Contrato de table (T8.2): documentado el patrón de menú de fila a nivel `<body>` (el
+  `overflow-x` del wrap clipea paneles internos).
+
 ### Fixed
 - **Wordmark en los proofs:** el truco tipográfico del grano-dot (span desplazado sobre la `i`)
   renderizaba el grano flotando entre la `i` y la `l` (y la `i` conservaba su punto natural).

@@ -1,0 +1,22 @@
+# CI de @milpa/design — el quality floor es inescapable (HANDOFF T3).
+# Sin instalación: los verificadores son node puro, cero dependencias.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # contraste WCAG AA (135 pares) + gobernanza del molde (token-purity,
+      # ARIA-state hooks, contratos válidos y coherentes)
+      - run: npm test
+      # TODO(T1): cuando el build de Style Dictionary esté decidido, agregar
+      #   npm install && npm run build  (hoy dist/ es hand-authored y verificado)

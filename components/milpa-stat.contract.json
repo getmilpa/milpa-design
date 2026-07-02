@@ -18,9 +18,10 @@
   },
   "variants": {
     "delta": {
-      "default": "sin modificador — neutro var(--text-secondary), sin flecha",
-      "up": ".mui-stat__delta--up — var(--success) + triángulo ▲ vía ::before (clip-path, currentColor)",
-      "down": ".mui-stat__delta--down — var(--danger) + triángulo ▼ vía ::before (clip-path, currentColor)"
+      "default": "sin modificadores — neutro var(--text-secondary), sin flecha",
+      "direccion": "--up / --down — SOLO orientan la flecha ▲/▼ (::before, clip-path, currentColor); no ponen color",
+      "valencia": "--positive (var(--success)) / --negative (var(--danger)) — el color es un juicio, no una dirección: 'tiempo de build a la baja' = --down --positive",
+      "nota": "dirección y valencia van desacopladas a propósito (T8.1); combiná una de cada eje. El significado nunca viaja solo en el color: signo en el texto + .mui-sr-only si hace falta ('a la baja, mejora')."
     }
   },
   "states": {
@@ -62,11 +63,11 @@
   "examples": [
     {
       "title": "KPI con tendencia al alza",
-      "html": "<div class=\"mui-stat\"><span class=\"mui-stat__label\">Módulos activos</span><span class=\"mui-stat__value\">128</span><span class=\"mui-stat__delta mui-stat__delta--up\">+12%<span class=\"mui-sr-only\"> al alza</span></span><span class=\"mui-stat__meta\">vs. semana anterior</span></div>"
+      "html": "<div class=\"mui-stat\"><span class=\"mui-stat__label\">Módulos activos</span><span class=\"mui-stat__value\">128</span><span class=\"mui-stat__delta mui-stat__delta--up mui-stat__delta--positive\">+12%<span class=\"mui-sr-only\"> al alza</span></span><span class=\"mui-stat__meta\">vs. semana anterior</span></div>"
     },
     {
-      "title": "KPI a la baja, dentro de una card",
-      "html": "<div class=\"mui-card mui-card--compact\"><div class=\"mui-card__body\"><div class=\"mui-stat\"><span class=\"mui-stat__label\">Errores de build</span><span class=\"mui-stat__value\">3</span><span class=\"mui-stat__delta mui-stat__delta--down\">−40%<span class=\"mui-sr-only\"> a la baja</span></span></div></div></div>"
+      "title": "KPI a la baja que ES mejora (--down --positive), dentro de una card",
+      "html": "<div class=\"mui-card mui-card--compact\"><div class=\"mui-card__body\"><div class=\"mui-stat\"><span class=\"mui-stat__label\">Errores de build</span><span class=\"mui-stat__value\">3</span><span class=\"mui-stat__delta mui-stat__delta--down mui-stat__delta--positive\">−40%<span class=\"mui-sr-only\"> a la baja, mejora</span></span></div></div></div>"
     }
   ]
 }

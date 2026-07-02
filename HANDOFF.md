@@ -56,20 +56,23 @@ npm run build   # style-dictionary: tokens/ -> build/generated/   (ver T1)
 - ~~**T2 · Primitivas (el par de referencia).**~~ ✅ **Hecho y extendido** — 29 componentes con
   contrato (ver §2). El molde vive en el header de `primitives/milpa-primitives.css`; los nuevos
   componentes siguen ese patrón + contrato + pares nuevos al gate.
-- **T3 · CI.** GitHub Action que corra `npm test` (el verificador de contraste) + build en cada PR.
+- ~~**T3 · CI.**~~ ✅ **Hecho** — `.github/workflows/ci.yml` corre `npm test` en cada push/PR:
+  contraste (135 AA) + `scripts/verify-governance.mjs` (token-purity, sin rampas/!important/z-index
+  crudo/duraciones hardcodeadas, var() existentes, 32 contratos válidos y coherentes). El paso de
+  build queda anotado para cuando T1 se decida.
 - ~~**T4 · Logo kit.**~~ ✅ **Hecho** — en `logo/` (símbolo, wordmark, lockups, app icon; mono-oro).
 - **T5 · Storybook** (o seguir extendiendo `proof/`) para estados exhaustivos por pieza. El
   `proof/milpa-admin-proof.html` ya battle-testea la composición completa.
 - **T6 · Publish `@milpa/design@0.1.0`** al scope npm `@milpa` (reservado) cuando T2 esté.
-- **T7 · LICENSE** → reemplazar por el texto completo de Apache-2.0 antes de público.
-- **T8 · Feedback del battle-test** (`proof/milpa-admin-proof.html` los expuso; chicos):
-  1. `.mui-stat__delta` acopla dirección y valencia (`--up`=success, `--down`=danger). "Tiempo de
-     build −8s" es *baja = mejora* → desacoplar (p.ej. modificador `--positive/--negative` aparte
-     de la flecha) o documentar el patrón neutro + `.mui-sr-only`.
-  2. `.mui-menu` dentro de `.mui-table-wrap` se clipea por el `overflow-x` — documentar en el
-     contrato de table el patrón "menú a nivel body posicionado por JS" que ya usa el proof.
-  3. El **grano-dot** del wordmark (punto de la `i`) se replica a mano en cada proof — candidato a
-     primitiva `mui-grano-dot` o a snippet oficial en el contrato de marca.
+- ~~**T7 · LICENSE**~~ ✅ **Hecho** — texto completo de Apache-2.0 (canónico) con copyright
+  Rod Vince / TeamX (StudioWeb MX).
+- ~~**T8 · Feedback del battle-test**~~ ✅ **Hecho:**
+  1. `mui-stat__delta` desacoplado: `--up/--down` = solo dirección (flecha); `--positive/--negative`
+     = valencia (color). "Tiempo de build −8s" ahora es `--down --positive` (baja Y mejora).
+  2. Patrón "menú a nivel body posicionado por JS" documentado en `a11y.behavior` del contrato
+     de table (el `overflow-x` del wrap clipea paneles internos).
+  3. Snippet oficial del wordmark en `logo/README.txt` (+ regla en DESIGN §2): vector del kit,
+     `i` sin punto, grano = `oro-300` constante — prohibidos los trucos tipográficos.
 
 ## 5. Reglas duras (no negociables)
 

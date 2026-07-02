@@ -247,8 +247,11 @@
   font-family: var(--font-mono); font-size: var(--text-xs);
   color: var(--text-secondary);                /* sin dirección = neutro */
 }
-.mui-stat__delta--up   { color: var(--success); }
-.mui-stat__delta--down { color: var(--danger); }
+/* dirección y valencia DESACOPLADAS (T8.1): --up/--down solo orientan la
+   flecha; el color lo pone la valencia. "Tiempo de build a la baja" es baja
+   Y mejora → --down --positive. Sin valencia = neutro. */
+.mui-stat__delta--positive { color: var(--success); }
+.mui-stat__delta--negative { color: var(--danger); }
 /* flecha decorativa: geometría CSS con currentColor (los lectores no la
    anuncian); la dirección también vive en el texto (signo o sr-only) */
 .mui-stat__delta--up::before, .mui-stat__delta--down::before {

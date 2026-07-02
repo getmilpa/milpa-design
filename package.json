@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "style-dictionary build --config style-dictionary.config.mjs",
-    "test": "node scripts/verify-contrast.mjs",
+    "test": "node scripts/verify-contrast.mjs && node scripts/verify-governance.mjs",
     "proof": "python3 -m http.server 4321"
   },
   "devDependencies": {

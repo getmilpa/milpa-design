@@ -44,7 +44,9 @@ Mapa metáfora → arquitectura (el corazón conceptual):
 **Logotipo.** Símbolo **Grano**: la letra M cosechada de una rejilla 5×5 de granos de maíz (muchos
 módulos → una identidad). Mono-oro a propósito; el secundario (verde olivo) NO entra en el logo. Detalle firma: el punto
 de la `i` del wordmark es un grano. Respeto mínimo = 1 módulo. Tamaño mínimo del símbolo = 16 px.
-Assets vectorizados en el kit (`/logo`).
+Assets vectorizados en el kit (`/logo`). **En HTML el wordmark se usa SOLO como vector del kit**
+(la `i` va sin punto; el grano ES el punto, en `oro-300` constante — nunca `var(--accent)`, nunca
+trucos tipográficos): snippet oficial en `logo/README.txt`.
 
 **Tipografía — la dualidad humano⇄agente.**
 - **Display / UI:** Space Grotesk (medium, tracking ≈ −2%, minúsculas para el wordmark). Grotesque

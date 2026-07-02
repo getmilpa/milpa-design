@@ -78,7 +78,8 @@
     ],
     "behavior": [
       "orden (JS del consumidor): click en __sort → alterna ascending↔descending en su th, pone aria-sort=\"none\" en el resto y reordena las filas",
-      "selección (JS del consumidor): el checkbox de fila alterna aria-selected de su <tr>; el checkbox del thead selecciona todo (indeterminate si es parcial)"
+      "selección (JS del consumidor): el checkbox de fila alterna aria-selected de su <tr>; el checkbox del thead selecciona todo (indeterminate si es parcial)",
+      "Menús de fila (.mui-menu en celdas __actions): el overflow-x auto del .mui-table-wrap CLIPEA cualquier panel absoluto interno. Patrón sancionado (T8.2, implementado en proof/milpa-admin-proof.html): UN solo .mui-menu hijo directo de <body>, position:fixed, posicionado por JS desde getBoundingClientRect() del trigger; aria-labelledby dinámico apuntando al trigger activo; cerrar en scroll/resize además de Esc/click-fuera. No anidar el menú dentro del wrap."
     ],
     "contrast": "text/accent-subtle (fila seleccionada) ≥4.5 en ambos temas — en el gate. Separador del thead = border-strong/surface: sostiene ≥3 también en dark (3.13 / 5.58 light; border/surface daba 2.17), par ya en el gate. Los separadores de fila (border-subtle, 1.47 dark) son decorativos y exentos de WCAG 1.4.11: no son boundary de componente y la jerarquía la dan tipografía y zebra de hover, no la línea. Indicador de orden: reposo border-strong/surface ≥3, activo accent-text/surface ≥4.5 (ambos en el gate)"
   },

@@ -3,6 +3,12 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
+
+## [0.1.0] — 2026-07-01
+
+> **Primera versión publicada en npm:** `npm i @milpa/design` · 59 archivos · 88 kB ·
+> publicada por `teamx-devkit` con acceso público.
+
 ### Added
 - **Base de componentes admin (HANDOFF T2 cumplido y extendido).** 29 piezas token-driven, cada
   una con su `*.contract.json` introspectable:
@@ -57,8 +63,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
   grano ES el punto, en `var(--oro-300)` constante (el logo es mono-oro y no se adapta al tema,
   fiel a las variantes color-dark/light del kit).
 
-## [0.1.0] — 2026-06-30
-### Added
+### Added (scaffold inicial — 2026-06-30)
 - **Paleta v0 cerrada** (dark-first): `oro` (primario/marca) + `olivo` (secundario / la milpa
   viva, OKLCH hue ~124°) + `tierra` (neutro); `cielo` como semántico `info`.
 - Tokens en **DTCG** (`tokens/milpa-tokens.json`, fuente de verdad) + salida CSS

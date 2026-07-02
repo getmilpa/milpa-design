@@ -36,10 +36,10 @@ DESIGN.md                   # la constitución
 HANDOFF.md                  # brief para retomar el trabajo (otra sesión/agente)
 ```
 
-## Uso (destino)
+## Uso
 
 ```bash
-npm i @milpa/design
+npm i @milpa/design    # publicado — v0.1.0 en npm
 ```
 ```css
 @import "@milpa/design/css";             /* tokens semánticos (dark-first) */

@@ -67,12 +67,14 @@ npm run build   # style-dictionary: tokens/ -> build/generated/   (ver T1)
 - ~~**T4 · Logo kit.**~~ ✅ **Hecho** — en `logo/` (símbolo, wordmark, lockups, app icon; mono-oro).
 - **T5 · Storybook** (o seguir extendiendo `proof/`) para estados exhaustivos por pieza. El
   `proof/milpa-admin-proof.html` ya battle-testea la composición completa.
-- **T6 · Publish `@milpa/design@0.1.0`** — **listo para disparar**: `npm run release` (carga el
-  token desde `.env` gitignoreado y publica vía `.npmrc.publish` con `--userconfig`; ensayo con
-  `npm run release:dry` ✓ — 59 archivos, 88 kB, gates corren solos por `prepublishOnly`). Token
-  autentica como `teamx-devkit`. OJO: no usar un `.npmrc` de proyecto normal — con `${NPM_TOKEN}`
-  sin definir rompe TODOS los comandos npm (por eso el archivo aparte). A futuro: trusted
-  publishing OIDC desde GitHub Actions cuando el repo viva en `github.com/getmilpa`.
+- ~~**T6 · Publish `@milpa/design@0.1.0`**~~ ✅ **PUBLICADO** (2026-07-02T05:00Z, por
+  `teamx-devkit`): `npm i @milpa/design` — 59 archivos, 88 kB, los 8 exports verificados con
+  install real. Flujo de release: `npm run release` (token en `.env` gitignoreado +
+  `.npmrc.publish` vía `--userconfig`; `prepublishOnly` corre el triple gate). OJO histórico: un
+  `.npmrc` de proyecto con `${NPM_TOKEN}` sin definir rompe TODOS los comandos npm (por eso el
+  archivo aparte); con 2FA activo el publish pide `--otp` (o usar token Automation/granular). A
+  futuro: trusted publishing OIDC desde GitHub Actions cuando el repo viva en `github.com/getmilpa`.
+  Nota 0.1.1: agregar `"./package.json": "./package.json"` a exports (compat con tooling).
 - ~~**T7 · LICENSE**~~ ✅ **Hecho** — texto completo de Apache-2.0 (canónico) con copyright
   Rod Vince / TeamX (StudioWeb MX).
 - ~~**T8 · Feedback del battle-test**~~ ✅ **Hecho:**

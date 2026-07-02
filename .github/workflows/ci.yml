@@ -15,8 +15,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      # contraste WCAG AA (135 pares) + gobernanza del molde (token-purity,
-      # ARIA-state hooks, contratos válidos y coherentes)
+      # npm test = triple gate:
+      #   1. contraste WCAG AA (135 pares)
+      #   2. gobernanza del molde (token-purity, contratos válidos y coherentes)
+      #   3. drift: dist/ debe coincidir con lo que genera tokens/milpa-tokens.json
+      #      (build-tokens.mjs --check — si editaste el JSON, corré npm run build)
       - run: npm test
-      # TODO(T1): cuando el build de Style Dictionary esté decidido, agregar
-      #   npm install && npm run build  (hoy dist/ es hand-authored y verificado)

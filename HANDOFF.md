@@ -49,10 +49,14 @@ npm run build   # style-dictionary: tokens/ -> build/generated/   (ver T1)
 
 ## 4. Backlog priorizado (bite-size)
 
-- **T1 · Build pipeline.** Decidir: ¿`dist/milpa-tokens.css` sigue **hand-authored** (simple, ya
-  verificado) o lo **genera Style Dictionary** con manejo de temas (`:root`/`[data-theme=light]`)?
-  SD por defecto aplana `theme.dark.*` → custom needed. Empezá por `style-dictionary.config.mjs`
-  (hoy escribe a `build/generated/`, no pisa el `dist/` verificado). **No rompas `npm test`.**
+- ~~**T1 · Build pipeline.**~~ ✅ **Hecho — decisión: generador propio, Style Dictionary descartado.**
+  `scripts/build-tokens.mjs` (cero dependencias, como los verificadores) genera
+  `dist/milpa-tokens.css` + `dist/tailwind.config.js` desde el JSON con el manejo de temas
+  exacto (`:root`+`[data-theme="dark"]` / `[data-theme="light"]`). Round-trip verificado contra el
+  dist hand-authored: 0 tokens perdidos/cambiados. `npm test` ahora incluye el **drift gate**
+  (`--check`): editar el JSON sin regenerar rompe CI. Flujo: editar `tokens/milpa-tokens.json` →
+  `npm run build` → `npm test`. SD se revisita solo si aparecen salidas multi-plataforma
+  (iOS/Android/Figma). De paso: `easing.linear` entró al JSON (estaba solo en el CSS).
 - ~~**T2 · Primitivas (el par de referencia).**~~ ✅ **Hecho y extendido** — 29 componentes con
   contrato (ver §2). El molde vive en el header de `primitives/milpa-primitives.css`; los nuevos
   componentes siguen ese patrón + contrato + pares nuevos al gate.

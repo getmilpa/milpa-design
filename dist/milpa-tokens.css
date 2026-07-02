@@ -1,31 +1,30 @@
 /* Milpa — design tokens. Dark-first.
-   Dark = default (:root, and [data-theme="dark"]). Light = [data-theme="light"] on <html>.
-   IMPORTANT: <html> SIEMPRE lleva data-theme ("dark" | "light"); nunca ausente (para que
+   GENERADO desde tokens/milpa-tokens.json — NO editar a mano.
+   Regenerar: npm run build · verificar: npm test · CI falla si driftea (--check).
+   Dark = default (:root, y [data-theme="dark"]). Light = [data-theme="light"] en <html>.
+   IMPORTANTE: <html> SIEMPRE lleva data-theme ("dark" | "light"); nunca ausente (para que
    las utilidades dark: de Tailwind matcheen el estado por defecto).
-   Todos los pares texto/UI verificados WCAG AA (32/32 checks). */
+   Todos los pares texto/UI verificados WCAG AA (npm test). */
 
 /* ===== color: primitives ===== */
 :root {
   --tierra-50:#FAF5EF; --tierra-100:#ECE6D8; --tierra-200:#E3D7CC; --tierra-300:#CBBFB4; --tierra-400:#B4A99E; --tierra-500:#9D9388; --tierra-600:#847A70; --tierra-700:#6B6157; --tierra-800:#51483F; --tierra-900:#372F27; --tierra-950:#17120D;
   --oro-50:#FFF4E3; --oro-100:#FFE8C2; --oro-200:#FFD286; --oro-300:#E8B14C; --oro-400:#DC9E12; --oro-500:#C18900; --oro-600:#A27200; --oro-700:#825B00; --oro-800:#624400; --oro-900:#422C00; --oro-950:#211400;
-  /* olivo = el verde vivo de la milpa (secundario / marca fría). Sustituye al viejo "azul". */
   --olivo-50:#F4F7F0; --olivo-100:#E8EEDD; --olivo-200:#D3DFBE; --olivo-300:#B7CA94; --olivo-400:#9CB668; --olivo-500:#85A143; --olivo-600:#6D882D; --olivo-700:#566D19; --olivo-800:#485C17; --olivo-900:#293701; --olivo-950:#121B00;
-  /* cielo = azul semántico, SOLO para el estado info (no es la marca). */
   --cielo-50:#F0F6FF; --cielo-100:#DFEDFF; --cielo-200:#C0DCFF; --cielo-300:#97C5FF; --cielo-400:#6CADFF; --cielo-500:#4796F5; --cielo-600:#317CD5; --cielo-700:#1E63B2; --cielo-800:#1A5395; --cielo-900:#033061; --cielo-950:#001735;
   --success-50:#E1FFE6; --success-100:#CAFAD2; --success-200:#A7EDB5; --success-300:#81D995; --success-400:#5EC478; --success-500:#41AE61; --success-600:#27934B; --success-700:#0F7737; --success-800:#005A26; --success-900:#003C17; --success-950:#001E08;
   --warning-50:#FFF3ED; --warning-100:#FFE5D8; --warning-200:#FFCDB2; --warning-300:#FFAB7B; --warning-400:#F78A47; --warning-500:#E07227; --warning-600:#C15A04; --warning-700:#9C4700; --warning-800:#763400; --warning-900:#502100; --warning-950:#2A0E00;
   --danger-50:#FFF3F1; --danger-100:#FFE4E0; --danger-200:#FFCBC4; --danger-300:#FFA79B; --danger-400:#FF7F71; --danger-500:#EA6356; --danger-600:#CB4C41; --danger-700:#A8372F; --danger-800:#82241E; --danger-900:#5A1410; --danger-950:#310504;
 
   /* ===== type ===== */
-  --font-display:'Space Grotesk', system-ui, sans-serif;
-  --font-mono:'Space Mono', ui-monospace, monospace;
+  --font-display:'Space Grotesk', system-ui, sans-serif; --font-mono:'Space Mono', ui-monospace, monospace;
   --text-2xs:0.6875rem; --text-xs:0.75rem; --text-sm:0.875rem; --text-base:1rem; --text-lg:1.125rem; --text-xl:1.25rem; --text-2xl:1.5rem; --text-3xl:1.875rem; --text-4xl:2.375rem; --text-5xl:3rem; --text-6xl:3.75rem;
   --leading-tight:1.1; --leading-snug:1.25; --leading-normal:1.5; --leading-relaxed:1.7;
   --weight-regular:400; --weight-medium:500; --weight-bold:700;
   --tracking-tight:-0.02em; --tracking-normal:0em; --tracking-wide:0.02em; --tracking-display:-0.03em;
 
   /* ===== spacing ===== */
-  --space-0:0; --space-px:1px; --space-0_5:0.125rem; --space-1:0.25rem; --space-1_5:0.375rem; --space-2:0.5rem; --space-3:0.75rem; --space-4:1rem; --space-5:1.25rem; --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem; --space-12:3rem; --space-16:4rem; --space-20:5rem; --space-24:6rem; --space-32:8rem;
+  --space-0:0; --space-1:0.25rem; --space-2:0.5rem; --space-3:0.75rem; --space-4:1rem; --space-5:1.25rem; --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem; --space-12:3rem; --space-16:4rem; --space-20:5rem; --space-24:6rem; --space-32:8rem; --space-px:1px; --space-0_5:0.125rem; --space-1_5:0.375rem;
 
   /* ===== radius ===== */
   --radius-none:0; --radius-xs:0.25rem; --radius-sm:0.375rem; --radius-base:0.5rem; --radius-md:0.625rem; --radius-lg:0.875rem; --radius-xl:1.25rem; --radius-2xl:1.75rem; --radius-full:9999px;
@@ -53,10 +52,10 @@
   --border-strong:var(--tierra-600);
   --text:var(--tierra-50);
   --text-secondary:var(--tierra-300);
-  --text-muted:var(--tierra-400);            /* FIX: 500→400 (pasa AA sobre superficies) */
+  --text-muted:var(--tierra-400);
   --text-on-accent:var(--tierra-950);
-  --on-danger:var(--tierra-950);             /* NUEVO: tinta oscura sobre danger fill en dark */
-  --on-secondary:var(--tierra-950);          /* NUEVO: tinta oscura sobre el verde fill en dark */
+  --on-danger:var(--tierra-950);
+  --on-secondary:var(--tierra-950);
   --accent:var(--oro-300);
   --accent-hover:var(--oro-200);
   --accent-active:var(--oro-400);
@@ -68,11 +67,20 @@
   --secondary-subtle:var(--olivo-950);
   --secondary-border:var(--olivo-800);
   --secondary-text:var(--olivo-400);
-  --success:var(--success-400);   --success-bg:var(--success-950);   --success-border:var(--success-800);
-  --warning:var(--warning-400);   --warning-bg:var(--warning-950);   --warning-border:var(--warning-800);
-  --danger:var(--danger-400);     --danger-bg:var(--danger-950);     --danger-border:var(--danger-800);
-  --danger-hover:var(--danger-300);  --danger-active:var(--danger-500);
-  --info:var(--cielo-400);        --info-bg:var(--cielo-950);        --info-border:var(--cielo-800);
+  --success:var(--success-400);
+  --success-bg:var(--success-950);
+  --success-border:var(--success-800);
+  --warning:var(--warning-400);
+  --warning-bg:var(--warning-950);
+  --warning-border:var(--warning-800);
+  --danger:var(--danger-400);
+  --danger-hover:var(--danger-300);
+  --danger-active:var(--danger-500);
+  --danger-bg:var(--danger-950);
+  --danger-border:var(--danger-800);
+  --info:var(--cielo-400);
+  --info-bg:var(--cielo-950);
+  --info-border:var(--cielo-800);
   --focus:var(--oro-300);
   /* ===== elevation (dark) ===== */
   --shadow-sm:0 1px 2px rgba(0,0,0,0.4);
@@ -90,30 +98,39 @@
   --surface-raised:var(--tierra-50);
   --overlay:var(--tierra-50);
   --border-subtle:var(--tierra-300);
-  --border:var(--tierra-600);                /* FIX: pasa 3:1 sobre crema */
-  --border-strong:var(--tierra-700);         /* FIX */
+  --border:var(--tierra-600);
+  --border-strong:var(--tierra-700);
   --text:var(--tierra-950);
-  --text-secondary:var(--tierra-800);        /* FIX: separa de muted y pasa AA */
-  --text-muted:var(--tierra-700);            /* FIX: 500→700 (el crema es muy claro) */
+  --text-secondary:var(--tierra-800);
+  --text-muted:var(--tierra-700);
   --text-on-accent:var(--tierra-950);
-  --on-danger:var(--tierra-50);              /* NUEVO: tinta clara sobre danger fill en light */
-  --on-secondary:var(--tierra-50);           /* NUEVO: tinta clara sobre el verde fill en light */
-  --accent:var(--oro-600);                   /* borde del primario-ghost (3.4:1) */
+  --on-danger:var(--tierra-50);
+  --on-secondary:var(--tierra-50);
+  --accent:var(--oro-600);
   --accent-hover:var(--oro-700);
   --accent-active:var(--oro-800);
   --accent-subtle:var(--oro-100);
-  --accent-text:var(--oro-700);              /* texto del primario-ghost (4.9:1) */
+  --accent-text:var(--oro-700);
   --secondary:var(--olivo-800);
   --secondary-hover:var(--olivo-900);
   --secondary-active:var(--olivo-900);
   --secondary-subtle:var(--olivo-100);
   --secondary-border:var(--olivo-300);
   --secondary-text:var(--olivo-700);
-  --success:var(--success-700);   --success-bg:var(--success-100);   --success-border:var(--success-300);
-  --warning:var(--warning-700);   --warning-bg:var(--warning-100);   --warning-border:var(--warning-300);
-  --danger:var(--danger-700);     --danger-bg:var(--danger-100);     --danger-border:var(--danger-300);
-  --danger-hover:var(--danger-800);  --danger-active:var(--danger-900);
-  --info:var(--cielo-700);        --info-bg:var(--cielo-100);        --info-border:var(--cielo-300);
+  --success:var(--success-700);
+  --success-bg:var(--success-100);
+  --success-border:var(--success-300);
+  --warning:var(--warning-700);
+  --warning-bg:var(--warning-100);
+  --warning-border:var(--warning-300);
+  --danger:var(--danger-700);
+  --danger-hover:var(--danger-800);
+  --danger-active:var(--danger-900);
+  --danger-bg:var(--danger-100);
+  --danger-border:var(--danger-300);
+  --info:var(--cielo-700);
+  --info-bg:var(--cielo-100);
+  --info-border:var(--cielo-300);
   --focus:var(--oro-700);
   /* ===== elevation (light) ===== */
   --shadow-sm:0 1px 2px rgba(23,18,13,0.08);

@@ -26,7 +26,7 @@ SD, CI, publish → ver [`HANDOFF.md`](./HANDOFF.md).
 
 ```
 tokens/milpa-tokens.json    # DTCG — FUENTE DE VERDAD
-dist/                       # salidas consumibles (CSS vars + preset Tailwind)  [baseline hand-authored, verificado AA]
+dist/                       # salidas consumibles (CSS vars + preset Tailwind) — GENERADAS (npm run build, drift-gated en CI)
 motion/                     # "el viento": easings + primitivas + contrato reduced-motion
 primitives/                 # el grano: Button, Input, Field, controles… (+ *.contract.json)
 components/                 # el frijol: Card, Table, Modal, Shell admin… (+ *.contract.json)
@@ -56,11 +56,13 @@ El `<html>` **siempre** lleva `data-theme` (`"dark"` | `"light"`).
 ## Desarrollo
 
 ```bash
-npm install
-npm run build      # style-dictionary: tokens/ -> dist/   (ver HANDOFF task 1)
-npm test           # verifica contraste WCAG AA de todos los pares semánticos
+npm run build      # genera dist/ desde tokens/milpa-tokens.json (cero dependencias)
+npm test           # triple gate: contraste AA (135) + gobernanza del molde + drift de dist/
 npm run proof      # sirve el repo en http://localhost:4321 → /proof/milpa-admin-proof.html
 ```
+
+Flujo de tokens: editar `tokens/milpa-tokens.json` → `npm run build` → `npm test`. Editar
+`dist/` a mano no tiene sentido: CI falla si driftea del JSON.
 
 ## Licencia
 

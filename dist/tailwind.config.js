@@ -1,4 +1,5 @@
-/* Milpa — Tailwind theme. Import milpa-tokens.css so the var() colors & shadows resolve.
+/* Milpa — Tailwind theme. GENERADO desde tokens/milpa-tokens.json — NO editar a mano (npm run build).
+   Import milpa-tokens.css so the var() colors & shadows resolve.
    NOTA darkMode: dark es el default (definido en :root y en [data-theme="dark"]). La
    convención es que <html> SIEMPRE lleve data-theme ("dark"|"light"); así el selector
    [data-theme="dark"] matchea el estado por defecto y las utilidades dark: disparan bien. */
@@ -9,14 +10,12 @@ module.exports = {
       colors: {
         tierra: { 50: '#FAF5EF', 100: '#ECE6D8', 200: '#E3D7CC', 300: '#CBBFB4', 400: '#B4A99E', 500: '#9D9388', 600: '#847A70', 700: '#6B6157', 800: '#51483F', 900: '#372F27', 950: '#17120D' },
         oro: { 50: '#FFF4E3', 100: '#FFE8C2', 200: '#FFD286', 300: '#E8B14C', 400: '#DC9E12', 500: '#C18900', 600: '#A27200', 700: '#825B00', 800: '#624400', 900: '#422C00', 950: '#211400' },
-        // olivo = secundario / marca fría (reemplaza al viejo azul)
         olivo: { 50: '#F4F7F0', 100: '#E8EEDD', 200: '#D3DFBE', 300: '#B7CA94', 400: '#9CB668', 500: '#85A143', 600: '#6D882D', 700: '#566D19', 800: '#485C17', 900: '#293701', 950: '#121B00' },
-        // cielo = azul semántico, solo para info
         cielo: { 50: '#F0F6FF', 100: '#DFEDFF', 200: '#C0DCFF', 300: '#97C5FF', 400: '#6CADFF', 500: '#4796F5', 600: '#317CD5', 700: '#1E63B2', 800: '#1A5395', 900: '#033061', 950: '#001735' },
         success: { 50: '#E1FFE6', 100: '#CAFAD2', 200: '#A7EDB5', 300: '#81D995', 400: '#5EC478', 500: '#41AE61', 600: '#27934B', 700: '#0F7737', 800: '#005A26', 900: '#003C17', 950: '#001E08' },
         warning: { 50: '#FFF3ED', 100: '#FFE5D8', 200: '#FFCDB2', 300: '#FFAB7B', 400: '#F78A47', 500: '#E07227', 600: '#C15A04', 700: '#9C4700', 800: '#763400', 900: '#502100', 950: '#2A0E00' },
         danger: { 50: '#FFF3F1', 100: '#FFE4E0', 200: '#FFCBC4', 300: '#FFA79B', 400: '#FF7F71', 500: '#EA6356', 600: '#CB4C41', 700: '#A8372F', 800: '#82241E', 900: '#5A1410', 950: '#310504' },
-        // ===== alias semánticos (resuelven contra milpa-tokens.css) =====
+        /* ===== alias semánticos (resuelven contra milpa-tokens.css) ===== */
         'bg': 'var(--bg)',
         'surface': 'var(--surface)',
         'surface-raised': 'var(--surface-raised)',
@@ -86,7 +85,10 @@ module.exports = {
         'full': '9999px',
       },
       boxShadow: {
-        sm: 'var(--shadow-sm)', base: 'var(--shadow-base)', md: 'var(--shadow-md)', lg: 'var(--shadow-lg)',
+        'sm': 'var(--shadow-sm)',
+        'base': 'var(--shadow-base)',
+        'md': 'var(--shadow-md)',
+        'lg': 'var(--shadow-lg)',
       },
       zIndex: {
         'base': '0',
@@ -100,6 +102,7 @@ module.exports = {
         'tooltip': '1700',
       },
       transitionDuration: {
+        'instant': '0ms',
         'fast': '120ms',
         'base': '200ms',
         'moderate': '320ms',
@@ -111,6 +114,7 @@ module.exports = {
         'settle': 'cubic-bezier(0.2,0.8,0.2,1)',
         'grano': 'cubic-bezier(0.16,1,0.3,1)',
         'in': 'cubic-bezier(0.4,0,1,1)',
+        'linear': 'linear',
       },
     },
   },

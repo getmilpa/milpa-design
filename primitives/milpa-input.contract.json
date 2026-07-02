@@ -1,0 +1,60 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "input",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-input",
+  "summary": "Entrada de texto de una línea. Fondo var(--bg) = un paso hundido respecto a la superficie; la definición la da el borde (regla 1). El estado inválido se declara con aria-invalid, no con una clase.",
+  "element": ["input[type=text|email|password|search|number|url|tel]"],
+  "anatomy": {
+    "root": ".mui-input — el control",
+    "group": ".mui-input-group (+ --prefix/--suffix) — envoltura para ícono/unidad superpuesta",
+    "group__prefix": ".mui-input-group__prefix — slot inicial (pointer-events none)",
+    "group__suffix": ".mui-input-group__suffix — slot final"
+  },
+  "variants": {
+    "size": {
+      "sm": ".mui-input--sm — 2rem / text-xs / radius-sm",
+      "md": "default — 2.5rem / text-sm / radius-base",
+      "lg": ".mui-input--lg — 3rem / text-base"
+    }
+  },
+  "states": {
+    "focus": ":focus-visible — outline 2px var(--focus) offset 1px + borde var(--focus)",
+    "invalid": "[aria-invalid=\"true\"] — borde var(--danger); su :focus-visible también en danger",
+    "disabled": "[disabled] — opacity .5, cursor not-allowed",
+    "readonly": "[readonly] — fondo var(--surface) (no editable, sí legible/seleccionable)"
+  },
+  "tokens": [
+    "--bg", "--surface", "--text", "--text-muted", "--border-strong", "--danger", "--focus",
+    "--font-display", "--text-xs", "--text-sm", "--text-base",
+    "--space-3", "--space-8", "--radius-sm", "--radius-base",
+    "--dur-fast", "--ease-standard"
+  ],
+  "a11y": {
+    "label": "SIEMPRE dentro de .mui-field con <label for> (o aria-label si el diseño lo oculta — usar .mui-sr-only)",
+    "aria": [
+      "error → aria-invalid=\"true\" + aria-describedby apuntando al id del .mui-field__error",
+      "hint → aria-describedby apuntando al id del .mui-field__hint",
+      "placeholder nunca sustituye al label"
+    ],
+    "keyboard": ["nativo del input; el focus ring es visible sobre cualquier superficie (par focus/surface verificado)"],
+    "contrast": "placeholder var(--text-muted) sobre var(--bg) verificado AA (npm test)",
+    "surfaces": "asentar el control sobre var(--bg) o var(--surface). En dark NO sobre --surface-raised/--overlay (modales, popovers): el boundary no llega a 3:1 (border-strong 2.13:1, fill 2.08:1 — WCAG 1.4.11). En light el borde sí define sobre cualquier superficie (5.58:1)."
+  },
+  "motion": {
+    "transitions": "border-color/background en --dur-fast --ease-standard",
+    "reducedMotion": "contrato global de milpa-motion.css"
+  },
+  "examples": [
+    {
+      "title": "Campo completo (field + input + error)",
+      "html": "<div class=\"mui-field\"><label class=\"mui-field__label\" for=\"plugin\">Nombre del plugin <span class=\"mui-field__required\" aria-hidden=\"true\">*</span></label><input class=\"mui-input\" id=\"plugin\" required aria-invalid=\"true\" aria-describedby=\"plugin-err\" placeholder=\"ej. MailPlugin\"><p class=\"mui-field__error\" id=\"plugin-err\">Este campo es obligatorio.</p></div>"
+    },
+    {
+      "title": "Con prefijo (búsqueda)",
+      "html": "<div class=\"mui-input-group mui-input-group--prefix\"><input class=\"mui-input\" type=\"search\" aria-label=\"Buscar\" placeholder=\"Buscar módulos…\"><span class=\"mui-input-group__prefix\" aria-hidden=\"true\">⌕</span></div>"
+    }
+  ]
+}

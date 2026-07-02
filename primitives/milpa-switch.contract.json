@@ -1,0 +1,72 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "switch",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-switch",
+  "summary": "Encendido/apagado de efecto inmediato (sin submit). <input type=\"checkbox\" role=\"switch\"> nativo con appearance:none: track 2.25×1.25rem radius-full + thumb que se desliza exactamente 1rem con --ease-settle. Unchecked = track var(--surface-raised) + borde var(--text-muted) (funciona también dentro de modales/drawers) + thumb var(--text-secondary). Checked en dark = track var(--accent) + thumb var(--text-on-accent); en light (regla 2, sin fill oro) = track var(--accent-subtle) + borde var(--accent) + thumb var(--accent-text), espejo del primario ghost.",
+  "element": [
+    "input[type=checkbox][role=switch]"
+  ],
+  "anatomy": {
+    "root": ".mui-switch — el track (pastilla radius-full); ::before es el thumb, decorativo (content:\"\" — invisible para lectores de pantalla)",
+    "choice": "se etiqueta con .mui-choice — patrón documentado en el contrato de checkbox (hint en var(--text-secondary), no muted: AA sobre overlay/surface-raised)"
+  },
+  "variants": {},
+  "states": {
+    "checked": ":checked — dark: track var(--accent) + auto-borde var(--accent-active) (regla 4), thumb var(--text-on-accent). light (regla 2): track var(--accent-subtle) + borde var(--accent), thumb var(--accent-text). En ambos, el thumb desliza al extremo (translate 1rem)",
+    "hover": ":hover — borde var(--text-secondary) (un paso sobre el var(--text-muted) de reposo); solo se percibe unchecked",
+    "focus": ":focus-visible — outline 2px var(--focus) offset 1px",
+    "disabled": "[disabled] — opacity .5, cursor not-allowed; dentro de .mui-choice se atenúa el label completo"
+  },
+  "tokens": [
+    "--surface-raised",
+    "--accent",
+    "--accent-active",
+    "--accent-subtle",
+    "--accent-text",
+    "--text-secondary",
+    "--text-muted",
+    "--text-on-accent",
+    "--focus",
+    "--radius-full",
+    "--space-0_5",
+    "--space-4",
+    "--dur-fast",
+    "--ease-standard",
+    "--ease-settle"
+  ],
+  "a11y": {
+    "element": "SIEMPRE <input type=\"checkbox\" role=\"switch\"> — el rol anuncia «interruptor» y el checked nativo se expone como aria-checked (HTML-AAM); no requiere JS del consumidor",
+    "label": "con .mui-choice o aria-label si es compacto; el label describe QUÉ enciende, nunca el estado (el estado lo anuncia el rol)",
+    "keyboard": [
+      "Space alterna (nativo)",
+      "Enter NO alterna un checkbox nativo — no simularlo; dentro de un form Enter envía"
+    ],
+    "aria": [
+      "semántica de switch = efecto inmediato: no usarlo para opciones que se confirman con submit (ahí corresponde checkbox)",
+      "no usar indeterminate con role=\"switch\": un interruptor es binario"
+    ],
+    "surfaces": "usable sobre bg, surface, surface-raised y overlay en ambos temas: el borde de reposo es var(--text-muted) precisamente porque border-strong sobre surface-raised/overlay en dark mide 2.13 (<3)",
+    "contrast": "medido con la fórmula de scripts/verify-contrast.mjs en ambos temas — thumb sobre su track: text-secondary/surface-raised 4.96 dark · 8.25 light (gateado), text-on-accent/accent 9.59 dark (gateado en dark), accent-text/accent-subtle 5.10 light (gateado). Boundary del track unchecked = text-muted: 8.07/4.86 sobre bg, 5.70/5.58 sobre surface y 3.88/5.58 sobre surface-raised (que en dark es también --overlay). Checked: accent 3.41–9.59 sobre los tres niveles + auto-borde accent-active 3.81–8.26; en light el borde también define contra su propio track (accent/accent-subtle 3.56). Los pares que aún no están en CI van declarados en pairsUsed del cluster"
+  },
+  "motion": {
+    "transitions": "track (background/border) en --dur-fast --ease-standard; thumb translate 1rem en --dur-fast --ease-settle — se desliza y se asienta, nunca rebota. En RTL el recorrido se invierte con :dir(rtl) (direccionalidad computada — cubre atributo dir, CSS direction e islotes ltr dentro de rtl; transform no es lógico)",
+    "reducedMotion": "contrato global de milpa-motion.css (1ms): el thumb salta al otro extremo en 1 frame — la posición final ES el estado, el trayecto es solo cortesía"
+  },
+  "examples": [
+    {
+      "title": "Con etiqueta y hint",
+      "html": "<label class=\"mui-choice\"><input type=\"checkbox\" role=\"switch\" class=\"mui-switch\" checked><span class=\"mui-choice__text\">Modo agente<span class=\"mui-choice__hint\">Los agentes pueden sembrar módulos por vos</span></span></label>"
+    },
+    {
+      "title": "Compacto (label oculto)",
+      "html": "<input type=\"checkbox\" role=\"switch\" class=\"mui-switch\" aria-label=\"Notificaciones\">"
+    },
+    {
+      "title": "Deshabilitado",
+      "html": "<label class=\"mui-choice\"><input type=\"checkbox\" role=\"switch\" class=\"mui-switch\" disabled><span class=\"mui-choice__text\">Telemetría<span class=\"mui-choice__hint\">Disponible en el plan Cosecha</span></span></label>"
+    }
+  ]
+}

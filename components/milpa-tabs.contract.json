@@ -1,0 +1,79 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "tabs",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-tabs",
+  "summary": "Navegación entre vistas hermanas dentro de una página. Tablist definido por una línea base (border-subtle); la pestaña activa la marca el subrayado oro vía aria-selected — sin fill, sin clase de estado. El indicador de 2px pisa la línea del tablist (margin-bottom -1px). Pensado para bg/surface.",
+  "element": [
+    "div[role=tablist] > button[role=tab]",
+    "div[role=tabpanel]"
+  ],
+  "composes": [
+    "badge"
+  ],
+  "anatomy": {
+    "root": ".mui-tabs — el tablist: flex, gap var(--space-1), línea base 1px var(--border-subtle)",
+    "tab": ".mui-tabs__tab — <button role=tab> ghost, 2.5rem, padding-inline var(--space-3), text-sm medium; indicador border-bottom 2px (transparent → var(--accent))",
+    "badge (slot)": "conteo opcional dentro del tab: compone .mui-badge como último hijo (dependencia declarada en composes: requiere el componente badge, primitiva de DESIGN.md §6, cargar su CSS junto a este cluster). El gap del tab (var(--space-2)) lo separa del label — sin CSS extra. Si el CSS de badge aún no cargó, degrada a texto plano que hereda el color del tab (contraste AA intacto)",
+    "panel": ".mui-tabs__panel — contenido asociado, padding-top var(--space-5); [hidden] lo oculta"
+  },
+  "variants": {
+    "size": {
+      "md": "default (única en v0) — 2.5rem / text-sm / weight-medium (prop privada --_h, alturas del molde)"
+    }
+  },
+  "states": {
+    "hover": ":hover — color var(--text); el indicador no aparece en hover (solo la selección lo enciende)",
+    "selected": "[aria-selected=\"true\"] — color var(--accent-text) + border-bottom-color var(--accent)",
+    "focus": ":focus-visible — outline 2px var(--focus) offset -2px (ring interior: no se corta si el tablist tiene overflow)",
+    "disabled": "[disabled] o [aria-disabled=\"true\"] — opacity .5, sin interacción",
+    "panel-hidden": ".mui-tabs__panel[hidden] — display none (los panels no activos llevan hidden)",
+    "panel-focus": ".mui-tabs__panel:focus-visible — outline 2px var(--focus) offset 2px (cuando lleva tabindex=0)"
+  },
+  "tokens": [
+    "--border-subtle",
+    "--text",
+    "--text-secondary",
+    "--accent",
+    "--accent-text",
+    "--focus",
+    "--font-display",
+    "--text-sm",
+    "--weight-medium",
+    "--tracking-normal",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-5",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "tabs = <button type=\"button\" role=\"tab\"> dentro de un contenedor role=\"tablist\" (con aria-label); cada panel = role=\"tabpanel\"",
+    "aria": [
+      "tablist con aria-label descriptivo",
+      "cada tab: aria-selected=\"true|false\" + aria-controls=<id del panel>",
+      "cada panel: aria-labelledby=<id de su tab>; los no activos llevan hidden",
+      "panel sin contenido focusable → tabindex=\"0\" para que el teclado llegue al contenido"
+    ],
+    "keyboard": [
+      "Tab entra al tablist (solo el tab activo es tabbable) y el siguiente Tab salta al panel",
+      "ArrowLeft/ArrowRight mueven el foco entre tabs (con wrap); Home/End van a los extremos",
+      "Enter/Space activan el tab enfocado (activación manual, recomendada si el panel carga datos)"
+    ],
+    "behavior": "JS del consumidor: (1) roving tabindex — el tab seleccionado lleva tabindex=0 y el resto tabindex=-1; (2) listeners de ArrowLeft/ArrowRight/Home/End que mueven el foco (saltando disabled, con wrap); (3) al activar: aria-selected=true en el tab nuevo / false en el anterior, hidden fuera del panel nuevo / puesto en los demás, y actualizar el roving tabindex. Activación automática al enfocar es válida solo si el cambio de panel es instantáneo. Tabs verticales: aria-orientation=\"vertical\" + ArrowUp/ArrowDown (el CSS v0 es horizontal).",
+    "contrast": "accent-text y accent (indicador, boundary ≥3) verificados sobre bg y surface en ambos temas; par accent/surface en el gate de scripts/verify-contrast.mjs (6.77 dark / 3.92 light)"
+  },
+  "motion": {
+    "transitions": "color y border-color en --dur-fast --ease-standard: el subrayado se asienta al seleccionar — nunca desliza ni rebota",
+    "reducedMotion": "contrato global de milpa-motion.css: la transición cae a 1ms — el indicador simplemente aparece (1 frame estático, sin pérdida semántica: la lleva aria-selected)"
+  },
+  "examples": [
+    {
+      "title": "Tabs con badge de conteo y panels",
+      "html": "<div class=\"mui-tabs\" role=\"tablist\" aria-label=\"Secciones del plugin\"><button type=\"button\" class=\"mui-tabs__tab\" role=\"tab\" id=\"tab-general\" aria-controls=\"panel-general\" aria-selected=\"true\">General</button><button type=\"button\" class=\"mui-tabs__tab\" role=\"tab\" id=\"tab-eventos\" aria-controls=\"panel-eventos\" aria-selected=\"false\" tabindex=\"-1\">Eventos <span class=\"mui-badge\">12</span></button><button type=\"button\" class=\"mui-tabs__tab\" role=\"tab\" id=\"tab-logs\" aria-controls=\"panel-logs\" aria-selected=\"false\" tabindex=\"-1\" disabled>Logs</button></div><div class=\"mui-tabs__panel\" role=\"tabpanel\" id=\"panel-general\" aria-labelledby=\"tab-general\" tabindex=\"0\"><p>Configuración general del plugin.</p></div><div class=\"mui-tabs__panel\" role=\"tabpanel\" id=\"panel-eventos\" aria-labelledby=\"tab-eventos\" tabindex=\"0\" hidden><p>Eventos suscritos.</p></div><div class=\"mui-tabs__panel\" role=\"tabpanel\" id=\"panel-logs\" aria-labelledby=\"tab-logs\" tabindex=\"0\" hidden><p>Registro de actividad.</p></div>"
+    }
+  ]
+}

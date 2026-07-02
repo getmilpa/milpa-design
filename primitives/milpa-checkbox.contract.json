@@ -1,0 +1,88 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "checkbox",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-checkbox",
+  "summary": "Selección múltiple. <input type=\"checkbox\"> nativo con appearance:none — la semántica (checked/indeterminate/disabled) sigue siendo del navegador; aquí solo se pinta. El glifo ✓ es geometría CSS (clip-path sobre currentColor), sin SVG. Checked en dark = fill var(--accent) + auto-borde var(--accent-active) (regla 4). En light el oro NO es fill sólido (regla 2): checked es ghost — borde 2px var(--accent) + glifo var(--accent-text) sobre var(--bg), espejo del .mui-btn--primary light.",
+  "element": [
+    "input[type=checkbox]"
+  ],
+  "anatomy": {
+    "root": ".mui-checkbox — el control (caja 1.125rem, radius-xs); ::before es el glifo ✓ / barra, decorativo (content:\"\" — invisible para lectores de pantalla, no requiere aria-hidden)",
+    "choice": ".mui-choice — patrón de etiqueta compartido por checkbox/radio/switch: <label> implícito inline-flex (gap --space-2, items al inicio) que envuelve control + texto; el click en cualquier parte activa el control",
+    "choice__text": ".mui-choice__text — texto de la opción (text-sm, var(--text-secondary))",
+    "choice__hint": ".mui-choice__hint — aclaración opcional (text-xs, var(--text-secondary) — NO text-muted: sobre --surface-raised/--overlay en dark, muted mide 3.88 < 4.5 AA y el hábitat canónico de estos controles son paneles y modales; la jerarquía la da el tamaño). Va DENTRO de __text para que el label la incluya"
+  },
+  "variants": {},
+  "states": {
+    "checked": ":checked — dark: fill var(--accent) + borde var(--accent-active), glifo ✓ ::before en var(--text-on-accent). light (regla 2, sin fill oro): borde 2px var(--accent) + glifo en var(--accent-text) sobre var(--bg)",
+    "indeterminate": ":indeterminate — barra horizontal (clip-path inset), mismo esquema por tema que checked; solo alcanzable por JS",
+    "hover": ":hover — borde var(--text-muted); solo se percibe unchecked (checked conserva su borde propio)",
+    "focus": ":focus-visible — outline 2px var(--focus) offset 1px (convención de campos)",
+    "invalid": "[aria-invalid=\"true\"] — borde var(--danger); su :focus-visible también en danger. checked/indeterminate+invalid refuerza la señal: fill var(--danger) + borde var(--danger-active) + glifo var(--on-danger) (un borde danger de 1px sería ilegible contra el fill oro: danger/accent 1.27 dark · 1.52 light)",
+    "disabled": "[disabled] — opacity .5, cursor not-allowed; dentro de .mui-choice se atenúa el label completo (el CSS evita la doble atenuación del control)"
+  },
+  "tokens": [
+    "--bg",
+    "--accent",
+    "--accent-active",
+    "--accent-text",
+    "--text-on-accent",
+    "--border-strong",
+    "--text-muted",
+    "--text-secondary",
+    "--danger",
+    "--danger-active",
+    "--on-danger",
+    "--focus",
+    "--radius-xs",
+    "--font-display",
+    "--text-sm",
+    "--text-xs",
+    "--leading-normal",
+    "--space-px",
+    "--space-0_5",
+    "--space-2",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "label": "SIEMPRE con label: envolver en .mui-choice (label implícito) o asociar con <label for>; si el diseño lo oculta (tablas, toolbars), aria-label + .mui-sr-only",
+    "keyboard": [
+      "Space alterna (nativo)",
+      "focus visible obligatorio vía :focus-visible"
+    ],
+    "aria": [
+      "error → aria-invalid=\"true\" + aria-describedby apuntando al id del .mui-field__error",
+      "grupos de checkboxes → <fieldset> + <legend> (pueden usar .mui-field / .mui-field__label)",
+      "el hint dentro de .mui-choice__text queda incluido en el nombre accesible del label; si estorba, moverlo fuera y asociarlo con aria-describedby"
+    ],
+    "behavior": "indeterminate no existe como atributo HTML: el consumidor lo setea por JS (el.indeterminate = true) — típico en «seleccionar todo» con selección parcial; el click del usuario lo limpia y el navegador pasa a checked",
+    "surfaces": "usable sobre bg, surface, surface-raised y overlay: unchecked, el boundary lo garantiza el borde contra el interior propio var(--bg) (border-strong/bg 4.43 dark · 4.86 light); checked, el oro contra el host (accent ≥3 en los tres niveles de superficie)",
+    "contrast": "medido con la fórmula de scripts/verify-contrast.mjs en ambos temas — glifo dark text-on-accent/accent 9.59 (par ya gateado en dark); glifo light accent-text/bg 4.90 (gateado); boundary checked accent sobre bg/surface/surface-raised 3.41–9.59; auto-borde accent-active sobre los tres niveles 3.81–8.26; invalid danger sobre los tres niveles 3.63–7.55 y glifo on-danger/danger 7.55 dark · 5.96 light (gateado). Los pares que aún no están en CI van declarados en pairsUsed del cluster para su alta en el gate"
+  },
+  "motion": {
+    "transitions": "background-color/border-color en --dur-fast --ease-standard; el glifo aparece con el estado, sin animación propia — germina y se asienta",
+    "reducedMotion": "contrato global de milpa-motion.css (transiciones a 1ms): el toggle degrada a 1 frame estático — la semántica la lleva :checked, no la transición"
+  },
+  "examples": [
+    {
+      "title": "Opción con hint (.mui-choice)",
+      "html": "<label class=\"mui-choice\"><input type=\"checkbox\" class=\"mui-checkbox\" checked><span class=\"mui-choice__text\">Actualizaciones automáticas<span class=\"mui-choice__hint\">Los módulos se cosechan cada noche</span></span></label>"
+    },
+    {
+      "title": "Inválido (dentro de .mui-field)",
+      "html": "<div class=\"mui-field\"><label class=\"mui-choice\"><input type=\"checkbox\" class=\"mui-checkbox\" required aria-invalid=\"true\" aria-describedby=\"tos-err\"><span class=\"mui-choice__text\">Acepto los términos de la milpa</span></label><p class=\"mui-field__error\" id=\"tos-err\">Debés aceptar los términos para continuar.</p></div>"
+    },
+    {
+      "title": "Mixto — «seleccionar todo» (indeterminate por JS)",
+      "html": "<label class=\"mui-choice\"><input type=\"checkbox\" class=\"mui-checkbox\" id=\"sel-all\"><span class=\"mui-choice__text\">Seleccionar todos los módulos</span></label><script>document.getElementById('sel-all').indeterminate = true;</script>"
+    },
+    {
+      "title": "Deshabilitado (el label completo se atenúa)",
+      "html": "<label class=\"mui-choice\"><input type=\"checkbox\" class=\"mui-checkbox\" checked disabled><span class=\"mui-choice__text\">Núcleo<span class=\"mui-choice__hint\">Siempre activo — es el maíz</span></span></label>"
+    }
+  ]
+}

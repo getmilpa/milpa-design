@@ -1,0 +1,62 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "progress",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-progress",
+  "summary": "Progreso determinado. Track hundido (var(--surface-raised) + borde var(--border), boundary ≥3:1 sobre el bg de página) y fill que ES el indicador: pares fill/track verificados ≥3:1 en ambos temas (cableados en el gate). El consumidor controla width inline y aria-valuenow. Para actividad sin valor conocido usar Spinner.",
+  "element": [
+    "div"
+  ],
+  "anatomy": {
+    "root": ".mui-progress — el track; lleva role=\"progressbar\" y los aria-value*",
+    "bar": ".mui-progress__bar — el fill; width inline (0–100%) puesto por el consumidor"
+  },
+  "variants": {
+    "intent": {
+      "default": "fill var(--accent) — progreso de marca (la cosecha en curso)",
+      "success": ".mui-progress--success — fill var(--success)",
+      "warning": ".mui-progress--warning — fill var(--warning)",
+      "danger": ".mui-progress--danger — fill var(--danger)"
+    }
+  },
+  "states": {
+    "value": "width del __bar + aria-valuenow del root — siempre el mismo número, actualizados juntos"
+  },
+  "tokens": [
+    "--surface-raised",
+    "--border",
+    "--accent",
+    "--success",
+    "--warning",
+    "--danger",
+    "--space-2",
+    "--radius-full",
+    "--dur-moderate",
+    "--ease-settle"
+  ],
+  "a11y": {
+    "element": "<div role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"…\"> + aria-label o aria-labelledby (qué progresa)",
+    "behavior": "JS del consumidor: en cada avance actualizar style.width del __bar y aria-valuenow del root con el mismo valor; no es interactivo (sin foco ni teclado). Con aria-valuetext se puede humanizar ('3 de 5 módulos')",
+    "aria": [
+      "aria-label o aria-labelledby obligatorio",
+      "si el máximo no es 100, declarar aria-valuemax y calcular el width en % aparte"
+    ],
+    "contrast": "fill sobre track: accent|success|warning|danger / surface-raised ≥3:1 verificados en dark y light — pares cableados en scripts/verify-contrast.mjs (npm test, 95/95). Boundary del track: var(--border) pasa 3:1 sobre el bg de página (3.08 dark / 3.38 light); sobre surface en dark mide 2.17 — el extent exacto del track es no-esencial porque aria-valuenow/aria-valuetext llevan el valor y el fill contrasta ≥3.63 contra el track. Nota regla 2 (DESIGN.md §3): en light el fill default es oro-600 como INDICADOR GRÁFICO sin tinta encima — sancionado por el alcance aclarado de la regla (la regla veta el oro como fill de componente con texto encima): 3.92:1 sobre el track, en el gate."
+  },
+  "motion": {
+    "transitions": "width en --dur-moderate --ease-settle — el avance se asienta, nunca rebota",
+    "reducedMotion": "contrato global: la transición cae a 1ms (salto instantáneo) sin pérdida de información"
+  },
+  "examples": [
+    {
+      "title": "Instalación",
+      "html": "<div class=\"mui-progress\" role=\"progressbar\" aria-label=\"Instalación de MailPlugin\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"64\"><div class=\"mui-progress__bar\" style=\"width:64%\"></div></div>"
+    },
+    {
+      "title": "Cuota casi llena (warning)",
+      "html": "<div class=\"mui-progress mui-progress--warning\" role=\"progressbar\" aria-label=\"Uso de almacenamiento\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"92\" aria-valuetext=\"92% del almacenamiento usado\"><div class=\"mui-progress__bar\" style=\"width:92%\"></div></div>"
+    }
+  ]
+}

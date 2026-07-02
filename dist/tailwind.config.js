@@ -48,6 +48,8 @@ module.exports = {
         'warning-bg': 'var(--warning-bg)',
         'warning-border': 'var(--warning-border)',
         'danger': 'var(--danger)',
+        'danger-hover': 'var(--danger-hover)',
+        'danger-active': 'var(--danger-active)',
         'danger-bg': 'var(--danger-bg)',
         'danger-border': 'var(--danger-border)',
         'info': 'var(--info)',

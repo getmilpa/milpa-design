@@ -3,6 +3,38 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
+### Added
+- **Base de componentes admin (HANDOFF T2 cumplido y extendido).** 29 piezas token-driven, cada
+  una con su `*.contract.json` introspectable:
+  - `primitives/milpa-primitives.css` — *el grano*: Button (primary/secondary/subtle/danger/ghost,
+    sm/lg/icon, loading `[aria-busy]`), Field, Input (+input-group), Textarea, Select, Checkbox,
+    Radio, Switch, patrón Choice, Badge, Kbd, Avatar (+group), Spinner, Progress, Divider.
+  - `components/milpa-components.css` — *el frijol*: Tooltip (inversión token-pure `--text`/`--bg`),
+    Menu, Card (+interactive/raised), Stat/KPI, EmptyState, Skeleton, Table (sticky header, sort
+    `[aria-sort]`, selección `[aria-selected]`, densidad), Pagination, Tabs, Breadcrumbs, Alert,
+    Toast (+viewport), Modal y Drawer (`<dialog>` nativo), y el esqueleto admin: Shell (+rail,
+    off-canvas mobile), Sidebar (item actual con barra-grano), Topbar, PageHeader.
+  - Convención transversal: **el estado se estiliza vía atributos ARIA/nativos** (`[disabled]`,
+    `[aria-invalid]`, `[aria-busy]`, `[aria-selected]`, `[aria-current]`, `[aria-sort]`) — el hook
+    de estilo es la semántica. Fills sólidos con auto-borde = su token `-active` (regla 4).
+- Tokens nuevos `danger-hover` / `danger-active` (dark 300/500 · light 800/900) en DTCG + CSS +
+  preset Tailwind — completan los estados de botón sólido destructivo.
+- **Gate de contraste ampliado: 32 → 135 checks AA** (`scripts/verify-contrast.mjs`) — cubre todos
+  los pares que consumen las primitivas y componentes (fills hover/active, tintes `*-subtle`,
+  semánticos sobre `surface`/`overlay`/`*-bg`, boundaries de tabla/tabs/progress).
+- **Logo kit integrado en `logo/`** (HANDOFF T4): símbolo Grano, wordmark grano-i, lockups h/v,
+  app icon. Mono-oro verificado (el verde no entra al logo).
+- Prueba visual del panel admin: `proof/milpa-admin-proof.html` (shell completo, tabla, formulario,
+  overlays, dark/light, teclado end-to-end).
+- `package.json`: exports `./primitives.css`, `./components.css`, `./primitives/*`,
+  `./components/*`, `./logo/*`; `npm run proof` ahora sirve la raíz del repo.
+
+### Fixed
+- **Wordmark en los proofs:** el truco tipográfico del grano-dot (span desplazado sobre la `i`)
+  renderizaba el grano flotando entre la `i` y la `l` (y la `i` conservaba su punto natural).
+  Reemplazado por el **vector real del kit** (`logo/wordmark/`) inline: la `i` va sin punto y el
+  grano ES el punto, en `var(--oro-300)` constante (el logo es mono-oro y no se adapta al tema,
+  fiel a las variantes color-dark/light del kit).
 
 ## [0.1.0] — 2026-06-30
 ### Added

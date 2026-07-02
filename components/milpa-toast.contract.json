@@ -1,0 +1,87 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "toast",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-toast",
+  "summary": "Notificación flotante y efímera. Vive dentro de .mui-toast-viewport (fixed, esquina block-end/inline-end, z var(--z-toast)). Fondo var(--overlay) = elevación máxima; el estado es una barra inline-start de 3px con el token semántico. Entra germinando (milpa-rise).",
+  "element": [
+    "div"
+  ],
+  "anatomy": {
+    "viewport": ".mui-toast-viewport — contenedor fixed único por app; columna con gap, pointer-events none (cada toast los reactiva)",
+    "root": ".mui-toast — la tarjeta: columna título/desc/acción; padding-inline-end reservado para __dismiss",
+    "title": ".mui-toast__title — text-sm medium",
+    "desc": ".mui-toast__desc — text-xs var(--text-secondary)",
+    "action": ".mui-toast__action — fila para .mui-btn--sm (gap --space-2); usar variantes con fill (.mui-btn--secondary o .mui-btn--primary, boundary ≥3 sobre overlay verificado) o .mui-btn--ghost (sin pretensión de boundary: lo identifica su label); el outline default NO alcanza 3:1 sobre overlay en dark",
+    "dismiss": ".mui-toast__dismiss — SOLO ancla a la esquina; se compone con .mui-btn .mui-btn--ghost .mui-btn--icon .mui-btn--sm + aria-label"
+  },
+  "variants": {
+    "intent": {
+      "default": "neutral — barra inline-start var(--border) (mismo grosor: el layout no salta entre variantes; barra decorativa, sin pretensión de 3:1 — un toast neutral no comunica estado)",
+      "success": ".mui-toast--success — barra var(--success)",
+      "warning": ".mui-toast--warning — barra var(--warning)",
+      "danger": ".mui-toast--danger — barra var(--danger)",
+      "info": ".mui-toast--info — barra var(--info)"
+    }
+  },
+  "states": {
+    "entering": "al insertarse en el DOM corre milpa-rise (germina y se asienta); no requiere clase",
+    "dismissed": "el consumidor remueve el nodo (auto-dismiss o __dismiss); nunca una clase de estado",
+    "focus": "el foco vive en los .mui-btn internos (__action / __dismiss), con su propio :focus-visible"
+  },
+  "tokens": [
+    "--overlay",
+    "--border",
+    "--text",
+    "--text-secondary",
+    "--success",
+    "--warning",
+    "--danger",
+    "--info",
+    "--shadow-lg",
+    "--z-toast",
+    "--font-display",
+    "--text-xs",
+    "--text-sm",
+    "--weight-medium",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--space-10",
+    "--radius-md",
+    "--dur-moderate",
+    "--ease-grano"
+  ],
+  "a11y": {
+    "role": "el viewport lleva aria-live=\"polite\"; cada toast success/info/neutral lleva role=\"status\" y los danger (y warning urgentes) role=\"alert\" (assertive implícito)",
+    "aria": [
+      "__dismiss requiere aria-label (ej. \"Descartar notificación\")",
+      "el viewport debe existir en el DOM antes de insertar toasts para que el live region anuncie",
+      "no meter en un toast contenido esencial que desaparezca solo — lo efímero es complemento, no canal único"
+    ],
+    "behavior": [
+      "insertar (JS consumidor): appendChild al viewport; remover al expirar o al descartar",
+      "auto-dismiss pausable: pausar el timer en hover y mientras haya foco dentro del toast; reanudar al salir",
+      "un toast con __action no debe expirar antes de que el usuario pueda accionarla (timeout largo o persistente)",
+      "no robar foco al aparecer; el foco solo entra si el usuario navega hacia el toast"
+    ],
+    "contrast": "text y text-secondary sobre overlay ≥4.5; cada var(--X) sobre overlay ≥3 (barra); secondary y accent sobre overlay ≥3 (boundary de las acciones con fill) — verificados en ambos temas; pares en el gate de scripts/verify-contrast.mjs (npm test). La barra neutra del default (var(--border)) es decorativa (1.48:1 dark), no sujeta al piso de 3:1. NO componer .mui-btn outline default en __action: su borde no llega a 3:1 sobre overlay en dark (border 1.48, border-strong hover 2.13) — usar fill (--secondary/--primary) o ghost."
+  },
+  "motion": {
+    "enter": "animation milpa-rise var(--dur-moderate) var(--ease-grano) both — germina desde abajo y se asienta",
+    "exit": "la maneja el consumidor: remover el nodo (opcional: fundido de opacity con .m-transition antes de remover)",
+    "reducedMotion": "contrato global de milpa-motion.css: la entrada degrada a 1 frame estático (aparece asentado)"
+  },
+  "examples": [
+    {
+      "title": "Viewport + toast success",
+      "html": "<div class=\"mui-toast-viewport\" aria-live=\"polite\"><div class=\"mui-toast mui-toast--success\" role=\"status\"><p class=\"mui-toast__title\">Módulo cosechado</p><p class=\"mui-toast__desc\">gallery-pro quedó publicado en el marketplace.</p><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-toast__dismiss\" aria-label=\"Descartar notificación\"><span aria-hidden=\"true\">✕</span></button></div></div>"
+    },
+    {
+      "title": "Danger con acción (assertive, sin auto-dismiss)",
+      "html": "<div class=\"mui-toast-viewport\" aria-live=\"polite\"><div class=\"mui-toast mui-toast--danger\" role=\"alert\"><p class=\"mui-toast__title\">Falló el deploy</p><p class=\"mui-toast__desc\">El terreno rechazó la siembra (exit 1).</p><div class=\"mui-toast__action\"><button type=\"button\" class=\"mui-btn mui-btn--secondary mui-btn--sm\">Reintentar</button></div><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-toast__dismiss\" aria-label=\"Descartar notificación\"><span aria-hidden=\"true\">✕</span></button></div></div>"
+    }
+  ]
+}

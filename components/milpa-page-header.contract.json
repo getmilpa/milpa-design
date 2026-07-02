@@ -1,0 +1,62 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "page-header",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-page-header",
+  "summary": "Cabecera del terreno de trabajo dentro del main: título (el h1 de la vista) + descripción, meta (badges) y acciones alineadas a la base. Sobriedad: UNA acción primaria por vista (mui-btn--primary), el resto neutral/ghost.",
+  "element": [
+    "header",
+    "div"
+  ],
+  "anatomy": {
+    "root": ".mui-page-header — flex wrap space-between align-end, gap space-4, margin-block-end space-6",
+    "text": ".mui-page-header__text — wrapper de título/desc/meta (min-width 0)",
+    "title": ".mui-page-header__title — <h1>; text-2xl, weight-medium, tracking-tight, leading-tight, var(--text)",
+    "desc": ".mui-page-header__desc — <p>; sm var(--text-muted), margin-top space-1",
+    "meta": ".mui-page-header__meta — flex gap space-2, margin-top space-2; compone .mui-badge — contrato badge PENDIENTE (HANDOFF)",
+    "actions": ".mui-page-header__actions — flex gap space-2; compone .mui-btn (un solo --primary)"
+  },
+  "variants": {},
+  "states": {},
+  "tokens": [
+    "--text",
+    "--text-muted",
+    "--font-display",
+    "--text-2xl",
+    "--text-sm",
+    "--weight-medium",
+    "--tracking-tight",
+    "--leading-tight",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--space-6"
+  ],
+  "a11y": {
+    "element": "<header> dentro de <main> (no es landmark banner ahí — correcto); el __title es el ÚNICO <h1> de la vista",
+    "aria": [
+      "la descripción no necesita aria: sigue al título en el orden del DOM",
+      "los badges de __meta llevan texto legible (no solo color); las acciones icon-only requieren aria-label (contrato button)"
+    ],
+    "keyboard": [
+      "solo composición: las acciones son primitivas focuseables por Tab en orden visual"
+    ],
+    "contrast": "text/bg y text-muted/bg verificados (npm test)"
+  },
+  "motion": {
+    "transitions": "ninguna propia; para la entrada de la vista puede componerse .m-rise (milpa-motion.css) en el consumidor",
+    "reducedMotion": "contrato global de milpa-motion.css (no hay animación que degradar)"
+  },
+  "examples": [
+    {
+      "title": "Cabecera con meta y acciones",
+      "html": "<header class=\"mui-page-header\"><div class=\"mui-page-header__text\"><h1 class=\"mui-page-header__title\">Plugins</h1><p class=\"mui-page-header__desc\">Módulos sembrados en esta aplicación.</p><div class=\"mui-page-header__meta\"><span class=\"mui-badge\">12 activos</span></div></div><div class=\"mui-page-header__actions\"><button type=\"button\" class=\"mui-btn\">Exportar</button><button type=\"button\" class=\"mui-btn mui-btn--primary\">Sembrar plugin</button></div></header>"
+    },
+    {
+      "title": "Mínima (solo título)",
+      "html": "<header class=\"mui-page-header\"><div class=\"mui-page-header__text\"><h1 class=\"mui-page-header__title\">Ajustes</h1></div></header>"
+    }
+  ]
+}

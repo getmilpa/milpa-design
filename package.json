@@ -6,19 +6,24 @@
   "type": "module",
   "private": false,
   "publishConfig": { "access": "public" },
-  "files": ["dist", "tokens", "motion", "primitives", "DESIGN.md"],
+  "files": ["dist", "tokens", "motion", "primitives", "components", "logo", "DESIGN.md"],
   "exports": {
     ".": "./dist/milpa-tokens.css",
     "./css": "./dist/milpa-tokens.css",
     "./tokens": "./tokens/milpa-tokens.json",
     "./tailwind": "./dist/tailwind.config.js",
     "./motion.css": "./motion/milpa-motion.css",
-    "./motion": "./motion/milpa-motion.js"
+    "./motion": "./motion/milpa-motion.js",
+    "./primitives.css": "./primitives/milpa-primitives.css",
+    "./components.css": "./components/milpa-components.css",
+    "./primitives/*": "./primitives/*",
+    "./components/*": "./components/*",
+    "./logo/*": "./logo/*"
   },
   "scripts": {
     "build": "style-dictionary build --config style-dictionary.config.mjs",
     "test": "node scripts/verify-contrast.mjs",
-    "proof": "python3 -m http.server -d proof 4321"
+    "proof": "python3 -m http.server 4321"
   },
   "devDependencies": {
     "style-dictionary": "^4.0.0"

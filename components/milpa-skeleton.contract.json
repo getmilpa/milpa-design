@@ -1,0 +1,62 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "skeleton",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-skeleton",
+  "summary": "Placeholder de carga: la semilla bajo tierra. Bloques mudos (aria-hidden) con pulso lento de opacidad; la semántica de carga la lleva el CONTENEDOR con aria-busy=\"true\", nunca el hueso. Regla 2: en light el fill cambia a var(--border-subtle) porque surface-raised == surface (crema) y sería invisible.",
+  "element": [
+    "span",
+    "div"
+  ],
+  "anatomy": {
+    "root": ".mui-skeleton — display block, fill var(--surface-raised) (light: var(--border-subtle)), altura default 1rem; el consumidor dimensiona con width/height para calcar la geometría del contenido final"
+  },
+  "variants": {
+    "shape": {
+      "text": ".mui-skeleton--text — height 1em (escala con la tipografía del padre), radius-xs; una por línea de texto",
+      "circle": ".mui-skeleton--circle — 2.5rem × 2.5rem default (avatar md), radius-full, flex none",
+      "block": ".mui-skeleton--block — radius-base; para imágenes, charts, cards"
+    }
+  },
+  "states": {
+    "loading": "el estado vive en el contenedor: [aria-busy=\"true\"] mientras se muestran skeletons; el skeleton en sí no tiene estados"
+  },
+  "tokens": [
+    "--surface-raised",
+    "--border-subtle",
+    "--radius-xs",
+    "--radius-base",
+    "--radius-full",
+    "--dur-deliberate",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "<span> o <div> vacíos — jamás contienen texto ni controles, jamás reciben foco",
+    "aria": [
+      "cada .mui-skeleton lleva aria-hidden=\"true\" — es pintura, no contenido",
+      "el contenedor que carga declara aria-busy=\"true\" mientras muestra skeletons y lo quita al llegar el contenido",
+      "no poner role=\"status\" en cada hueso; si la carga debe anunciarse, un único aria-live=\"polite\" en la región"
+    ],
+    "behavior": {
+      "loading": "JS del consumidor: al iniciar la carga renderiza skeletons con la MISMA geometría que el contenido final (evita layout shift) y pone aria-busy=\"true\" en el contenedor; al resolver, reemplaza los skeletons por el contenido y quita aria-busy",
+      "focus": "si la carga reemplaza contenido que tenía el foco, moverlo a la región resultante o a su encabezado"
+    },
+    "contrast": "decorativo (aria-hidden): exento de mínimos AA. Visibilidad con paridad medida: dark surface-raised/surface 1.47:1 · light border-subtle/surface 1.66:1"
+  },
+  "motion": {
+    "pulse": "mui-skeleton-pulse — opacidad 1 ↔ 0.55, --dur-deliberate --ease-standard infinite alternate: respira lento, no parpadea",
+    "reducedMotion": "contrato global de milpa-motion.css: 1 iteración de 1ms → el hueso queda estático a opacidad plena (degradación perfecta, sigue visible)"
+  },
+  "examples": [
+    {
+      "title": "Card cargando (avatar + dos líneas)",
+      "html": "<div class=\"mui-card\" aria-busy=\"true\"><div class=\"mui-card__body\"><span class=\"mui-skeleton mui-skeleton--circle\" aria-hidden=\"true\"></span><span class=\"mui-skeleton mui-skeleton--text\" aria-hidden=\"true\" style=\"width:60%\"></span><span class=\"mui-skeleton mui-skeleton--text\" aria-hidden=\"true\" style=\"width:85%\"></span></div></div>"
+    },
+    {
+      "title": "Bloque de imagen/chart",
+      "html": "<div aria-busy=\"true\"><span class=\"mui-skeleton mui-skeleton--block\" aria-hidden=\"true\" style=\"height:10rem\"></span></div>"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "textarea",
+  "layer": "primitive",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-textarea",
+  "summary": "Entrada de texto multi-línea. Mismo lenguaje que .mui-input: fondo var(--bg) = un paso hundido respecto a la superficie, la definición la da el borde (regla 1). Resize solo vertical (el ancho lo gobierna el layout). El estado inválido se declara con aria-invalid, no con una clase.",
+  "element": [
+    "textarea"
+  ],
+  "anatomy": {
+    "root": ".mui-textarea — el control multi-línea; min-height 5rem, padding block var(--space-2) / inline var(--space-3), line-height var(--leading-normal)"
+  },
+  "variants": {
+    "size": {
+      "md": "único — min-height 5rem / text-sm / radius-base; el alto lo gobiernan el contenido, rows y el resize vertical del usuario"
+    }
+  },
+  "states": {
+    "focus": ":focus-visible — outline 2px var(--focus) offset 1px + borde var(--focus)",
+    "invalid": "[aria-invalid=\"true\"] — borde var(--danger); su :focus-visible también en danger",
+    "disabled": "[disabled] — opacity .5, cursor not-allowed, resize none",
+    "readonly": "[readonly] — fondo var(--surface) (no editable, sí legible/seleccionable; conserva el resize vertical)"
+  },
+  "tokens": [
+    "--bg",
+    "--surface",
+    "--text",
+    "--text-muted",
+    "--border-strong",
+    "--danger",
+    "--focus",
+    "--font-display",
+    "--text-sm",
+    "--leading-normal",
+    "--space-2",
+    "--space-3",
+    "--radius-base",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "label": "SIEMPRE dentro de .mui-field con <label for> (o aria-label si el diseño lo oculta — usar .mui-sr-only)",
+    "aria": [
+      "error → aria-invalid=\"true\" + aria-describedby apuntando al id del .mui-field__error",
+      "hint (p.ej. límite de caracteres) → aria-describedby apuntando al id del .mui-field__hint",
+      "placeholder nunca sustituye al label"
+    ],
+    "keyboard": [
+      "nativo del textarea (Enter inserta salto de línea — no lo secuestres para submit)",
+      "el focus ring es visible sobre cualquier superficie (par focus/surface verificado)"
+    ],
+    "contrast": "texto var(--text) y placeholder var(--text-muted) sobre var(--bg) y var(--surface) verificados AA en ambos temas por el gate (npm test; incluye el par text/surface que introduce [readonly]: 12.12 dark / 17.16 light)",
+    "surfaces": "asentar el control sobre var(--bg) o var(--surface). En dark NO sobre --surface-raised/--overlay (modales, popovers): el boundary no llega a 3:1 (border-strong 2.13:1, fill 2.08:1 — WCAG 1.4.11). En light el borde sí define sobre cualquier superficie (5.58:1)."
+  },
+  "motion": {
+    "transitions": "border-color/background en --dur-fast --ease-standard",
+    "reducedMotion": "contrato global de milpa-motion.css (degrada a cambio instantáneo de 1 frame)"
+  },
+  "examples": [
+    {
+      "title": "Campo completo (field + textarea + hint)",
+      "html": "<div class=\"mui-field\"><label class=\"mui-field__label\" for=\"desc\">Descripción del módulo</label><textarea class=\"mui-textarea\" id=\"desc\" rows=\"4\" placeholder=\"Qué siembra este módulo…\" aria-describedby=\"desc-hint\"></textarea><p class=\"mui-field__hint\" id=\"desc-hint\">Máximo 500 caracteres.</p></div>"
+    },
+    {
+      "title": "Inválido (aria-invalid + error)",
+      "html": "<div class=\"mui-field\"><label class=\"mui-field__label\" for=\"notas\">Notas de release <span class=\"mui-field__required\" aria-hidden=\"true\">*</span></label><textarea class=\"mui-textarea\" id=\"notas\" rows=\"3\" required aria-invalid=\"true\" aria-describedby=\"notas-err\"></textarea><p class=\"mui-field__error\" id=\"notas-err\">Este campo es obligatorio.</p></div>"
+    },
+    {
+      "title": "Solo lectura",
+      "html": "<div class=\"mui-field\"><label class=\"mui-field__label\" for=\"manifiesto\">Manifiesto</label><textarea class=\"mui-textarea\" id=\"manifiesto\" rows=\"4\" readonly>name: mail-plugin\nversion: 1.2.0</textarea></div>"
+    }
+  ]
+}

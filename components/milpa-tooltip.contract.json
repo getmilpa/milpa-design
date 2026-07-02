@@ -1,0 +1,81 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "tooltip",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-tooltip",
+  "summary": "Etiqueta flotante CSS-only: el host lleva data-tip y el ::after la pinta con content: attr(data-tip). Inversión de tema token-pure — fondo var(--text) + tinta var(--bg) (el par text/bg ya es AA; el ratio es simétrico: 17.2:1 dark, 15.0:1 light). SOLO para información REDUNDANTE o decorativa: attr() no entra de forma fiable al árbol de accesibilidad.",
+  "element": [
+    "button",
+    "a",
+    "span (wrapper con un focusable dentro — lo cubre :focus-within)"
+  ],
+  "anatomy": {
+    "root": ".mui-tooltip — el host: lleva data-tip=\"texto\" y position:relative; puede ser el propio control interactivo o un wrapper",
+    "::after": "el tooltip — content: attr(data-tip); width max-content, max-width 16rem, white-space normal (envuelve), pointer-events none, z var(--z-tooltip)"
+  },
+  "variants": {
+    "position": {
+      "top": "default — centrado sobre el host, a --space-1_5 del borde",
+      "bottom": ".mui-tooltip--bottom — centrado bajo el host",
+      "start": ".mui-tooltip--start — antes del host en el eje inline, centrado vertical",
+      "end": ".mui-tooltip--end — después del host en el eje inline, centrado vertical"
+    }
+  },
+  "states": {
+    "hidden": "default — opacity 0 + translateY(2px); la salida es inmediata (sin delay)",
+    "visible": ":hover, :focus-visible (host focusable) o :focus-within (wrapper) — fade + rise 2px en --dur-fast --ease-settle, con transition-delay --dur-base SOLO a la entrada (intención de hover)"
+  },
+  "tokens": [
+    "--text",
+    "--bg",
+    "--z-tooltip",
+    "--space-1_5",
+    "--space-2",
+    "--radius-sm",
+    "--font-display",
+    "--text-2xs",
+    "--weight-medium",
+    "--leading-snug",
+    "--tracking-normal",
+    "--dur-fast",
+    "--dur-base",
+    "--ease-settle"
+  ],
+  "a11y": {
+    "pattern": "REGLA DE ORO: el tooltip es eco visual, nunca la única fuente. Icon-button → aria-label con EXACTAMENTE el mismo texto que data-tip. Información complementaria que no es el nombre del control → nodo real en el DOM + aria-describedby (y data-tip como espejo), o directamente no usar este componente.",
+    "aria": [
+      "host icon-only: aria-label=\"…\" idéntico a data-tip",
+      "info complementaria esencial: <span id> real + aria-describedby en el control; data-tip solo la duplica visualmente",
+      "el ::after no necesita aria-hidden: los pseudo-elementos con attr() no son API de accesibilidad confiable — por eso el patrón exige redundancia"
+    ],
+    "keyboard": [
+      "paridad hover/teclado: aparece con :focus-visible en el host y con :focus-within en wrappers — ningún contenido es solo-mouse"
+    ],
+    "limits": [
+      "sin hover ni focus en touch: la información nunca puede vivir solo en el tooltip",
+      "CSS-only no reposiciona contra los bordes del viewport: elegir --bottom/--start/--end con criterio, o usar un popover con JS para contenido posicionado dinámicamente",
+      "no interactivo (pointer-events none): jamás poner enlaces o botones dentro"
+    ],
+    "contrast": "bg/text (inversión) verificado en ambos temas: 17.16 dark · 14.95 light (≥4.5)"
+  },
+  "motion": {
+    "transitions": "opacity + transform (rise 2px) en --dur-fast --ease-settle; germina y se asienta. transition-delay --dur-base solo en el estado visible: la entrada espera intención, la salida es inmediata.",
+    "reducedMotion": "contrato global de milpa-motion.css: la transición cae a 1ms (1 frame estático). El delay de entrada se conserva a propósito: es intención de hover (timing), no movimiento."
+  },
+  "examples": [
+    {
+      "title": "Icon-button (label + tooltip idénticos)",
+      "html": "<button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-tooltip\" aria-label=\"Sembrar plugin\" data-tip=\"Sembrar plugin\"><svg aria-hidden=\"true\" width=\"16\" height=\"16\"><!-- … --></svg></button>"
+    },
+    {
+      "title": "Posición bottom",
+      "html": "<button type=\"button\" class=\"mui-btn mui-tooltip mui-tooltip--bottom\" aria-label=\"Cosechar build\" data-tip=\"Cosechar build\">Cosechar</button>"
+    },
+    {
+      "title": "Complementaria (nodo real + aria-describedby; data-tip es el espejo visual)",
+      "html": "<span class=\"mui-tooltip\" data-tip=\"Se regenera cada 24 h\"><button type=\"button\" class=\"mui-btn\" aria-describedby=\"tok-hint\">Regenerar token</button></span><span id=\"tok-hint\" class=\"mui-sr-only\">Se regenera cada 24 h</span>"
+    }
+  ]
+}

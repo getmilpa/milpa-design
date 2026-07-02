@@ -1,0 +1,91 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "modal",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-modal",
+  "summary": "Diálogo modal sobre <dialog> nativo: showModal() da top layer, focus trap, Esc y fondo inerte gratis (por eso no consume --z-*). Panel var(--surface) con radio xl; scrim = color-mix del suelo (tierra en dark, crema en light) + blur sutil. Abre germinando (milpa-scale-in).",
+  "element": [
+    "dialog"
+  ],
+  "anatomy": {
+    "root": ".mui-modal — el <dialog>; columna header/body/footer cuando está [open]",
+    "header": ".mui-modal__header — flex space-between: título + botón cerrar (composición .mui-btn--ghost --icon --sm)",
+    "title": ".mui-modal__title — text-lg medium; admite __icon inicial",
+    "icon": ".mui-modal__icon — slot decorativo opcional dentro del título, con aria-hidden",
+    "body": ".mui-modal__body — contenido scrolleable; text-sm var(--text-secondary)",
+    "footer": ".mui-modal__footer — acciones alineadas al final, borde superior var(--border-subtle)"
+  },
+  "variants": {
+    "intent": {
+      "default": "confirmación / contenido — acción primaria .mui-btn--primary",
+      "danger": ".mui-modal--danger — título (e ícono, que hereda) en var(--danger); la acción primaria del footer es .mui-btn--danger"
+    }
+  },
+  "states": {
+    "open": "[open] — el UA lo pone al llamar showModal(); dispara milpa-scale-in y el fade del ::backdrop",
+    "closed": "sin [open] — display none del UA; no hay clase de estado",
+    "focus": ":focus-visible en el propio dialog (cuando no hay foco interno) — outline 2px var(--focus) offset 2px"
+  },
+  "tokens": [
+    "--surface",
+    "--bg",
+    "--border",
+    "--border-subtle",
+    "--text",
+    "--text-secondary",
+    "--danger",
+    "--focus",
+    "--shadow-lg",
+    "--font-display",
+    "--text-lg",
+    "--text-sm",
+    "--weight-medium",
+    "--leading-snug",
+    "--leading-normal",
+    "--space-2",
+    "--space-3",
+    "--space-5",
+    "--space-16",
+    "--radius-xl",
+    "--dur-moderate",
+    "--ease-grano",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "SIEMPRE <dialog> abierto con dialog.showModal() — nunca show() (perdería trap e inerte) ni un div con role=\"dialog\"",
+    "aria": [
+      "aria-labelledby en el <dialog> apuntando al id del __title",
+      "cuerpo largo o crítico: aria-describedby apuntando al id del __body",
+      "el botón cerrar del header requiere aria-label (ej. \"Cerrar diálogo\")",
+      "__icon decorativo siempre aria-hidden=\"true\""
+    ],
+    "keyboard": [
+      "Esc cierra (cancel/close nativos)",
+      "Tab queda atrapado dentro (focus trap nativo del top layer)",
+      "cerrar sin JS: <form method=\"dialog\"> envolviendo los botones de cancelar/cerrar, con type=\"submit\" explícito — el submit-que-cierra es intencional"
+    ],
+    "behavior": [
+      "retorno de foco (JS consumidor): guardar document.activeElement antes de showModal() y devolverle el foco en el evento close",
+      "foco inicial: el UA enfoca el primer focusable; para diálogos destructivos poner autofocus en la acción segura (Cancelar)",
+      "click en el backdrop no cierra por defecto; si se desea, el consumidor lo implementa comparando event.target === dialog"
+    ],
+    "contrast": "text y text-secondary sobre surface, danger sobre surface y focus sobre surface — pares ya verificados por npm test. El separador del footer (var(--border-subtle)) es un delimitador decorativo, no sujeto al piso de 3:1. · Los .mui-btn outline default dentro de __footer reciben borde var(--border-strong) (boundary 3.13 dark / 5.58 light sobre surface — par en el gate); el default border/surface daría 2.17 en dark."
+  },
+  "motion": {
+    "enter": "[open] → milpa-scale-in var(--dur-moderate) var(--ease-grano) both (germina y se asienta); ::backdrop → milpa-fade var(--dur-moderate) var(--ease-standard)",
+    "exit": "cierre nativo instantáneo (el <dialog> sale del top layer); sin animación de salida en v0",
+    "reducedMotion": "contrato global de milpa-motion.css: apertura y scrim degradan a 1 frame estático"
+  },
+  "examples": [
+    {
+      "title": "Confirmación estándar",
+      "html": "<dialog class=\"mui-modal\" id=\"dlg-publicar\" aria-labelledby=\"dlg-publicar-title\"><header class=\"mui-modal__header\"><h2 class=\"mui-modal__title\" id=\"dlg-publicar-title\">Publicar módulo</h2><form method=\"dialog\"><button type=\"submit\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm\" aria-label=\"Cerrar diálogo\"><span aria-hidden=\"true\">✕</span></button></form></header><div class=\"mui-modal__body\"><p>gallery-pro se publicará en el marketplace. Podés despublicarlo cuando quieras.</p></div><footer class=\"mui-modal__footer\"><form method=\"dialog\"><button type=\"submit\" class=\"mui-btn\">Cancelar</button></form><button type=\"button\" class=\"mui-btn mui-btn--primary\">Publicar</button></footer></dialog><!-- JS consumidor: trigger.onclick = () => dlg.showModal(); dlg.addEventListener('close', () => trigger.focus()) -->"
+    },
+    {
+      "title": "Destructivo (--danger)",
+      "html": "<dialog class=\"mui-modal mui-modal--danger\" id=\"dlg-arrancar\" aria-labelledby=\"dlg-arrancar-title\"><header class=\"mui-modal__header\"><h2 class=\"mui-modal__title\" id=\"dlg-arrancar-title\"><span class=\"mui-modal__icon\" aria-hidden=\"true\">!</span> Arrancar plugin</h2><form method=\"dialog\"><button type=\"submit\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm\" aria-label=\"Cerrar diálogo\"><span aria-hidden=\"true\">✕</span></button></form></header><div class=\"mui-modal__body\"><p>MailPlugin se eliminará del terreno junto con su configuración. Esta acción no se puede deshacer.</p></div><footer class=\"mui-modal__footer\"><form method=\"dialog\"><button type=\"submit\" class=\"mui-btn\" autofocus>Cancelar</button></form><button type=\"button\" class=\"mui-btn mui-btn--danger\">Eliminar</button></footer></dialog>"
+    }
+  ]
+}

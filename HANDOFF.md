@@ -17,15 +17,26 @@ converger:** el framework y el DS avanzan en paralelo y se reencuentran en una *
 El framework *consume* `@milpa/design@x.y.z`. **Nadie edita los internals del otro**; se cambian
 cosas vía bump semver + nota de compat. (Esto es Milpa aplicado a sí mismo: contract-first.)
 
-## 2. Estado actual (v0)
+## 2. Estado actual (v0.1)
 
 ✅ **Paleta cerrada y verificada.** `oro` (primario/marca) + `olivo` (secundario / la milpa viva,
-OKLCH ~124°) + `tierra` (neutro); `cielo` = `info`. **32/32 pares WCAG AA** (dark+light) — corré
-`npm test`. Dark-first. Tokens DTCG + salida CSS + preset Tailwind + motion + `DESIGN.md` +
-`proof/milpa-ds-proof.html`.
+OKLCH ~124°) + `tierra` (neutro); `cielo` = `info`. Dark-first. Tokens DTCG + salida CSS + preset
+Tailwind + motion + `DESIGN.md` + `proof/milpa-ds-proof.html`.
 
-⚠️ **Falta:** build pipeline real (hoy `dist/` es hand-authored, verificado), primitivas
-(Button/Input), contratos, logo kit, Storybook, publish.
+✅ **T2 cumplido y extendido — base de componentes admin completa.** 29 piezas token-driven con
+contrato: 14 primitivas en `primitives/milpa-primitives.css` (Button/Field/Input = **el molde**,
++ Textarea, Select, Checkbox, Radio, Switch, Badge, Kbd, Avatar, Spinner, Progress, Divider) y
+18 componentes en `components/milpa-components.css` (Tooltip, Menu, Card, Stat, Empty, Skeleton,
+Table, Pagination, Tabs, Breadcrumbs, Alert, Toast, Modal, Drawer + Shell/Sidebar/Topbar/PageHeader).
+Convenciones del molde en el header de `milpa-primitives.css` (estados vía atributos ARIA;
+auto-borde `-active` en fills; solo tokens semánticos). Gate ampliado: **135/135 AA** (`npm test`).
+Battle-test: `proof/milpa-admin-proof.html` (dashboard completo, dark/light, teclado).
+
+✅ **T4 cumplido — logo kit en `logo/`** (símbolo Grano, wordmark grano-i, lockups, app icon;
+mono-oro verificado).
+
+⚠️ **Falta:** build pipeline real (hoy `dist/` es hand-authored, verificado), CI (T3), Storybook
+formal (T5 — el proof admin cubre v0), publish (T6), LICENSE texto completo (T7).
 
 ## 3. Cómo correr
 
@@ -42,17 +53,23 @@ npm run build   # style-dictionary: tokens/ -> build/generated/   (ver T1)
   verificado) o lo **genera Style Dictionary** con manejo de temas (`:root`/`[data-theme=light]`)?
   SD por defecto aplana `theme.dark.*` → custom needed. Empezá por `style-dictionary.config.mjs`
   (hoy escribe a `build/generated/`, no pisa el `dist/` verificado). **No rompas `npm test`.**
-- **T2 · Primitivas (el par de referencia).** `Button` + `Input` token-driven + sus
-  `milpa-button.contract.json` / `milpa-input.contract.json` (DESIGN §6). Fijan el molde para todo
-  lo demás. **Quality floor obligatorio** (DESIGN §6): AA, paridad light/dark, paridad
-  reduced-motion, teclado + `:focus-visible`, `aria-*`. Ojo: **primario en light = ghost** (el oro
-  no contrasta como fill sobre crema).
+- ~~**T2 · Primitivas (el par de referencia).**~~ ✅ **Hecho y extendido** — 29 componentes con
+  contrato (ver §2). El molde vive en el header de `primitives/milpa-primitives.css`; los nuevos
+  componentes siguen ese patrón + contrato + pares nuevos al gate.
 - **T3 · CI.** GitHub Action que corra `npm test` (el verificador de contraste) + build en cada PR.
-- **T4 · Logo kit.** Símbolo **Grano** (la M en rejilla 5×5 de granos) + wordmark con el punto de la
-  `i` = grano. SVG: símbolo, wordmark, lockups, favicon. Mono-oro (el verde NO entra al logo).
-- **T5 · Storybook** (o extender `proof/`) para las primitivas + los estados.
+- ~~**T4 · Logo kit.**~~ ✅ **Hecho** — en `logo/` (símbolo, wordmark, lockups, app icon; mono-oro).
+- **T5 · Storybook** (o seguir extendiendo `proof/`) para estados exhaustivos por pieza. El
+  `proof/milpa-admin-proof.html` ya battle-testea la composición completa.
 - **T6 · Publish `@milpa/design@0.1.0`** al scope npm `@milpa` (reservado) cuando T2 esté.
 - **T7 · LICENSE** → reemplazar por el texto completo de Apache-2.0 antes de público.
+- **T8 · Feedback del battle-test** (`proof/milpa-admin-proof.html` los expuso; chicos):
+  1. `.mui-stat__delta` acopla dirección y valencia (`--up`=success, `--down`=danger). "Tiempo de
+     build −8s" es *baja = mejora* → desacoplar (p.ej. modificador `--positive/--negative` aparte
+     de la flecha) o documentar el patrón neutro + `.mui-sr-only`.
+  2. `.mui-menu` dentro de `.mui-table-wrap` se clipea por el `overflow-x` — documentar en el
+     contrato de table el patrón "menú a nivel body posicionado por JS" que ya usa el proof.
+  3. El **grano-dot** del wordmark (punto de la `i`) se replica a mano en cada proof — candidato a
+     primitiva `mui-grano-dot` o a snippet oficial en el contrato de marca.
 
 ## 5. Reglas duras (no negociables)
 

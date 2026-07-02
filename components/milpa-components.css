@@ -1,0 +1,1047 @@
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — components (el frijol) · @milpa/design
+   Requiere: dist/milpa-tokens.css + primitives/milpa-primitives.css
+   + motion/milpa-motion.css (keyframes milpa-* y contrato reduced-motion).
+   Sigue el molde de primitives/milpa-primitives.css — mismas convenciones.
+   ════════════════════════════════════════════════════════════════════ */
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · floating
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — components · floating (Tooltip + Menu) · @milpa/design
+   Requiere: dist/milpa-tokens.css + motion/milpa-motion.css (aporta
+   @keyframes milpa-scale-in y el contrato global de prefers-reduced-motion)
+   + primitives/milpa-primitives.css (el molde: box-sizing, .mui-btn).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Tooltip · .mui-tooltip ----------
+   CSS-only: el host lleva data-tip="texto" y ::after lo pinta.
+   Inversión de tema token-pure: fondo var(--text) + tinta var(--bg) —
+   el par text/bg ya está verificado AA y el ratio es simétrico
+   (17.2:1 dark · 15.0:1 light).
+   SOLO para info REDUNDANTE/decorativa: attr() no llega de forma
+   fiable al árbol de accesibilidad — el patrón vive en el contrato. */
+.mui-tooltip { position: relative; }
+.mui-tooltip::after {
+  --_center: translateX(-50%);               /* centrado estático por posición */
+  content: attr(data-tip);
+  position: absolute; z-index: var(--z-tooltip);
+  bottom: calc(100% + var(--space-1_5)); left: 50%;
+  width: max-content; max-width: 16rem;
+  padding: var(--space-1_5) var(--space-2);
+  font-family: var(--font-display); font-size: var(--text-2xs);
+  font-weight: var(--weight-medium); line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal); white-space: normal;
+  background: var(--text); color: var(--bg);
+  border-radius: var(--radius-sm);
+  pointer-events: none;                      /* jamás captura el cursor */
+  opacity: 0;
+  transform: var(--_center) translateY(2px); /* germina: rise de 2px al asentarse */
+  transition:
+    opacity   var(--dur-fast) var(--ease-settle),
+    transform var(--dur-fast) var(--ease-settle);
+}
+.mui-tooltip:hover::after,
+.mui-tooltip:focus-visible::after,
+.mui-tooltip:focus-within::after {
+  opacity: 1; transform: var(--_center);
+  transition-delay: var(--dur-base);         /* intención de hover: delay SOLO a la entrada */
+}
+
+/* posiciones — top es el default. El rise siempre es vertical: germinar = subir. */
+.mui-tooltip--bottom::after { bottom: auto; top: calc(100% + var(--space-1_5)); }
+.mui-tooltip--start::after {
+  --_center: translateY(-50%);
+  bottom: auto; top: 50%;
+  left: auto; inset-inline-end: calc(100% + var(--space-1_5));
+}
+.mui-tooltip--end::after {
+  --_center: translateY(-50%);
+  bottom: auto; top: 50%;
+  left: auto; inset-inline-start: calc(100% + var(--space-1_5));
+}
+
+/* ---------- Menu · .mui-menu ----------
+   Panel de dropdown. bg var(--overlay) + borde var(--border-strong):
+   en dark, border-subtle es el mismo paso de tierra que overlay y
+   border a secas mide 2.17:1 sobre --surface — border-strong asegura
+   el boundary 3:1 sobre --bg y --surface, los fondos típicos de un
+   dropdown (regla 1: el borde define; pares ya gateados en CI).
+   Cerrado con [hidden]; al abrir germina (milpa-scale-in) desde el
+   trigger. El posicionamiento fino y el comportamiento (foco, teclas,
+   click-fuera) los aporta el consumidor — ver contrato a11y.behavior. */
+.mui-menu {
+  position: absolute;                        /* insets auto: cae bajo el trigger hermano dentro de un contenedor position:relative */
+  z-index: var(--z-dropdown);
+  min-width: 12rem; margin: 0; padding: var(--space-1);
+  list-style: none;                          /* reset por si el consumidor usa <ul>/<menu> */
+  background: var(--overlay);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transform-origin: top;
+  animation: milpa-scale-in var(--dur-fast) var(--ease-grano) both;
+}
+.mui-menu[hidden] { display: none; }         /* al quitar [hidden] la entrada se re-ejecuta */
+
+/* item — <button> o <a>; el estado activo es ARIA, nunca una clase */
+.mui-menu__item {
+  display: flex; align-items: center; gap: var(--space-2);
+  width: 100%; padding: var(--space-1_5) var(--space-2);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  font-weight: var(--weight-regular); line-height: var(--leading-snug);
+  text-align: start; text-decoration: none; user-select: none; cursor: pointer;
+  color: var(--text-secondary); background: transparent;
+  border: 0; border-radius: var(--radius-sm);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    color            var(--dur-fast) var(--ease-standard);
+}
+.mui-menu__item:hover,
+.mui-menu__item:focus-visible { background: var(--accent-subtle); color: var(--text); }
+.mui-menu__item:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-menu__item[aria-current],
+.mui-menu__item[aria-checked="true"] {
+  background: var(--accent-subtle); color: var(--text);
+  font-weight: var(--weight-medium);
+}
+.mui-menu__item[disabled],
+.mui-menu__item[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+
+/* destructivo — danger-hover es el paso AA sobre overlay en AMBOS temas
+   (danger a secas mide 3.6:1 sobre tierra-800 en dark; danger-hover ya
+   se profundiza/aclara por tema, mismo mecanismo de la regla 2) */
+.mui-menu__item--danger { color: var(--danger-hover); }
+.mui-menu__item--danger:hover,
+.mui-menu__item--danger:focus-visible { background: var(--danger-bg); color: var(--danger-hover); }
+
+/* separador — full-bleed hasta el borde del panel (padding = space-1);
+   decorativo (exento de 1.4.11): --border alcanza, no necesita el strong */
+.mui-menu__sep {
+  margin: var(--space-1) calc(-1 * var(--space-1));
+  border: 0; border-top: 1px solid var(--border);
+}
+
+/* label de grupo — mono uppercase; text-secondary (muted mide 3.9:1
+   sobre overlay en dark): la jerarquía la dan mono/2xs/uppercase */
+.mui-menu__label {
+  display: block;
+  padding: var(--space-2) var(--space-2) var(--space-1);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-secondary);
+}
+
+/* slot de atajo al final del item — tipografía mono/2xs propia.
+   TODO: cuando exista la primitiva .mui-kbd (hoy NO está en el repo),
+   este slot podrá envolverla; mientras tanto usar <kbd> sin clase. */
+.mui-menu__kbd {
+  margin-inline-start: auto;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  color: var(--text-secondary);
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · surfaces
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — components · cluster "surfaces" (el frijol) · @milpa/design
+   Card · Stat · EmptyState · Skeleton
+   Requiere: dist/milpa-tokens.css + primitives/milpa-primitives.css
+   (+ motion/milpa-motion.css, que aporta el contrato global de
+   prefers-reduced-motion).
+
+   Sigue EL MOLDE (milpa-primitives.css): BEM mui-*, estado vía
+   atributos nativos/ARIA, color SOLO por tokens semánticos, motion
+   que germina y se asienta. Elevación contenida (regla 1): la
+   definición la dan los bordes, no sombras dramáticas.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Card · .mui-card ----------
+   Superficie contenida: fill var(--surface) + borde sutil + sombra sm.
+   El padding vive en los elementos (__header/__body/__footer), no en
+   el root, para que tablas/listas puedan ir edge-to-edge. */
+.mui-card {
+  --_pad: var(--space-5);
+  display: flex; flex-direction: column;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.mui-card__header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--_pad);
+}
+.mui-card__title {
+  margin: 0;
+  font-family: var(--font-display); font-size: var(--text-base);
+  font-weight: var(--weight-medium); line-height: var(--leading-snug);
+  color: var(--text);
+}
+.mui-card__body { flex: 1 1 auto; padding: var(--_pad); }
+/* el header ya aporta el espacio superior del body */
+.mui-card__header + .mui-card__body { padding-top: 0; }
+.mui-card__footer {
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-4) var(--_pad);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* compact — densidad para dashboards */
+.mui-card--compact { --_pad: var(--space-4); }
+
+/* raised — un paso de elevación para destacar (regla 1: salto contenido) */
+.mui-card--raised { background: var(--surface-raised); box-shadow: var(--shadow-base); }
+/* regla 2: en light surface-raised == surface (crema, 1.00:1 = el fill no
+   diferencia) → el paso de elevación lo marca un borde reforzado, no solo
+   la sombra; paridad medida con el salto de fill dark (border/fill 3.88:1
+   vs surface-raised/surface 1.47:1) */
+[data-theme="light"] .mui-card--raised { border-color: var(--border); }
+
+/* interactive — la card entera es un <a> o <button> envolvente.
+   El hover nunca depende solo del borde: motion + sombra lo acompañan. */
+.mui-card--interactive {
+  width: 100%; padding: 0; text-align: start;   /* reset de <button> */
+  font: inherit; text-decoration: none;          /* reset de <a> */
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow   var(--dur-fast) var(--ease-standard),
+    transform    var(--dur-fast) var(--ease-settle);
+}
+.mui-card--interactive:hover {
+  border-color: var(--border);
+  box-shadow: var(--shadow-base);
+  transform: translateY(-1px);
+}
+.mui-card--interactive:active { transform: translateY(0); }
+.mui-card--interactive:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- Stat · .mui-stat ----------
+   KPI de dashboard. Pensado para componer dentro de .mui-card__body
+   sobre --surface o --bg (no dentro de --raised: ver contrato). */
+.mui-stat { display: flex; flex-direction: column; gap: var(--space-1); }
+.mui-stat__label {
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+}
+.mui-stat__value {
+  font-family: var(--font-display); font-size: var(--text-3xl);
+  font-weight: var(--weight-medium); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text);
+}
+.mui-stat__delta {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  align-self: flex-start;
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  color: var(--text-secondary);                /* sin dirección = neutro */
+}
+.mui-stat__delta--up   { color: var(--success); }
+.mui-stat__delta--down { color: var(--danger); }
+/* flecha decorativa: geometría CSS con currentColor (los lectores no la
+   anuncian); la dirección también vive en el texto (signo o sr-only) */
+.mui-stat__delta--up::before, .mui-stat__delta--down::before {
+  content: ""; width: 0.5em; height: 0.5em; flex: none;
+  background: currentColor;
+}
+.mui-stat__delta--up::before   { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.mui-stat__delta--down::before { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.mui-stat__meta { font-size: var(--text-xs); color: var(--text-muted); }
+
+/* ---------- EmptyState · .mui-empty ----------
+   El terreno antes de sembrar: columna centrada, sobria, la acción
+   como protagonista. */
+.mui-empty {
+  display: flex; flex-direction: column; align-items: center;
+  padding: var(--space-12);
+  text-align: center;
+}
+.mui-empty__icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 2rem; line-height: 1;             /* glifo o SVG a 1em */
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+}
+.mui-empty__title {
+  margin: 0;
+  font-family: var(--font-display); font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--text);
+}
+.mui-empty__desc {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+  color: var(--text-muted);
+  max-width: 40ch;
+}
+.mui-empty__actions {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+/* ---------- Skeleton · .mui-skeleton ----------
+   Placeholder de carga. SIEMPRE aria-hidden="true"; la semántica la
+   lleva el contenedor con aria-busy="true". El pulso alterna opacidad
+   y bajo reduced-motion degrada solo a 1 frame estático (contrato
+   global): el placeholder queda visible a opacidad plena. */
+@keyframes mui-skeleton-pulse { from { opacity: 1; } to { opacity: 0.55; } }
+.mui-skeleton {
+  display: block;
+  height: 1rem;                     /* default; el consumidor dimensiona */
+  background: var(--surface-raised);
+  border-radius: var(--radius-base);
+  animation: mui-skeleton-pulse var(--dur-deliberate) var(--ease-standard) infinite alternate;
+}
+/* regla 2: en light surface-raised == surface (crema, 1.0:1 = invisible)
+   → tinte semántico de borde; paridad medida con dark (~1.5:1) */
+[data-theme="light"] .mui-skeleton { background: var(--border-subtle); }
+
+.mui-skeleton--text   { height: 1em; border-radius: var(--radius-xs); }
+.mui-skeleton--circle { width: 2.5rem; height: 2.5rem; flex: none; border-radius: var(--radius-full); }
+.mui-skeleton--block  { border-radius: var(--radius-base); }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · data
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — components · data (el frijol) · @milpa/design
+   Table + Pagination — el corazón del admin.
+   Requiere: dist/milpa-tokens.css + motion/milpa-motion.css (contrato
+   global de reduced-motion) + primitives/milpa-primitives.css (box-model
+   mui-*, .mui-sr-only; las celdas de acciones componen .mui-btn y la
+   columna de selección compone .mui-checkbox).
+   Convenciones del molde: BEM mui-* · estado vía atributos ARIA
+   ([aria-sort], [aria-selected], [aria-current], [disabled]) · color
+   SOLO por tokens semánticos · focus :focus-visible var(--focus).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Table · .mui-table ----------
+   La tabla ES una card: la envoltura aporta superficie, borde y radio
+   (regla 1: la elevación la definen los bordes, no las sombras). El wrap
+   es el scroll container: con max-height, el thead sticky queda pegado. */
+.mui-table-wrap {
+  /* prop privada: escalón local del thead sobre las celdas, anclado a la
+     escala (--z-base) y contenido por el isolate — nunca un número suelto */
+  --_z-thead: calc(var(--z-base) + 1);
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  isolation: isolate; /* el z del thead sticky no compite con la escala global */
+}
+/* scroll por teclado: el wrap lleva tabindex="0" + role="region" (ver contrato) */
+.mui-table-wrap:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.mui-table {
+  width: 100%;
+  border-collapse: separate; border-spacing: 0; /* el borde viaja con el th sticky */
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+}
+
+/* encabezado — mono 2xs uppercase: la voz de la máquina */
+.mui-table thead th {
+  position: sticky; top: 0;
+  z-index: var(--_z-thead);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  text-align: start; color: var(--text-muted);
+  background: var(--surface);
+  /* border-strong y no border: el separador del header sostiene 3:1 también
+     en dark (3.13; border/surface daba 2.17) — par ya en el gate */
+  border-bottom: 1px solid var(--border-strong);
+}
+
+/* ordenable — el estado vive en th[aria-sort]; el botón hereda la voz del th */
+.mui-table__sort {
+  display: inline-flex; align-items: center; gap: var(--space-1_5);
+  padding: 0; background: transparent; border: 0;
+  font: inherit; letter-spacing: inherit; text-transform: inherit;
+  color: inherit; cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.mui-table__sort:hover { color: var(--text); }
+.mui-table__sort:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* indicador decorativo (unicode con alt vacío donde se soporta):
+   ↕ neutro atenuado en reposo · ▲/▼ en oro cuando la columna ordena.
+   El estado real lo anuncia aria-sort, no el glifo. */
+.mui-table__sort::after {
+  content: "\2195\FE0E";
+  content: "\2195\FE0E" / "";
+  font-size: 0.9em; line-height: 1; flex: none;
+  color: var(--border-strong); /* ≥3:1 sobre surface (par ya en el gate) */
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.mui-table th[aria-sort="ascending"] .mui-table__sort::after {
+  content: "\25B2"; content: "\25B2" / ""; color: var(--accent-text);
+}
+.mui-table th[aria-sort="descending"] .mui-table__sort::after {
+  content: "\25BC"; content: "\25BC" / ""; color: var(--accent-text);
+}
+
+/* cuerpo */
+.mui-table td {
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background-color var(--dur-fast) var(--ease-standard);
+}
+.mui-table tbody tr:last-child > td { border-bottom: 0; } /* el cierre lo pone el wrap */
+
+/* hover: la fila se hunde un paso — inset sutil que funciona en ambos temas */
+.mui-table tbody tr:hover > td { background: var(--bg); }
+/* selección — la semántica es aria-selected; declarada después del hover, gana */
+.mui-table tbody tr[aria-selected="true"] > td {
+  background: var(--accent-subtle); color: var(--text);
+}
+
+/* celdas con rol */
+.mui-table .mui-table__lead { color: var(--text); font-weight: var(--weight-medium); }
+.mui-table .mui-table__num  { text-align: end; font-variant-numeric: tabular-nums; }
+.mui-table td.mui-table__num { font-family: var(--font-mono); font-size: var(--text-xs); }
+.mui-table .mui-table__actions {
+  text-align: end; white-space: nowrap;
+  padding-block: var(--space-2); /* los .mui-btn--sm ghost no inflan la fila */
+}
+.mui-table .mui-table__check {
+  width: 2.5rem; padding-inline: var(--space-2); text-align: center; /* compone .mui-checkbox */
+}
+
+/* densidad */
+.mui-table--compact thead th,
+.mui-table--compact td { padding: var(--space-2) var(--space-3); }
+.mui-table--compact .mui-table__actions { padding-block: var(--space-1); }
+
+/* ---------- Pagination · .mui-pagination ----------
+   <nav aria-label> + lista. El ítem ES el button/a. La página actual se
+   declara con aria-current="page": tinte oro + borde acento + texto
+   accent-text — el mismo trío funciona en dark y light sin override. */
+.mui-pagination {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+.mui-pagination__list {
+  display: flex; align-items: center; gap: var(--space-1);
+  list-style: none; margin: 0; padding: 0;
+}
+.mui-pagination__item {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2rem; height: 2rem; padding: 0 var(--space-1); /* cuadrado; crece con 3+ dígitos */
+  font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary); text-decoration: none;
+  background: transparent; border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color     var(--dur-fast) var(--ease-standard),
+    color            var(--dur-fast) var(--ease-standard);
+}
+/* border-strong y no border: border/surface no alcanza 3:1 en dark (2.17) —
+   mismo hover-border que .mui-btn en el molde */
+.mui-pagination__item:hover { color: var(--text); border-color: var(--border-strong); }
+.mui-pagination__item:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-pagination__item[aria-current="page"] {
+  background: var(--accent-subtle); color: var(--accent-text);
+  border-color: var(--accent); font-weight: var(--weight-bold);
+}
+.mui-pagination__item[disabled],
+.mui-pagination__item[aria-disabled="true"] {
+  opacity: 0.5; cursor: not-allowed; pointer-events: none;
+}
+.mui-pagination__ellipsis {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2rem; height: 2rem;
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  color: var(--text-muted); user-select: none;
+}
+.mui-pagination__info {
+  margin: 0;
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  color: var(--text-muted); font-variant-numeric: tabular-nums;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · nav-bits
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — nav-bits (el frijol) · @milpa/design
+   Tabs + Breadcrumbs. Requiere: dist/milpa-tokens.css,
+   primitives/milpa-primitives.css (molde + box model compartido) y
+   motion/milpa-motion.css (contrato global de reduced-motion).
+   El comportamiento (roles, roving tabindex, flechas) lo implementa el
+   consumidor según el contrato — este CSS solo estiliza la semántica.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Tabs · .mui-tabs ----------
+   Tablist definido por una línea base (border-subtle, regla 1: la
+   definición la dan los bordes). La pestaña activa se marca con el
+   subrayado oro vía [aria-selected="true"] — nunca una clase de estado.
+   margin-bottom -1px: el indicador de 2px pisa la línea del tablist. */
+.mui-tabs {
+  display: flex; gap: var(--space-1);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.mui-tabs__tab {
+  --_h: 2.5rem;
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  height: var(--_h); padding: 0 var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  font-weight: var(--weight-medium); line-height: 1;
+  letter-spacing: var(--tracking-normal); white-space: nowrap;
+  user-select: none; cursor: pointer;
+  background: transparent; color: var(--text-secondary);
+  border: 0; border-bottom: 2px solid transparent;
+  margin-bottom: -1px; /* el indicador se asienta sobre la línea base */
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color        var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+.mui-tabs__tab:hover { color: var(--text); }
+/* activa — subrayado oro; la semántica ES el hook de estilo */
+.mui-tabs__tab[aria-selected="true"] {
+  color: var(--accent-text);
+  border-bottom-color: var(--accent);
+}
+/* ring interior (offset negativo): sobrevive a tablists con overflow */
+.mui-tabs__tab:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.mui-tabs__tab[disabled], .mui-tabs__tab[aria-disabled="true"] {
+  opacity: 0.5; cursor: not-allowed; pointer-events: none;
+}
+/* slot de conteo: compone .mui-badge dentro del tab — el gap lo separa */
+
+.mui-tabs__panel { padding-top: var(--space-5); }
+.mui-tabs__panel[hidden] { display: none; }
+/* panel enfocable (tabindex=0 cuando no tiene contenido focusable) */
+.mui-tabs__panel:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- Breadcrumbs · .mui-breadcrumbs ----------
+   <nav aria-label="breadcrumb"> + <ol>. El separador "/" es CSS puro
+   (mono, muted, alt vacío): decorativo, invisible para lectores de
+   pantalla y sin spans extra en el markup. La miga actual se declara
+   con aria-current="page" (texto, sin link). */
+.mui-breadcrumbs { font-family: var(--font-display); font-size: var(--text-xs); }
+.mui-breadcrumbs__list {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-2);
+  list-style: none; margin: 0; padding: 0;
+}
+.mui-breadcrumbs__item { display: inline-flex; align-items: center; gap: var(--space-2); }
+.mui-breadcrumbs__item + .mui-breadcrumbs__item::before {
+  content: "/";
+  content: "/" / ""; /* alt vacío — el separador no llega al lector */
+  font-family: var(--font-mono); color: var(--text-muted);
+}
+.mui-breadcrumbs__link {
+  color: var(--text-muted); text-decoration: none;
+  border-radius: var(--radius-xs);
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.mui-breadcrumbs__link:hover {
+  color: var(--text);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.mui-breadcrumbs__link:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* la miga actual: texto plano, un peso arriba — no compite con --text */
+.mui-breadcrumbs [aria-current="page"] {
+  color: var(--text-secondary); font-weight: var(--weight-medium);
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · feedback-overlays
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — components · feedback & overlays (el frijol) · @milpa/design
+   Alert · Toast · Modal · Drawer
+   Requiere: dist/milpa-tokens.css · motion/milpa-motion.css (keyframes
+   milpa-rise / milpa-fade / milpa-scale-in + contrato global de
+   prefers-reduced-motion — acá NO se repiten media queries de reduce) ·
+   primitives/milpa-primitives.css (box-sizing base y .mui-btn: los
+   dismiss y las acciones se COMPONEN con el botón, no se reinventan).
+   Convenciones del molde: BEM mui-* · estado vía atributos nativos/ARIA ·
+   color solo vía tokens semánticos · motion que germina y se asienta ·
+   z-index solo vía --z-*.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Alert · .mui-alert ----------
+   Aviso inline: vive en el flujo del contenido, no flota. Default =
+   neutral (surface + borde). Variantes semánticas: bg/borde teñidos con
+   los tokens -bg/-border; __icon y __title llevan el color de estado y
+   el cuerpo permanece en var(--text) — pares verificados AA en ambos
+   temas. La urgencia la declara el role (status/alert); el color solo
+   la refuerza. */
+.mui-alert {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  padding: var(--space-4);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+}
+/* guard: el display:flex de arriba pisaría el [hidden] del UA — el
+   contrato descarta con hidden (o removiendo el nodo) y debe funcionar */
+.mui-alert[hidden] { display: none; }
+.mui-alert__icon {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  inline-size: 1.25em; block-size: 1.25em; line-height: 1;
+  margin-block-start: var(--space-0_5); /* alinea óptico con la 1.ª línea */
+}
+.mui-alert__content {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: var(--space-1);
+}
+.mui-alert__title { margin: 0; font-weight: var(--weight-medium); }
+.mui-alert__desc  { margin: 0; }
+.mui-alert__actions {
+  display: flex; flex-wrap: wrap; gap: var(--space-2);
+  margin-block-start: var(--space-2);
+}
+/* .mui-btn outline default dentro de __actions: sobre los fondos teñidos
+   var(--border) no llega a 3:1 (2.92–3.01 dark) → boundary con
+   border-strong (4.20–4.33 dark · 5.02–5.22 light sobre los 4 X-bg,
+   pares en el gate). Los fills sólidos conservan su auto-borde -active
+   (regla 4) y el ghost su transparencia (lo identifica su label). */
+.mui-alert__actions .mui-btn:not(.mui-btn--primary, .mui-btn--secondary, .mui-btn--subtle, .mui-btn--danger, .mui-btn--ghost) {
+  border-color: var(--border-strong);
+}
+/* dismiss — se compone con .mui-btn .mui-btn--ghost .mui-btn--icon
+   .mui-btn--sm (+ aria-label); esta clase SOLO lo acomoda en la esquina */
+.mui-alert__dismiss {
+  align-self: flex-start; margin-inline-start: auto;
+  margin-block-start: calc(var(--space-2) * -1);
+  margin-inline-end:  calc(var(--space-2) * -1);
+}
+
+/* variantes semánticas */
+.mui-alert--success { background: var(--success-bg); border-color: var(--success-border); }
+.mui-alert--warning { background: var(--warning-bg); border-color: var(--warning-border); }
+.mui-alert--danger  { background: var(--danger-bg);  border-color: var(--danger-border); }
+.mui-alert--info    { background: var(--info-bg);    border-color: var(--info-border); }
+.mui-alert--success .mui-alert__icon, .mui-alert--success .mui-alert__title { color: var(--success); }
+.mui-alert--warning .mui-alert__icon, .mui-alert--warning .mui-alert__title { color: var(--warning); }
+.mui-alert--danger  .mui-alert__icon, .mui-alert--danger  .mui-alert__title { color: var(--danger); }
+.mui-alert--info    .mui-alert__icon, .mui-alert--info    .mui-alert__title { color: var(--info); }
+
+/* ---------- Toast · .mui-toast (+ .mui-toast-viewport) ----------
+   Notificación flotante y efímera. bg var(--overlay) = elevación máxima;
+   el estado es una barra inline-start de 3px (var(--X), ≥3:1 sobre
+   overlay en ambos temas). Entra germinando (milpa-rise); la salida la
+   maneja el consumidor removiendo el nodo. Acciones en __action: variantes
+   con fill (--secondary/--primary) o ghost — el outline default no llega
+   a boundary 3:1 sobre overlay en dark (ver contrato). */
+.mui-toast-viewport {
+  position: fixed;
+  inset-block-end: var(--space-4); inset-inline-end: var(--space-4);
+  z-index: var(--z-toast);
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: var(--space-2);
+  pointer-events: none; /* la página sigue clickeable; cada toast reactiva eventos */
+}
+.mui-toast {
+  pointer-events: auto; position: relative;
+  display: flex; flex-direction: column; gap: var(--space-1);
+  width: min(22rem, calc(100vw - 2 * var(--space-4)));
+  padding: var(--space-4);
+  padding-inline-end: var(--space-10); /* aire para __dismiss */
+  font-family: var(--font-display);
+  color: var(--text); background: var(--overlay);
+  border: 1px solid var(--border);
+  border-inline-start: 3px solid var(--border); /* la variante la tiñe */
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  animation: milpa-rise var(--dur-moderate) var(--ease-grano) both;
+}
+.mui-toast__title { margin: 0; font-size: var(--text-sm); font-weight: var(--weight-medium); }
+.mui-toast__desc  { margin: 0; font-size: var(--text-xs); color: var(--text-secondary); }
+.mui-toast__action { display: flex; gap: var(--space-2); margin-block-start: var(--space-2); }
+/* dismiss — composición .mui-btn--ghost --icon --sm, anclado a la esquina */
+.mui-toast__dismiss {
+  position: absolute;
+  inset-block-start: var(--space-2); inset-inline-end: var(--space-2);
+}
+
+/* variantes — acento semántico en la barra */
+.mui-toast--success { border-inline-start-color: var(--success); }
+.mui-toast--warning { border-inline-start-color: var(--warning); }
+.mui-toast--danger  { border-inline-start-color: var(--danger); }
+.mui-toast--info    { border-inline-start-color: var(--info); }
+
+/* ---------- Modal · .mui-modal ----------
+   <dialog> nativo: showModal() da top layer, focus trap, Esc y fondo
+   inerte gratis — por eso NO usa --z-* (el top layer vive por encima de
+   toda la escala z). Scrim = el color del suelo: tierra en dark, crema
+   en light. */
+.mui-modal {
+  width: min(92vw, 32rem); max-width: none;
+  max-height: calc(100dvh - var(--space-16));
+  margin: auto; padding: 0;
+  color: var(--text); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+.mui-modal::backdrop {
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter: blur(2px);
+}
+.mui-modal[open] {
+  display: flex; flex-direction: column;
+  animation: milpa-scale-in var(--dur-moderate) var(--ease-grano) both;
+}
+.mui-modal[open]::backdrop { animation: milpa-fade var(--dur-moderate) var(--ease-standard) both; }
+.mui-modal:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-modal__header {
+  flex: none; display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-3); padding: var(--space-5);
+}
+.mui-modal__title {
+  margin: 0; display: flex; align-items: center; gap: var(--space-2);
+  font-family: var(--font-display); font-size: var(--text-lg);
+  font-weight: var(--weight-medium); line-height: var(--leading-snug);
+}
+.mui-modal__icon { flex: none; } /* slot decorativo opcional dentro del título */
+.mui-modal__body {
+  flex: 1; min-height: 0; overflow-y: auto;
+  padding-block: var(--space-2) var(--space-5); padding-inline: var(--space-5);
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+.mui-modal__body > :first-child { margin-block-start: 0; }
+.mui-modal__body > :last-child  { margin-block-end: 0; }
+.mui-modal__footer {
+  flex: none; display: flex; justify-content: flex-end; gap: var(--space-2);
+  padding: var(--space-5);
+  border-block-start: 1px solid var(--border-subtle); /* separador decorativo */
+}
+/* destructivo — título (e ícono, que hereda) en danger; la acción
+   primaria del footer es .mui-btn--danger */
+.mui-modal--danger .mui-modal__title { color: var(--danger); }
+
+/* ---------- Drawer · .mui-drawer ----------
+   <dialog> lateral anclado al inline-end: alto completo, radio 0, la
+   definición la da el borde inline-start. Mismo contrato nativo que
+   Modal. Entra deslizando desde el borde con keyframe propio (SOLO
+   transform+opacity → bajo reduce degrada a 1 frame estático). */
+@keyframes mui-drawer-in {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: none; }
+}
+.mui-drawer {
+  position: fixed; inset-block: 0; inset-inline-end: 0;
+  height: 100dvh; max-height: 100dvh;
+  width: min(92vw, 26rem); max-width: none;
+  margin: 0; margin-inline-start: auto; padding: 0;
+  color: var(--text); background: var(--surface);
+  border: none; border-inline-start: 1px solid var(--border);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-lg);
+}
+.mui-drawer::backdrop {
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter: blur(2px);
+}
+.mui-drawer[open] {
+  display: flex; flex-direction: column;
+  animation: mui-drawer-in var(--dur-moderate) var(--ease-grano) both;
+}
+.mui-drawer[open]::backdrop { animation: milpa-fade var(--dur-moderate) var(--ease-standard) both; }
+.mui-drawer:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px; /* panel al borde del viewport: el anillo va por dentro */
+}
+.mui-drawer__header {
+  flex: none; display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-3); padding: var(--space-5);
+}
+.mui-drawer__title {
+  margin: 0; font-family: var(--font-display); font-size: var(--text-lg);
+  font-weight: var(--weight-medium); line-height: var(--leading-snug);
+}
+.mui-drawer__body {
+  flex: 1; min-height: 0; overflow-y: auto;
+  padding-block: var(--space-2) var(--space-5); padding-inline: var(--space-5);
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+.mui-drawer__body > :first-child { margin-block-start: 0; }
+.mui-drawer__body > :last-child  { margin-block-end: 0; }
+.mui-drawer__footer {
+  flex: none; margin-block-start: auto; /* se ancla al fondo del panel */
+  display: flex; justify-content: flex-end; gap: var(--space-2);
+  padding: var(--space-5);
+  border-block-start: 1px solid var(--border-subtle); /* separador decorativo */
+}
+
+/* fix de auditoría: el .mui-btn outline default sobre var(--surface) en dark da
+   boundary 2.17:1 — en los footers de modal/drawer se sube a border-strong (3.13
+   dark · 5.58 light), igual que hace .mui-alert__actions con los suyos. */
+.mui-modal__footer .mui-btn:not(.mui-btn--primary, .mui-btn--secondary, .mui-btn--subtle, .mui-btn--danger, .mui-btn--ghost),
+.mui-drawer__footer .mui-btn:not(.mui-btn--primary, .mui-btn--secondary, .mui-btn--subtle, .mui-btn--danger, .mui-btn--ghost) {
+  border-color: var(--border-strong);
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · shell
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — shell (el frijol · components) · @milpa/design
+   Esqueleto admin: Shell + Sidebar + Topbar + PageHeader.
+   Requiere: dist/milpa-tokens.css + primitives/milpa-primitives.css
+   (+ motion/milpa-motion.css, que aporta el contrato global de
+   prefers-reduced-motion).
+
+   Sigue EL MOLDE (milpa-primitives.css): BEM mui-*, estados vía
+   atributos nativos/ARIA, color SOLO por tokens semánticos, z-index
+   SOLO por --z-*, focus en :focus-visible. Sobrio, preciso, cálido:
+   la elevación la definen los bordes, no las sombras (regla 1).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Shell · .mui-shell ----------
+   Grid raíz del admin: la sidebar ocupa las dos filas; topbar + main a
+   la derecha. El lienzo es var(--bg); la sidebar, var(--surface). */
+.mui-shell {
+  --_sidebar-w: 16rem; --_topbar-h: 3.5rem;
+  display: grid;
+  grid-template-columns: var(--_sidebar-w) 1fr;
+  grid-template-rows: var(--_topbar-h) 1fr;
+  grid-template-areas:
+    "sidebar topbar"
+    "sidebar main";
+  min-height: 100dvh;
+  background: var(--bg); color: var(--text);
+}
+
+/* main — el terreno de trabajo. Ancho de lectura por defecto (90rem);
+   --wide lo libera para tablas anchas / kanban. */
+.mui-shell__main {
+  grid-area: main; min-width: 0;
+  width: 100%; max-width: 90rem; margin-inline: auto;
+  padding: clamp(var(--space-5), 3vw, var(--space-8));
+}
+.mui-shell__main--wide { max-width: none; }
+
+/* skip-link — PRIMER hijo del shell; invisible hasta el foco de teclado.
+   Pares text/surface y border-strong/surface verificados (npm test). */
+.mui-shell__skip {
+  position: fixed; top: var(--space-3); inset-inline-start: var(--space-3);
+  z-index: var(--z-toast);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text); background: var(--surface);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  text-decoration: none;
+  transform: translateY(calc(-100% - var(--space-4)));
+}
+.mui-shell__skip:focus-visible {
+  transform: none;
+  outline: 2px solid var(--focus); outline-offset: 2px;
+}
+
+/* ---------- Sidebar · .mui-sidebar ----------
+   <nav aria-label="principal"> lateral. Sticky a viewport en desktop:
+   __nav scrollea por su cuenta y __footer queda siempre a la vista. */
+.mui-sidebar {
+  grid-area: sidebar;
+  position: sticky; top: 0; height: 100dvh;
+  display: flex; flex-direction: column; min-height: 0;
+  background: var(--surface);
+  border-inline-end: 1px solid var(--border-subtle);
+  /* divisor decorativo (<3:1 a propósito): la separación sidebar/main
+     la da el salto surface→bg (regla 1) — ver contrato sidebar */
+}
+
+/* brand — slot del símbolo Grano (SVG) + wordmark */
+.mui-sidebar__brand {
+  display: flex; align-items: center; gap: var(--space-2); flex: none;
+  height: 3.5rem; padding-inline: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  font-family: var(--font-display); font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text); text-decoration: none;
+}
+.mui-sidebar__brand:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.mui-sidebar__nav {
+  flex: 1; min-height: 0; overflow-y: auto;
+  padding: var(--space-3);
+}
+
+/* section — grupo con label mono (la voz de la máquina) */
+.mui-sidebar__section { margin-block-start: var(--space-4); }
+.mui-sidebar__section:first-child { margin-block-start: 0; }
+.mui-sidebar__section-label {
+  display: block;
+  padding: var(--space-2) var(--space-3) var(--space-1);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+}
+
+/* item — <a>. El estado actual es aria-current="page", nunca una clase. */
+.mui-sidebar__item {
+  position: relative;
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  color: var(--text-secondary); text-decoration: none;
+  border-radius: var(--radius-base);
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    color            var(--dur-fast) var(--ease-standard);
+}
+.mui-sidebar__item:hover { color: var(--text); background: var(--bg); }
+.mui-sidebar__item:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-sidebar__item[aria-current="page"] {
+  color: var(--accent-text); background: var(--accent-subtle);
+  font-weight: var(--weight-medium);
+}
+/* la firma: el grano que germina — barra oro en el arranque del item.
+   accent/accent-subtle ≥3:1 en ambos temas (9.29 dark · 3.56 light). */
+.mui-sidebar__item[aria-current="page"]::before {
+  content: ""; position: absolute;
+  inset-inline-start: 0; top: 50%;
+  width: 3px; height: 1.25rem;
+  transform: translateY(-50%);
+  border-radius: var(--radius-full);
+  background: var(--accent);
+}
+
+.mui-sidebar__item-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.25rem; height: 1.25rem; flex: none;
+}
+.mui-sidebar__item-label {
+  min-width: 0; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+/* badge — compone .mui-badge (contrato pendiente, HANDOFF), empujado al final */
+.mui-sidebar__item-badge { margin-inline-start: auto; }
+
+/* footer — slot para user-card mini */
+.mui-sidebar__footer {
+  flex: none; padding: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ---------- rail (solo desktop) · .mui-shell--rail ----------
+   La milpa condensada: 4.5rem, íconos centrados. Los labels quedan
+   ocultos accesiblemente (los lectores los siguen anunciando) y el item
+   actual conserva la barra. En ≤960px el rail no aplica: el drawer
+   off-canvas siempre muestra los labels completos. */
+@media (min-width: 961px) {
+  .mui-shell--rail { --_sidebar-w: 4.5rem; }
+  .mui-shell--rail .mui-sidebar__brand { justify-content: center; padding-inline: var(--space-2); }
+  .mui-shell--rail .mui-sidebar__item  { justify-content: center; padding-inline: var(--space-2); }
+  .mui-shell--rail .mui-sidebar__wordmark,
+  .mui-shell--rail .mui-sidebar__section-label,
+  .mui-shell--rail .mui-sidebar__item-label,
+  .mui-shell--rail .mui-sidebar__item-badge {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+}
+
+/* ---------- Topbar · .mui-topbar ----------
+   Sticky; velo del lienzo: color-mix + blur (idioma del proof). El
+   contenido de encima lee sobre var(--bg) efectivo — pares ya
+   verificados. Slots que componen primitivas (btn ghost, input-group). */
+.mui-topbar {
+  grid-area: topbar;
+  position: sticky; top: 0; z-index: var(--z-sticky);
+  display: flex; align-items: center; gap: var(--space-4);
+  height: 3.5rem; padding-inline: var(--space-5);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.mui-topbar__start  { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
+.mui-topbar__search { flex: 1; max-width: 24rem; }
+.mui-topbar__end    { display: flex; align-items: center; gap: var(--space-1); margin-inline-start: auto; }
+/* toggle del drawer — compone .mui-btn--ghost --icon; visible solo ≤960px */
+.mui-topbar__nav-toggle { display: none; }
+
+/* ---------- PageHeader · .mui-page-header ----------
+   Cabecera del terreno: título (h1) + descripción, meta (badges) y
+   acciones (el primario es UNO). align-end asienta las acciones. */
+.mui-page-header {
+  display: flex; flex-wrap: wrap;
+  justify-content: space-between; align-items: flex-end;
+  gap: var(--space-4);
+  margin-block-end: var(--space-6);
+}
+.mui-page-header__text { min-width: 0; }
+.mui-page-header__title {
+  margin: 0;
+  font-family: var(--font-display); font-size: var(--text-2xl);
+  font-weight: var(--weight-medium); letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--text);
+}
+.mui-page-header__desc {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm); color: var(--text-muted);
+}
+.mui-page-header__meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);
+  margin-block-start: var(--space-2);
+}
+.mui-page-header__actions {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);
+}
+
+/* ---------- responsive ≤960px ----------
+   Una columna; la sidebar se vuelve drawer off-canvas a lo ancho
+   completo (16rem, labels visibles — el rail es solo desktop). El
+   toggle es JS del consumidor: alterna .mui-shell--nav-open en el shell
+   y aria-expanded en el botón (ver contratos shell/topbar). */
+@media (max-width: 960px) {
+  .mui-shell {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "topbar"
+      "main";
+  }
+  /* drawer cerrado: fuera del lienzo Y fuera del teclado/árbol de a11y.
+     visibility flipa al TERMINAR el slide-out (delay --dur-moderate);
+     al abrir flipa al instante para que el slide-in sea visible. El JS
+     del consumidor además alterna `inert` (cinturón y tirantes). */
+  .mui-shell .mui-sidebar {
+    position: fixed; inset-block: 0; inset-inline-start: 0;
+    width: 16rem; z-index: var(--z-drawer);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition:
+      transform  var(--dur-moderate) var(--ease-grano),
+      visibility var(--dur-instant) var(--ease-linear) var(--dur-moderate);
+    /* reduce → transform a 1ms (contrato global): 1 frame estático */
+  }
+  .mui-shell--nav-open .mui-sidebar {
+    transform: none; visibility: visible; box-shadow: var(--shadow-md);
+    transition:
+      transform  var(--dur-moderate) var(--ease-grano),
+      visibility var(--dur-instant);
+  }
+  .mui-topbar__nav-toggle { display: inline-flex; }
+}

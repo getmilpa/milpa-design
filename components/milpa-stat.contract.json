@@ -1,0 +1,72 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "stat",
+  "layer": "component",
+  "version": "0.1.0",
+  "status": "stable",
+  "class": "mui-stat",
+  "summary": "KPI de dashboard: label mono uppercase (la máquina), valor display grande (la cosecha), delta direccional y meta. Pensado para componer dentro de .mui-card__body sobre --surface o --bg — NO dentro de .mui-card--raised en dark (muted/success/danger no alcanzan AA sobre surface-raised; medido 3.88/4.11/3.63).",
+  "element": [
+    "div"
+  ],
+  "anatomy": {
+    "root": ".mui-stat — flex column, gap --space-1",
+    "label": ".mui-stat__label — mono 2xs uppercase tracking-wide, var(--text-muted)",
+    "value": ".mui-stat__value — display 3xl medium tracking-tight leading-tight, var(--text)",
+    "delta": ".mui-stat__delta (+ --up/--down) — mono xs inline-flex; sin modificador = var(--text-secondary) sin flecha; la flecha es un ::before decorativo de geometría CSS (clip-path + currentColor)",
+    "meta": ".mui-stat__meta — xs, var(--text-muted); contexto tipo \"vs. semana anterior\""
+  },
+  "variants": {
+    "delta": {
+      "default": "sin modificador — neutro var(--text-secondary), sin flecha",
+      "up": ".mui-stat__delta--up — var(--success) + triángulo ▲ vía ::before (clip-path, currentColor)",
+      "down": ".mui-stat__delta--down — var(--danger) + triángulo ▼ vía ::before (clip-path, currentColor)"
+    }
+  },
+  "states": {
+    "static": "sin estados interactivos ni ARIA propios — es lectura pura"
+  },
+  "tokens": [
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--success",
+    "--danger",
+    "--font-display",
+    "--font-mono",
+    "--text-2xs",
+    "--text-xs",
+    "--text-3xl",
+    "--weight-regular",
+    "--weight-medium",
+    "--leading-tight",
+    "--tracking-wide",
+    "--tracking-tight",
+    "--space-1"
+  ],
+  "a11y": {
+    "element": "contenedor <div>; los hijos son <span> — el orden del DOM (label → value → delta → meta) ya lee bien en voz",
+    "aria": [
+      "la flecha es un pseudo-elemento decorativo (geometría CSS): los lectores de pantalla no la anuncian; la dirección DEBE vivir también en el texto — signo (+/−) o <span class=\"mui-sr-only\">al alza</span>",
+      "el color nunca es el único canal para --up/--down: siempre acompañado de signo o texto"
+    ],
+    "keyboard": [
+      "no focusable; si el KPI navega a un detalle, envolver en .mui-card--interactive"
+    ],
+    "contrast": "label/meta var(--text-muted), delta var(--success)/var(--danger) y valor var(--text) verificados AA sobre --bg y --surface (npm test). Restricción medida: no componer dentro de .mui-card--raised en dark"
+  },
+  "motion": {
+    "transitions": "ninguna — el stat es estático; la animación de entrada (count-up, rise) la orquesta el consumidor con las primitivas de milpa-motion",
+    "reducedMotion": "n/a (sin animación propia)"
+  },
+  "examples": [
+    {
+      "title": "KPI con tendencia al alza",
+      "html": "<div class=\"mui-stat\"><span class=\"mui-stat__label\">Módulos activos</span><span class=\"mui-stat__value\">128</span><span class=\"mui-stat__delta mui-stat__delta--up\">+12%<span class=\"mui-sr-only\"> al alza</span></span><span class=\"mui-stat__meta\">vs. semana anterior</span></div>"
+    },
+    {
+      "title": "KPI a la baja, dentro de una card",
+      "html": "<div class=\"mui-card mui-card--compact\"><div class=\"mui-card__body\"><div class=\"mui-stat\"><span class=\"mui-stat__label\">Errores de build</span><span class=\"mui-stat__value\">3</span><span class=\"mui-stat__delta mui-stat__delta--down\">−40%<span class=\"mui-sr-only\"> a la baja</span></span></div></div></div>"
+    }
+  ]
+}

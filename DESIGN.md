@@ -88,6 +88,10 @@ Estas reglas son **innegociables**; los valores hex exactos son un *baseline a r
    - Oro: **fill claro en dark** (`oro-300` + tinta oscura). En **light el oro NO va como fill
      sólido** — no contrasta sobre crema (boundary 1.6:1 medido). El primario en light es **ghost**:
      borde `oro-600` + texto `oro-700` (4.9:1). Como *texto/ícono* en light, oro usa `oro-700`.
+     *Alcance:* la regla veta el oro como fill de **componente con tinta encima** (botones, chips);
+     como **indicador gráfico** sin texto y con ≥3:1 verificado (subrayado de tab, fill de
+     progress), `oro-600` (= `--accent` light) sí está sancionado: 3.4:1 sobre crema, 3.9:1 sobre
+     el track `surface-raised` (pares en el gate).
    - Verde (olivo, secundario): **claro en dark** (`olivo-400/500`), **profundo en light** (`olivo-700/800`).
    - Info (cielo): **claro en dark** (`cielo-400`), **profundo en light** (`cielo-700`).
    - Danger: **más oscuro en light** (`danger-700`); `on-danger` se invierte (tinta oscura en dark,
@@ -202,9 +206,12 @@ referencia (Button + Input) ya fija el patrón; el resto es repetición discipli
 | `motion/milpa-motion.css`         | primitivas de motion + contrato reduced-motion    |
 | `motion/milpa-motion.js`          | config de motion para GSAP / ScrollTrigger        |
 | `proof/milpa-ds-proof.html`       | página de prueba visual (storybook v0)            |
-| `scripts/verify-contrast.mjs`     | gate WCAG AA (`npm test`) sobre los tokens         |
-| `primitives/milpa-primitives.css` | Button + Input (token-driven) — *pendiente (HANDOFF T2)* |
-| `primitives/milpa-*.contract.json`| contratos de Button/Input — *pendiente (HANDOFF T2)* |
-| `logo/*.svg`                      | kit de logo (símbolo, wordmark grano-i, lockups, favicon) — *pendiente (HANDOFF T4)* |
+| `proof/milpa-admin-proof.html`    | battle-test del panel admin (shell + componentes compuestos, dark/light) |
+| `scripts/verify-contrast.mjs`     | gate WCAG AA (`npm test`) — tokens **y** pares que consumen los componentes (135 checks) |
+| `primitives/milpa-primitives.css` | *el grano*: Button, Field, Input, Textarea, Select, Checkbox, Radio, Switch, Badge, Kbd, Avatar, Spinner, Progress, Divider — **el molde vive en el header del archivo** |
+| `primitives/milpa-*.contract.json`| contratos de las primitivas (plantilla: `milpa-button.contract.json`) |
+| `components/milpa-components.css` | *el frijol*: Tooltip, Menu, Card, Stat, Empty, Skeleton, Table, Pagination, Tabs, Breadcrumbs, Alert, Toast, Modal, Drawer, Shell, Sidebar, Topbar, PageHeader |
+| `components/milpa-*.contract.json`| contratos de los componentes (comportamiento JS del consumidor en `a11y.behavior`) |
+| `logo/*`                          | kit de logo: símbolo Grano, wordmark grano-i, lockups h/v, app icon (mono-oro) |
 
 *Milpa · milpa.lat · getmilpa.com · milpahq.com*

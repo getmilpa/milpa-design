@@ -266,7 +266,8 @@
     "standard": { "$type": "cubicBezier", "$value": [0.4, 0, 0.2, 1] },
     "settle": { "$type": "cubicBezier", "$value": [0.2, 0.8, 0.2, 1] },
     "grano": { "$type": "cubicBezier", "$value": [0.16, 1, 0.3, 1] },
-    "in": { "$type": "cubicBezier", "$value": [0.4, 0, 1, 1] }
+    "in": { "$type": "cubicBezier", "$value": [0.4, 0, 1, 1] },
+    "linear": { "$type": "cubicBezier", "$value": [0, 0, 1, 1] }
   },
   "stagger": {
     "tight": { "$type": "duration", "$value": "40ms" },

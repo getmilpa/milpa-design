@@ -203,8 +203,10 @@ referencia (Button + Input) ya fija el patrón; el resto es repetición discipli
 | Archivo                          | Qué es                                            |
 |----------------------------------|---------------------------------------------------|
 | `tokens/milpa-tokens.json`        | **fuente de verdad** — tokens W3C DTCG (Style Dictionary/Tokens Studio) |
-| `dist/milpa-tokens.css`           | salida CSS (dark-first + override light) — *baseline hand-authored, verificado AA* |
-| `dist/tailwind.config.js`         | preset Tailwind: rampas + alias semánticos + radius/sombras/z/easings |
+| `dist/milpa-tokens.css`           | salida CSS (dark-first + override light) — **generada** desde el JSON (`npm run build`), drift-gated en CI |
+| `dist/tailwind.config.js`         | preset Tailwind: rampas + alias semánticos + radius/sombras/z/easings — **generado** |
+| `scripts/build-tokens.mjs`        | generador de `dist/` (cero deps) + drift gate (`--check`) |
+| `scripts/verify-governance.mjs`   | gate estructural: token-purity, contratos válidos y coherentes |
 | `motion/milpa-motion.css`         | primitivas de motion + contrato reduced-motion    |
 | `motion/milpa-motion.js`          | config de motion para GSAP / ScrollTrigger        |
 | `proof/milpa-ds-proof.html`       | página de prueba visual (storybook v0)            |

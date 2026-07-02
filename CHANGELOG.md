@@ -37,6 +37,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 - **Snippet oficial del wordmark (T8.3)** en `logo/README.txt` + regla en DESIGN §2.
 
 ### Changed
+- **Build pipeline (T1) — decisión: generador propio, Style Dictionary descartado.**
+  `scripts/build-tokens.mjs` (cero dependencias) genera `dist/milpa-tokens.css` +
+  `dist/tailwind.config.js` desde `tokens/milpa-tokens.json` con el manejo de temas exacto.
+  Round-trip verificado contra el dist hand-authored: 0 tokens perdidos/cambiados. `npm test`
+  suma el **drift gate** (`build-tokens.mjs --check`): el JSON es fuente de verdad real —
+  editarlo sin regenerar rompe CI. Se retiraron `style-dictionary.config.mjs` y la
+  devDependency (nunca instalada). `easing.linear` entró al JSON (estaba solo en el CSS).
 - **`mui-stat__delta` desacopla dirección y valencia (T8.1):** `--up/--down` solo orientan la
   flecha; el color lo dan `--positive` (success) / `--negative` (danger). Antes `--down` implicaba
   danger, lo que mentía en KPIs donde bajar es mejorar (tiempo de build, incidencias).

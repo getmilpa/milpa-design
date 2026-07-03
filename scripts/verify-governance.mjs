@@ -13,6 +13,16 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CSS_FILES = ['primitives/milpa-primitives.css', 'components/milpa-components.css'];
 const CONTRACT_DIRS = ['primitives', 'components'];
 
+// Regla @layer: todo CSS publicado declara el orden canónico completo y envuelve
+// sus reglas en su propia capa (THEMING.md). dist/ lo garantiza el generador+drift.
+const LAYER_ORDER =
+  '@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;';
+const LAYERED = {
+  'motion/milpa-motion.css': 'milpa.motion',
+  'primitives/milpa-primitives.css': 'milpa.primitives',
+  'components/milpa-components.css': 'milpa.components',
+};
+
 let fails = 0;
 const fail = (msg) => { fails++; console.log(`  FAIL ${msg}`); };
 const pass = (msg) => console.log(`  PASS ${msg}`);
@@ -55,6 +65,14 @@ for (const file of CSS_FILES) {
     if (!defined.has(t) && !local.has(t) && !t.startsWith('_')) missing.add(t);
   }
   missing.size ? fail(`var() inexistentes: ${[...missing].join(', ')}`) : pass('todas las var() existen');
+}
+
+// @layer: declaración canónica + wrap propio en cada CSS publicado
+console.log('\n@layer');
+for (const [file, layer] of Object.entries(LAYERED)) {
+  const raw = readFileSync(join(root, file), 'utf8');
+  raw.includes(LAYER_ORDER) ? pass(`${file}: declara el orden canónico`) : fail(`${file}: falta la declaración @layer canónica`);
+  raw.includes(`@layer ${layer} {`) ? pass(`${file}: envuelto en @layer ${layer}`) : fail(`${file}: no envuelve sus reglas en @layer ${layer}`);
 }
 
 // contratos: JSON válido + campos requeridos + tokens declarados existentes

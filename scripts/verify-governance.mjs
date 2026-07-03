@@ -11,8 +11,8 @@ import { dirname, join } from 'node:path';
 import { LAYER_ORDER } from './contrast-pairs.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const CSS_FILES = ['primitives/milpa-primitives.css', 'components/milpa-components.css', 'artifacts/milpa-artifacts.css'];
-const CONTRACT_DIRS = ['primitives', 'components', 'artifacts'];
+const CSS_FILES = ['primitives/milpa-primitives.css', 'components/milpa-components.css', 'artifacts/milpa-artifacts.css', 'layouts/milpa-layouts.css'];
+const CONTRACT_DIRS = ['primitives', 'components', 'artifacts', 'layouts'];
 
 // Regla @layer: todo CSS publicado declara el orden canónico completo y envuelve
 // sus reglas en su propia capa (THEMING.md). dist/ lo garantiza el generador+drift.
@@ -21,6 +21,7 @@ const LAYERED = {
   'primitives/milpa-primitives.css': 'milpa.primitives',
   'components/milpa-components.css': 'milpa.components',
   'artifacts/milpa-artifacts.css': 'milpa.artifacts',
+  'layouts/milpa-layouts.css': 'milpa.layouts',
 };
 
 let fails = 0;

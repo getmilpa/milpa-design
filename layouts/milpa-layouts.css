@@ -1,0 +1,288 @@
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — layouts (la parcela) · @milpa/design
+   Estructura de página: el shell de docs versionadas (mui-docs) +
+   vocabulario de marketing/media (hero, sections, pricing, footer…).
+   Requiere: dist/milpa-tokens.css + motion/milpa-motion.css +
+   primitives/milpa-primitives.css + components/milpa-components.css +
+   artifacts/milpa-artifacts.css (compone toc, search, prose,
+   version-switcher/banner).
+   Sigue el molde de primitives/milpa-primitives.css — mismas convenciones.
+   Cascada: este archivo vive en @layer — el CSS del consumidor/plugin
+   gana sin !important (THEMING.md).
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;
+
+@layer milpa.layouts {
+
+/* ---------- Docs · .mui-docs ----------
+   La parcela de lectura: topbar sticky (hermano ANTERIOR al grid) +
+   grid de 3 columnas nav / artículo / toc. REUSA el idioma del shell
+   admin — off-canvas con scrim en móvil, barra-grano en el item
+   actual — pero acá todo vive SOBRE var(--bg): la elevación la siguen
+   definiendo los bordes (regla 1). Compone los artefactos de contenido
+   (mui-prose, mui-toc, mui-search-trigger, mui-breadcrumbs,
+   mui-version-*) — no los redeclara. El body del consumidor pone el
+   lienzo: background var(--bg) + color var(--text). */
+.mui-docs,
+.mui-docs__topbar {
+  --_topbar-h: 3.5rem;
+  --_max-w: 90rem;
+  --_pad-inline: clamp(var(--space-4), 3vw, var(--space-8));
+}
+
+/* el grid — minmax(0,1fr) en la columna del artículo: el código ancho
+   scrollea adentro (overflow del .mui-code), nunca revienta la parcela */
+.mui-docs {
+  display: grid;
+  grid-template-columns: minmax(15rem, 17rem) minmax(0, 1fr) minmax(13rem, 15rem);
+  gap: clamp(var(--space-6), 3vw, var(--space-10));
+  width: 100%;
+  max-width: var(--_max-w);
+  margin-inline: auto;
+  padding-inline: var(--_pad-inline);
+}
+
+/* topbar — velo del lienzo: color-mix + blur (idioma del proof y la
+   landing). Full-bleed, hermano ANTERIOR al grid; el padding-inline se
+   estira para que su contenido alinee con la parcela centrada de 90rem. */
+.mui-docs__topbar {
+  position: sticky; top: 0; z-index: var(--z-sticky);
+  display: flex; align-items: center; gap: var(--space-4);
+  height: var(--_topbar-h);
+  padding-inline: max(var(--_pad-inline), calc((100% - var(--_max-w)) / 2 + var(--_pad-inline)));
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* brand — slot del símbolo Grano (SVG) + wordmark; la voz de la sidebar */
+.mui-docs__brand {
+  display: flex; align-items: center; gap: var(--space-2); flex: none;
+  font-family: var(--font-display); font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text); text-decoration: none;
+}
+.mui-docs__brand:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* nav del topbar — links que componen .mui-btn mui-btn--ghost mui-btn--sm;
+   en ≤880px se oculta (el consumidor duplica los links como primer
+   grupo del drawer — ver contrato) */
+.mui-docs__topbar-nav {
+  display: flex; align-items: center; gap: var(--space-1);
+  min-width: 0;
+}
+
+/* acciones — search-trigger + version-switcher + toggle de tema, al final */
+.mui-docs__topbar-actions {
+  display: flex; align-items: center; gap: var(--space-2);
+  margin-inline-start: auto;
+}
+
+/* hamburguesa — compone .mui-btn mui-btn--ghost mui-btn--icon; solo ≤880px */
+.mui-docs__nav-toggle { display: none; }
+
+/* nav (col 1) — sticky bajo el topbar, scrollea por su cuenta. El
+   padding-inline space-1 deja vivir al anillo de foco dentro del scroll
+   container (precedente .mui-toc); el respiro block (space-8) alinea
+   con el padding-block del main. Scrollbar sutil, tokens y nada más. */
+.mui-docs__nav {
+  align-self: start;
+  position: sticky; top: var(--_topbar-h);
+  max-height: calc(100dvh - var(--_topbar-h));
+  overflow-y: auto; overscroll-behavior: contain;
+  padding: var(--space-8) var(--space-1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* grupo — heading mono (la voz de la máquina), como .mui-sidebar__section-label */
+.mui-docs__nav-group { margin-block-start: var(--space-5); }
+.mui-docs__nav-group:first-child { margin-block-start: 0; }
+.mui-docs__nav-heading {
+  display: block; margin: 0;
+  padding: var(--space-2) var(--space-3) var(--space-1);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+}
+
+/* item — <a>. El estado actual es aria-current="page", nunca una clase.
+   OJO hover: mui-docs vive SOBRE var(--bg), así que el item se hunde a
+   var(--surface) — no a var(--bg) como en la sidebar del admin
+   (text/surface y text-secondary/surface verificados en el gate). */
+.mui-docs__nav-item {
+  position: relative;
+  display: block;
+  padding: var(--space-1_5) var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--text-secondary); text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    color            var(--dur-fast) var(--ease-standard);
+}
+.mui-docs__nav-item:hover { color: var(--text); background: var(--surface); }
+.mui-docs__nav-item:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-docs__nav-item[aria-current="page"] {
+  color: var(--accent-text); background: var(--accent-subtle);
+  font-weight: var(--weight-medium);
+}
+/* la firma: el grano que germina — barra oro en el arranque del item
+   (lenguaje exacto de .mui-sidebar__item del admin).
+   accent/accent-subtle ≥3:1 en ambos temas (9.29 dark · 3.56 light). */
+.mui-docs__nav-item[aria-current="page"]::before {
+  content: ""; position: absolute;
+  inset-inline-start: 0; top: 50%;
+  width: 3px; height: 1.25rem;
+  transform: translateY(-50%);
+  border-radius: var(--radius-full);
+  background: var(--accent);
+}
+
+/* main (col 2) — el artículo. El consumidor apila adentro:
+   .mui-version-banner → .mui-breadcrumbs → article.mui-prose → __pager */
+.mui-docs__main {
+  min-width: 0;
+  padding-block: var(--space-8);
+}
+
+/* aside (col 3) — el mismo sticky que el nav; adentro vive .mui-toc
+   (el scroll-spy y el aria-current="location" son de su contrato) */
+.mui-docs__aside {
+  align-self: start;
+  position: sticky; top: var(--_topbar-h);
+  max-height: calc(100dvh - var(--_topbar-h));
+  overflow-y: auto; overscroll-behavior: contain;
+  padding: var(--space-8) var(--space-1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* toc inline — <1100px la columna del toc se cae y el consumidor mueve
+   el índice a un <details> arriba del artículo: summary "En esta
+   página" + el MISMO nav .mui-toc adentro (el toc no tiene variante
+   inline — esto es marco del layout, no un toc nuevo). Oculto en
+   desktop; el estado abierto es [open], nunca una clase. */
+.mui-docs__toc-inline {
+  display: none;
+  margin-block-end: var(--space-6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+.mui-docs__toc-inline > summary {
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+  cursor: pointer; user-select: none;
+  border-radius: var(--radius-md);
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.mui-docs__toc-inline > summary:hover { color: var(--text-secondary); }
+/* anillo por dentro — el summary es edge-to-edge del marco redondeado
+   (precedente .mui-search__input) */
+.mui-docs__toc-inline > summary:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: -2px;
+}
+.mui-docs__toc-inline[open] > summary {
+  color: var(--text-secondary);
+  border-block-end: 1px solid var(--border-subtle);
+  border-end-start-radius: 0; border-end-end-radius: 0;
+}
+.mui-docs__toc-inline > .mui-toc { padding: var(--space-2) var(--space-3) var(--space-3); }
+
+/* pager — prev/next al pie del artículo. Cards silenciosas (borde
+   sutil, regla 1); el hover afirma el boundary (border-strong ≥3 sobre
+   --bg). Sin prev, --next se ancla solo a la columna 2. */
+.mui-docs__pager {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-block-start: var(--space-10);
+}
+.mui-docs__pager-link {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+.mui-docs__pager-link:hover { border-color: var(--border-strong); }
+.mui-docs__pager-link:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-docs__pager-link--next { grid-column: 2; text-align: end; }
+.mui-docs__pager-dir {
+  display: block; margin-block-end: var(--space-1);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+}
+.mui-docs__pager-title {
+  display: block;
+  font-family: var(--font-display); font-size: var(--text-sm);
+  font-weight: var(--weight-medium); line-height: var(--leading-snug);
+  color: var(--accent-text);
+}
+
+/* scrim — velo del drawer móvil; existe solo con [data-nav-open] ≤880px */
+.mui-docs__scrim { display: none; }
+
+/* ---------- responsive ≤1100px ----------
+   Dos columnas: la del toc se cae y el índice reaparece plegado arriba
+   del artículo (.mui-docs__toc-inline). */
+@media (max-width: 1100px) {
+  .mui-docs { grid-template-columns: minmax(15rem, 17rem) minmax(0, 1fr); }
+  .mui-docs__aside { display: none; }
+  .mui-docs__toc-inline { display: block; }
+}
+
+/* ---------- responsive ≤880px ----------
+   Una columna; el nav se vuelve drawer off-canvas — patrón EXACTO del
+   shell admin: cerrado = fuera del lienzo Y fuera del teclado/árbol de
+   a11y. visibility flipa al TERMINAR el slide-out (delay
+   --dur-moderate); al abrir flipa al instante para que el slide-in sea
+   visible. El JS del consumidor además alterna `inert` (cinturón y
+   tirantes). El hook de layout es [data-nav-open] en .mui-docs; la
+   semántica la lleva aria-expanded en el toggle. */
+@media (max-width: 880px) {
+  .mui-docs { grid-template-columns: 1fr; }
+
+  .mui-docs__nav {
+    position: fixed; inset-block: 0; inset-inline-start: 0;
+    width: 17rem; max-height: none;
+    padding: var(--space-4) var(--space-3);
+    background: var(--bg);
+    border-inline-end: 1px solid var(--border-subtle);
+    z-index: var(--z-drawer);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition:
+      transform  var(--dur-moderate) var(--ease-grano),
+      visibility var(--dur-instant) var(--ease-linear) var(--dur-moderate);
+    /* reduce → transform a 1ms (contrato global): 1 frame estático */
+  }
+  .mui-docs[data-nav-open] .mui-docs__nav {
+    transform: none; visibility: visible; box-shadow: var(--shadow-md);
+    transition:
+      transform  var(--dur-moderate) var(--ease-grano),
+      visibility var(--dur-instant);
+  }
+
+  /* scrim — cubre el topbar (z-backdrop > z-sticky) y queda bajo el
+     drawer; clickearlo cierra (JS del consumidor) */
+  .mui-docs[data-nav-open] .mui-docs__scrim {
+    display: block;
+    position: fixed; inset: 0;
+    z-index: var(--z-backdrop);
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    animation: milpa-fade var(--dur-moderate) var(--ease-standard) both;
+  }
+
+  /* los links del topbar migran al drawer (los duplica el consumidor) */
+  .mui-docs__topbar-nav { display: none; }
+  .mui-docs__nav-toggle { display: inline-flex; }
+}
+
+} /* @layer milpa.layouts */

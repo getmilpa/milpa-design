@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module contracts · Milpa Docs v0.1.0</title>
+<meta name="description" content="Milpa documentation — module contracts: declare what a module provides, consumes and emits. Contract-first, AI-native, harvested with coa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../logo/symbol/milpa-symbol-color.svg">
+<link rel="stylesheet" href="../dist/milpa-tokens.css">
+<link rel="stylesheet" href="../motion/milpa-motion.css">
+<link rel="stylesheet" href="../primitives/milpa-primitives.css">
+<link rel="stylesheet" href="../components/milpa-components.css">
+<link rel="stylesheet" href="../artifacts/milpa-artifacts.css">
+<link rel="stylesheet" href="../layouts/milpa-layouts.css">
+<style>
+/* ===== page styles (docs-*) — the system does the rest; all tokens ===== */
+body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font-display); font-size:var(--text-base); line-height:var(--leading-normal); -webkit-font-smoothing:antialiased; }
+.docs-wordmark { height:1rem; width:auto; display:block; flex:none; }
+.docs-theme-toggle { font-family:var(--font-mono); }
+.docs-gap { margin-block-end:var(--space-6); }
+/* topbar-nav links duplicated as first drawer group — visible only ≤880px (contract behavior) */
+.docs-nav-dup { display:none; }
+/* changelog: second stacked "page" below the article */
+.docs-changelog { margin-block-start:var(--space-20); padding-block-start:var(--space-10); border-block-start:1px solid var(--border-subtle); }
+.docs-changelog > .mui-prose { margin-block-end:var(--space-6); }
+.docs-footer { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2) var(--space-3); max-width:90rem; margin-inline:auto; padding:var(--space-6) clamp(var(--space-4),3vw,var(--space-8)); border-block-start:1px solid var(--border-subtle); color:var(--text-muted); font-size:var(--text-sm); }
+.docs-footer__tagline { margin:0; font-family:var(--font-mono); font-size:var(--text-xs); }
+.docs-footer__legal { margin:0; margin-inline-start:auto; font-size:var(--text-xs); }
+@media (max-width:880px){ .docs-nav-dup { display:block; } }
+</style>
+</head>
+<body>
+
+<a class="mui-shell__skip" href="#main">Skip to content</a>
+
+<!-- wordmark vector (official kit snippet — letters currentColor, grain oro-300 constant) -->
+<svg style="display:none" aria-hidden="true"><symbol id="wm-milpa" viewBox="0 0 2406.90 900.00"><g fill="currentColor"><path d="M76.299560546875 0V492.500244140625H177.201171875V435.00048828125H193.101318359375Q206.80126953125 460.700439453125 237.8511962890625 480.9503173828125Q268.901123046875 501.2001953125 322.100830078125 501.2001953125Q377.20068359375 501.2001953125 410.77557373046875 478.42535400390625Q444.3504638671875 455.6505126953125 461.00048828125 420.900634765625H476.900634765625Q493.900634765625 455.00048828125 526.6505126953125 478.100341796875Q559.400390625 501.2001953125 619.2001953125 501.2001953125Q666.60009765625 501.2001953125 703.9251098632812 481.3502197265625Q741.2501220703125 461.500244140625 763.2251586914062 423.0501708984375Q785.2001953125 384.60009765625 785.2001953125 328.4498291015625V0H682.298583984375V320.499755859375Q682.298583984375 365.3494873046875 657.6238403320312 389.69921875Q632.9490966796875 414.0489501953125 588.299560546875 414.0489501953125Q540.0499267578125 414.0489501953125 511.12530517578125 383.0491943359375Q482.20068359375 352.0494384765625 482.20068359375 293.699951171875V0H379.299072265625V320.499755859375Q379.299072265625 365.3494873046875 354.62432861328125 389.69921875Q329.9495849609375 414.0489501953125 285.300048828125 414.0489501953125Q237.0504150390625 414.0489501953125 208.12579345703125 383.0491943359375Q179.201171875 352.0494384765625 179.201171875 293.699951171875V0Z" transform="translate(-76.30,700.00) scale(1,-1)"/><path d="M76.299560546875 0V492.500244140625H179.201171875V0Z" transform="translate(760.70,700.00) scale(1,-1)"/><path d="M76.299560546875 0V700H179.201171875V0Z" transform="translate(996.70,700.00) scale(1,-1)"/><path d="M76.299560546875 -200V492.500244140625H177.201171875V422.3509521484375H193.101318359375Q211.501220703125 455.20068359375 250.47601318359375 480.8504638671875Q289.4508056640625 506.500244140625 361.00048828125 506.500244140625Q422.7503662109375 506.500244140625 474.4503173828125 476.6502685546875Q526.1502685546875 446.80029296875 557.3252563476562 390.1502685546875Q588.500244140625 333.500244140625 588.500244140625 253.5501708984375V238.9500732421875Q588.500244140625 159.3499755859375 557.500244140625 102.52496337890625Q526.500244140625 45.699951171875 474.80029296875 15.8499755859375Q423.100341796875 -14 361.00048828125 -14Q313.20068359375 -14 280.2508544921875 -2.10009765625Q247.301025390625 9.7998046875 227.0511474609375 28.57464599609375Q206.80126953125 47.3494873046875 195.101318359375 66.79931640625H179.201171875V-200ZM331.39990234375 76.4013671875Q398.79931640625 76.4013671875 441.8489990234375 119.32598876953125Q484.898681640625 162.2506103515625 484.898681640625 241.60009765625V250.900146484375Q484.898681640625 330.2496337890625 441.52398681640625 373.17425537109375Q398.1492919921875 416.098876953125 331.39990234375 416.098876953125Q265.00048828125 416.098876953125 221.4508056640625 373.17425537109375Q177.901123046875 330.2496337890625 177.901123046875 250.900146484375V241.60009765625Q177.901123046875 162.2506103515625 221.4508056640625 119.32598876953125Q265.00048828125 76.4013671875 331.39990234375 76.4013671875Z" transform="translate(1232.70,700.00) scale(1,-1)"/><path d="M228.5496826171875 -14Q176.2496337890625 -14 134.42462158203125 4.1500244140625Q92.599609375 22.300048828125 68.27459716796875 57.27508544921875Q43.9495849609375 92.2501220703125 43.9495849609375 142.2001953125Q43.9495849609375 192.500244140625 68.27459716796875 226.12530517578125Q92.599609375 259.7503662109375 135.22467041015625 276.72540283203125Q177.8497314453125 293.700439453125 231.7498779296875 293.700439453125H382.4488525390625V325.5501708984375Q382.4488525390625 368.9495849609375 356.2491455078125 395.12432861328125Q330.0494384765625 421.299072265625 276.099853515625 421.299072265625Q223.1502685546875 421.299072265625 195.07562255859375 396.29931640625Q167.0009765625 371.299560546875 157.901123046875 330.6500244140625L62.19970703125 361.9505615234375Q74.19970703125 401.700439453125 100.52471923828125 434.2503662109375Q126.8497314453125 466.80029296875 170.82476806640625 486.6502685546875Q214.7998046875 506.500244140625 277.39990234375 506.500244140625Q373.300048828125 506.500244140625 428.02520751953125 457.8502197265625Q482.7503662109375 409.2001953125 482.7503662109375 318.6500244140625V115.80126953125Q482.7503662109375 85.80126953125 510.7503662109375 85.80126953125H553.2001953125V0H476.19970703125Q441.299560546875 0 419.3994140625 18.17498779296875Q397.499267578125 36.3499755859375 397.499267578125 67.0499267578125V70.1497802734375H381.6490478515625Q374.499267578125 54.6500244140625 358.22442626953125 34.62506103515625Q341.9495849609375 14.60009765625 310.899658203125 0.300048828125Q279.8497314453125 -14 228.5496826171875 -14ZM244.2501220703125 71.201171875Q305.6495361328125 71.201171875 344.0491943359375 106.6507568359375Q382.4488525390625 142.100341796875 382.4488525390625 203.699462890625V214.3994140625H237.9500732421875Q197.00048828125 214.3994140625 171.92584228515625 196.77459716796875Q146.8511962890625 179.1497802734375 146.8511962890625 145.1502685546875Q146.8511962890625 111.1507568359375 172.92584228515625 91.17596435546875Q199.00048828125 71.201171875 244.2501220703125 71.201171875Z" transform="translate(1853.70,700.00) scale(1,-1)"/></g><rect x="818.99" y="40.80" width="138.92" height="138.92" rx="34.73" fill="var(--oro-300)"/></symbol></svg>
+
+<!-- ============ TOPBAR ============ -->
+<header class="mui-docs__topbar">
+  <button type="button" class="mui-btn mui-btn--ghost mui-btn--icon mui-docs__nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="docs-nav">
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 5h14"/><path d="M3 10h14"/><path d="M3 15h14"/></svg>
+  </button>
+
+  <a class="mui-docs__brand" href="/docs/0.1.0">
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
+      <g fill="var(--oro-300)">
+        <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
+        <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
+        <rect x="0" y="25" width="10" height="10" rx="2.5"/><rect x="25" y="25" width="10" height="10" rx="2.5"/><rect x="50" y="25" width="10" height="10" rx="2.5"/>
+        <rect x="0" y="37.5" width="10" height="10" rx="2.5"/><rect x="50" y="37.5" width="10" height="10" rx="2.5"/>
+        <rect x="0" y="50" width="10" height="10" rx="2.5"/><rect x="50" y="50" width="10" height="10" rx="2.5"/>
+      </g>
+    </svg>
+    <svg class="docs-wordmark" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+    <span class="mui-badge">docs</span>
+  </a>
+
+  <nav class="mui-docs__topbar-nav" aria-label="Sections">
+    <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/docs/0.1.0/installation">Guide</a>
+    <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/docs/0.1.0/api/module">API</a>
+    <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#changelog">Changelog</a>
+  </nav>
+
+  <div class="mui-docs__topbar-actions">
+    <button type="button" class="mui-search-trigger" id="search-trigger" aria-keyshortcuts="Control+K Meta+K">
+      <svg class="mui-search-trigger__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M13.5 13.5L17 17"/></svg>
+      Search docs…
+      <kbd class="mui-kbd">⌘K</kbd>
+    </button>
+
+    <div style="position:relative">
+      <button type="button" class="mui-version-switcher" id="vs-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="vs-menu">v0.1.0</button>
+      <div class="mui-menu" id="vs-menu" role="menu" aria-labelledby="vs-trigger" hidden>
+        <a class="mui-menu__item mui-version-switcher__item" role="menuitem" href="/docs/0.2.0/module-contracts">v0.2.0<span class="mui-badge mui-badge--accent">latest</span></a>
+        <a class="mui-menu__item mui-version-switcher__item" role="menuitem" aria-current="true" href="/docs/0.1.0/module-contracts">v0.1.0</a>
+        <a class="mui-menu__item mui-version-switcher__item" role="menuitem" href="/docs/0.0.9/module-contracts">v0.0.9</a>
+      </div>
+    </div>
+
+    <button type="button" class="mui-btn mui-btn--sm docs-theme-toggle" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
+
+    <a class="mui-btn mui-btn--ghost mui-btn--icon" href="https://github.com/milpa-lat/milpa" aria-label="Milpa on GitHub">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- ============ THE PLOT: nav / article / toc ============ -->
+<div class="mui-docs">
+
+  <nav class="mui-docs__nav" id="docs-nav" aria-label="Documentation">
+    <!-- topbar links migrate here ≤880px (contract: first group of the drawer) -->
+    <div class="mui-docs__nav-group docs-nav-dup">
+      <p class="mui-docs__nav-heading">Sections</p>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/installation">Guide</a>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/api/module">API</a>
+      <a class="mui-docs__nav-item" href="#changelog">Changelog</a>
+    </div>
+
+    <div class="mui-docs__nav-group">
+      <p class="mui-docs__nav-heading">Getting started</p>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/installation">Installation</a>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/quick-start">Quick start</a>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/project-structure">Project structure</a>
+    </div>
+
+    <div class="mui-docs__nav-group">
+      <p class="mui-docs__nav-heading">Core concepts</p>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/modules">Modules</a>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/module-contracts" aria-current="page">Module contracts</a>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/events">Events</a>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/kernel">The kernel</a>
+    </div>
+
+    <div class="mui-docs__nav-group">
+      <p class="mui-docs__nav-heading">API reference</p>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/api/module">Module</a>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/api/contract">Contract</a>
+      <a class="mui-docs__nav-item" href="/docs/0.1.0/api/event-bus">EventBus</a>
+    </div>
+  </nav>
+
+  <main class="mui-docs__main" id="main" tabindex="-1">
+
+    <div class="mui-version-banner docs-gap" role="status">
+      <span class="mui-version-banner__icon" aria-hidden="true">⚠</span>
+      <p class="mui-version-banner__text">You're viewing docs for <strong>v0.1.0</strong> — latest is <a class="mui-version-banner__link" href="/docs/0.2.0/module-contracts">v0.2.0</a>.</p>
+    </div>
+
+    <nav class="mui-breadcrumbs docs-gap" aria-label="Breadcrumb">
+      <ol class="mui-breadcrumbs__list">
+        <li class="mui-breadcrumbs__item"><a class="mui-breadcrumbs__link" href="/docs/0.1.0">Docs</a></li>
+        <li class="mui-breadcrumbs__item"><a class="mui-breadcrumbs__link" href="/docs/0.1.0/modules">Core concepts</a></li>
+        <li class="mui-breadcrumbs__item"><span aria-current="page">Module contracts</span></li>
+      </ol>
+    </nav>
+
+    <!-- inline TOC — appears <1100px when the aside column drops -->
+    <details class="mui-docs__toc-inline">
+      <summary>On this page</summary>
+      <nav class="mui-toc" aria-label="On this page">
+        <ul class="mui-toc__list">
+          <li class="mui-toc__item"><a class="mui-toc__link" href="#what-is-a-contract" aria-current="location">What is a module contract?</a></li>
+          <li class="mui-toc__item mui-toc__item--sub"><a class="mui-toc__link" href="#contract-anatomy">Anatomy of a contract</a></li>
+          <li class="mui-toc__item"><a class="mui-toc__link" href="#declaring-a-contract">Declaring a contract</a></li>
+          <li class="mui-toc__item"><a class="mui-toc__link" href="#scaffolding-with-coa">Scaffolding with coa</a></li>
+          <li class="mui-toc__item"><a class="mui-toc__link" href="#validating-contracts">Validating contracts</a></li>
+          <li class="mui-toc__item mui-toc__item--sub"><a class="mui-toc__link" href="#api-contract-validate">Contract::validate()</a></li>
+          <li class="mui-toc__item"><a class="mui-toc__link" href="#typical-workflow">A typical workflow</a></li>
+          <li class="mui-toc__item mui-toc__item--sub"><a class="mui-toc__link" href="#module-skeleton">Module skeleton</a></li>
+          <li class="mui-toc__item"><a class="mui-toc__link" href="#contract-coverage">Contract coverage</a></li>
+          <li class="mui-toc__item"><a class="mui-toc__link" href="#changelog">Changelog</a></li>
+        </ul>
+      </nav>
+    </details>
+
+    <!-- ============ ARTICLE ============ -->
+    <article class="mui-prose">
+      <h1 id="module-contracts">Module contracts</h1>
+      <p>Every Milpa module ships with a <strong>contract</strong>: a machine-readable manifest that declares what the module <em>provides</em>, what it <em>consumes</em> and which events it <em>emits</em>. The kernel never introspects your code — it reads the contract, wires the container and subscribes the listeners before a single line of module code runs.</p>
+
+      <h2 id="what-is-a-contract">What is a module contract?</h2>
+      <p>A contract is the public face of a module. It has exactly three clauses: <code>provides</code> lists the services the module binds into the container, <code>consumes</code> names the capabilities it needs from the rest of the field, and <code>emits</code> enumerates every event it may dispatch. Anything not declared is private by definition.</p>
+      <p>Contracts are also how agents work with a Milpa codebase: an AI pair can read <code>mail.contract.json</code> and know the whole surface of a module without opening its source. That is the contract-first rule — <a href="/docs/0.1.0/modules">if it is not in the contract, it does not exist</a>.</p>
+
+      <div class="mui-callout mui-callout--version" role="note">
+        <span class="mui-callout__icon" aria-hidden="true">✦</span>
+        <div class="mui-callout__content">
+          <p class="mui-callout__title">Added in v0.2.0</p>
+          <p class="mui-callout__body">Contract linting. <code>coa contract --lint</code> validates every contract against the JSON schema before a harvest — upgrade to v0.2.0 to run it in CI.</p>
+        </div>
+      </div>
+
+      <h3 id="contract-anatomy">Anatomy of a contract</h3>
+      <p>You declare the contract in code — one <code>contract()</code> method per module class — and <code>coa</code> compiles it to JSON at harvest time. The highlighted line is where the container learns about <code>Mailer</code>: consumers depend on the interface, never on the module.</p>
+
+      <div class="mui-code mui-code--numbered">
+        <div class="mui-code__header">
+          <span class="mui-code__file">src/Modules/Mail/MailModule.php</span>
+          <span class="mui-code__lang">php</span>
+          <div class="mui-code__actions"><button type="button" class="mui-btn mui-btn--ghost mui-btn--sm">Copy</button></div>
+        </div>
+        <div class="mui-code__body" role="region" aria-label="src/Modules/Mail/MailModule.php" tabindex="0"><pre><code><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">1</span><span class="tok-tag">&lt;?php</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">2</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">3</span><span class="tok-kw">declare</span><span class="tok-punc">(</span>strict_types<span class="tok-punc">=</span><span class="tok-num">1</span><span class="tok-punc">);</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">4</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">5</span><span class="tok-kw">namespace</span> App\Modules\Mail<span class="tok-punc">;</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">6</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">7</span><span class="tok-kw">use</span> Milpa\Contract\Contract<span class="tok-punc">;</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">8</span><span class="tok-kw">use</span> Milpa\Module\Module<span class="tok-punc">;</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">9</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">10</span><span class="tok-kw">final class</span> MailModule <span class="tok-kw">extends</span> Module</span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">11</span><span class="tok-punc">{</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">12</span>    <span class="tok-kw">public function</span> <span class="tok-fn">contract</span><span class="tok-punc">():</span> Contract</span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">13</span>    <span class="tok-punc">{</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">14</span>        <span class="tok-kw">return</span> Contract<span class="tok-punc">::</span><span class="tok-fn">define</span><span class="tok-punc">(</span><span class="tok-str">'mail'</span><span class="tok-punc">)</span></span><span class="mui-code__line mui-code__line--highlight"><span class="mui-code__ln" aria-hidden="true">15</span>            <span class="tok-punc">-&gt;</span><span class="tok-fn">provides</span><span class="tok-punc">(</span>Mailer<span class="tok-punc">::</span><span class="tok-kw">class</span><span class="tok-punc">)</span> <span class="tok-com">// the kernel binds this for you</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">16</span>            <span class="tok-punc">-&gt;</span><span class="tok-fn">consumes</span><span class="tok-punc">(</span><span class="tok-str">'queue'</span><span class="tok-punc">,</span> <span class="tok-str">'config'</span><span class="tok-punc">)</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">17</span>            <span class="tok-punc">-&gt;</span><span class="tok-fn">emits</span><span class="tok-punc">(</span><span class="tok-str">'mail.sent'</span><span class="tok-punc">,</span> <span class="tok-str">'mail.failed'</span><span class="tok-punc">);</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">18</span>    <span class="tok-punc">}</span></span><span class="mui-code__line"><span class="mui-code__ln" aria-hidden="true">19</span><span class="tok-punc">}</span></span></code></pre></div>
+      </div>
+
+      <h2 id="declaring-a-contract">Declaring a contract</h2>
+      <p>The same contract, three ways to look at it: the fluent PHP builder you write, the CLI view <code>coa</code> prints, and the compiled JSON artifact the kernel actually reads.</p>
+
+      <div class="mui-code-group">
+        <div class="mui-tabs" role="tablist" aria-label="Contract in PHP, CLI and JSON">
+          <button type="button" class="mui-tabs__tab" role="tab" id="cg-php" aria-controls="cg-panel-php" aria-selected="true">PHP</button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="cg-cli" aria-controls="cg-panel-cli" aria-selected="false" tabindex="-1">CLI</button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="cg-json" aria-controls="cg-panel-json" aria-selected="false" tabindex="-1">JSON</button>
+        </div>
+        <div class="mui-tabs__panel" role="tabpanel" id="cg-panel-php" aria-labelledby="cg-php">
+          <div class="mui-code">
+            <div class="mui-code__header">
+              <span class="mui-code__file">MailModule.php</span>
+              <span class="mui-code__lang">php</span>
+            </div>
+            <div class="mui-code__body"><pre><code><span class="mui-code__line">Contract<span class="tok-punc">::</span><span class="tok-fn">define</span><span class="tok-punc">(</span><span class="tok-str">'mail'</span><span class="tok-punc">)</span></span><span class="mui-code__line">    <span class="tok-punc">-&gt;</span><span class="tok-fn">provides</span><span class="tok-punc">(</span>Mailer<span class="tok-punc">::</span><span class="tok-kw">class</span><span class="tok-punc">)</span></span><span class="mui-code__line">    <span class="tok-punc">-&gt;</span><span class="tok-fn">consumes</span><span class="tok-punc">(</span><span class="tok-str">'queue'</span><span class="tok-punc">,</span> <span class="tok-str">'config'</span><span class="tok-punc">)</span></span><span class="mui-code__line">    <span class="tok-punc">-&gt;</span><span class="tok-fn">emits</span><span class="tok-punc">(</span><span class="tok-str">'mail.sent'</span><span class="tok-punc">,</span> <span class="tok-str">'mail.failed'</span><span class="tok-punc">);</span></span></code></pre></div>
+          </div>
+        </div>
+        <div class="mui-tabs__panel" role="tabpanel" id="cg-panel-cli" aria-labelledby="cg-cli" hidden>
+          <div class="mui-terminal">
+            <div class="mui-terminal__bar"></div>
+            <div class="mui-terminal__body" role="region" aria-label="coa contract session" tabindex="0">
+              <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">coa contract mail --show</span></div>
+              <div class="mui-terminal__line"><span class="mui-terminal__out">name      mail</span></div>
+              <div class="mui-terminal__line"><span class="mui-terminal__out">provides  App\Modules\Mail\Mailer</span></div>
+              <div class="mui-terminal__line"><span class="mui-terminal__out">consumes  queue, config</span></div>
+              <div class="mui-terminal__line"><span class="mui-terminal__out">emits     mail.sent, mail.failed</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="mui-tabs__panel" role="tabpanel" id="cg-panel-json" aria-labelledby="cg-json" hidden>
+          <div class="mui-code">
+            <div class="mui-code__header">
+              <span class="mui-code__file">mail.contract.json</span>
+              <span class="mui-code__lang">json</span>
+            </div>
+            <div class="mui-code__body"><pre><code><span class="mui-code__line"><span class="tok-punc">{</span></span><span class="mui-code__line">  <span class="tok-attr">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"mail"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"provides"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"App\\Modules\\Mail\\Mailer"</span><span class="tok-punc">],</span></span><span class="mui-code__line">  <span class="tok-attr">"consumes"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"queue"</span><span class="tok-punc">,</span> <span class="tok-str">"config"</span><span class="tok-punc">],</span></span><span class="mui-code__line">  <span class="tok-attr">"emits"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"mail.sent"</span><span class="tok-punc">,</span> <span class="tok-str">"mail.failed"</span><span class="tok-punc">]</span></span><span class="mui-code__line"><span class="tok-punc">}</span></span></code></pre></div>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="scaffolding-with-coa">Scaffolding with coa</h2>
+      <p>You rarely write a module from scratch — you plant a seed. <code>coa siembra</code> scaffolds the module class, its contract and a test skeleton in one pass:</p>
+
+      <div class="mui-terminal">
+        <div class="mui-terminal__bar"></div>
+        <div class="mui-terminal__body" role="region" aria-label="coa siembra session" tabindex="0">
+          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">coa siembra mail-module</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ module class    src/Modules/Mail/MailModule.php</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ contract        src/Modules/Mail/mail.contract.json</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ events          src/Modules/Mail/Events (2 files)</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ test skeleton   src/Modules/Mail/Tests/MailModuleTest.php</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">Done: mail-module planted — 5 files in 212 ms.</span></div>
+        </div>
+      </div>
+
+      <div class="mui-callout mui-callout--warning" role="note">
+        <span class="mui-callout__icon" aria-hidden="true">⚠</span>
+        <div class="mui-callout__content">
+          <p class="mui-callout__title">Never edit a compiled contract by hand</p>
+          <p class="mui-callout__body"><code>mail.contract.json</code> is regenerated from <code>contract()</code> on every harvest. The drift gate fails the build when code and JSON diverge — change the method, not the artifact.</p>
+        </div>
+      </div>
+
+      <h2 id="validating-contracts">Validating contracts</h2>
+      <p>Contracts are validated twice: at boot in development, and at harvest in CI. When you need it programmatically — custom tooling, editor plugins, agents — go through <code>Contract::validate()</code>.</p>
+
+      <section class="mui-api" aria-labelledby="api-contract-validate">
+        <div class="mui-api__header">
+          <h3 class="mui-api__name" id="api-contract-validate">Contract::validate()</h3>
+          <div class="mui-api__meta">
+            <span class="mui-badge mui-badge--since">Since v0.1.0</span>
+          </div>
+        </div>
+        <pre class="mui-api__signature"><code><span class="tok-kw">public function</span> <span class="tok-fn">validate</span><span class="tok-punc">(</span>ModuleManifest <span class="tok-var">$manifest</span><span class="tok-punc">,</span> <span class="tok-kw">bool</span> <span class="tok-var">$strict</span> <span class="tok-punc">=</span> <span class="tok-kw">true</span><span class="tok-punc">,</span> <span class="tok-punc">?</span><span class="tok-kw">string</span> <span class="tok-var">$schema</span> <span class="tok-punc">=</span> <span class="tok-kw">null</span><span class="tok-punc">):</span> ValidationReport</code></pre>
+        <p class="mui-api__desc">Checks a module manifest against the contract schema and the wiring rules of the current field: every consumed capability must be provided by some module, and every emitted event must be namespaced under the module name.</p>
+
+        <h4 class="mui-api__section">Parameters</h4>
+        <div class="mui-table-wrap mui-api__params" role="region" aria-labelledby="api-validate-params-cap" tabindex="0">
+          <table class="mui-table">
+            <caption class="mui-sr-only" id="api-validate-params-cap">Parameters of Contract::validate()</caption>
+            <thead>
+              <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mui-table__lead">$manifest</td>
+                <td><code class="mui-api__type">ModuleManifest</code></td>
+                <td>The manifest to check, as produced by the module's <code>contract()</code> method.</td>
+              </tr>
+              <tr>
+                <td class="mui-table__lead">$strict</td>
+                <td><code class="mui-api__type">bool</code></td>
+                <td>When <code>true</code>, warnings fail the report as well as errors. Defaults to <code>true</code>.</td>
+              </tr>
+              <tr>
+                <td class="mui-table__lead">$schema <span class="mui-badge mui-badge--deprecated">deprecated</span></td>
+                <td><code class="mui-api__type">string|null</code></td>
+                <td>Path to a custom JSON schema used instead of the bundled one.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mui-api__deprecated-note"><strong>Deprecated:</strong> <code>$schema</code> is ignored when a <code>Schema</code> instance is bound in the container — bind one instead. The parameter is removed in v0.3.0.</p>
+
+        <h4 class="mui-api__section">Returns</h4>
+        <p class="mui-api__desc">A <code class="mui-api__type">ValidationReport</code> with one entry per contract rule; <code>passed()</code> is <code>true</code> when no errors — and, in strict mode, no warnings — were recorded.</p>
+
+        <h4 class="mui-api__section">Throws</h4>
+        <p class="mui-api__desc"><code class="mui-api__type">SchemaNotFoundException</code> when the schema path does not resolve to a readable file.</p>
+      </section>
+
+      <h2 id="typical-workflow">A typical workflow</h2>
+      <p>From bare soil to a registered module, the loop is always the same four moves:</p>
+
+      <ol class="mui-steps">
+        <li class="mui-steps__item">
+          <span class="mui-steps__marker" aria-hidden="true"></span>
+          <h3 class="mui-steps__title">Scaffold the module</h3>
+          <p class="mui-steps__body"><code>coa siembra mail-module</code> plants the seed: module class, compiled contract and test skeleton.</p>
+        </li>
+        <li class="mui-steps__item" aria-current="step">
+          <span class="mui-steps__marker" aria-hidden="true"></span>
+          <h3 class="mui-steps__title">Declare the contract</h3>
+          <p class="mui-steps__body">Fill in <code>provides</code>, <code>consumes</code> and <code>emits</code> in the module's <code>contract()</code> method. Keep the surface minimal — private things stay out.</p>
+        </li>
+        <li class="mui-steps__item">
+          <span class="mui-steps__marker" aria-hidden="true"></span>
+          <h3 class="mui-steps__title">Run the gate</h3>
+          <p class="mui-steps__body"><code>coa contract --lint</code> checks the contract against the schema; the drift gate compares it with your code and your tests exercise the declared surface.</p>
+        </li>
+        <li class="mui-steps__item">
+          <span class="mui-steps__marker" aria-hidden="true"></span>
+          <h3 class="mui-steps__title">Harvest</h3>
+          <p class="mui-steps__body"><code>coa cosecha</code> builds, validates and registers the module with the kernel. The field is one module richer.</p>
+        </li>
+      </ol>
+
+      <h3 id="module-skeleton">Module skeleton</h3>
+      <p>This is what <code>coa siembra</code> leaves on the ground. Generated files carry the <em>gen</em> mark; files added since your last harvest carry <em>new</em>:</p>
+
+      <ul class="mui-file-tree">
+        <li>
+          <details class="mui-file-tree__dir" open>
+            <summary>src/Modules/Mail</summary>
+            <ul>
+              <li class="mui-file-tree__file" aria-current="true">MailModule.php</li>
+              <li class="mui-file-tree__file">Mailer.php</li>
+              <li class="mui-file-tree__file">mail.contract.json <span class="mui-file-tree__badge mui-file-tree__badge--gen">gen</span></li>
+              <li>
+                <details class="mui-file-tree__dir" open>
+                  <summary>Events</summary>
+                  <ul>
+                    <li class="mui-file-tree__file">MailSent.php <span class="mui-file-tree__badge mui-file-tree__badge--new">new</span></li>
+                    <li class="mui-file-tree__file">MailFailed.php <span class="mui-file-tree__badge mui-file-tree__badge--new">new</span></li>
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="mui-file-tree__dir" open>
+                  <summary>Tests</summary>
+                  <ul>
+                    <li class="mui-file-tree__file">MailModuleTest.php <span class="mui-file-tree__badge mui-file-tree__badge--gen">gen</span></li>
+                  </ul>
+                </details>
+              </li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+
+      <h2 id="contract-coverage">Contract coverage</h2>
+      <p>Each release widens the gate. The chart shows how many contract checks a release must pass before it can ship — v0.2.0 runs the full 135.</p>
+
+      <figure class="mui-chart mui-chart--bars">
+        <figcaption class="mui-chart__title">Contract checks per release</figcaption>
+        <div class="mui-chart__canvas" role="img" aria-label="Contract checks per release: v0.0.8 ran 52 checks, v0.0.9 ran 84, v0.1.0 ran 110, v0.2.0 runs 135.">
+          <div class="mui-chart__bar" style="--_v:39%; --_c:var(--viz-1); --_ca:var(--viz-1-active)"></div>
+          <div class="mui-chart__bar" style="--_v:62%; --_c:var(--viz-1); --_ca:var(--viz-1-active)"></div>
+          <div class="mui-chart__bar" style="--_v:81%; --_c:var(--viz-1); --_ca:var(--viz-1-active)"></div>
+          <div class="mui-chart__bar" style="--_v:100%; --_c:var(--viz-1); --_ca:var(--viz-1-active)"></div>
+        </div>
+        <div class="mui-chart__axis" aria-hidden="true">
+          <span class="mui-chart__tick">v0.0.8</span>
+          <span class="mui-chart__tick">v0.0.9</span>
+          <span class="mui-chart__tick">v0.1.0</span>
+          <span class="mui-chart__tick">v0.2.0</span>
+        </div>
+        <div class="mui-chart__legend">
+          <span class="mui-chart__legend-item"><span class="mui-chart__swatch mui-chart__swatch--1"></span>contract checks (gate)</span>
+        </div>
+      </figure>
+
+      <p>Next up: <a href="/docs/0.1.0/events">events</a> — how modules talk to each other once their contracts are wired.</p>
+    </article>
+
+    <nav class="mui-docs__pager" aria-label="Pagination">
+      <a class="mui-docs__pager-link" href="/docs/0.1.0/modules">
+        <span class="mui-docs__pager-dir">← Previous</span>
+        <span class="mui-docs__pager-title">Modules</span>
+      </a>
+      <a class="mui-docs__pager-link mui-docs__pager-link--next" href="/docs/0.1.0/events">
+        <span class="mui-docs__pager-dir">Next →</span>
+        <span class="mui-docs__pager-title">Events</span>
+      </a>
+    </nav>
+
+    <!-- ============ CHANGELOG (second stacked page) ============ -->
+    <section class="docs-changelog" aria-labelledby="changelog">
+      <div class="mui-prose">
+        <h2 id="changelog">Changelog</h2>
+        <p>All notable changes to Milpa. The project follows semantic versioning; breaking changes are called out per item.</p>
+      </div>
+
+      <section class="mui-changelog" aria-label="Release history">
+        <article class="mui-changelog__release" aria-labelledby="rel-020">
+          <header class="mui-changelog__header">
+            <h3 class="mui-changelog__version" id="rel-020">v0.2.0</h3>
+            <time class="mui-changelog__date" datetime="2026-06-26">June 26, 2026</time>
+            <span class="mui-changelog__badges"><span class="mui-badge mui-badge--accent">latest</span></span>
+          </header>
+          <section class="mui-changelog__group">
+            <h4 class="mui-changelog__type" data-type="added">Added</h4>
+            <ul class="mui-changelog__list">
+              <li class="mui-changelog__item">Contract linting: <code>coa contract --lint</code> validates every contract against the JSON schema before a harvest.</li>
+              <li class="mui-changelog__item"><code>Contract::emits()</code> accepts wildcard event names (<code>mail.*</code>) for modules that fan out.</li>
+            </ul>
+          </section>
+          <section class="mui-changelog__group">
+            <h4 class="mui-changelog__type" data-type="changed">Changed</h4>
+            <ul class="mui-changelog__list">
+              <li class="mui-changelog__item mui-changelog__item--breaking">The kernel no longer boots modules without a contract — run <code>coa contract --sync</code> once to generate contracts for legacy modules.</li>
+              <li class="mui-changelog__item"><code>ValidationReport</code> is now immutable; mutators return a new instance.</li>
+            </ul>
+          </section>
+          <section class="mui-changelog__group">
+            <h4 class="mui-changelog__type" data-type="fixed">Fixed</h4>
+            <ul class="mui-changelog__list">
+              <li class="mui-changelog__item"><code>coa siembra</code> no longer overwrites an existing module directory without <code>--force</code>.</li>
+              <li class="mui-changelog__item">Event names are normalized to lowercase before dispatch, matching the contract schema.</li>
+            </ul>
+          </section>
+        </article>
+
+        <article class="mui-changelog__release" aria-labelledby="rel-010">
+          <header class="mui-changelog__header">
+            <h3 class="mui-changelog__version" id="rel-010">v0.1.0</h3>
+            <time class="mui-changelog__date" datetime="2026-03-03">March 3, 2026</time>
+          </header>
+          <section class="mui-changelog__group">
+            <h4 class="mui-changelog__type" data-type="added">Added</h4>
+            <ul class="mui-changelog__list">
+              <li class="mui-changelog__item">First public release: the kernel, the module loader and the <code>coa</code> CLI.</li>
+              <li class="mui-changelog__item">Contract-first module API — <code>provides</code>, <code>consumes</code>, <code>emits</code> — with <code>Contract::validate()</code>.</li>
+            </ul>
+          </section>
+        </article>
+      </section>
+    </section>
+
+  </main>
+
+  <aside class="mui-docs__aside">
+    <nav class="mui-toc" aria-label="On this page">
+      <p class="mui-toc__title">On this page</p>
+      <ul class="mui-toc__list">
+        <li class="mui-toc__item"><a class="mui-toc__link" href="#what-is-a-contract" aria-current="location">What is a module contract?</a></li>
+        <li class="mui-toc__item mui-toc__item--sub"><a class="mui-toc__link" href="#contract-anatomy">Anatomy of a contract</a></li>
+        <li class="mui-toc__item"><a class="mui-toc__link" href="#declaring-a-contract">Declaring a contract</a></li>
+        <li class="mui-toc__item"><a class="mui-toc__link" href="#scaffolding-with-coa">Scaffolding with coa</a></li>
+        <li class="mui-toc__item"><a class="mui-toc__link" href="#validating-contracts">Validating contracts</a></li>
+        <li class="mui-toc__item mui-toc__item--sub"><a class="mui-toc__link" href="#api-contract-validate">Contract::validate()</a></li>
+        <li class="mui-toc__item"><a class="mui-toc__link" href="#typical-workflow">A typical workflow</a></li>
+        <li class="mui-toc__item mui-toc__item--sub"><a class="mui-toc__link" href="#module-skeleton">Module skeleton</a></li>
+        <li class="mui-toc__item"><a class="mui-toc__link" href="#contract-coverage">Contract coverage</a></li>
+        <li class="mui-toc__item"><a class="mui-toc__link" href="#changelog">Changelog</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="mui-docs__scrim" aria-hidden="true"></div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="docs-footer">
+  <svg class="docs-wordmark" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+  <p class="docs-footer__tagline">Siembra módulos, cosecha aplicaciones.</p>
+  <p class="docs-footer__legal">© 2026 Milpa · Apache-2.0 · docs built from v0.1.0</p>
+</footer>
+
+<!-- ============ SEARCH DIALOG (⌘K) ============ -->
+<dialog class="mui-modal mui-search" id="search-dialog" aria-label="Search documentation">
+  <input id="docs-search-input" name="q" class="mui-search__input" type="search" role="combobox" aria-expanded="true" aria-controls="search-results" aria-activedescendant="search-opt-1" aria-autocomplete="list" aria-label="Search documentation" placeholder="Search docs…">
+  <ul class="mui-search__results" id="search-results" role="listbox" aria-label="Results">
+    <li class="mui-search__result" id="search-opt-1" role="option" aria-selected="true">
+      <a href="#module-contracts">
+        <span class="mui-search__crumb">Core concepts / Module contracts</span>
+        <span class="mui-search__title-line">Module contracts</span>
+        <span class="mui-search__excerpt">Every module ships with a machine-readable manifest: provides, consumes, emits…</span>
+      </a>
+    </li>
+    <li class="mui-search__result" id="search-opt-2" role="option" aria-selected="false">
+      <a href="#api-contract-validate">
+        <span class="mui-search__crumb">API / Contract</span>
+        <span class="mui-search__title-line">Contract::validate()</span>
+        <span class="mui-search__excerpt">Checks a module manifest against the contract schema and the wiring rules…</span>
+      </a>
+    </li>
+    <li class="mui-search__result" id="search-opt-3" role="option" aria-selected="false">
+      <a href="/docs/0.1.0/quick-start">
+        <span class="mui-search__crumb">Getting started / Quick start</span>
+        <span class="mui-search__title-line">coa siembra</span>
+        <span class="mui-search__excerpt">Scaffold your first module with the coa CLI: module class, contract, tests…</span>
+      </a>
+    </li>
+  </ul>
+  <div class="mui-search__footer">
+    <span class="mui-search__hint"><kbd class="mui-kbd">↑↓</kbd> navigate</span>
+    <span class="mui-search__hint"><kbd class="mui-kbd">↵</kbd> open</span>
+    <span class="mui-search__hint"><kbd class="mui-kbd">esc</kbd> close</span>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  'use strict';
+  const $  = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+
+  /* ---------- theme: toggle + persistence + label (admin proof pattern) ---------- */
+  const root = document.documentElement, themeBtn = $('#theme-toggle');
+  const applyTheme = t => {
+    root.dataset.theme = t;
+    themeBtn.textContent = '◐ ' + t;
+    try { localStorage.setItem('milpa-theme', t); } catch {}
+  };
+  let saved = null; try { saved = localStorage.getItem('milpa-theme'); } catch {}
+  applyTheme(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
+  themeBtn.addEventListener('click', () => applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+  /* ---------- off-canvas drawer ≤880px: [data-nav-open] + aria-expanded + inert ---------- */
+  const docs = $('.mui-docs'), nav = $('#docs-nav'), navToggle = $('#nav-toggle'), scrim = $('.mui-docs__scrim');
+  const mq = matchMedia('(max-width: 880px)');
+  const navOpen = () => docs.hasAttribute('data-nav-open');
+  const syncInert = () => {
+    if (mq.matches && !navOpen()) nav.setAttribute('inert', '');
+    else nav.removeAttribute('inert');
+  };
+  function openNav() {
+    docs.setAttribute('data-nav-open', '');
+    navToggle.setAttribute('aria-expanded', 'true');
+    syncInert();
+    const target = $('.mui-docs__nav-item[aria-current="page"]', nav) || $('.mui-docs__nav-item', nav);
+    if (target) target.focus();
+  }
+  function closeNav(returnFocus = false) {
+    if (!navOpen()) return;
+    docs.removeAttribute('data-nav-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    syncInert();
+    if (returnFocus) navToggle.focus();
+  }
+  navToggle.addEventListener('click', () => navOpen() ? closeNav() : openNav());
+  scrim.addEventListener('click', () => closeNav());
+  nav.addEventListener('click', e => { if (e.target.closest('.mui-docs__nav-item')) closeNav(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && navOpen()) { e.preventDefault(); closeNav(true); }
+  });
+  mq.addEventListener('change', syncInert);
+  syncInert();
+
+  /* ---------- TOC scroll-spy: aria-current="location" (aside + inline, one per nav) ---------- */
+  const tocLinks = $$('.mui-toc__link');
+  const byId = new Map();
+  tocLinks.forEach(l => {
+    const id = decodeURIComponent(new URL(l.href).hash.slice(1));
+    if (!byId.has(id)) byId.set(id, []);
+    byId.get(id).push(l);
+  });
+  const headings = [...byId.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const setLocation = id => tocLinks.forEach(l => {
+    if ((byId.get(id) || []).includes(l)) l.setAttribute('aria-current', 'location');
+    else l.removeAttribute('aria-current');
+  });
+  let current = headings.length ? headings[0].id : null;
+  const spy = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) current = en.target.id; });
+    if (current) setLocation(current);
+  }, { rootMargin: '-64px 0px -70% 0px', threshold: 0 }); // compensates the sticky topbar
+  headings.forEach(h => spy.observe(h));
+
+  /* ---------- search dialog: ⌘K / Ctrl+K, click, esc (native <dialog>) ---------- */
+  const searchDlg = $('#search-dialog'), searchTrigger = $('#search-trigger');
+  const searchInput = $('.mui-search__input', searchDlg);
+  const openSearch = () => { if (!searchDlg.open) { searchDlg.showModal(); searchInput.select(); } };
+  searchTrigger.addEventListener('click', openSearch);
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      searchDlg.open ? searchDlg.close() : openSearch();
+    }
+  });
+  searchDlg.addEventListener('click', e => {
+    if (e.target.closest('.mui-search__result a')) searchDlg.close();
+  });
+})();
+</script>
+
+</body>
+</html>

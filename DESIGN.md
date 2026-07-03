@@ -98,7 +98,8 @@ Estas reglas son **innegociables**; los valores hex exactos son un *baseline a r
    - Info (cielo): **claro en dark** (`cielo-400`), **profundo en light** (`cielo-700`).
    - Danger: **más oscuro en light** (`danger-700`); `on-danger` se invierte (tinta oscura en dark,
      clara en light). Igual `on-secondary` para el fill verde.
-3. **Todo par texto/UI cumple WCAG AA:** 4.5:1 texto normal, 3:1 boundary de componente. (Set actual: 32/32 ✓.)
+3. **Todo par texto/UI cumple WCAG AA:** 4.5:1 texto normal, 3:1 boundary de componente. (Set
+   actual: 193/193 ✓ — los pares viven como datos en `scripts/contrast-pairs.mjs`.)
 4. **Botones sólidos llevan un auto-borde sutil** (un paso más oscuro de su propio color) para
    definir el boundary, sobre todo en light.
 5. **El verde (olivo) es marca fría / secundario** y **cielo es solo `info`** — ninguno compite con
@@ -115,7 +116,8 @@ matcheen. Ver `milpa-tokens.css` / `.json` (DTCG) / `tailwind.config.js`. Roles:
 surface-raised, overlay, border-subtle, border, border-strong, text, text-secondary, text-muted,
 text-on-accent, on-danger, on-secondary, accent (+hover/active/subtle/text), secondary
 (+hover/active/subtle/border/text), success/warning/danger/info (+bg/border), focus`. `secondary`=olivo,
-`info`=cielo. Todos los pares verificados WCAG AA (32/32).
+`info`=cielo; 0.2.0 suma `syntax-*` (highlighting) y `viz-1..6 (+-active)` (charts). Todos los
+pares verificados WCAG AA (193/193, `npm test`).
 
 ---
 

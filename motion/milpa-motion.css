@@ -1,4 +1,12 @@
-/* Milpa motion — primitives. Requires milpa-tokens.css for --dur / --ease / --rise. */
+/* Milpa motion — primitives. Requires milpa-tokens.css for --dur / --ease / --rise.
+   Cascada: este archivo vive en @layer — el CSS del consumidor/plugin gana sin !important
+   (THEMING.md). El contrato reduced-motion conserva su !important: con capa le gana incluso
+   al !important sin capa del plugin — el invariante queda blindado. */
+
+@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;
+
+@layer milpa.motion {
+
 @keyframes milpa-rise     { from { opacity: 0; transform: translateY(var(--rise-base)); } to { opacity: 1; transform: none; } }
 @keyframes milpa-fade     { from { opacity: 0; } to { opacity: 1; } }
 @keyframes milpa-scale-in { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
@@ -27,3 +35,5 @@
   }
   .m-rise, .m-pop { animation: milpa-fade 1ms both; }
 }
+
+} /* @layer milpa.motion */

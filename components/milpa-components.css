@@ -3,7 +3,13 @@
    Requiere: dist/milpa-tokens.css + primitives/milpa-primitives.css
    + motion/milpa-motion.css (keyframes milpa-* y contrato reduced-motion).
    Sigue el molde de primitives/milpa-primitives.css — mismas convenciones.
+   Cascada: este archivo vive en @layer — el CSS del consumidor/plugin
+   gana sin !important (THEMING.md).
    ════════════════════════════════════════════════════════════════════ */
+
+@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;
+
+@layer milpa.components {
 
 
 /* ════════════════════════════════════════════════════════════════════
@@ -1048,3 +1054,5 @@
   }
   .mui-topbar__nav-toggle { display: inline-flex; }
 }
+
+} /* @layer milpa.components */

@@ -20,6 +20,10 @@
   --secondary-subtle: #0E2412;
   --secondary-border: #2C5232;
   --secondary-text: #8FBF93;
+  /* la cadencia Nopal: esquinas casi duras y movimiento más seco (L1) */
+  --radius-xs: 0.125rem; --radius-sm: 0.125rem; --radius-base: 0.125rem;
+  --radius-md: 0.1875rem; --radius-lg: 0.25rem; --radius-xl: 0.375rem;
+  --dur-fast: 90ms; --dur-base: 150ms;
 }
 [data-theme="light"] {
   --accent: #A62A66;

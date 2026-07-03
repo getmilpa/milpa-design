@@ -35,16 +35,24 @@ Battle-test: `proof/milpa-admin-proof.html` (dashboard completo, dark/light, tec
 ✅ **T4 cumplido — logo kit en `logo/`** (símbolo Grano, wordmark grano-i, lockups, app icon;
 mono-oro verificado).
 
-⚠️ **Falta:** build pipeline real (hoy `dist/` es hand-authored, verificado), CI (T3), Storybook
-formal (T5 — el proof admin cubre v0), publish (T6), LICENSE texto completo (T7).
+✅ **0.2.0 — la segunda cosecha (plan `docs/superpowers/plans/2026-07-02-…-theming.md`):**
+docs versionadas (kit + `mui-docs` shell), `artifacts/` (*el elote*, 15 piezas: code/terminal/
+chart/prose/api/search/…), `layouts/` (*la parcela*, 11: hero/pricing/faq/footer/media/lightbox),
+commerce en `components/` (5), tokens `--syntax-*`/`--viz-*`, y el **contrato de theming**:
+todo el CSS en `@layer milpa.*` + `theme.contract.json` generado + `THEMING.md` +
+`verify-theme.mjs`. Gate: **193/193 AA · 63 contratos**. Seis proofs (docs/blog/commerce/
+gallery/saas/themed — el skin "Nopal" pasa el gate sin tocar bundles). Landing en inglés.
+
+⚠️ **Falta:** Storybook formal (T5 — los seis proofs cubren v0.2).
 
 ## 3. Cómo correr
 
 ```bash
 npm install
-npm test        # verifica contraste AA de todos los pares semánticos (falla si algo rompe)
-npm run proof   # sirve proof/ en http://localhost:4321  (abrí milpa-ds-proof.html)
-npm run build   # style-dictionary: tokens/ -> build/generated/   (ver T1)
+npm test               # triple gate: 193 AA + governance (molde + @layer + 63 contratos) + drift
+npm run proof          # sirve el repo en http://localhost:4321 (proof/*.html, landing/)
+npm run build          # genera dist/ + theme.contract.json desde tokens/milpa-tokens.json
+npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.json
 ```
 
 ## 4. Backlog priorizado (bite-size)
@@ -65,8 +73,22 @@ npm run build   # style-dictionary: tokens/ -> build/generated/   (ver T1)
   crudo/duraciones hardcodeadas, var() existentes, 32 contratos válidos y coherentes). El paso de
   build queda anotado para cuando T1 se decida.
 - ~~**T4 · Logo kit.**~~ ✅ **Hecho** — en `logo/` (símbolo, wordmark, lockups, app icon; mono-oro).
-- **T5 · Storybook** (o seguir extendiendo `proof/`) para estados exhaustivos por pieza. El
-  `proof/milpa-admin-proof.html` ya battle-testea la composición completa.
+- **T5 · Storybook** (o seguir extendiendo `proof/`) para estados exhaustivos por pieza. Los
+  seis proofs de 0.2.0 ya battle-testean la composición completa por caso de uso.
+- **T9 · Backlog 0.3 — lo que los battle-tests destaparon** (gaps reales reportados por los
+  builders de los proofs, por frecuencia de dolor):
+  1. **Header de marketing/sitio** compartido (hoy landing, blog, saas y commerce lo re-escriben;
+     `mui-topbar` es del shell admin y `mui-docs__topbar` del shell docs).
+  2. `mui-card__media` (cover edge-to-edge en cards) y `mui-byline` (avatar+nombre+fecha ×3 usos).
+  3. Media slots como `:is(img, svg, picture)` en product-card/media-gallery/media-grid/lightbox
+     (hoy `img`-only; los SVG token-driven necesitan plomería del consumidor).
+  4. Qty stepper extraíble (`mui-input-group--stepper`) — hoy vive solo en cart-line.
+  5. `mui-tabs` variante pill/filtro (con su patrón ARIA de panel único documentado).
+  6. Pager standalone (hoy `mui-docs__pager` está atado al shell); `mui-stat --lg`; utilidad
+     stack/cluster; drawer variante docked/inline (demos y paneles laterales estáticos);
+     `mui-chart --line` con fila de ticks HTML (el `<text>` del SVG se distorsiona);
+     slot de mantra propio en `mui-footer` para productos de terceros; swap JS de referencia
+     para thumbs de `mui-media-gallery` (documentado, sin implementar en el proof).
 - ~~**T6 · Publish `@milpa/design@0.1.0`**~~ ✅ **PUBLICADO** (2026-07-02T05:00Z, por
   `teamx-devkit`): `npm i @milpa/design` — 59 archivos, 88 kB, los 8 exports verificados con
   install real. Flujo de release: `npm run release` (token en `.env` gitignoreado +
@@ -91,6 +113,9 @@ npm run build   # style-dictionary: tokens/ -> build/generated/   (ver T1)
   navegable por teclado con `:focus-visible`, `aria-*` correctos. (DESIGN §6 quality floor.)
 - `<html>` **siempre** lleva `data-theme` (`"dark"|"light"`), nunca ausente.
 - Naming: clases `mui-*`; tokens `--{categoría}-{nombre}`; contratos `{componente}.contract.json`.
+- **Todo CSS publicado declara el orden `@layer` canónico y envuelve sus reglas en su capa**
+  (governance lo verifica; el orden vive en `scripts/contrast-pairs.mjs` → `LAYER_ORDER`). El
+  CSS sin layer del consumidor SIEMPRE gana — no "arregles" eso, es el mecanismo de theming.
 - **El verde de marca (olivo ~124°) vive lejos de success (~150°)** — no los acerques.
 - Cambiar la forma/semántica de un token o contrato = **bump semver** (el framework depende de esto).
 

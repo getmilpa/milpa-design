@@ -1,12 +1,26 @@
 {
   "name": "@milpa/design",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Milpa Design System — dark-first design tokens, motion, and component contracts. The visual face of the Milpa framework.",
   "license": "Apache-2.0",
   "type": "module",
   "private": false,
-  "publishConfig": { "access": "public" },
-  "files": ["dist", "tokens", "motion", "primitives", "components", "artifacts", "layouts", "logo", "theme.contract.json", "THEMING.md", "DESIGN.md"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "tokens",
+    "motion",
+    "primitives",
+    "components",
+    "artifacts",
+    "layouts",
+    "logo",
+    "theme.contract.json",
+    "THEMING.md",
+    "DESIGN.md"
+  ],
   "exports": {
     ".": "./dist/milpa-tokens.css",
     "./css": "./dist/milpa-tokens.css",
@@ -35,8 +49,22 @@
     "release:dry": "set -a; . ./.env; set +a; npm publish --dry-run --userconfig ./.npmrc.publish",
     "release": "set -a; . ./.env; set +a; npm publish --userconfig ./.npmrc.publish"
   },
-  "keywords": ["milpa", "design-system", "design-tokens", "dtcg", "dark-mode", "oklch", "tailwind", "motion"],
+  "keywords": [
+    "milpa",
+    "design-system",
+    "design-tokens",
+    "dtcg",
+    "dark-mode",
+    "oklch",
+    "tailwind",
+    "motion"
+  ],
   "homepage": "https://milpa.lat",
-  "repository": { "type": "git", "url": "git+https://github.com/getmilpa/milpa-design.git" },
-  "bugs": { "url": "https://github.com/getmilpa/milpa-design/issues" }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getmilpa/milpa-design.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getmilpa/milpa-design/issues"
+  }
 }

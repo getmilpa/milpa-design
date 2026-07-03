@@ -14,13 +14,17 @@ ambos avanzan en paralelo sin pisarse. La costura entre los dos es un **contrato
 
 ## Estado
 
-**v0.1 — base de componentes admin completa.** Paleta cerrada: `oro` (primario) + `olivo`
-(secundario / la milpa viva) + `tierra` (neutro); `cielo` = `info`. **135/135 pares WCAG AA**
-(dark + light, `npm test`). **29 componentes** con contrato: 11 primitivas (Button, Input, Field,
-Textarea, Select, Checkbox, Radio, Switch, Badge, Kbd, Avatar, Spinner, Progress, Divider…) +
-componentes admin (Card, Stat, Table, Pagination, Tabs, Breadcrumbs, Menu, Tooltip, Alert, Toast,
-Modal, Drawer, EmptyState, Skeleton, Shell/Sidebar/Topbar/PageHeader). Pendiente: build pipeline
-SD, CI, publish → ver [`HANDOFF.md`](./HANDOFF.md).
+**v0.2 — docs versionadas, artefactos, layouts y theming inyectable.** Paleta cerrada: `oro`
+(primario) + `olivo` (secundario / la milpa viva) + `tierra` (neutro); `cielo` = `info`; y ahora
+`--syntax-*` (highlighting AA-verificado) y `--viz-*` (charts, colorblind-safe) — semánticos de
+las mismas rampas. **193/193 pares WCAG AA** (dark + light, `npm test`). **63 piezas** con
+contrato en cuatro capas: primitivas (*el grano*), componentes admin + commerce (*el frijol*),
+artefactos de contenido (*el elote*: code, terminal, chart, prose, api, search, kit de
+versionado…) y layouts (*la parcela*: el shell de docs versionadas, hero, pricing, faq, footer,
+media-grid, lightbox…). Todo el CSS publicado vive en **`@layer milpa.*`**: el CSS de un
+plugin/consumidor gana sin `!important` — el theming es contrato ([`THEMING.md`](./THEMING.md) +
+`theme.contract.json` generado). Seis battle-tests en `proof/` (docs, blog, commerce, gallery,
+saas y `themed` — el blog vistiendo un skin que pasa el mismo gate).
 
 ## Estructura
 
@@ -29,9 +33,13 @@ tokens/milpa-tokens.json    # DTCG — FUENTE DE VERDAD
 dist/                       # salidas consumibles (CSS vars + preset Tailwind) — GENERADAS (npm run build, drift-gated en CI)
 motion/                     # "el viento": easings + primitivas + contrato reduced-motion
 primitives/                 # el grano: Button, Input, Field, controles… (+ *.contract.json)
-components/                 # el frijol: Card, Table, Modal, Shell admin… (+ *.contract.json)
+components/                 # el frijol: Card, Table, Modal, Shell admin, commerce… (+ *.contract.json)
+artifacts/                  # el elote: Code, Terminal, Chart, Prose, Api, Search, versionado… (+ *.contract.json)
+layouts/                    # la parcela: Docs shell, Hero, Pricing, Faq, Footer, MediaGrid, Lightbox… (+ *.contract.json)
+theme.contract.json         # contrato de theming — GENERADO (tokens requeridos + pares AA + invariantes)
+THEMING.md                  # cómo un plugin inyecta su look & feel (3 niveles, cascade layers)
 logo/                       # kit: símbolo Grano, wordmark grano-i, lockups, app icon
-proof/                      # storybook v0: prueba visual de tokens + panel admin completo
+proof/                      # battle-tests: admin, docs, blog, commerce, gallery, saas, themed
 DESIGN.md                   # la constitución
 HANDOFF.md                  # brief para retomar el trabajo (otra sesión/agente)
 ```
@@ -46,6 +54,8 @@ npm i @milpa/design    # publicado — v0.1.0 en npm
 @import "@milpa/design/motion.css";      /* el viento + contrato reduced-motion */
 @import "@milpa/design/primitives.css";  /* el grano: mui-btn, mui-input, … */
 @import "@milpa/design/components.css";  /* el frijol: mui-card, mui-table, mui-shell, … */
+@import "@milpa/design/artifacts.css";   /* el elote: mui-code, mui-chart, mui-prose, … */
+@import "@milpa/design/layouts.css";     /* la parcela: mui-docs, mui-hero, mui-pricing, … */
 ```
 ```js
 // tailwind.config.js
@@ -53,11 +63,19 @@ export { default } from "@milpa/design/tailwind";
 ```
 El `<html>` **siempre** lleva `data-theme` (`"dark"` | `"light"`).
 
+## Theming (plugins)
+
+Todo el CSS publicado vive en `@layer milpa.*` — **tu CSS sin layer siempre gana**, sin
+`!important`. Tres niveles: **retokenizar** (override de custom properties), **reskin** (tu CSS
+reemplaza la piel de cualquier `mui-*`) o **reemplazo total** (traés tu design system y honrás
+`theme.contract.json`). Validá tu skin: `npm run verify:theme -- mi-skin.css` (los mismos 193
+pares AA del gate). Ejemplo vivo: `proof/themed.html`. Leé [`THEMING.md`](./THEMING.md).
+
 ## Desarrollo
 
 ```bash
 npm run build      # genera dist/ desde tokens/milpa-tokens.json (cero dependencias)
-npm test           # triple gate: contraste AA (135) + gobernanza del molde + drift de dist/
+npm test           # triple gate: contraste AA (193) + gobernanza del molde y las capas + drift de dist/ y theme.contract.json
 npm run proof      # sirve el repo en http://localhost:4321 → /proof/milpa-admin-proof.html
 ```
 

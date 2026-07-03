@@ -181,8 +181,19 @@ ensamblar UI sabiendo exactamente qué expone cada pieza, sin adivinar. Plantill
 
 **Naming:** clases `mui-*`; tokens `--{categoría}-{nombre}`; contratos `{componente}.contract.json`.
 
-**Orden de construcción:** foundations → primitivas → componentes → patterns → superficies. El par de
-referencia (Button + Input) ya fija el patrón; el resto es repetición disciplinada bajo el mismo molde.
+**Cascada y theming (0.2.0):** todo CSS publicado declara el orden canónico
+`@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;`
+y envuelve sus reglas en su propia capa (governance lo verifica). El CSS sin layer del
+consumidor/plugin SIEMPRE gana — ese es el mecanismo de inyección de look & feel, en tres niveles
+(retokenizar / reskin / reemplazo total) documentados en `THEMING.md`. El contrato ejecutable es
+`theme.contract.json` (**generado**: tokens requeridos + pares AA como datos + invariantes);
+`scripts/verify-theme.mjs` es el validador de referencia. Los tokens `--syntax-*` (highlighting,
+AA sobre `--syntax-bg`) y `--viz-*` (+ sus `-active`, paleta categórica colorblind-safe) son
+semánticos de la **paleta cerrada** — nacen de las rampas, como todo.
+
+**Orden de construcción:** foundations → primitivas → componentes → artefactos → layouts →
+superficies (los casos de uso son *proofs* compuestos, no CSS nuevo). El par de referencia
+(Button + Input) ya fija el patrón; el resto es repetición disciplinada bajo el mismo molde.
 
 ---
 
@@ -211,11 +222,19 @@ referencia (Button + Input) ya fija el patrón; el resto es repetición discipli
 | `motion/milpa-motion.js`          | config de motion para GSAP / ScrollTrigger        |
 | `proof/milpa-ds-proof.html`       | página de prueba visual (storybook v0)            |
 | `proof/milpa-admin-proof.html`    | battle-test del panel admin (shell + componentes compuestos, dark/light) |
-| `scripts/verify-contrast.mjs`     | gate WCAG AA (`npm test`) — tokens **y** pares que consumen los componentes (135 checks) |
-| `primitives/milpa-primitives.css` | *el grano*: Button, Field, Input, Textarea, Select, Checkbox, Radio, Switch, Badge, Kbd, Avatar, Spinner, Progress, Divider — **el molde vive en el header del archivo** |
+| `scripts/verify-contrast.mjs`     | gate WCAG AA (`npm test`) — consume los pares de `contrast-pairs.mjs` (193 checks) |
+| `scripts/contrast-pairs.mjs`      | los pares AA **como datos** + `LAYER_ORDER` — única fuente para el gate y `theme.contract.json` |
+| `scripts/verify-theme.mjs`        | validador de referencia de themes inyectados (`npm run verify:theme`) |
+| `theme.contract.json`             | contrato de theming — **generado** (tokens requeridos + pares + invariantes) |
+| `THEMING.md`                      | los 3 niveles de inyección de look & feel (cascade layers) |
+| `primitives/milpa-primitives.css` | *el grano*: Button, Field, Input, Textarea, Select, Checkbox, Radio, Switch, Badge (+variantes de estabilidad), Kbd, Avatar, Spinner, Progress, Divider — **el molde vive en el header del archivo** |
 | `primitives/milpa-*.contract.json`| contratos de las primitivas (plantilla: `milpa-button.contract.json`) |
-| `components/milpa-components.css` | *el frijol*: Tooltip, Menu, Card, Stat, Empty, Skeleton, Table, Pagination, Tabs, Breadcrumbs, Alert, Toast, Modal, Drawer, Shell, Sidebar, Topbar, PageHeader |
+| `components/milpa-components.css` | *el frijol*: Tooltip, Menu, Card, Stat, Empty, Skeleton, Table, Pagination, Tabs, Breadcrumbs, Alert, Toast, Modal, Drawer, Shell/Sidebar/Topbar/PageHeader + commerce (ProductCard, Price, Rating, MediaGallery, CartLine) |
 | `components/milpa-*.contract.json`| contratos de los componentes (comportamiento JS del consumidor en `a11y.behavior`) |
+| `artifacts/milpa-artifacts.css`   | *el elote*: Code (tokens `--syntax-*`), Terminal, CodeGroup, Chart (`--viz-*`), Quote, Callout, Api, Steps, FileTree, Prose, Toc, Search + kit de versionado (VersionSwitcher, VersionBanner, Changelog) |
+| `layouts/milpa-layouts.css`       | *la parcela*: Docs (shell de documentación versionada), Page/Section/Container, Hero, FeatureGrid, CtaBand, Pricing, Faq, Testimonial, Footer, MediaGrid, Lightbox |
+| `proof/docs.html` · `blog` · `commerce` · `gallery` · `saas` | battle-tests de casos de uso — compuestos SOLO del sistema |
+| `proof/themed.html` + `themed-skin.css` | la prueba del contrato de theming: el blog con el skin "Nopal" (193/193) |
 | `logo/*`                          | kit de logo: símbolo Grano, wordmark grano-i, lockups h/v, app icon (mono-oro) |
 
 *Milpa · milpa.lat · getmilpa.com · milpahq.com*

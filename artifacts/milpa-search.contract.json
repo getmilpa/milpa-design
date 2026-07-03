@@ -1,0 +1,99 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "search",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-search",
+  "summary": "Búsqueda de documentación (⌘K): trigger + shell del modal. El trigger (.mui-search-trigger) es un <button> vestido de input que solo abre el dialog; el shell (.mui-search) COMPONE .mui-modal — top layer, focus trap, Esc y backdrop nativos — y solo ajusta la silueta: min(92vw, 36rem), anclado arriba (10vh), edge-to-edge. Patrón combobox + listbox con aria-activedescendant: el foco DOM queda en el input y el ítem activo se marca con li[aria-selected=\"true\"]. El índice y el filtrado son del framework, no del design system.",
+  "element": [
+    "button (.mui-search-trigger)",
+    "dialog (<dialog class=\"mui-modal mui-search\">, abierto con showModal())"
+  ],
+  "anatomy": {
+    "trigger": ".mui-search-trigger — button con la voz de .mui-input (bg var(--bg) + borde var(--border)): icono aria-hidden + label visible ('Search docs…') + .mui-kbd empujado al final; width 100% máx 16rem, alto 2.25rem",
+    "trigger-icon": ".mui-search-trigger__icon — lupa decorativa a 1em (aria-hidden=\"true\")",
+    "shell": ".mui-search — sobre .mui-modal: width min(92vw, 36rem), margin-block-start 10vh (la lista crece hacia abajo sin recentrar el panel), padding 0 heredado del Modal",
+    "input": ".mui-search__input — <input type=\"search\"> grande sin borde propio (subrayado border-subtle); role=\"combobox\" con aria-activedescendant; sus corners superiores siguen el radio del Modal para que el anillo de foco no pise la curva",
+    "results": "ul.mui-search__results — role=\"listbox\"; overflow-y auto, max-height 50vh, padding space-2, scroll-padding para el activedescendant",
+    "result": "li.mui-search__result — role=\"option\" con id único + aria-selected; adentro UN <a> bloque con crumb + title-line + excerpt",
+    "crumb": ".mui-search__crumb — ruta del doc: mono 2xs text-muted",
+    "title-line": ".mui-search__title-line — text-sm var(--text) weight-medium",
+    "excerpt": ".mui-search__excerpt — text-xs text-muted, ellipsis a 1 línea",
+    "empty": ".mui-search__empty — 'sin resultados' centrado text-muted; reemplaza al listbox (para más ceremonia, componer .mui-empty adentro)",
+    "footer": ".mui-search__footer — hints de teclado sobre borde superior border-subtle; text-muted 2xs",
+    "hint": ".mui-search__hint — par tecla+verbo: <kbd class=\"mui-kbd\">↑↓</kbd> + 'navegar'"
+  },
+  "variants": {
+    "none": "sin variantes — un solo command palette por sitio"
+  },
+  "states": {
+    "trigger-hover": ".mui-search-trigger:hover — borde var(--border-strong) + texto var(--text-secondary)",
+    "open": "dialog[open] — heredado de .mui-modal: milpa-scale-in + backdrop con fade",
+    "active": "li[aria-selected=\"true\"] > a — fondo var(--accent-subtle); DENTRO del activo todo el texto sube: crumb → accent-text, título y excerpt → var(--text) (text-muted sobre el tinte no está en el gate)",
+    "hover": ".mui-search__result > a:hover — se hunde a var(--bg) (patrón hover de .mui-table); es pista de mouse, el estado real es aria-selected y gana en la cascada",
+    "focus": ":focus-visible — trigger y links con anillo estándar (2px offset 2px); el __input lleva el anillo por dentro (offset -2px, patrón drawer: es edge-to-edge)",
+    "empty": "sin matches → .mui-search__empty en lugar del listbox"
+  },
+  "tokens": [
+    "--bg",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--accent-subtle",
+    "--accent-text",
+    "--border",
+    "--border-strong",
+    "--border-subtle",
+    "--focus",
+    "--font-display",
+    "--font-mono",
+    "--text-2xs",
+    "--text-xs",
+    "--text-sm",
+    "--text-base",
+    "--weight-medium",
+    "--leading-snug",
+    "--tracking-wide",
+    "--space-1_5",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-8",
+    "--radius-sm",
+    "--radius-md",
+    "--radius-xl",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "trigger: <button type=\"button\"> con aria-keyshortcuts=\"Control+K Meta+K\" — el label visible es su nombre accesible. Shell: <dialog> con aria-label; input con role=\"combobox\" + aria-expanded + aria-controls (id del listbox) + aria-activedescendant (id del option activo) + aria-autocomplete=\"list\"; ul role=\"listbox\", li role=\"option\" con id único",
+    "keyboard": [
+      "⌘K / Ctrl+K abre (listener global del consumidor); Esc cierra (nativo del <dialog>)",
+      "↑/↓ mueven aria-activedescendant sin mover el foco DOM (queda en el input); Home/End opcionales",
+      "Enter navega al resultado activo; el focus trap y el fondo inerte los da showModal()"
+    ],
+    "aria": [
+      "el activo es UNO: aria-selected=\"true\" en un solo option, el resto \"false\"",
+      "el JS trae el activo a la vista con scrollIntoView({ block: 'nearest' }) — el listbox declara scroll-padding",
+      "anunciar el conteo de resultados en una región aria-live=\"polite\" (visible en el footer o .mui-sr-only)",
+      "el <a> interno lleva la navegación real; el control accesible es el option — en el patrón activedescendant el link no recibe foco"
+    ],
+    "behavior": "JS del consumidor: (1) abrir con dialog.showModal() desde el trigger y el atajo ⌘K/Ctrl+K, con el foco directo en __input; (2) filtrar contra el índice del framework en cada input; (3) sincronizar aria-activedescendant + aria-selected con ↑/↓ (y opcionalmente con el hover del mouse); (4) Enter o click navegan y cierran con dialog.close(). El índice de búsqueda es del framework, no del design system.",
+    "contrast": "trigger: text-muted/bg ≥4.5 y border/bg ≥3 (hover border-strong ≥3 — pares en el gate). Ítem activo: accent-text y text sobre accent-subtle ≥4.5 (gate); por eso NINGÚN text-muted sobrevive dentro del activo. Footer y empty: text-muted/surface ≥4.5 (el dialog es surface, heredado del Modal). El subrayado del input y el borde del footer (border-subtle) son separadores decorativos, no boundary; el hover a var(--bg) sobre surface es zebra decorativa (patrón .mui-table)."
+  },
+  "motion": {
+    "transitions": "trigger (color/borde) y fondo de los ítems en --dur-fast --ease-standard; la entrada del dialog es la de .mui-modal (milpa-scale-in --dur-moderate --ease-grano, backdrop con milpa-fade)",
+    "reducedMotion": "contrato global de milpa-motion.css: todo cae a 1 frame — estados finales directos, sin animación continua ni pérdida semántica"
+  },
+  "examples": [
+    {
+      "title": "Trigger (⌘K)",
+      "html": "<button type=\"button\" class=\"mui-search-trigger\" aria-keyshortcuts=\"Control+K Meta+K\"><svg class=\"mui-search-trigger__icon\" aria-hidden=\"true\" width=\"16\" height=\"16\"><!-- lupa --></svg>Search docs…<kbd class=\"mui-kbd\">⌘K</kbd></button>"
+    },
+    {
+      "title": "Shell completo (combobox + listbox + footer)",
+      "html": "<dialog class=\"mui-modal mui-search\" aria-label=\"Buscar en la documentación\"><input class=\"mui-search__input\" type=\"search\" role=\"combobox\" aria-expanded=\"true\" aria-controls=\"search-listbox\" aria-activedescendant=\"opt-1\" aria-autocomplete=\"list\" aria-label=\"Buscar en la documentación\" placeholder=\"Search docs…\"><ul class=\"mui-search__results\" id=\"search-listbox\" role=\"listbox\" aria-label=\"Resultados\"><li class=\"mui-search__result\" id=\"opt-1\" role=\"option\" aria-selected=\"true\"><a href=\"/docs/routing\"><span class=\"mui-search__crumb\">Guías / Routing</span><span class=\"mui-search__title-line\">Definir rutas</span><span class=\"mui-search__excerpt\">Las rutas se declaran con el atributo #[Route] sobre el controlador…</span></a></li><li class=\"mui-search__result\" id=\"opt-2\" role=\"option\" aria-selected=\"false\"><a href=\"/docs/api/router\"><span class=\"mui-search__crumb\">API / Router</span><span class=\"mui-search__title-line\">Router::handle()</span><span class=\"mui-search__excerpt\">Despacha la petición al controlador cuya ruta matchea.</span></a></li></ul><div class=\"mui-search__footer\"><span class=\"mui-search__hint\"><kbd class=\"mui-kbd\">↑↓</kbd> navegar</span><span class=\"mui-search__hint\"><kbd class=\"mui-kbd\">↵</kbd> abrir</span><span class=\"mui-search__hint\"><kbd class=\"mui-kbd\">esc</kbd> cerrar</span></div></dialog>"
+    }
+  ]
+}

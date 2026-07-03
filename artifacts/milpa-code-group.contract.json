@@ -1,0 +1,62 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "code-group",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-code-group",
+  "summary": "Código multipestaña (PHP/CLI/JSON) — composición pura sobre tabs: .mui-tabs elige, los panels no activos llevan [hidden] nativo y adentro va .mui-code o .mui-terminal. El único CSS propio cose el seam: el panel pierde su respiro superior y el bloque interno colapsa borde y radios de arriba — la línea base del tablist ES el borde superior del bloque (sin doble borde) y el indicador oro la pisa.",
+  "element": [
+    "div > div[role=tablist].mui-tabs + div[role=tabpanel].mui-tabs__panel > (.mui-code | .mui-terminal)"
+  ],
+  "composes": [
+    "tabs",
+    "code",
+    "terminal"
+  ],
+  "anatomy": {
+    "root": ".mui-code-group — envoltorio del patrón; no aporta superficie propia",
+    "tablist (slot)": ".mui-tabs con role=\"tablist\" — una pestaña por lenguaje/canal (PHP, CLI, JSON…); todo según el contrato de tabs",
+    "panel (slot)": ".mui-tabs__panel con role=\"tabpanel\" — dentro del grupo pierde el padding-top (el seam queda colapsado); los no activos llevan hidden",
+    "bloque": ".mui-code o .mui-terminal hijo del panel — va sin borde superior y sin radios de arriba: la línea del tablist hace de borde"
+  },
+  "variants": {
+    "seam": {
+      "default": "único en v0 — el colapso aplica a cualquier .mui-code o .mui-terminal dentro del grupo, con o sin header/bar propios"
+    }
+  },
+  "states": {
+    "selected": "la pestaña activa vía [aria-selected=\"true\"] (subrayado oro — contrato de tabs, sin clases de estado)",
+    "panel-hidden": ".mui-tabs__panel[hidden] — display none (contrato de tabs)",
+    "focus": "heredado: ring interior en tabs, ring en panels/bodies focusables según sus contratos"
+  },
+  "tokens": [
+    "--radius-none"
+  ],
+  "a11y": {
+    "element": "misma estructura ARIA que tabs: tablist con aria-label descriptivo ('Ejemplo en varios lenguajes'); cada tab <button type=\"button\" role=\"tab\"> con aria-selected + aria-controls; cada panel role=\"tabpanel\" + aria-labelledby a su tab; los no activos con hidden",
+    "aria": [
+      "tab activa: aria-selected=\"true\" y tabindex=\"0\"; el resto aria-selected=\"false\" y tabindex=\"-1\" (roving tabindex)",
+      "panel sin contenido focusable → tabindex=\"0\"; con .mui-code/.mui-terminal scrolleables adentro, el foco ya llega a sus bodies"
+    ],
+    "keyboard": [
+      "Tab entra al tablist (solo la tab activa es tabbable); el siguiente Tab baja al bloque del panel",
+      "ArrowLeft/ArrowRight mueven el foco entre tabs (con wrap); Home/End a los extremos; Enter/Space activan (activación manual)"
+    ],
+    "behavior": [
+      "JS del consumidor (patrón completo tabs/tabpanel): (1) roving tabindex — la tab seleccionada lleva tabindex=0, el resto -1; (2) ArrowLeft/ArrowRight/Home/End mueven el foco saltando disabled, con wrap; (3) al activar: aria-selected=true en la tab nueva / false en la anterior, quitar hidden al panel nuevo / ponerlo en los demás, actualizar el roving tabindex",
+      "sincronización opcional entre grupos: al elegir un lenguaje, activar la pestaña homónima en los demás .mui-code-group de la página y persistir la preferencia (localStorage) — el lector de una guía elige 'CLI' una sola vez"
+    ],
+    "contrast": "no introduce pares nuevos: hereda los de tabs (accent-text y el indicador accent ≥3 sobre bg/surface, en el gate) y los de code/terminal sobre --syntax-bg"
+  },
+  "motion": {
+    "transitions": "heredadas de tabs: color y border-color de la pestaña en --dur-fast --ease-standard; el grupo no anima nada propio",
+    "reducedMotion": "contrato global de milpa-motion.css: cae a 1ms sin pérdida semántica (la lleva aria-selected)"
+  },
+  "examples": [
+    {
+      "title": "PHP / CLI — code y terminal cosidos al tablist",
+      "html": "<div class=\"mui-code-group\"><div class=\"mui-tabs\" role=\"tablist\" aria-label=\"Ejemplo en varios lenguajes\"><button type=\"button\" class=\"mui-tabs__tab\" role=\"tab\" id=\"cg-php\" aria-controls=\"cg-panel-php\" aria-selected=\"true\">PHP</button><button type=\"button\" class=\"mui-tabs__tab\" role=\"tab\" id=\"cg-cli\" aria-controls=\"cg-panel-cli\" aria-selected=\"false\" tabindex=\"-1\">CLI</button></div><div class=\"mui-tabs__panel\" role=\"tabpanel\" id=\"cg-panel-php\" aria-labelledby=\"cg-php\"><div class=\"mui-code\"><div class=\"mui-code__body\"><pre><code><span class=\"mui-code__line\"><span class=\"tok-var\">$milpa</span><span class=\"tok-punc\">-&gt;</span><span class=\"tok-fn\">sembrar</span><span class=\"tok-punc\">(</span><span class=\"tok-str\">'mail'</span><span class=\"tok-punc\">);</span></span></code></pre></div></div></div><div class=\"mui-tabs__panel\" role=\"tabpanel\" id=\"cg-panel-cli\" aria-labelledby=\"cg-cli\" hidden><div class=\"mui-terminal\"><div class=\"mui-terminal__bar\"></div><div class=\"mui-terminal__body\"><div class=\"mui-terminal__line\"><span class=\"mui-terminal__prompt\" aria-hidden=\"true\">$</span><span class=\"mui-terminal__out\">milpa sembrar mail</span></div></div></div></div></div>"
+    }
+  ]
+}

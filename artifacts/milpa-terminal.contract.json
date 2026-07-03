@@ -1,0 +1,82 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "terminal",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-terminal",
+  "summary": "Ventana de terminal para docs de CLI — mismo marco que code (--syntax-bg + borde sutil + radius-lg, mono). La barra lleva tres dots de cromo en un solo pseudo decorativo (border-strong, NO semánticos de estado). El prompt (olivo vía --syntax-string, mismo valor de rampa que --secondary-text en ambos temas) queda fuera de la selección: copiar la sesión no arrastra los '$'. Corriendo se declara con aria-busy en el root: cursor de bloque pulsando al final de la última línea.",
+  "element": [
+    "div (bar + body; una <div> .mui-terminal__line por línea de sesión)"
+  ],
+  "anatomy": {
+    "root": ".mui-terminal — mono text-sm leading-relaxed; var(--syntax-text) sobre var(--syntax-bg); borde 1px var(--border-subtle) + radius-lg",
+    "bar": ".mui-terminal__bar — barra de ventana separada por border-subtle; los dots son ::before decorativo (un dot + dos box-shadow en var(--border-strong)): pseudo sin contenido, invisible para lectores, sin aria extra",
+    "body": ".mui-terminal__body — padding space-4, overflow-x auto; si scrollea lleva role=\"region\" + aria-label + tabindex=\"0\"; con output en streaming, role=\"log\"",
+    "line": ".mui-terminal__line — una línea de sesión: white-space pre-wrap (conserva espacios, parte líneas largas)",
+    "prompt": ".mui-terminal__prompt — '$' o 'coa': var(--syntax-string), user-select none; en el markup con aria-hidden=\"true\" (el lector lee solo el comando)",
+    "out": ".mui-terminal__out — comando u output: hereda var(--syntax-text) del root; overflow-wrap anywhere"
+  },
+  "variants": {
+    "line": {
+      "error": ".mui-terminal__line--error — texto var(--danger) (4.5 sobre syntax-bg, par en el gate); para stderr. El color acompaña al texto del error, no lo sustituye"
+    }
+  },
+  "states": {
+    "busy": "[aria-busy=\"true\"] en el root — cursor de bloque (1ch, --syntax-text) al final de la última .mui-terminal__line, pulsando en --dur-deliberate; el consumidor lo quita al terminar el comando",
+    "focus": "__body con tabindex=\"0\" → :focus-visible outline 2px var(--focus) offset -2px (ring interior dentro del marco redondeado)",
+    "static": "sin más estados: la terminal muestra una sesión, no acciona"
+  },
+  "tokens": [
+    "--syntax-bg",
+    "--syntax-text",
+    "--syntax-string",
+    "--danger",
+    "--border-subtle",
+    "--border-strong",
+    "--focus",
+    "--font-mono",
+    "--text-sm",
+    "--leading-relaxed",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--radius-lg",
+    "--radius-full",
+    "--dur-deliberate",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "<div> por línea (no <pre>): pre-wrap conserva espacios y permite partir líneas largas. Body scrolleable → role=\"region\" + aria-label + tabindex=\"0\" (patrón de .mui-table-wrap); output en vivo → role=\"log\" + aria-live=\"polite\" (anuncia líneas nuevas sin robar el foco)",
+    "aria": [
+      "los dots de la barra son un pseudo sin contenido: cromo invisible para lectores, no llevan aria",
+      "el prompt lleva aria-hidden=\"true\" y user-select none: ni el lector ni el clipboard arrastran los '$'",
+      "el estado corriendo lo anuncia [aria-busy=\"true\"] en el root — el cursor es refuerzo visual, nunca el único canal",
+      "en líneas --error el color refuerza: el texto debe decir que es un error ('error: …')"
+    ],
+    "keyboard": [
+      "con body focusable, las flechas scrollean el contenido enfocado"
+    ],
+    "behavior": [
+      "el consumidor pone aria-busy=\"true\" en el root mientras el comando corre y lo remueve al terminar — el CSS enciende/apaga el cursor solo",
+      "streaming: agregar cada línea como nodo nuevo dentro del body con role=\"log\" (el anuncio es automático); mantener el scroll pegado al fondo salvo que el usuario haya scrolleado hacia arriba"
+    ],
+    "contrast": "syntax-text sobre syntax-bg ≥4.5, prompt --syntax-string sobre syntax-bg ≥4.5, líneas --error danger/syntax-bg 4.5 — los tres pares en el gate, ambos temas. Dots border-strong: cromo decorativo (el par border-strong/syntax-bg sostiene ≥3 igual, en el gate). El marco border-subtle es decorativo, mismo estatus que card."
+  },
+  "motion": {
+    "transitions": "ninguna",
+    "animations": "cursor de [aria-busy]: @keyframes mui-terminal-blink (pulso de opacity 1→0→1) en --dur-deliberate --ease-standard infinite — steps() queda fuera del molde (easings solo por token)",
+    "reducedMotion": "contrato global de milpa-motion.css (1ms × 1 iteración): la animación termina en su estado base (opacity 1) — equivalente estático documentado: cursor de bloque LLENO y FIJO al final de la última línea, visible mientras dure aria-busy; la semántica la lleva el atributo, no el parpadeo"
+  },
+  "examples": [
+    {
+      "title": "Sesión con output y línea de error",
+      "html": "<div class=\"mui-terminal\"><div class=\"mui-terminal__bar\"></div><div class=\"mui-terminal__body\" role=\"region\" aria-label=\"Sesión de terminal\" tabindex=\"0\"><div class=\"mui-terminal__line\"><span class=\"mui-terminal__prompt\" aria-hidden=\"true\">$</span><span class=\"mui-terminal__out\">milpa sembrar mail-plugin</span></div><div class=\"mui-terminal__line\"><span class=\"mui-terminal__out\">✔ mail-plugin 1.2.0 sembrado</span></div><div class=\"mui-terminal__line mui-terminal__line--error\"><span class=\"mui-terminal__out\">error: falta MILPA_MAIL_KEY en .env</span></div></div></div>"
+    },
+    {
+      "title": "Comando corriendo (aria-busy → cursor)",
+      "html": "<div class=\"mui-terminal\" aria-busy=\"true\"><div class=\"mui-terminal__bar\"></div><div class=\"mui-terminal__body\" role=\"log\" aria-live=\"polite\" aria-label=\"Cosecha en curso\"><div class=\"mui-terminal__line\"><span class=\"mui-terminal__prompt\" aria-hidden=\"true\">coa</span><span class=\"mui-terminal__out\">milpa cosechar --all</span></div></div></div>"
+    }
+  ]
+}

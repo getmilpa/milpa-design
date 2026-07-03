@@ -1,0 +1,107 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "code",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-code",
+  "summary": "Bloque de código para docs/blog/API — el elote. Superficie propia --syntax-bg (una por tema) con los once tokens --syntax-* verificados AA sobre ella; marco como card: borde sutil + radius-lg (regla 1). Header opcional con filename, pill de lenguaje y slot de acciones (el botón copiar lo compone el consumidor). Líneas destacadas y diff vía variantes de __line; los colores de highlight los emiten las clases .tok-* del highlighter del framework, scopeadas bajo el bloque.",
+  "element": [
+    "div (header opcional + body; el código SIEMPRE dentro de <pre><code>)"
+  ],
+  "composes": [
+    "button (slot __actions: .mui-btn mui-btn--ghost mui-btn--sm para copiar)"
+  ],
+  "anatomy": {
+    "root": ".mui-code — mono text-sm leading-relaxed; var(--syntax-text) sobre var(--syntax-bg); borde 1px var(--border-subtle) + radius-lg",
+    "header": ".mui-code__header — flex: __file + __lang + __actions, separado del body por border-subtle",
+    "file": ".mui-code__file — nombre de archivo: text-xs var(--text-secondary); trunca con ellipsis y empuja el resto al final",
+    "lang": ".mui-code__lang — pill de lenguaje: mono 2xs uppercase tracking-wide, var(--text-muted) + borde var(--border-strong) (≥3 sobre syntax-bg)",
+    "actions": ".mui-code__actions — slot alineado al final; compone .mui-btn mui-btn--ghost mui-btn--sm (copiar)",
+    "body": ".mui-code__body — overflow-x auto, tab-size 2, padding-block space-4; el padding inline vive en el <pre> (min-width max-content: los tintes de línea llegan al borde aun con scroll y el respiro derecho sobrevive)",
+    "line": ".mui-code__line — display block, full-bleed (margen negativo pisa el padding del pre). El markup NO lleva saltos de línea entre spans de línea: el <pre> los duplicaría",
+    "ln": ".mui-code__ln — número de línea: inline-block 3ch alineado al final, var(--text-muted), user-select none; en el markup SIEMPRE con aria-hidden=\"true\"",
+    "tok": ".tok-kw|str|com|fn|num|punc|var|tag|attr — clases emitidas por el highlighter (no son bloques mui-), scopeadas bajo .mui-code → --syntax-keyword | string | comment (itálica) | function | number | punctuation | variable | tag | attribute"
+  },
+  "variants": {
+    "block": {
+      "numbered": ".mui-code--numbered — cada línea antepone .mui-code__ln. Variante declarativa: el CSS de __ln aplica solo; la clase en el root documenta el markup"
+    },
+    "line": {
+      "highlight": ".mui-code__line--highlight — fondo var(--accent-subtle): línea destacada en docs. Refuerzo visual: el significado lo lleva la prosa alrededor, no el color",
+      "add": ".mui-code__line--add — tinte var(--success-bg) + glifo \"+\" en var(--success) vía ::before (alt vacío). El glifo vive en el canal del padding: las columnas de código no se corren respecto a las líneas de contexto",
+      "remove": ".mui-code__line--remove — tinte var(--danger-bg) + glifo \"−\" en var(--danger); mismo canal"
+    }
+  },
+  "states": {
+    "static": "sin estados interactivos propios — las acciones las aportan los botones compuestos en __actions",
+    "focus": "__body con tabindex=\"0\" (bloques que scrollean) → :focus-visible outline 2px var(--focus) offset -2px (ring interior, precedente de tabs: el body vive dentro del marco redondeado)"
+  },
+  "tokens": [
+    "--syntax-bg",
+    "--syntax-text",
+    "--syntax-keyword",
+    "--syntax-string",
+    "--syntax-comment",
+    "--syntax-function",
+    "--syntax-number",
+    "--syntax-punctuation",
+    "--syntax-variable",
+    "--syntax-tag",
+    "--syntax-attribute",
+    "--accent-subtle",
+    "--success",
+    "--success-bg",
+    "--danger",
+    "--danger-bg",
+    "--border-subtle",
+    "--border-strong",
+    "--text-secondary",
+    "--text-muted",
+    "--focus",
+    "--font-mono",
+    "--text-sm",
+    "--text-xs",
+    "--text-2xs",
+    "--leading-relaxed",
+    "--leading-snug",
+    "--tracking-wide",
+    "--space-0_5",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--radius-lg",
+    "--radius-full"
+  ],
+  "a11y": {
+    "element": "el código SIEMPRE en <pre><code> (bloque preformateado semántico). Con título visible, envolver en <figure> + <figcaption>. Si el body scrollea (overflow-x), lleva role=\"region\" + aria-label (o aria-labelledby al __file) + tabindex=\"0\" — mismo patrón que .mui-table-wrap",
+    "aria": [
+      "los .mui-code__ln llevan aria-hidden=\"true\": el número es cromo, no contenido",
+      "los glifos +/− del diff son pseudos con alt vacío — la semántica agregado/quitado va en el markup: envolver el contenido de la línea en <ins>/<del> (el CSS ya neutraliza la decoración del UA)",
+      "el botón de copiar siempre con label ('Copiar código'); el feedback ('Copiado') vía región aria-live=\"polite\""
+    ],
+    "keyboard": [
+      "Tab llega al botón de copiar del slot __actions y (si scrollea) al body; las flechas scrollean el body enfocado"
+    ],
+    "behavior": [
+      "copiar (JS del consumidor): NO leer textContent crudo — los __ln y los <del> viajarían al clipboard. Leer de la fuente original o filtrar .mui-code__ln y .mui-code__line--remove antes de navigator.clipboard.writeText(); user-select:none solo cubre la selección manual",
+      "el highlighter emite las clases .tok-* dentro de cada .mui-code__line; sin highlighter el bloque degrada a --syntax-text plano (AA intacto)"
+    ],
+    "contrast": "los once --syntax-* sobre --syntax-bg ≥4.5 en ambos temas (gate); __file text-secondary y __ln/__lang text-muted sobre syntax-bg ≥4.5 (gate); borde del pill __lang border-strong ≥3 sobre syntax-bg (gate); glifos diff success/danger sobre su propio tinte ≥4.5 (pares X/--X-bg en el gate). PENDIENTE de gate 0.2.0: tokens de sintaxis sobre los tintes de línea (accent-subtle / success-bg / danger-bg) — syntax-text y syntax-variable coinciden por valor con --text (par verificado sobre los tres tintes); el resto está a un paso del fondo y debe entrar al gate (ver notes del cluster). El marco border-subtle es decorativo, mismo estatus que card: el boundary no porta semántica."
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática (los botones compuestos traen la suya)",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Bloque con header, línea destacada y botón copiar",
+      "html": "<div class=\"mui-code\"><div class=\"mui-code__header\"><span class=\"mui-code__file\">config/milpa.php</span><span class=\"mui-code__lang\">php</span><div class=\"mui-code__actions\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--sm\">Copiar</button></div></div><div class=\"mui-code__body\" role=\"region\" aria-label=\"config/milpa.php\" tabindex=\"0\"><pre><code><span class=\"mui-code__line\"><span class=\"tok-kw\">return</span> <span class=\"tok-punc\">[</span></span><span class=\"mui-code__line mui-code__line--highlight\">    <span class=\"tok-str\">'plugins'</span> <span class=\"tok-punc\">=&gt;</span> <span class=\"tok-punc\">[</span><span class=\"tok-str\">'mail'</span><span class=\"tok-punc\">],</span></span><span class=\"mui-code__line\"><span class=\"tok-punc\">];</span></span></code></pre></div></div>"
+    },
+    {
+      "title": "Diff numerado (ins/del portan la semántica)",
+      "html": "<div class=\"mui-code mui-code--numbered\"><div class=\"mui-code__header\"><span class=\"mui-code__file\">milpa.config.json</span><span class=\"mui-code__lang\">json</span></div><div class=\"mui-code__body\"><pre><code><span class=\"mui-code__line\"><span class=\"mui-code__ln\" aria-hidden=\"true\">1</span><span class=\"tok-punc\">{</span></span><span class=\"mui-code__line mui-code__line--remove\"><span class=\"mui-code__ln\" aria-hidden=\"true\">2</span><del>  <span class=\"tok-attr\">&quot;version&quot;</span><span class=\"tok-punc\">:</span> <span class=\"tok-str\">&quot;0.1.0&quot;</span></del></span><span class=\"mui-code__line mui-code__line--add\"><span class=\"mui-code__ln\" aria-hidden=\"true\">2</span><ins>  <span class=\"tok-attr\">&quot;version&quot;</span><span class=\"tok-punc\">:</span> <span class=\"tok-str\">&quot;0.2.0&quot;</span></ins></span><span class=\"mui-code__line\"><span class=\"mui-code__ln\" aria-hidden=\"true\">3</span><span class=\"tok-punc\">}</span></span></code></pre></div></div>"
+    }
+  ]
+}

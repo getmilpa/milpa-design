@@ -1,0 +1,83 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "api",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-api",
+  "summary": "Entrada de referencia de API — la cara renderizada de los docblocks del framework. Mapeo docblock→anatomía: @param → fila de __params · @return → __section 'Returns' + prosa · @throws → __section 'Throws' + prosa · @since → badge en __meta · @deprecated → badge en __meta + __deprecated-note. La firma vive sobre var(--syntax-bg) con los .tok-* del cluster code; los parámetros componen .mui-table. Pieza de display pura: sin estados interactivos propios.",
+  "element": [
+    "section (una por símbolo, con aria-labelledby apuntando al id del __name)"
+  ],
+  "anatomy": {
+    "root": ".mui-api — columna con gap space-3; entre entradas consecutivas (.mui-api + .mui-api) separador border-subtle + respiro space-6: la referencia se lee como lista",
+    "header": ".mui-api__header — flex wrap: nombre + metadatos",
+    "name": ".mui-api__name — heading real (h3/h4 según jerarquía de la página) con id; mono text-lg bold, overflow-wrap anywhere para FQCNs largos",
+    "meta": ".mui-api__meta — compone .mui-badge: @since / @deprecated / @experimental. Las variantes de estabilidad del cluster badges (--since/--deprecated/--experimental) son las destinatarias; hasta que aterricen, --accent/--danger/--warning hacen de puente",
+    "signature": ".mui-api__signature — <pre> sobre var(--syntax-bg), mono text-sm, padding space-3/space-4, radius-md, scroll horizontal propio; el contenido va en <code> con los .tok-* del cluster code (este CSS no los redefine)",
+    "desc": ".mui-api__desc — prosa text-secondary, máx 70ch",
+    "section": ".mui-api__section — label mono 2xs uppercase text-muted ('Parameters', 'Returns', 'Throws'); heading del nivel siguiente al del __name",
+    "params": ".mui-api__params — va EN el .mui-table-wrap de la tabla de @param; aprieta la densidad a la de --compact sin pedir la variante. Columnas típicas: nombre (.mui-table__lead), tipo (__type), descripción",
+    "type": ".mui-api__type — tipo PHP del parámetro: var(--info), mono text-xs; en un <code> dentro de la celda (también sirve en la prosa de Throws)",
+    "deprecated-note": ".mui-api__deprecated-note — prosa text-secondary con el término inicial (<strong>) en var(--danger); sin fondo: la alarma es puntual, el banner ya lo pone el badge"
+  },
+  "variants": {
+    "none": "sin variantes visuales — la variación la dicta el docblock: qué badges lleva __meta y si aparece __deprecated-note"
+  },
+  "states": {
+    "static": "pieza de display — sin estados interactivos propios; la tabla de __params conserva los suyos de .mui-table (hover de fila, aria-sort si el consumidor ordena)"
+  },
+  "tokens": [
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--info",
+    "--danger",
+    "--syntax-bg",
+    "--syntax-text",
+    "--border-subtle",
+    "--font-display",
+    "--font-mono",
+    "--text-2xs",
+    "--text-xs",
+    "--text-sm",
+    "--text-lg",
+    "--weight-regular",
+    "--weight-medium",
+    "--weight-bold",
+    "--tracking-wide",
+    "--leading-snug",
+    "--leading-normal",
+    "--space-1_5",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-6",
+    "--radius-md"
+  ],
+  "a11y": {
+    "element": "<section aria-labelledby> apuntando al id del __name; __name y __section son headings reales en orden (h3 → h4) para que la referencia se navegue por encabezados",
+    "aria": [
+      "la firma va en <pre><code> — los .tok-* son spans presentacionales; el contenido accesible es el texto completo de la firma",
+      "los badges de __meta no comunican solo por color: el texto dice 'deprecated 1.2', la variante lo refuerza",
+      "en __deprecated-note el término va en <strong>: la semántica es textual, el danger solo la tiñe",
+      "la tabla de __params sigue el contrato de .mui-table: <caption> obligatorio (visible o .mui-sr-only)"
+    ],
+    "behavior": "ninguno — el HTML lo emite el generador de docs del framework desde el docblock; la pieza no requiere JS",
+    "contrast": "syntax-text/syntax-bg ≥4.5 (par en el gate); el AA de los .tok-* viene gateado del cluster code. __type: info ≥4.5 sobre bg y surface (la celda hace hover a bg — ambos pares en el gate). __deprecated-note: danger y text-secondary ≥4.5 sobre bg/surface. El borde del bloque de firma es border-subtle decorativo — en dark syntax-bg == bg y el bloque lo definen padding y voz mono (precedente card/table-wrap); si se quisiera boundary 3:1 el par gateado disponible es border-strong/syntax-bg."
+  },
+  "motion": {
+    "transitions": "ninguna propia — pieza estática; la tabla interna hereda las de .mui-table (--dur-fast --ease-standard)",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Método con firma, parámetros y Returns",
+      "html": "<section class=\"mui-api\" aria-labelledby=\"api-router-handle\"><div class=\"mui-api__header\"><h3 class=\"mui-api__name\" id=\"api-router-handle\">Router::handle()</h3><div class=\"mui-api__meta\"><span class=\"mui-badge mui-badge--accent\">since 0.9</span></div></div><pre class=\"mui-api__signature\"><code><span class=\"tok-keyword\">public function</span> <span class=\"tok-function\">handle</span><span class=\"tok-punctuation\">(</span>Request <span class=\"tok-variable\">$request</span><span class=\"tok-punctuation\">):</span> Response</code></pre><p class=\"mui-api__desc\">Despacha la petición al controlador cuya ruta matchea.</p><h4 class=\"mui-api__section\">Parameters</h4><div class=\"mui-table-wrap mui-api__params\"><table class=\"mui-table\"><caption class=\"mui-sr-only\">Parámetros de handle()</caption><thead><tr><th>Nombre</th><th>Tipo</th><th>Descripción</th></tr></thead><tbody><tr><td class=\"mui-table__lead\">$request</td><td><code class=\"mui-api__type\">Request</code></td><td>La petición entrante.</td></tr></tbody></table></div><h4 class=\"mui-api__section\">Returns</h4><p class=\"mui-api__desc\">La respuesta del controlador, lista para emitir.</p></section>"
+    },
+    {
+      "title": "Deprecated + Throws (@deprecated → badge + nota)",
+      "html": "<section class=\"mui-api\" aria-labelledby=\"api-view-render\"><div class=\"mui-api__header\"><h3 class=\"mui-api__name\" id=\"api-view-render\">View::render()</h3><div class=\"mui-api__meta\"><span class=\"mui-badge mui-badge--danger\">deprecated 1.2</span></div></div><pre class=\"mui-api__signature\"><code><span class=\"tok-keyword\">public function</span> <span class=\"tok-function\">render</span><span class=\"tok-punctuation\">(</span><span class=\"tok-keyword\">string</span> <span class=\"tok-variable\">$template</span><span class=\"tok-punctuation\">):</span> <span class=\"tok-keyword\">string</span></code></pre><p class=\"mui-api__deprecated-note\"><strong>Deprecated:</strong> usá <code>View::stream()</code> — se elimina en 2.0.</p><h4 class=\"mui-api__section\">Throws</h4><p class=\"mui-api__desc\"><code class=\"mui-api__type\">ViewNotFoundException</code> si la plantilla no existe.</p></section>"
+    }
+  ]
+}

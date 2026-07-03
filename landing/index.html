@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Milpa — Sow modules, harvest applications</title>
+<meta name="description" content="Milpa is a modular, AI-native, contract-first PHP framework. A milpa is not a crop — it's a system. The first harvest is already on npm: @milpa/design.">
+<meta property="og:title" content="Milpa — Sow modules, harvest applications">
+<meta property="og:description" content="Modular, AI-native, contract-first PHP framework. It's germinating.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://milpa.lat">
+<link rel="icon" href="../logo/symbol/milpa-symbol-color.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../dist/milpa-tokens.css">
+<link rel="stylesheet" href="../motion/milpa-motion.css">
+<link rel="stylesheet" href="../primitives/milpa-primitives.css">
+<link rel="stylesheet" href="../components/milpa-components.css">
+<link rel="stylesheet" href="../layouts/milpa-layouts.css">
+<style>
+/* ===== landing (ld-*) — tokens only; page/section/grid/footer now come
+   from @milpa/design layouts (mui-*). What stays ld-* is the marketing
+   header (a known gap in the system) and the signature-moment hero. ===== */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; -webkit-font-smoothing: antialiased; }
+.ld-mono { font-family: var(--font-mono); }
+
+/* ---- header ---- */
+.ld-header {
+  position: sticky; top: 0; z-index: var(--z-sticky);
+  border-bottom: 1px solid var(--border-subtle);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(10px);
+}
+.ld-header__row { display: flex; align-items: center; gap: var(--space-4); height: 3.5rem; }
+.ld-brand { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--text); text-decoration: none; }
+.ld-brand .wm { height: 1.05rem; width: auto; display: block; }
+.ld-nav { margin-inline-start: auto; display: flex; align-items: center; gap: var(--space-1); }
+.ld-nav a { text-decoration: none; }
+
+/* ---- hero (pinned by ScrollTrigger — the signature moment) ---- */
+.ld-hero { min-height: calc(100svh - 3.5rem); display: grid; align-items: center; overflow: hidden; position: relative; }
+.ld-hero__grid {
+  display: grid; grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(var(--space-8), 6vw, var(--space-16)); align-items: center;
+}
+/* text in front: the scattered granos pass behind it (depth) */
+.ld-hero__grid > div:first-child { position: relative; z-index: 1; }
+.ld-hero .wm-hero { height: clamp(2.6rem, 7vw, 4.6rem); width: auto; display: block; }
+.ld-hero__tag {
+  margin-top: var(--space-5);
+  font-family: var(--font-mono); font-size: clamp(var(--text-sm), 2vw, var(--text-lg));
+  color: var(--text-secondary);
+}
+.ld-hero__gloss { margin: var(--space-1) 0 0; font-size: var(--text-xs); font-style: italic; color: var(--text-muted); }
+.ld-hero__sub { margin-top: var(--space-4); color: var(--text-muted); max-width: 46ch; font-size: var(--text-base); }
+.ld-hero__cta { margin-top: var(--space-8); display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.ld-hero__meta { margin-top: var(--space-5); display: flex; gap: var(--space-2); flex-wrap: wrap; }
+/* the M — the granos' terrain; overflow visible for the scattered state */
+.ld-granoM { justify-self: center; width: min(52vmin, 24rem); }
+.ld-granoM svg { width: 100%; height: auto; display: block; overflow: visible; }
+.ld-hint {
+  position: absolute; inset-inline: 0; bottom: var(--space-5);
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-1);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide); color: var(--text-muted); text-transform: uppercase;
+}
+.ld-hint::after {
+  content: ""; width: 0.5rem; height: 0.5rem;
+  border-inline-end: 2px solid currentColor; border-block-end: 2px solid currentColor;
+  transform: rotate(45deg);
+  animation: ld-drop var(--dur-deliberate) var(--ease-settle) infinite alternate;
+}
+@keyframes ld-drop { from { translate: 0 0; opacity: .5; } to { translate: 0 4px; opacity: 1; } }
+
+/* design system showcase */
+.ld-ds { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); align-items: start; margin-top: var(--space-10); }
+.ld-demo-rows { display: flex; flex-direction: column; gap: var(--space-5); }
+.ld-demo-row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.ld-install {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg); border: 1px solid var(--border-strong); border-radius: var(--radius-md);
+  font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text);
+}
+.ld-install .ld-prompt { color: var(--secondary-text); user-select: none; }
+.ld-install code { flex: 1; overflow-x: auto; white-space: nowrap; }
+
+/* contract */
+.ld-code {
+  margin-top: var(--space-8);
+  background: var(--bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6); overflow-x: auto;
+}
+.ld-code pre { margin: 0; font-family: var(--font-mono); font-size: var(--text-xs); line-height: var(--leading-relaxed); color: var(--text-secondary); }
+.ld-code .k { color: var(--accent-text); }
+.ld-code .c { color: var(--text-muted); }
+
+/* final cta */
+.ld-final { text-align: center; }
+.ld-final .mui-section__title { margin-inline: auto; }
+.ld-final__cta { margin-top: var(--space-8); display: flex; justify-content: center; gap: var(--space-3); flex-wrap: wrap; }
+.ld-coa {
+  margin-top: var(--space-6); display: inline-flex; gap: var(--space-2); align-items: baseline;
+  font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted);
+}
+.ld-coa .ld-prompt { color: var(--secondary-text); }
+
+/* official wordmark (logo/README.txt): currentColor letters, constant oro-300 grano */
+.wm, .wm-hero { color: var(--text); }
+
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+
+@media (max-width: 880px) {
+  .ld-hero__grid { grid-template-columns: 1fr; gap: var(--space-10); }
+  .ld-granoM { order: -1; width: min(44vmin, 15rem); margin-top: var(--space-16); }
+  .ld-ds { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body class="mui-page">
+
+<!-- kit wordmark as a reusable symbol (official snippet — logo/README.txt) -->
+<svg style="display:none" aria-hidden="true"><symbol id="wm-milpa" viewBox="0 0 2406.90 900.00"><g fill="currentColor"><path d="M76.299560546875 0V492.500244140625H177.201171875V435.00048828125H193.101318359375Q206.80126953125 460.700439453125 237.8511962890625 480.9503173828125Q268.901123046875 501.2001953125 322.100830078125 501.2001953125Q377.20068359375 501.2001953125 410.77557373046875 478.42535400390625Q444.3504638671875 455.6505126953125 461.00048828125 420.900634765625H476.900634765625Q493.900634765625 455.00048828125 526.6505126953125 478.100341796875Q559.400390625 501.2001953125 619.2001953125 501.2001953125Q666.60009765625 501.2001953125 703.9251098632812 481.3502197265625Q741.2501220703125 461.500244140625 763.2251586914062 423.0501708984375Q785.2001953125 384.60009765625 785.2001953125 328.4498291015625V0H682.298583984375V320.499755859375Q682.298583984375 365.3494873046875 657.6238403320312 389.69921875Q632.9490966796875 414.0489501953125 588.299560546875 414.0489501953125Q540.0499267578125 414.0489501953125 511.12530517578125 383.0491943359375Q482.20068359375 352.0494384765625 482.20068359375 293.699951171875V0H379.299072265625V320.499755859375Q379.299072265625 365.3494873046875 354.62432861328125 389.69921875Q329.9495849609375 414.0489501953125 285.300048828125 414.0489501953125Q237.0504150390625 414.0489501953125 208.12579345703125 383.0491943359375Q179.201171875 352.0494384765625 179.201171875 293.699951171875V0Z" transform="translate(-76.30,700.00) scale(1,-1)"/><path d="M76.299560546875 0V492.500244140625H179.201171875V0Z" transform="translate(760.70,700.00) scale(1,-1)"/><path d="M76.299560546875 0V700H179.201171875V0Z" transform="translate(996.70,700.00) scale(1,-1)"/><path d="M76.299560546875 -200V492.500244140625H177.201171875V422.3509521484375H193.101318359375Q211.501220703125 455.20068359375 250.47601318359375 480.8504638671875Q289.4508056640625 506.500244140625 361.00048828125 506.500244140625Q422.7503662109375 506.500244140625 474.4503173828125 476.6502685546875Q526.1502685546875 446.80029296875 557.3252563476562 390.1502685546875Q588.500244140625 333.500244140625 588.500244140625 253.5501708984375V238.9500732421875Q588.500244140625 159.3499755859375 557.500244140625 102.52496337890625Q526.500244140625 45.699951171875 474.80029296875 15.8499755859375Q423.100341796875 -14 361.00048828125 -14Q313.20068359375 -14 280.2508544921875 -2.10009765625Q247.301025390625 9.7998046875 227.0511474609375 28.57464599609375Q206.80126953125 47.3494873046875 195.101318359375 66.79931640625H179.201171875V-200ZM331.39990234375 76.4013671875Q398.79931640625 76.4013671875 441.8489990234375 119.32598876953125Q484.898681640625 162.2506103515625 484.898681640625 241.60009765625V250.900146484375Q484.898681640625 330.2496337890625 441.52398681640625 373.17425537109375Q398.1492919921875 416.098876953125 331.39990234375 416.098876953125Q265.00048828125 416.098876953125 221.4508056640625 373.17425537109375Q177.901123046875 330.2496337890625 177.901123046875 250.900146484375V241.60009765625Q177.901123046875 162.2506103515625 221.4508056640625 119.32598876953125Q265.00048828125 76.4013671875 331.39990234375 76.4013671875Z" transform="translate(1232.70,700.00) scale(1,-1)"/><path d="M228.5496826171875 -14Q176.2496337890625 -14 134.42462158203125 4.1500244140625Q92.599609375 22.300048828125 68.27459716796875 57.27508544921875Q43.9495849609375 92.2501220703125 43.9495849609375 142.2001953125Q43.9495849609375 192.500244140625 68.27459716796875 226.12530517578125Q92.599609375 259.7503662109375 135.22467041015625 276.72540283203125Q177.8497314453125 293.700439453125 231.7498779296875 293.700439453125H382.4488525390625V325.5501708984375Q382.4488525390625 368.9495849609375 356.2491455078125 395.12432861328125Q330.0494384765625 421.299072265625 276.099853515625 421.299072265625Q223.1502685546875 421.299072265625 195.07562255859375 396.29931640625Q167.0009765625 371.299560546875 157.901123046875 330.6500244140625L62.19970703125 361.9505615234375Q74.19970703125 401.700439453125 100.52471923828125 434.2503662109375Q126.8497314453125 466.80029296875 170.82476806640625 486.6502685546875Q214.7998046875 506.500244140625 277.39990234375 506.500244140625Q373.300048828125 506.500244140625 428.02520751953125 457.8502197265625Q482.7503662109375 409.2001953125 482.7503662109375 318.6500244140625V115.80126953125Q482.7503662109375 85.80126953125 510.7503662109375 85.80126953125H553.2001953125V0H476.19970703125Q441.299560546875 0 419.3994140625 18.17498779296875Q397.499267578125 36.3499755859375 397.499267578125 67.0499267578125V70.1497802734375H381.6490478515625Q374.499267578125 54.6500244140625 358.22442626953125 34.62506103515625Q341.9495849609375 14.60009765625 310.899658203125 0.300048828125Q279.8497314453125 -14 228.5496826171875 -14ZM244.2501220703125 71.201171875Q305.6495361328125 71.201171875 344.0491943359375 106.6507568359375Q382.4488525390625 142.100341796875 382.4488525390625 203.699462890625V214.3994140625H237.9500732421875Q197.00048828125 214.3994140625 171.92584228515625 196.77459716796875Q146.8511962890625 179.1497802734375 146.8511962890625 145.1502685546875Q146.8511962890625 111.1507568359375 172.92584228515625 91.17596435546875Q199.00048828125 71.201171875 244.2501220703125 71.201171875Z" transform="translate(1853.70,700.00) scale(1,-1)"/></g><rect x="818.99" y="40.80" width="138.92" height="138.92" rx="34.73" fill="var(--oro-300)"/></symbol></svg>
+
+<!-- ============ HEADER ============ -->
+<header class="ld-header">
+  <div class="mui-container ld-header__row">
+    <a class="ld-brand" href="#" aria-label="Milpa — home">
+      <svg class="wm" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+    </a>
+    <nav class="ld-nav" aria-label="primary">
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/docs">Docs</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://github.com/getmilpa/milpa-design">GitHub</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://www.npmjs.com/package/@milpa/design">npm</a>
+      <button class="mui-btn mui-btn--sm ld-mono" id="themeBtn" type="button" aria-label="Toggle theme">◐ dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- ============ HERO · the signature moment ============ -->
+  <section class="ld-hero" id="hero" aria-label="Milpa">
+    <div class="mui-container ld-hero__grid">
+      <div>
+        <p class="mui-section__kicker">modular php framework · ai-native · contract-first</p>
+        <h1 style="margin:var(--space-4) 0 0">
+          <svg class="wm-hero" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+        </h1>
+        <p class="ld-hero__tag" lang="es">Siembra módulos, cosecha aplicaciones.</p>
+        <p class="ld-hero__gloss">sow modules, harvest applications</p>
+        <p class="ld-hero__sub">A milpa is not a crop: it's a <b style="color:var(--text-secondary)">system</b>.
+          Modules that grow together and feed one another — on a deterministic core,
+          with contracts that protect them.</p>
+        <div class="ld-hero__cta">
+          <a class="mui-btn mui-btn--primary" href="https://github.com/getmilpa/milpa-design">Explore the design system</a>
+          <button class="mui-btn ld-mono" type="button" data-copy="npm i @milpa/design">npm i @milpa/design</button>
+        </div>
+        <div class="ld-hero__meta">
+          <span class="mui-badge mui-badge--accent">@milpa/design v0.2.0 · published</span>
+          <span class="mui-badge">Apache-2.0</span>
+          <span class="mui-badge mui-badge--secondary">the core is germinating</span>
+        </div>
+      </div>
+      <!-- The M assembling itself: 13 granos = 13 modules → one identity.
+           Default state (no JS / reduced-motion): ASSEMBLED. -->
+      <div class="ld-granoM" aria-hidden="true">
+        <svg viewBox="0 0 60 60">
+          <g fill="var(--oro-300)">
+            <rect class="grano" x="0" y="0" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="50" y="0" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="0" y="12.5" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="12.5" y="12.5" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="37.5" y="12.5" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="50" y="12.5" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="0" y="25" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="25" y="25" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="50" y="25" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="0" y="37.5" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="50" y="37.5" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="0" y="50" width="10" height="10" rx="2.5"/>
+            <rect class="grano" x="50" y="50" width="10" height="10" rx="2.5"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="ld-hint" id="hint">the milpa germinates as you scroll</div>
+  </section>
+
+  <!-- ============ THE THREE SISTERS ============ -->
+  <section class="mui-section" aria-labelledby="h-sisters">
+    <div class="mui-container">
+      <p class="mui-section__kicker" data-rise>the system</p>
+      <h2 class="mui-section__title" id="h-sisters" data-rise>A polyculture, not a monoculture</h2>
+      <p class="mui-section__lede" data-rise>The three sisters — corn, beans, and squash — grow together and
+        feed one another. Deterministic, cultivated agriculture: order that yields abundance.
+        That is the framework.</p>
+      <div class="mui-feature-grid">
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <svg class="mui-feature-grid__icon mui-feature-grid__icon--oro" viewBox="0 0 36 36" fill="currentColor" aria-hidden="true">
+              <rect x="4" y="4" width="8" height="8" rx="2"/><rect x="14" y="4" width="8" height="8" rx="2"/><rect x="24" y="4" width="8" height="8" rx="2"/>
+              <rect x="4" y="14" width="8" height="8" rx="2"/><rect x="14" y="14" width="8" height="8" rx="2"/><rect x="24" y="14" width="8" height="8" rx="2"/>
+              <rect x="4" y="24" width="8" height="8" rx="2"/><rect x="14" y="24" width="8" height="8" rx="2"/><rect x="24" y="24" width="8" height="8" rx="2"/>
+            </svg>
+            <p class="mui-feature-grid__rol" style="margin:var(--space-4) 0 var(--space-1)">corn · the core</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Deterministic kernel</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">The stalk that holds everything up.
+              A small core, predictable and boring on purpose: abundance grows on top of it, not inside it.</p>
+          </div>
+        </article>
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <svg class="mui-feature-grid__icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+              <path d="M18 32 C 10 26, 12 18, 18 14 C 24 10, 22 6, 18 4"/>
+              <circle cx="10" cy="22" r="3" fill="currentColor" stroke="none"/>
+              <circle cx="25" cy="17" r="3" fill="currentColor" stroke="none"/>
+              <circle cx="14" cy="8" r="3" fill="currentColor" stroke="none"/>
+            </svg>
+            <p class="mui-feature-grid__rol" style="margin:var(--space-4) 0 var(--space-1)">beans · the modules</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Plugins that climb the stalk</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Modules that connect through
+              events and compose with each other. They fix nitrogen: each one feeds the whole system.</p>
+          </div>
+        </article>
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <svg class="mui-feature-grid__icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 4 L31 11 V25 L18 32 L5 25 V11 Z"/>
+              <path d="M18 12 L24 15.5 V22.5 L18 26 L12 22.5 V15.5 Z" fill="currentColor" stroke="none" opacity=".9"/>
+            </svg>
+            <p class="mui-feature-grid__rol" style="margin:var(--space-4) 0 var(--space-1)">squash · the contracts</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Governance that protects</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">It covers the soil: machine-readable
+              contracts that validate every piece. Nothing is sown without one.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE FIRST HARVEST · design system ============ -->
+  <section class="mui-section" aria-labelledby="h-ds">
+    <div class="mui-container">
+      <p class="mui-section__kicker" data-rise>the first harvest</p>
+      <h2 class="mui-section__title" id="h-ds" data-rise>The design system is ready to sow</h2>
+      <p class="mui-section__lede" data-rise><code class="ld-mono" style="color:var(--accent-text)">@milpa/design</code> is
+        published: dark-first tokens verified WCAG AA, motion with a reduced-motion contract, and 63
+        pieces, every one with a machine-readable contract. It's the visual face of the framework — and it
+        stands on its own.</p>
+      <div class="ld-ds">
+        <div data-rise>
+          <div class="ld-install">
+            <span class="ld-prompt" aria-hidden="true">$</span>
+            <code>npm i @milpa/design</code>
+            <button class="mui-btn mui-btn--ghost mui-btn--sm" type="button" data-copy="npm i @milpa/design">copy</button>
+          </div>
+          <p style="margin-top:var(--space-4); color:var(--text-muted); font-size:var(--text-sm)">
+            Pure CSS + JSON contracts: no framework in between, no dependencies. The quality floor —
+            AA contrast, light/dark parity, reduced-motion parity, keyboard — runs under
+            <span class="ld-mono">npm test</span> on every change: <b style="color:var(--text-secondary)">193 AA pairs verified in CI</b>.
+          </p>
+          <div style="margin-top:var(--space-5); display:flex; gap:var(--space-2); flex-wrap:wrap">
+            <a class="mui-btn mui-btn--sm" href="https://github.com/getmilpa/milpa-design/blob/main/DESIGN.md">Read DESIGN.md</a>
+            <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://github.com/getmilpa/milpa-design/releases/tag/v0.2.0">Release v0.2.0</a>
+          </div>
+        </div>
+        <div class="mui-card" data-rise>
+          <div class="mui-card__body ld-demo-rows">
+            <div class="ld-demo-row">
+              <button class="mui-btn mui-btn--primary mui-btn--sm" type="button">Sow</button>
+              <button class="mui-btn mui-btn--secondary mui-btn--sm" type="button">Cultivate</button>
+              <button class="mui-btn mui-btn--sm" type="button">Cancel</button>
+              <button class="mui-btn mui-btn--danger mui-btn--sm" type="button">Uproot</button>
+            </div>
+            <div class="ld-demo-row">
+              <span class="mui-badge mui-badge--success mui-badge--dot">active</span>
+              <span class="mui-badge mui-badge--warning mui-badge--dot">germinating</span>
+              <span class="mui-badge mui-badge--info">info</span>
+              <span class="mui-badge mui-badge--accent">v0.2.0</span>
+              <span class="mui-kbd">⌘K</span>
+            </div>
+            <div class="ld-demo-row">
+              <label class="mui-choice"><input type="checkbox" class="mui-checkbox" checked><span class="mui-choice__text">Auto-activate</span></label>
+              <label class="mui-choice"><input type="checkbox" class="mui-switch" role="switch" checked><span class="mui-choice__text">Automatic irrigation</span></label>
+            </div>
+            <div>
+              <div class="mui-stat">
+                <span class="mui-stat__label">wcag aa pairs</span>
+                <span class="mui-stat__value">193<span style="color:var(--success)">/193</span></span>
+                <span class="mui-stat__delta mui-stat__delta--up mui-stat__delta--positive">verified in CI</span>
+              </div>
+              <div class="mui-progress mui-progress--success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="AA coverage" style="margin-top:var(--space-3)">
+                <div class="mui-progress__bar" style="width:100%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE CONTRACT ============ -->
+  <section class="mui-section" aria-labelledby="h-contract">
+    <div class="mui-container">
+      <p class="mui-section__kicker" data-rise>milpa applied to itself</p>
+      <h2 class="mui-section__title" id="h-contract" data-rise>Nothing is sown without a contract</h2>
+      <p class="mui-section__lede" data-rise>Every piece declares what it exposes: props, states, tokens,
+        accessibility and motion requirements — in a <b style="color:var(--text-secondary)">machine-readable</b> spec.
+        A human <i>or an agent</i> can assemble UI knowing exactly what's there, without guessing.</p>
+      <div class="ld-code" data-rise>
+        <pre aria-label="Excerpt from milpa-button.contract.json"><code><span class="c">// primitives/milpa-button.contract.json</span>
+{
+  <span class="k">"name"</span>: "button",
+  <span class="k">"layer"</span>: "primitive",
+  <span class="k">"class"</span>: "mui-btn",
+  <span class="k">"states"</span>: {
+    <span class="k">"loading"</span>: "[aria-busy=\"true\"] — ::before spinner; the text stays visible",
+    <span class="k">"disabled"</span>: "[disabled] — state is styled via ARIA attributes, never classes"
+  },
+  <span class="k">"a11y"</span>: { <span class="k">"contrast"</span>: "every pair verified in npm test" },
+  <span class="k">"motion"</span>: { <span class="k">"reducedMotion"</span>: "global contract — nothing moves against the user" }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="mui-section ld-final" aria-labelledby="h-final">
+    <div class="mui-container">
+      <p class="mui-section__kicker" data-rise>what's next</p>
+      <h2 class="mui-section__title" id="h-final" data-rise>The framework is germinating</h2>
+      <p class="mui-section__lede" data-rise style="margin-inline:auto">A modular PHP core, event-driven modules,
+        contracts at the root — and a CLI to sow it all.</p>
+      <p class="ld-coa" data-rise><span class="ld-prompt">$</span> coa siembra mail-module <span style="color:var(--text-muted)">· coming soon</span></p>
+      <div class="ld-final__cta" data-rise>
+        <a class="mui-btn mui-btn--primary" href="https://github.com/getmilpa">Follow getmilpa</a>
+        <a class="mui-btn" href="https://www.npmjs.com/package/@milpa/design">@milpa/design on npm</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="mui-footer">
+  <div class="mui-footer__grid">
+    <div class="mui-footer__brand">
+      <svg class="wm" style="height:1rem" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+      <p class="mui-footer__mantra" lang="es">Siembra módulos, cosecha aplicaciones.</p>
+    </div>
+    <nav aria-labelledby="ft-project">
+      <p class="mui-footer__heading" id="ft-project">Project</p>
+      <ul class="mui-footer__links">
+        <li><a href="https://github.com/getmilpa/milpa-design">GitHub</a></li>
+        <li><a href="https://www.npmjs.com/package/@milpa/design">npm</a></li>
+        <li><a href="https://github.com/getmilpa/milpa-design/blob/main/LICENSE">Apache-2.0</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="mui-footer__legal">
+    <p>© 2026 Milpa — Apache-2.0</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script type="module">
+import { motion } from '../motion/milpa-motion.js';
+
+/* ---------- tema ---------- */
+const root = document.documentElement, btn = document.getElementById('themeBtn');
+const setTheme = (t) => { root.dataset.theme = t; btn.textContent = t === 'dark' ? '◐ dark' : '◐ light'; localStorage.setItem('milpa-theme', t); };
+setTheme(localStorage.getItem('milpa-theme') || 'dark');
+btn.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+/* ---------- copiar al portapapeles ---------- */
+document.querySelectorAll('[data-copy]').forEach((b) => {
+  const original = b.textContent;
+  b.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'copied ✓'; }
+    catch { b.textContent = b.dataset.copy; }
+    setTimeout(() => (b.textContent = original), 1600);
+  });
+});
+
+/* ---------- el momento firma ----------
+   13 granos dispersos (módulos sueltos) se asientan en la M al hacer scroll.
+   Progressive enhancement: el estado por defecto es la M ENSAMBLADA — sin JS
+   o con prefers-reduced-motion, no hay dispersión ni pin. Determinista:
+   offsets fijos por índice, cero azar. */
+gsap.registerPlugin(ScrollTrigger);
+
+/* dispersión contenida alrededor de la M (no invade la columna de texto) */
+const SCATTER = [
+  [-12, -30], [34, -26], [-20, 4], [-6, -46], [18, -54], [52, -12],
+  [-18, 26], [6, -64], [46, 28], [-14, 46], [38, 46], [-8, 58], [26, 60],
+];
+const ROT = [14, -10, 8, -16, 12, -8, 10, -14, 16, -12, 8, -10, 14];
+
+const mm = gsap.matchMedia();
+mm.add('(prefers-reduced-motion: no-preference)', () => {
+  const granos = gsap.utils.toArray('.grano');
+
+  // dispersión inicial (solo si hay motion)
+  granos.forEach((g, i) => gsap.set(g, {
+    x: SCATTER[i][0], y: SCATTER[i][1], rotation: ROT[i],
+    transformOrigin: '50% 50%', opacity: 0.3,
+  }));
+
+  const tl = gsap.timeline({
+    defaults: { ease: motion.ease.grano },
+    scrollTrigger: {
+      trigger: '#hero',
+      start: () => 'top ' + document.querySelector('.ld-header').offsetHeight + 'px',
+      end: '+=130%',
+      pin: true,
+      scrub: 0.6,
+    },
+  });
+  tl.to('#hint', { opacity: 0, duration: 0.25 }, 0.05)
+    .to('.grano', {
+      x: 0, y: 0, rotation: 0, opacity: 1,
+      duration: 1, stagger: motion.stagger.base,
+    }, 0);
+
+  // entradas macro: rise + fade, una vez, sin gatear visibilidad (default visible)
+  ScrollTrigger.batch('[data-rise]', {
+    start: 'top 88%',
+    once: true,
+    onEnter: (batch) => gsap.fromTo(batch,
+      { y: motion.rise.base, opacity: 0 },
+      { y: 0, opacity: 1, duration: motion.duration.slow, ease: motion.ease.grano, stagger: motion.stagger.base }),
+  });
+});
+
+// posiciones correctas cuando las fuentes terminan de cargar
+document.fonts?.ready.then(() => ScrollTrigger.refresh());
+</script>
+</body>
+</html>

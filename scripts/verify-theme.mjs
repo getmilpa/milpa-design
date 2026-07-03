@@ -26,7 +26,9 @@ if (!file) { console.error('uso: node scripts/verify-theme.mjs <skin.css>'); pro
 
 const contract = JSON.parse(readFileSync(join(root, 'theme.contract.json'), 'utf8'));
 const tok = JSON.parse(readFileSync(join(root, 'tokens/milpa-tokens.json'), 'utf8'));
-const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+let css;
+try { css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, ''); }
+catch { console.error(`no pude leer ${file} — ¿la ruta existe?`); process.exit(2); }
 
 // --- defaults de Milpa por tema (refs DTCG → hex) ---
 const prim = (ref) => {

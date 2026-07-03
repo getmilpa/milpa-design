@@ -72,6 +72,12 @@ module.exports = {
         'viz-4': 'var(--viz-4)',
         'viz-5': 'var(--viz-5)',
         'viz-6': 'var(--viz-6)',
+        'viz-1-active': 'var(--viz-1-active)',
+        'viz-2-active': 'var(--viz-2-active)',
+        'viz-3-active': 'var(--viz-3-active)',
+        'viz-4-active': 'var(--viz-4-active)',
+        'viz-5-active': 'var(--viz-5-active)',
+        'viz-6-active': 'var(--viz-6-active)',
       },
       fontFamily: {
         display: ['Space Grotesk', 'system-ui', 'sans-serif'],

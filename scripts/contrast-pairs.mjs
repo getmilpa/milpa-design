@@ -56,7 +56,8 @@ export const PAIRS = [
   ['syntax-function', 'syntax-bg', 4.5], ['syntax-number', 'syntax-bg', 4.5],
   ['syntax-punctuation', 'syntax-bg', 4.5], ['syntax-variable', 'syntax-bg', 4.5],
   ['syntax-tag', 'syntax-bg', 4.5], ['syntax-attribute', 'syntax-bg', 4.5],
-  ['text-secondary', 'syntax-bg', 4.5], ['text-muted', 'syntax-bg', 4.5], // header de mui-code / prompt
+  ['text-secondary', 'syntax-bg', 4.5], ['text-muted', 'syntax-bg', 4.5], // header de mui-code
+  ['secondary-text', 'syntax-bg', 4.5], // prompt del terminal (voz olivo)
   ['border-strong', 'syntax-bg', 3],   // boundary del bloque y del botón copiar
   ['success', 'syntax-bg', 4.5], ['danger', 'syntax-bg', 4.5], // líneas diff +/-
   ['focus', 'syntax-bg', 3],

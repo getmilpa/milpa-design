@@ -30,7 +30,7 @@
   "tokens": [
     "--syntax-bg",
     "--syntax-text",
-    "--syntax-string",
+    "--secondary-text",
     "--danger",
     "--border-subtle",
     "--border-strong",

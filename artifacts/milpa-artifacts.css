@@ -183,7 +183,7 @@
 .mui-terminal__line { white-space: pre-wrap; }
 .mui-terminal__prompt {
   margin-inline-end: var(--space-2);
-  color: var(--syntax-string);
+  color: var(--secondary-text);
   user-select: none;
 }
 /* el output hereda --syntax-text del root; anywhere: una URL larga
@@ -269,19 +269,23 @@
   width: 0.75rem; height: 0.75rem; flex: none;
   border-radius: var(--radius-xs);
   background: var(--_c, var(--viz-1));
+  border: 1px solid var(--_ca, var(--viz-1-active)); /* regla 4: auto-borde -active */
 }
-.mui-chart__swatch--1 { --_c: var(--viz-1); }
-.mui-chart__swatch--2 { --_c: var(--viz-2); }
-.mui-chart__swatch--3 { --_c: var(--viz-3); }
-.mui-chart__swatch--4 { --_c: var(--viz-4); }
-.mui-chart__swatch--5 { --_c: var(--viz-5); }
-.mui-chart__swatch--6 { --_c: var(--viz-6); }
+.mui-chart__swatch--1 { --_c: var(--viz-1); --_ca: var(--viz-1-active); }
+.mui-chart__swatch--2 { --_c: var(--viz-2); --_ca: var(--viz-2-active); }
+.mui-chart__swatch--3 { --_c: var(--viz-3); --_ca: var(--viz-3-active); }
+.mui-chart__swatch--4 { --_c: var(--viz-4); --_ca: var(--viz-4-active); }
+.mui-chart__swatch--5 { --_c: var(--viz-5); --_ca: var(--viz-5-active); }
+.mui-chart__swatch--6 { --_c: var(--viz-6); --_ca: var(--viz-6-active); }
 
 /* la marca de dato — el consumidor la siembra con style="--_v:62%"
    (y --_c: var(--viz-N) para la serie; --_c hereda: seteado en el
    canvas colorea toda una serie de una vez) */
 .mui-chart__bar {
   background: var(--_c, var(--viz-1));
+  /* regla 4: auto-borde -active; el consumidor setea --_ca junto a --_c
+     (los pares viz-N / viz-N-active viajan juntos) */
+  border: 1px solid var(--_ca, var(--viz-1-active));
   min-height: 1px;                   /* el cero también se ve */
 }
 
@@ -358,7 +362,10 @@
 
 /* donut — el conic-gradient lo ARMA el consumidor inline, solo con
    tokens viz (ver contrato); el agujero se recorta con ::after. Sobre
-   otra superficie, setear --_hole (ej. style="--_hole: var(--bg)"). */
+   otra superficie, setear --_hole (ej. style="--_hole: var(--bg)").
+   Regla 4 (auto-borde): un conic-gradient no admite borde por segmento —
+   la separación entre segmentos la da el patrón de GAP del contrato
+   (franjas finas de var(--_hole) entre series), que además ayuda en CVD. */
 .mui-chart--donut .mui-chart__canvas {
   display: flex; justify-content: center;
 }

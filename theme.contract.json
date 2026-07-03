@@ -68,7 +68,13 @@
       "--viz-3",
       "--viz-4",
       "--viz-5",
-      "--viz-6"
+      "--viz-6",
+      "--viz-1-active",
+      "--viz-2-active",
+      "--viz-3-active",
+      "--viz-4-active",
+      "--viz-5-active",
+      "--viz-6-active"
     ],
     "type": [
       "--font-display",
@@ -581,6 +587,11 @@
       },
       {
         "fg": "--text-muted",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--secondary-text",
         "bg": "--syntax-bg",
         "min": 4.5
       },

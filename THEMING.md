@@ -111,13 +111,19 @@ No importás `primitives.css`/`components.css`/`artifacts.css`/`layouts.css` y t
 ## 6. Validación
 
 ```bash
-npm run verify:theme -- mi-skin.css   # scripts/verify-theme.mjs (llega con la 0.2.0 — F5 del plan)
+npm run verify:theme -- mi-skin.css   # scripts/verify-theme.mjs
 ```
 
-Valida tu CSS de tokens (valores hex planos) contra `theme.contract.json`: presencia de
-`requiredTokens.color` y TODOS los pares AA en ambos temas. Es la implementación de referencia
-de lo que `coa` correrá al instalar un plugin con theme propio: **nada se siembra sin contrato —
-tampoco un theme.**
+Valida tu CSS de tokens (valores hex planos) contra `theme.contract.json`: reporta qué tokens
+de `requiredTokens.color` provee el skin (los que falten se heredan de Milpa — un skin parcial
+es un skin válido) y verifica TODOS los pares AA en ambos temas sobre la paleta resultante;
+sale con código 1 si algún par falla. Es la implementación de referencia de lo que `coa`
+correrá al instalar un plugin con theme propio: **nada se siembra sin contrato — tampoco un
+theme.**
+
+**Ejemplo vivo:** el skin "Nopal" (`proof/themed-skin.css`, 12 tokens + radios + cadencia,
+193/193 en el gate) vistiendo el blog completo en `proof/themed.html` — nivel 1 por link,
+nivel 2 en su `<style>` sin layer.
 
 ## 7. Qué NO hacer
 

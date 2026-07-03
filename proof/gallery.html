@@ -85,12 +85,12 @@ body { margin:0; background:var(--bg); }
         <h2 class="mui-section__title" id="survey-title">Twelve pieces, one plot</h2>
         <p class="mui-section__lede">Filter by stage of the season. Every frame opens in the viewer — arrow keys cycle the collection, Esc returns you to the field.</p>
 
-        <!-- filter tabs — all four control the same panel: its content is what the filter changes -->
+        <!-- filter tabs — all four control the same panel: the filter JS below hides non-matching pieces -->
         <div class="mui-tabs" role="tablist" aria-label="Filter pieces by season stage">
-          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-all" aria-controls="gal-grid-panel" aria-selected="true">All <span class="mui-badge">12</span></button>
-          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-seed" aria-controls="gal-grid-panel" aria-selected="false" tabindex="-1">Seed <span class="mui-badge">3</span></button>
-          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-growth" aria-controls="gal-grid-panel" aria-selected="false" tabindex="-1">Growth <span class="mui-badge">5</span></button>
-          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-harvest" aria-controls="gal-grid-panel" aria-selected="false" tabindex="-1">Harvest <span class="mui-badge">4</span></button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-all" data-filter="all" aria-controls="gal-grid-panel" aria-selected="true">All <span class="mui-badge">12</span></button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-seed" data-filter="seed" aria-controls="gal-grid-panel" aria-selected="false" tabindex="-1">Seed <span class="mui-badge">3</span></button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-growth" data-filter="growth" aria-controls="gal-grid-panel" aria-selected="false" tabindex="-1">Growth <span class="mui-badge">5</span></button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-harvest" data-filter="harvest" aria-controls="gal-grid-panel" aria-selected="false" tabindex="-1">Harvest <span class="mui-badge">4</span></button>
         </div>
 
         <div class="mui-tabs__panel" role="tabpanel" id="gal-grid-panel" aria-labelledby="ftab-all">
@@ -98,7 +98,7 @@ body { margin:0; background:var(--bg); }
                items are <button> — the span bridge keeps the content model conforming -->
           <div class="mui-media-grid mui-media-grid--masonry" id="gal-grid">
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="seed" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 300 400" aria-hidden="true" focusable="false">
                   <rect width="300" height="400" fill="var(--surface-raised)"/>
@@ -110,7 +110,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="seed" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 640 360" aria-hidden="true" focusable="false">
                   <rect width="640" height="360" fill="var(--surface)"/>
@@ -123,7 +123,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="growth" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
                   <rect width="400" height="400" fill="var(--surface-raised)"/>
@@ -138,7 +138,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="growth" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 400 300" aria-hidden="true" focusable="false">
                   <rect width="400" height="300" fill="var(--surface)"/>
@@ -151,7 +151,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="growth" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 300 400" aria-hidden="true" focusable="false">
                   <rect width="300" height="400" fill="var(--surface-raised)"/>
@@ -166,7 +166,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="seed" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
                   <rect width="400" height="400" fill="var(--surface)"/>
@@ -181,7 +181,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="growth" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 400 300" aria-hidden="true" focusable="false">
                   <rect width="400" height="300" fill="var(--surface-raised)"/>
@@ -196,7 +196,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="growth" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 640 360" aria-hidden="true" focusable="false">
                   <rect width="640" height="360" fill="var(--surface)"/>
@@ -208,7 +208,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="harvest" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 300 400" aria-hidden="true" focusable="false">
                   <rect width="300" height="400" fill="var(--surface)"/>
@@ -221,7 +221,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="harvest" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
                   <rect width="400" height="400" fill="var(--surface-raised)"/>
@@ -233,7 +233,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="harvest" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 400 300" aria-hidden="true" focusable="false">
                   <rect width="400" height="300" fill="var(--surface)"/>
@@ -246,7 +246,7 @@ body { margin:0; background:var(--bg); }
               </span>
             </button>
 
-            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+            <button type="button" class="mui-media-grid__item" data-tag="harvest" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
                 <svg class="gal-ph" viewBox="0 0 640 360" aria-hidden="true" focusable="false">
                   <rect width="640" height="360" fill="var(--surface)"/>
@@ -444,6 +444,35 @@ body { margin:0; background:var(--bg); }
   lb.addEventListener('keydown', e => {
     if (e.key === 'ArrowLeft')  { e.preventDefault(); show(idx - 1); }
     if (e.key === 'ArrowRight') { e.preventDefault(); show(idx + 1); }
+  });
+})();
+
+/* ---- filtros (mui-tabs como filtro de colección): click + flechas + Home/End;
+   el estado ES aria-selected y el efecto es [hidden] en las piezas ---- */
+(() => {
+  const tabs = [...document.querySelectorAll('.mui-tabs__tab[data-filter]')];
+  const items = [...document.querySelectorAll('.mui-media-grid__item[data-tag]')];
+  const select = (tab) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+    });
+    const f = tab.dataset.filter;
+    items.forEach((it) => { it.hidden = f !== 'all' && it.dataset.tag !== f; });
+    tab.focus();
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      const n = tabs.length;
+      if (e.key === 'ArrowRight') select(tabs[(i + 1) % n]);
+      else if (e.key === 'ArrowLeft') select(tabs[(i - 1 + n) % n]);
+      else if (e.key === 'Home') select(tabs[0]);
+      else if (e.key === 'End') select(tabs[n - 1]);
+      else return;
+      e.preventDefault();
+    });
   });
 })();
 </script>

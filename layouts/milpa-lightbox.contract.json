@@ -1,0 +1,87 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "lightbox",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-lightbox",
+  "summary": "Visor de media a pantalla — se aplica JUNTO a .mui-modal (<dialog class=\"mui-modal mui-lightbox\">): hereda top layer, focus trap del UA, Esc y ::backdrop sin redeclararlos (la capa layouts gana la cascada). Desnuda el marco del modal: fondo transparente, sin borde ni sombra — la media ES la superficie y lleva radio + shadow-lg. La entrada milpa-scale-in se MUDA del dialog a la media: el dialog nunca se transforma, así que los controles fixed nacen clavados al viewport (sin salto de containing block al asentar el keyframe) y acompañan con el fade del backdrop. Caption, counter y controles flotan sobre el scrim traslúcido (debajo puede haber cualquier cosa), por eso todos llevan chip SÓLIDO var(--overlay): pares del gate, no composites. Prev/next y close componen .mui-btn mui-btn--icon.",
+  "element": [
+    "dialog (SIEMPRE con class=\"mui-modal mui-lightbox\", abierto con showModal() — sin --z-*: el top layer vive encima de toda la escala)"
+  ],
+  "composes": [
+    "modal (base obligatoria: backdrop, display flex de [open] y :focus-visible del dialog — este contrato NO los redeclara; la ÚNICA excepción es la animación de entrada del dialog, que este scope neutraliza con animation: none y muda a la media — ver motion)",
+    "button (prev/next dentro de __nav y el __close: .mui-btn mui-btn--icon + aria-label; el scope les fija chip overlay)"
+  ],
+  "anatomy": {
+    "root": "dialog.mui-lightbox — junto a .mui-modal: width fit-content, max-width min(92vw, 70rem), max-height 92vh, padding 0, fondo transparente, sin borde ni sombra; en [open] neutraliza la animación del dialog (animation: none — la entrada vive en __media, ver motion)",
+    "media": "figure.mui-lightbox__media — margin 0, min-height 0; porta la entrada milpa-scale-in en [open]; adentro img|video: display block, max-width 100%, max-height 80vh, centrados con margin-inline auto, radius-md + shadow-lg (el marco vive en la media)",
+    "caption": "figcaption.mui-lightbox__caption — chip centrado fit-content bajo la media: text-sm var(--text-secondary) sobre fondo SÓLIDO var(--overlay) (el scrim traslúcido no es par gateable), padding space-1_5/space-3, radius-sm, text-align center",
+    "counter": ".mui-lightbox__counter — \"3 / 12\": mono 2xs tracking-wide var(--text-secondary), mismo chip overlay, fixed arriba al inline-start; con aria-live=\"polite\" anuncia el avance",
+    "nav": ".mui-lightbox__nav — banda fixed full-viewport: flex space-between centrado en el eje de bloque (sin transform: el hover del .mui-btn ya usa translateY), pointer-events none (el click pasa al backdrop); adentro prev/next componen .mui-btn mui-btn--icon — pointer-events auto SOLO vía :not([disabled], [aria-disabled=\"true\"], [aria-busy=\"true\"]): los botones muertos conservan el pointer-events:none de primitives (esta capa gana la cascada; sin el guard lo pisaría) y el click sobre ellos cae al backdrop. ≤560px la banda se vuelve estática: fila centrada bajo la media",
+    "close": "button.mui-lightbox__close — compone .mui-btn mui-btn--icon, fixed arriba al inline-end",
+    "chips": "los .mui-btn del __nav y el __close ganan en este scope fondo var(--overlay) + borde var(--border) decorativo + shadow-base: flotan sobre scrim y fotos, el fill sólido garantiza los pares del gate (idioma exacto del toast: definición = fill + sombra)"
+  },
+  "variants": {
+    "none": "sin variantes — la composición con .mui-modal es obligatoria (no es variante) y este contrato no redeclara backdrop ni base"
+  },
+  "states": {
+    "open": "[open] — display flex column heredado del modal; este scope neutraliza la animación del dialog (animation: none) — la entrada vive en __media (milpa-scale-in) y counter/nav/close acompañan con milpa-fade, el mismo pulso que el ::backdrop. Nunca una clase",
+    "hover": "controles compuestos VIVOS: el hover del contrato .mui-btn sube el color a var(--text) (par text/overlay 4.5); el chip overlay que fija este scope no cambia — la capa layouts gana sobre el hover de fondo del ghost. Los [disabled] no tienen hover: conservan pointer-events none",
+    "focus": "el dialog hereda el :focus-visible del modal; cada botón compuesto trae su outline 2px var(--focus) del contrato .mui-btn, pero en este scope con outline-offset -2px (precedente del drawer): con el offset estándar el anillo caería sobre el scrim compuesto (no gateable, ver notes del cluster) — negativo, vive íntegro sobre el fill var(--overlay) (focus/overlay ≥3 en ambos temas, par del gate)",
+    "disabled": "prev/next en los extremos de la colección: [disabled] del botón (opacity .5 + pointer-events none, contrato .mui-btn — el guard :not() de este scope NO los reactiva: sin affordance fantasma de hover, y el click sobre el botón muerto atraviesa al backdrop) — no removerlos del DOM: la banda no salta"
+  },
+  "tokens": [
+    "--overlay",
+    "--text-secondary",
+    "--border",
+    "--shadow-lg",
+    "--shadow-base",
+    "--radius-md",
+    "--radius-sm",
+    "--font-display",
+    "--font-mono",
+    "--text-sm",
+    "--text-2xs",
+    "--tracking-wide",
+    "--leading-snug",
+    "--space-1",
+    "--space-1_5",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--dur-moderate",
+    "--ease-grano",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "dialog nativo abierto con showModal(): top layer, fondo inerte, focus trap y Esc los da el UA. El dialog lleva nombre: aria-label (\"Visor de imágenes\") o aria-labelledby a la caption",
+    "aria": [
+      "cada media con alt significativo — acá el visor ES el contenido: alt=\"\" no aplica (a diferencia del item del grid, donde la caption porta el nombre)",
+      "counter con aria-live=\"polite\": anuncia \"4 / 12\" al navegar sin robar el foco",
+      "prev/next/close SIEMPRE con aria-label (\"Anterior\", \"Siguiente\", \"Cerrar\")"
+    ],
+    "keyboard": [
+      "Esc cierra — nativo del dialog",
+      "←/→ navegan la colección: listener del consumidor sobre el dialog abierto",
+      "Tab circula entre prev/next/close dentro del trap del UA; el close puede llevar autofocus"
+    ],
+    "behavior": [
+      "al cerrar, el foco vuelve solo al disparador (contrato del dialog nativo) — el .mui-media-grid__item que lo abrió",
+      "al navegar (flechas o botones) se actualizan img+alt, caption y counter EN el mismo dialog — no cerrar/reabrir: el trap y el foco no se pierden",
+      "light-dismiss opcional del consumidor: click en el ::backdrop cierra — la banda __nav deja pasar el click (pointer-events none) y los prev/next [disabled] también (el guard :not() les conserva el none de primitives); la vía accesible sigue siendo Esc y el close",
+      "en los extremos, deshabilitar prev/next con [disabled] (o loopear la colección — documentarlo al usuario)"
+    ],
+    "contrast": "todo texto/control lleva fondo sólido var(--overlay) — el scrim traslúcido del modal no es par gateable: caption y counter text-secondary ≥4.5 sobre overlay (par del gate); botones text-secondary reposo / text hover ≥4.5 sobre overlay (pares del gate). El anillo de foco de nav/close usa outline-offset -2px para dibujarse sobre el fill overlay (focus/overlay ≥3 en ambos temas, par del gate) y no sobre el scrim compuesto (ver notes del cluster). El borde var(--border) de los chips es decorativo — la definición la dan fill + sombra (estatus del borde del toast, exento de 1.4.11); el scrim hereda el estatus decorativo del contrato modal"
+  },
+  "motion": {
+    "transitions": "entrada: este scope neutraliza el milpa-scale-in del dialog (animation: none) — mientras el keyframe porta transform, el dialog sería containing block de los controles fixed, y al asentar en transform:none counter/nav/close brincarían de golpe del borde del dialog a las esquinas reales del viewport (reposicionamiento discreto observable). En su lugar: __media entra con milpa-scale-in --dur-moderate --ease-grano, y counter/nav/close con milpa-fade --dur-moderate --ease-standard (mismo pulso que el ::backdrop heredado del modal) — misma entrada percibida, los fixed nacen clavados al viewport. Los botones compuestos traen las transiciones del contrato .mui-btn",
+    "reducedMotion": "contrato global de milpa-motion.css: scale-in y fades caen a 1 frame — el visor nace ya asentado y los controles clavados; nada depende del movimiento"
+  },
+  "examples": [
+    {
+      "title": "Visor completo: media + caption + counter + nav + close",
+      "html": "<dialog class=\"mui-modal mui-lightbox\" aria-label=\"Visor de imágenes\"><figure class=\"mui-lightbox__media\"><img src=\"/media/terrazas.avif\" alt=\"Terrazas de cultivo al amanecer, Oaxaca\"><figcaption class=\"mui-lightbox__caption\">Terrazas de cultivo — Oaxaca</figcaption></figure><div class=\"mui-lightbox__nav\"><button type=\"button\" class=\"mui-btn mui-btn--icon\" aria-label=\"Anterior\"><!-- ícono ← --></button><button type=\"button\" class=\"mui-btn mui-btn--icon\" aria-label=\"Siguiente\"><!-- ícono → --></button></div><button type=\"button\" class=\"mui-btn mui-btn--icon mui-lightbox__close\" aria-label=\"Cerrar\" autofocus><!-- ícono ✕ --></button><span class=\"mui-lightbox__counter\" aria-live=\"polite\">3 / 12</span></dialog>"
+    }
+  ]
+}

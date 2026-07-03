@@ -1,0 +1,85 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "hero",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-hero",
+  "summary": "El momento firma de la página — el hero de la landing formalizado: dos columnas asimétricas (1.15fr texto / 0.85fr media) alineadas al centro, que se apilan a una columna ≤880px. Kicker mono (la MISMA voz que .mui-section__kicker, selector agrupado), título clamp grande con tracking-display, tagline mono, sub en voz baja de 46ch, fila de CTAs (.mui-btn compuestos, UN primario) y fila de badges (.mui-badge). --center centra todo en una columna; --media-first sube el media al apilarse (la M de granos de la landing móvil).",
+  "element": [
+    "div (.mui-hero — dentro de .mui-container; primer hijo el bloque de texto (<div> anónimo), segundo .mui-hero__media)"
+  ],
+  "composes": [
+    "button (__cta: .mui-btn / .mui-btn--primary — un solo primario por vista)",
+    "badge (__meta: .mui-badge y variantes — versión, licencia, estado)",
+    "page (vive dentro de .mui-section + .mui-container; --flush si el hero administra su respiro)"
+  ],
+  "anatomy": {
+    "root": ".mui-hero — grid [1.15fr 0.85fr], gap clamp(space-8, 6vw, space-16), align-items center",
+    "kicker": ".mui-hero__kicker — <p> mono text-2xs uppercase tracking-wide var(--secondary-text): selector AGRUPADO con .mui-section__kicker (misma voz). El título adyacente gana margin-block-start space-4",
+    "title": ".mui-hero__title — clamp(text-3xl, 6vw, text-6xl) weight-medium tracking-display leading-tight text-wrap balance; normalmente el <h1> del documento",
+    "tagline": ".mui-hero__tagline — mono clamp(text-sm, 2vw, text-lg) var(--text-secondary), margin-top space-5: la línea de la casa ('Siembra módulos, cosecha aplicaciones.')",
+    "sub": ".mui-hero__sub — var(--text-muted), max-width 46ch, margin-top space-4: apoyo en voz baja, más angosto que un lede",
+    "cta": ".mui-hero__cta — flex wrap gap space-3 align-center, margin-top space-8: botones compuestos",
+    "meta": ".mui-hero__meta — flex wrap gap space-2, margin-top space-5: badges compuestos",
+    "media": ".mui-hero__media — justify-self center; img/svg display block, max-width 100%, height auto (nunca revienta su columna)"
+  },
+  "variants": {
+    "layout": {
+      "center": ".mui-hero--center — una columna, text-align center; title y sub con margin-inline auto; cta y meta con justify-content center (lanzamientos, portadas cortas)",
+      "media-first": ".mui-hero--media-first — SOLO ≤880px: el __media sube (order -1) sobre el texto, como la M de granos en la landing móvil. Variante de LAYOUT documentada — el orden del documento (texto primero) no cambia"
+    }
+  },
+  "states": {
+    "static": "sin estados interactivos propios — los aportan los botones y badges compuestos"
+  },
+  "tokens": [
+    "--secondary-text",
+    "--text-secondary",
+    "--text-muted",
+    "--font-mono",
+    "--text-2xs",
+    "--text-sm",
+    "--text-lg",
+    "--text-3xl",
+    "--text-6xl",
+    "--weight-medium",
+    "--tracking-wide",
+    "--tracking-display",
+    "--leading-tight",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-5",
+    "--space-8",
+    "--space-10",
+    "--space-16"
+  ],
+  "a11y": {
+    "element": "el __title es normalmente el <h1> de la página — uno por documento; el kicker es <p> ANTES del h1, nunca un heading",
+    "aria": [
+      "media decorativo (ilustración, la M de granos) → aria-hidden=\"true\" en el contenedor; si porta contenido (captura del producto) → <img> con alt descriptivo",
+      "UN solo .mui-btn--primary en __cta (regla de la casa: un primario por vista)",
+      "los badges de __meta exigen texto — la variante acompaña, no sustituye (contrato badge)"
+    ],
+    "keyboard": [
+      "Tab recorre los botones de __cta en orden de documento — el hero no agrega interactivos propios",
+      "--media-first solo reordena visualmente ≤880px: el orden de foco/lectura sigue al documento (el media es decorativo y no enfocable, sin trampa de orden)"
+    ],
+    "contrast": "todo sobre var(--bg), pares del gate: kicker var(--secondary-text) ≥4.5, título var(--text) ≥4.5, tagline var(--text-secondary) ≥4.5, sub var(--text-muted) ≥4.5. Botones y badges verifican en sus propios contratos"
+  },
+  "motion": {
+    "transitions": "ninguna propia — los botones compuestos traen la suya. El pin/scroll de la landing (GSAP) es coreografía del consumidor, fuera de este contrato",
+    "reducedMotion": "n/a — sin hover propio, el hero lee completo congelado (el contrato global rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Hero de dos columnas con CTAs, badges y media (media-first en móvil)",
+      "html": "<section class=\"mui-section mui-section--flush\" aria-label=\"Milpa\"><div class=\"mui-container\"><div class=\"mui-hero mui-hero--media-first\"><div><p class=\"mui-hero__kicker\">framework php modular · ia-native · contract-first</p><h1 class=\"mui-hero__title\">Siembra módulos, cosecha aplicaciones.</h1><p class=\"mui-hero__tagline\">un núcleo determinista · contratos que protegen</p><p class=\"mui-hero__sub\">Una milpa no es un cultivo: es un sistema. Módulos que crecen juntos y se nutren entre sí.</p><div class=\"mui-hero__cta\"><a class=\"mui-btn mui-btn--primary\" href=\"/docs\">Empezar</a><a class=\"mui-btn\" href=\"https://github.com/getmilpa/milpa-design\">GitHub</a></div><div class=\"mui-hero__meta\"><span class=\"mui-badge mui-badge--accent\">v0.2.0</span><span class=\"mui-badge\">Apache-2.0</span><span class=\"mui-badge mui-badge--secondary\">el core germina</span></div></div><div class=\"mui-hero__media\" aria-hidden=\"true\"><svg viewBox=\"0 0 60 60\"><!-- la M de granos --></svg></div></div></div></section>"
+    },
+    {
+      "title": "Hero centrado (lanzamiento)",
+      "html": "<div class=\"mui-hero mui-hero--center\"><div><p class=\"mui-hero__kicker\">release</p><h1 class=\"mui-hero__title\">@milpa/design 0.2.0</h1><p class=\"mui-hero__tagline\">la parcela germinó</p><div class=\"mui-hero__cta\"><a class=\"mui-btn mui-btn--primary\" href=\"/changelog\">Ver changelog</a></div></div></div>"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "cta-band",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-cta-band",
+  "summary": "La franja de cierre — el CTA final de la landing formalizado como banda: sube UN paso a var(--surface) y se marca con border-block sutil (regla 1: bordes, no sombras), todo centrado. Título con la MISMA voz que .mui-section__title (selector agrupado), sub de 52ch centrado y fila de acciones que compone .mui-btn (un primario). Va full-bleed como hermana de las .mui-section — trae su propio respiro clamp(space-12..space-20) — y el consumidor mete su .mui-container adentro.",
+  "element": [
+    "section (.mui-cta-band — con aria-labelledby a su __title; hermana de las .mui-section, nunca hija de un .mui-container)"
+  ],
+  "composes": [
+    "button (__actions: .mui-btn / .mui-btn--primary / --lg — un solo primario por vista)",
+    "page (el .mui-container va ADENTRO de la banda; combina con .mui-section--flush si vive dentro del flujo con respiro propio)",
+    "input-group (opcional en __actions: captura de correo con su <label> — nunca placeholder-como-label)"
+  ],
+  "anatomy": {
+    "root": ".mui-cta-band — padding-block clamp(space-12, 8vw, space-20), background var(--surface), border-block 1px var(--border-subtle), text-align center",
+    "title": ".mui-cta-band__title — selector AGRUPADO con .mui-section__title: clamp(text-2xl, 4vw, text-4xl) weight-medium tracking-tight leading-snug balance, margin space-2 0 space-3",
+    "sub": ".mui-cta-band__sub — var(--text-secondary), max-width 52ch, margin-inline auto",
+    "actions": ".mui-cta-band__actions — flex wrap center (justify + align), gap space-3, margin-top space-8"
+  },
+  "variants": {},
+  "states": {
+    "static": "sin estados propios — los aportan los botones compuestos en __actions"
+  },
+  "tokens": [
+    "--surface",
+    "--border-subtle",
+    "--text-secondary",
+    "--text-2xl",
+    "--text-4xl",
+    "--weight-medium",
+    "--tracking-tight",
+    "--leading-snug",
+    "--space-2",
+    "--space-3",
+    "--space-8",
+    "--space-12",
+    "--space-20"
+  ],
+  "a11y": {
+    "element": "<section aria-labelledby> al id del __title; el título suele ser <h2> (elegir nivel por documento)",
+    "aria": [
+      "UN solo .mui-btn--primary en __actions — es el cierre: la acción principal manda",
+      "si la banda captura correo, el campo compuesto lleva su <label> real (el contrato de input-group/field rige)"
+    ],
+    "keyboard": [
+      "Tab recorre las acciones en orden de documento; los anillos de foco de los botones (var(--focus)) están verificados ≥3 sobre --surface (par del gate)"
+    ],
+    "contrast": "sobre --surface, pares del gate: título var(--text) ≥4.5 y sub var(--text-secondary) ≥4.5 (accent-text también verificado si el consumidor lo usa en el copy). Botones compuestos: los fills (primario dark, secondary, danger) traen sus propios pares independientes del fondo; el neutral outline conserva AA por texto (text-secondary/surface, gate) y su borde var(--border) queda decorativo en dark sobre surface (2.17 medido — precedente badge/card) mientras en light pasa (3.88). Los border-block de la franja son decorativos: el paso de superficie lo refuerzan, no lo portan"
+  },
+  "motion": {
+    "transitions": "ninguna propia — pieza estática; los botones compuestos traen la suya",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Cierre de landing: título + sub + acciones",
+      "html": "<section class=\"mui-cta-band\" aria-labelledby=\"h-cierre\"><div class=\"mui-container\"><h2 class=\"mui-cta-band__title\" id=\"h-cierre\">Sembrá tu primera milpa</h2><p class=\"mui-cta-band__sub\">Un núcleo determinista, módulos que se nutren entre sí y contratos que los protegen.</p><div class=\"mui-cta-band__actions\"><a class=\"mui-btn mui-btn--primary mui-btn--lg\" href=\"/docs/0.2/instalacion\">Empezar</a><button type=\"button\" class=\"mui-btn mui-btn--lg\" data-copy=\"npm i @milpa/design\">npm i @milpa/design</button></div></div></section>"
+    }
+  ]
+}

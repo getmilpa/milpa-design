@@ -4,6 +4,57 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-07-03
+
+> **La segunda cosecha:** documentación versionada, artefactos de contenido, vocabulario de
+> layouts y el contrato de theming para plugins. **63 piezas** con contrato · **193 pares AA** ·
+> todo el CSS publicado en `@layer milpa.*`.
+
+### Added
+- **Theming inyectable (la costura para plugins).** Todo el CSS publicado declara el orden
+  canónico `@layer milpa.tokens, …, milpa.layouts` y envuelve sus reglas en su capa: **el CSS
+  sin layer del consumidor/plugin siempre gana** — sin `!important`, sin guerras de
+  especificidad. Tres niveles documentados en `THEMING.md` (retokenizar / reskin / reemplazo
+  total). `theme.contract.json` (**generado**, drift-gated) publica tokens requeridos + los
+  pares AA del gate **como datos** + invariantes; `scripts/verify-theme.mjs`
+  (`npm run verify:theme`) es el validador de referencia — el que `coa` correrá al instalar un
+  theme de plugin. Bonus: el `!important` del contrato reduced-motion, dentro de capa, le gana
+  incluso al `!important` sin capa — el invariante queda blindado.
+- **Tokens nuevos (paleta cerrada, como todo):** `--syntax-*` (11: highlighting de código,
+  cada color verificado 4.5:1 sobre `--syntax-bg` en ambos temas) y `--viz-1..6` + `--viz-*-active`
+  (paleta categórica de charts: 3:1 sobre `bg`/`surface`, separación de matiz/luminancia
+  verificada para daltonismo, auto-borde regla 4).
+- **`artifacts/` — *el elote*, 15 piezas de contenido con contrato:** Code (líneas, diff,
+  highlight, clases `.tok-*`), Terminal, CodeGroup, Chart (bars/line/donut/sparkline), Quote,
+  Callout (note/tip/warning/danger/version), Api (la cara de los docblocks), Steps, FileTree,
+  Prose (tipografía long-form), Toc (scroll-spy por `aria-current`), Search (⌘K shell) + el kit
+  de versionado: VersionSwitcher, VersionBanner ("You're viewing docs for v0.1.0…"), Changelog —
+  y las variantes de estabilidad del Badge (`--since` / `--deprecated` / `--experimental`).
+- **`layouts/` — *la parcela*, 11 piezas de estructura:** `mui-docs` (el shell de documentación
+  versionada: 3 columnas, off-canvas, slots de switcher/search, pager, convención
+  `/docs/{version}/{page}`), Page/Section/Container, Hero, FeatureGrid, CtaBand, Pricing, Faq
+  (details nativo), Testimonial, Footer, MediaGrid (uniforme/masonry), Lightbox (dialog nativo).
+- **Commerce en `components/`:** ProductCard, Price, Rating, MediaGallery, CartLine.
+- **Seis battle-tests** en `proof/` (todo inglés, compuestos SOLO del sistema): `docs.html`
+  (versionado completo), `blog`, `commerce`, `gallery` (lightbox real con teclado), `saas`, y
+  **`themed.html`** — el blog vistiendo el skin "Nopal" (`themed-skin.css`: 12 tokens + radios,
+  validado 193/193) sin tocar un solo bundle. La regla 2 (primario ghost en light) sobrevive al
+  skin vía la cascada.
+- Exports nuevos: `./artifacts.css`, `./layouts.css`, `./theme`, `./artifacts/*`, `./layouts/*`,
+  `./package.json` (compat tooling, nota 0.1.1 del HANDOFF).
+
+### Changed
+- **Todo el CSS publicado vive en cascade layers** — nota de compat: los overrides sin layer de
+  consumidores existentes ahora ganan SIEMPRE (antes dependían de especificidad). Es una mejora,
+  pero es un cambio de comportamiento de cascada → minor bump.
+- Los pares del gate viven en `scripts/contrast-pairs.mjs` (datos compartidos entre
+  `verify-contrast.mjs` y el generador de `theme.contract.json`). Gate: **135 → 193 checks**.
+  Governance verifica además la declaración `@layer` de cada CSS publicado (63 contratos).
+- **La landing pasa a inglés** (el mantra "Siembra módulos, cosecha aplicaciones." queda en
+  español, es la firma) y consume el vocabulario nuevo de `layouts/`; números actualizados a
+  0.2.0.
+- El scope de `.tok-*` cubre también `mui-api__signature` (`:is()`).
+
 ## [0.1.0] — 2026-07-01
 
 > **Primera versión publicada en npm:** `npm i @milpa/design` · 59 archivos · 88 kB ·

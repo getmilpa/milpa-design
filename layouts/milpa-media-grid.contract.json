@@ -14,7 +14,7 @@
   ],
   "anatomy": {
     "root": ".mui-media-grid — grid repeat(auto-fill, minmax(14rem,1fr)), gap space-3; guard [hidden] (display none, precedente .mui-alert)",
-    "item": "a.mui-media-grid__item | button.mui-media-grid__item — envolvente con reset de <a>/<button> (idioma .mui-card--interactive): position relative, aspect-ratio 4/3, fondo var(--surface) como suelo mientras carga la imagen, borde 1px border-subtle + radius-md, overflow hidden",
+    "item": "a.mui-media-grid__item | button.mui-media-grid__item — envolvente con reset de <a>/<button> (idioma .mui-card--interactive): position relative, aspect-ratio 4/3, fondo var(--surface) como suelo mientras carga la imagen, borde 1px border-subtle + radius-md, overflow hidden Guard [hidden] propio: display none le gana al display block del item (filtros por atributo, cross-browser).",
     "figure": "figure bare (camino <a>) | span.mui-media-grid__figure (camino <button>) — display block, margin 0, height 100%: puente para que la imagen llene la celda. <figure> dentro de <button> es HTML no conforme (el content model de <button> es solo phrasing content): en el camino <button> el puente y la caption son <span>",
     "img": "img — display block, 100%×100%, object-fit cover; zoom decorativo scale(1.03) en hover del item (--dur-moderate --ease-settle)",
     "caption": "figcaption.mui-media-grid__caption (camino <a>) | span.mui-media-grid__caption (camino <button>) — velo inferior: absolute inset-inline 0 + inset-block-end 0, padding space-3, text-sm var(--text) sobre color-mix(in srgb, var(--bg) 78%, transparent) + blur(4px). SIEMPRE visible; en hover el velo sube a 88% — nunca aparece/desaparece"

@@ -52,8 +52,7 @@ for (const m of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
   const buckets = [];
   if (/\[data-theme="?dark"?\]/.test(sel)) buckets.push('dark');
   if (/\[data-theme="?light"?\]/.test(sel)) buckets.push('light');
-  if (/:root/.test(sel) && buckets.length === 0) buckets.push('base');
-  else if (/:root/.test(sel)) buckets.push('base');
+  if (/:root/.test(sel)) buckets.push('base');
   if (!buckets.length) continue;
   for (const d of m[2].matchAll(/--([\w-]+)\s*:\s*(#[0-9a-fA-F]{6})\b/g)) {
     for (const b of buckets) skin[b][d[1]] = d[2].toUpperCase();

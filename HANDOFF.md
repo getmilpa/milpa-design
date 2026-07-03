@@ -17,7 +17,7 @@ converger:** el framework y el DS avanzan en paralelo y se reencuentran en una *
 El framework *consume* `@milpa/design@x.y.z`. **Nadie edita los internals del otro**; se cambian
 cosas vía bump semver + nota de compat. (Esto es Milpa aplicado a sí mismo: contract-first.)
 
-## 2. Estado actual (v0.1)
+## 2. Estado actual (v0.2)
 
 ✅ **Paleta cerrada y verificada.** `oro` (primario/marca) + `olivo` (secundario / la milpa viva,
 OKLCH ~124°) + `tierra` (neutro); `cielo` = `info`. Dark-first. Tokens DTCG + salida CSS + preset
@@ -89,6 +89,9 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
      `mui-chart --line` con fila de ticks HTML (el `<text>` del SVG se distorsiona);
      slot de mantra propio en `mui-footer` para productos de terceros; swap JS de referencia
      para thumbs de `mui-media-gallery` (documentado, sin implementar en el proof).
+  7. Gate: endurecer el check de @layer en governance (hoy es substring — un brace-walk
+     cazaría reglas que queden FUERA de la capa); el lightbox del proof gallery cicla piezas
+     filtradas (counter "n / 12") — decidir si el contrato debe prescribir respetar el filtro.
 - ~~**T6 · Publish `@milpa/design@0.1.0`**~~ ✅ **PUBLICADO** (2026-07-02T05:00Z, por
   `teamx-devkit`): `npm i @milpa/design` — 59 archivos, 88 kB, los 8 exports verificados con
   install real. Flujo de release: `npm run release` (token en `.env` gitignoreado +

@@ -19,7 +19,8 @@
     "logo",
     "theme.contract.json",
     "THEMING.md",
-    "DESIGN.md"
+    "DESIGN.md",
+    "CHANGELOG.md"
   ],
   "exports": {
     ".": "./dist/milpa-tokens.css",

@@ -285,4 +285,746 @@
   .mui-docs__nav-toggle { display: inline-flex; }
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   cluster · page
+   ════════════════════════════════════════════════════════════════════ */
+/* ---------- Page · .mui-page / .mui-container / .mui-section ----------
+   El lienzo de marketing/contenido — los ld-* de la landing formalizados.
+   .mui-page pinta el fondo y estira a 100svh (flex column: un footer con
+   margin-block-start auto cae al pie solo). El ancho lo pone
+   .mui-container (la parcela de 72rem); el ritmo vertical, .mui-section
+   (respiro clamp + costura border-subtle entre hermanas — regla 1:
+   estructura por bordes, nunca sombras). Las secciones van full-bleed
+   hijas de .mui-page y el container vive ADENTRO de cada una. */
+.mui-page {
+  display: flex; flex-direction: column;
+  min-height: 100svh;
+  background: var(--bg); color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-base); line-height: var(--leading-normal);
+  /* el fundido del flip de tema — idioma exacto del body de la landing */
+  transition:
+    background-color var(--dur-moderate) var(--ease-settle),
+    color            var(--dur-moderate) var(--ease-settle);
+}
+
+/* container — la parcela centrada: 72rem, padding-inline fluido */
+.mui-container {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: clamp(var(--space-5), 4vw, var(--space-8));
+}
+.mui-container--narrow { max-width: 48rem; } /* prosa: ~65ch a text-base */
+.mui-container--wide   { max-width: 90rem; } /* la parcela ancha de mui-docs */
+
+/* section — respiro fluido; la costura entre hermanas es un borde sutil */
+.mui-section { padding-block: clamp(var(--space-16), 10vw, var(--space-24)); }
+.mui-section + .mui-section { border-block-start: 1px solid var(--border-subtle); }
+.mui-section--tight { padding-block: clamp(var(--space-10), 6vw, var(--space-16)); }
+.mui-section--flush { padding-block: var(--space-0); }
+
+/* kicker — mono 2xs uppercase olivo: la voz de la máquina que abre cada
+   sección. La MISMA voz sirve al hero (selector agrupado: cero drift). */
+.mui-section__kicker,
+.mui-hero__kicker {
+  margin: 0;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--secondary-text);
+}
+
+/* título de sección — el h2 de la landing; balance evita viudas. La MISMA
+   voz sirve al cierre (.mui-cta-band__title, selector agrupado). */
+.mui-section__title,
+.mui-cta-band__title {
+  margin: var(--space-2) 0 var(--space-3);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-snug);
+  text-wrap: balance;
+}
+
+/* lede — el párrafo que abre la sección; 62ch de medida cómoda */
+.mui-section__lede {
+  margin: 0;
+  color: var(--text-secondary);
+  max-width: 62ch;
+}
+
+/* ---------- Hero · .mui-hero ----------
+   El momento firma: dos columnas asimétricas (el texto manda, el media
+   acompaña) que se apilan ≤880px. Compone .mui-btn en __cta y .mui-badge
+   en __meta — no los redeclara. Vive dentro de .mui-section +
+   .mui-container (--flush si el hero administra su propio respiro).
+   El primer hijo es el bloque de texto (un <div> anónimo); el segundo,
+   .mui-hero__media. */
+.mui-hero {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(var(--space-8), 6vw, var(--space-16));
+  align-items: center;
+}
+
+/* título — el clamp grande de la casa; tracking-display, como el wordmark */
+.mui-hero__title {
+  margin: 0;
+  font-size: clamp(var(--text-3xl), 6vw, var(--text-6xl));
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+.mui-hero__kicker + .mui-hero__title { margin-block-start: var(--space-4); }
+
+/* tagline — la línea mono bajo el título ("Siembra módulos, cosecha…") */
+.mui-hero__tagline {
+  margin: var(--space-5) 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(var(--text-sm), 2vw, var(--text-lg));
+  color: var(--text-secondary);
+}
+
+/* sub — apoyo en voz baja; 46ch, más angosto que un lede */
+.mui-hero__sub {
+  margin: var(--space-4) 0 0;
+  color: var(--text-muted);
+  max-width: 46ch;
+}
+
+/* cta — botones compuestos (.mui-btn); UN primario por vista */
+.mui-hero__cta {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-3);
+  margin-block-start: var(--space-8);
+}
+
+/* meta — badges compuestos (.mui-badge): versión, licencia, estado */
+.mui-hero__meta {
+  display: flex; flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block-start: var(--space-5);
+}
+
+/* media — ilustración/captura; nunca revienta su columna */
+.mui-hero__media { justify-self: center; }
+.mui-hero__media img,
+.mui-hero__media svg { display: block; max-width: 100%; height: auto; }
+
+/* --center: una columna con todo centrado (lanzamientos, portadas cortas) */
+.mui-hero--center {
+  grid-template-columns: 1fr;
+  text-align: center;
+}
+.mui-hero--center .mui-hero__title,
+.mui-hero--center .mui-hero__sub { margin-inline: auto; }
+.mui-hero--center .mui-hero__cta,
+.mui-hero--center .mui-hero__meta { justify-content: center; }
+
+/* responsive ≤880px — una columna (breakpoint compartido con docs/shell).
+   El media queda DESPUÉS del texto; --media-first lo sube (order -1):
+   variante de LAYOUT documentada, como la M de granos en la landing móvil. */
+@media (max-width: 880px) {
+  .mui-hero { grid-template-columns: 1fr; gap: var(--space-10); }
+  .mui-hero--media-first .mui-hero__media { order: -1; }
+}
+
+/* ---------- Feature grid · .mui-feature-grid ----------
+   Las tres hermanas formalizadas: grid fluido de cards silenciosas.
+   El __item habla el idioma de .mui-card pero es pieza propia — sin
+   fill, sin sombra: borde border-subtle + radius-lg sobre var(--bg).
+   Interactivo SOLO como <a> completo (hover afirma el boundary,
+   precedente .mui-docs__pager-link). */
+.mui-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--space-4);
+  margin-block-start: var(--space-10);
+}
+
+.mui-feature-grid__item {
+  display: block;
+  padding: var(--space-6);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  color: inherit;
+  text-decoration: none;
+}
+/* interactiva solo como <a>: el hover afirma el boundary (border-strong
+   ≥3 sobre --bg). El borde en reposo ya dibuja la card — sin hover
+   (touch/reduced) no se pierde nada. */
+a.mui-feature-grid__item {
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+a.mui-feature-grid__item:hover { border-color: var(--border-strong); }
+a.mui-feature-grid__item:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 2px;
+}
+
+/* icon — 2.25rem, olivo por defecto; --oro para la hermana núcleo */
+.mui-feature-grid__icon {
+  display: block;
+  width: 2.25rem; height: 2.25rem;
+  color: var(--secondary-text);
+}
+.mui-feature-grid__icon--oro { color: var(--accent-text); }
+
+/* rol — "maíz · el núcleo": mono 2xs uppercase, la voz de la máquina */
+.mui-feature-grid__rol {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+}
+
+.mui-feature-grid__title {
+  margin: var(--space-1) 0 var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+}
+
+.mui-feature-grid__body {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- CTA band · .mui-cta-band ----------
+   La franja de cierre: sube UN paso a var(--surface) y se marca con
+   border-block sutil (regla 1 — nada de sombras). Centrada; compone
+   .mui-btn en __actions. Va full-bleed, hermana de las .mui-section;
+   el consumidor mete su .mui-container adentro. Sobre --surface leen
+   text / text-secondary / accent-text (pares del gate).
+   El __title comparte la voz de .mui-section__title (selector agrupado
+   arriba, junto a Page). */
+.mui-cta-band {
+  padding-block: clamp(var(--space-12), 8vw, var(--space-20));
+  background: var(--surface);
+  border-block: 1px solid var(--border-subtle);
+  text-align: center;
+}
+
+.mui-cta-band__sub {
+  margin: 0 auto;
+  color: var(--text-secondary);
+  max-width: 52ch;
+}
+
+.mui-cta-band__actions {
+  display: flex; flex-wrap: wrap;
+  justify-content: center; align-items: center;
+  gap: var(--space-3);
+  margin-block-start: var(--space-8);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · sections
+   ════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   cluster · sections (la parcela commerce: pricing, faq,
+   testimonial, footer)
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Pricing · .mui-pricing ----------
+   La feria de planes: grilla equal-height donde cada plan es una card
+   silenciosa (precedente .mui-docs__pager-link — idioma de card sin
+   redeclarar .mui-card) y el CTA ancla al fondo con margin auto. El
+   plan destacado se marca con [data-featured] (hook de layout
+   documentado): borde var(--accent) — la semántica "recomendado" la
+   lleva el TEXTO del flag, que compone .mui-badge--accent. */
+.mui-pricing {
+  display: grid;
+  /* min(16rem, 100%): bajo 16rem de lienzo la columna cede, no desborda */
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: var(--space-4);
+  align-items: stretch;
+  margin-block-start: var(--space-10);
+}
+
+/* el plan — flex column: el CTA baja solo hasta el fondo */
+.mui-pricing__plan {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+/* destacado — borde oro (accent/surface ≥3, gateado); refuerzo
+   decorativo: el significado va en el flag, nunca solo en el borde */
+.mui-pricing__plan[data-featured] {
+  position: relative;
+  border-color: var(--accent);
+}
+
+/* flag "Recomendado" — compone .mui-badge mui-badge--accent, a caballo
+   del borde superior; inset-inline + margin auto centra RTL-safe */
+.mui-pricing__flag {
+  position: absolute;
+  top: 0; inset-inline: 0;
+  width: fit-content; margin-inline: auto;
+  transform: translateY(-50%);
+}
+
+.mui-pricing__name {
+  margin: 0;
+  font-family: var(--font-display); font-size: var(--text-lg);
+  font-weight: var(--weight-medium); line-height: var(--leading-snug);
+  color: var(--text);
+}
+.mui-pricing__desc {
+  margin: 0;
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+
+/* el precio — mono display: la cifra es el dato, el período la escolta */
+.mui-pricing__price {
+  margin-block: var(--space-4);
+  font-family: var(--font-mono); font-size: var(--text-4xl);
+  font-weight: var(--weight-bold); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text);
+}
+.mui-pricing__period {
+  font-size: var(--text-sm); font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-normal);
+  color: var(--text-muted);
+}
+
+/* features — checklist. Glifos con alt vacío (ornamento): la semántica
+   incluido/no-incluido va en el texto (componer .mui-sr-only) */
+.mui-pricing__features {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  margin: 0; padding: 0; list-style: none;
+}
+.mui-pricing__features li {
+  display: flex; align-items: baseline; gap: var(--space-2);
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+.mui-pricing__features li::before {
+  content: "✓";
+  content: "✓" / ""; /* alt vacío — patrón del cluster steps/file-tree */
+  flex: none;
+  font-weight: var(--weight-bold);
+  color: var(--success);
+}
+/* feature ausente — [data-off]: glifo — y texto apagados */
+.mui-pricing__features li[data-off] { color: var(--text-muted); }
+.mui-pricing__features li[data-off]::before {
+  content: "—";
+  content: "—" / "";
+  font-weight: var(--weight-regular);
+  color: var(--text-muted);
+}
+
+/* CTA — wrapper que ancla abajo (margin auto en flex column); el
+   .mui-btn compuesto se estira al ancho del plan (column stretch) */
+.mui-pricing__cta {
+  display: flex; flex-direction: column;
+  margin-block-start: auto;
+  padding-block-start: var(--space-6);
+}
+
+/* ---------- FAQ · .mui-faq ----------
+   Preguntas frecuentes con <details>/<summary> nativos: el estado es
+   [open] y el plegado lo trae gratis la plataforma — cero JS. Filas
+   separadas por hairlines: la definición la dan los bordes (regla 1).
+   Vive sobre var(--bg) o var(--surface) — mismos pares del gate. */
+.mui-faq {
+  width: 100%;
+  max-width: 48rem;
+}
+.mui-faq__item { border-top: 1px solid var(--border-subtle); }
+.mui-faq__item:last-child { border-bottom: 1px solid var(--border-subtle); }
+
+/* la pregunta — summary sin marcador del UA; chevron propio ::after */
+.mui-faq__q {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  font-family: var(--font-display); font-size: var(--text-base);
+  font-weight: var(--weight-medium); line-height: var(--leading-snug);
+  color: var(--text);
+  cursor: pointer; list-style: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.mui-faq__q::-webkit-details-marker { display: none; }
+.mui-faq__q:hover { color: var(--accent-text); }
+.mui-faq__q:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* chevron — dibujado con bordes, hereda currentColor; rota 180°
+   (45°→225°) al abrir. Reduced-motion lo deja congelado en 1 frame:
+   OK — el estado lo cuenta la respuesta visible, no la flecha. */
+.mui-faq__q::after {
+  content: "";
+  flex: none;
+  width: 0.5em; height: 0.5em;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+.mui-faq__item[open] > .mui-faq__q::after { transform: rotate(225deg); }
+
+/* la respuesta — prosa contenida a 62ch; aparece sin animar (1 frame:
+   idéntico bajo reduced-motion, nada que neutralizar) */
+.mui-faq__a {
+  margin: 0;
+  max-width: 62ch;
+  padding-block: 0 var(--space-4);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+}
+/* respuestas de varios párrafos (__a como <div> con <p> adentro) */
+.mui-faq__a p { margin-block: 0 var(--space-3); }
+.mui-faq__a p:last-child { margin-block-end: 0; }
+
+/* ---------- Testimonial · .mui-testimonial ----------
+   Coro de voces: grilla de cards sutiles; cada item ENVUELVE un
+   blockquote.mui-quote (cluster content de artifacts) sin
+   redeclararlo — acá solo viven la parcela, la card y los seams. */
+.mui-testimonial {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  gap: var(--space-4);
+  margin-block-start: var(--space-10);
+}
+.mui-testimonial__item {
+  display: flex; flex-direction: column;
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+/* seams: el quote llena la card y su atribución asienta al fondo
+   (equal-height entre vecinos); la variante --pull pierde barra y
+   sangría — el marco de la card ya define (regla 1, sin doble borde) */
+.mui-testimonial__item > .mui-quote { flex: 1 1 auto; }
+.mui-testimonial__item .mui-quote__attr { margin-block-start: auto; }
+.mui-testimonial__item > .mui-quote--pull {
+  border-inline-start: 0;
+  padding-inline-start: 0;
+}
+
+/* ---------- Footer · .mui-footer ----------
+   El mega footer — la línea de tierra que cierra la página.
+   margin-block-start auto lo empuja al fondo cuando el wrapper
+   (.mui-page o el body) es flex column con min-height 100dvh.
+   La grilla: tracks auto-fit de 9rem y la marca ocupa 2 — el spec
+   de grid no admite fr junto a repeat(auto-fit) en una misma lista
+   de tracks, así que "brand 2fr" se logra con grid-column: span 2
+   (mismo resultado: la marca = dos columnas de links). */
+.mui-footer {
+  --_max-w: 90rem;
+  --_pad-inline: clamp(var(--space-4), 3vw, var(--space-8));
+  margin-block-start: auto;
+  padding-block: var(--space-16) var(--space-10);
+  padding-inline: var(--_pad-inline);
+  font-family: var(--font-display);
+  background: var(--bg);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.mui-footer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--space-8);
+  max-width: var(--_max-w);
+  margin-inline: auto;
+}
+
+/* brand — wordmark (slot svg) + mantra; doble de ancho que cada columna */
+.mui-footer__brand {
+  grid-column: span 2;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: var(--space-3);
+}
+.mui-footer__mantra {
+  margin: 0;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+
+/* rótulo de columna — la voz de .mui-docs__nav-heading */
+.mui-footer__heading {
+  margin: 0; margin-block-end: var(--space-3);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-wide); text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* links — silenciosos en reposo; el hover nunca es solo color: sube a
+   var(--text) Y aparece el subrayado (ambos pares ≥4.5 sobre --bg) */
+.mui-footer__links {
+  margin: 0; padding: 0; list-style: none;
+}
+.mui-footer__links li { margin-block: var(--space-2); }
+.mui-footer__links a,
+.mui-footer__legal a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.mui-footer__links a { font-size: var(--text-sm); }
+.mui-footer__links a:hover,
+.mui-footer__legal a:hover { color: var(--text); text-decoration: underline; }
+.mui-footer__links a:focus-visible,
+.mui-footer__legal a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* legal — hairline + fila que envuelve: © a un lado, meta al otro */
+.mui-footer__legal {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  max-width: var(--_max-w);
+  margin-inline: auto;
+  margin-block-start: var(--space-10);
+  padding-block-start: var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+.mui-footer__legal p { margin: 0; }
+
+/* ≤880px — una columna: la marca arriba, columnas apiladas (mismo
+   breakpoint que el drawer de mui-docs) */
+@media (max-width: 880px) {
+  .mui-footer__grid { grid-template-columns: 1fr; }
+  .mui-footer__brand { grid-column: auto; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · media
+   ════════════════════════════════════════════════════════════════════ */
+/* ---------- Media Grid · .mui-media-grid ----------
+   La parcela de imágenes: grid uniforme auto-fill (celdas 4/3, --square
+   1/1) o masonry por columnas (variante). Cada item es un <a> o <button>
+   envolvente (idioma de .mui-card--interactive) que puede abrir el
+   lightbox. La caption es un velo inferior SIEMPRE visible — regla
+   touch/reduced-motion: nada de opacity 0→1 en hover; el hover solo
+   intensifica el velo, y el zoom de la imagen es decorativo (bajo
+   reduce el contrato global lo congela y no se pierde nada). */
+.mui-media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: var(--space-3);
+}
+/* guard: el display de arriba pisaría el [hidden] del UA (precedente .mui-alert) */
+.mui-media-grid[hidden] { display: none; }
+
+/* item — <a> o <button> envolvente; el reset sigue a .mui-card--interactive */
+.mui-media-grid__item {
+  position: relative; display: block;
+  width: 100%; padding: 0;                /* reset de <button> */
+  font: inherit; text-align: start;
+  text-decoration: none; cursor: pointer; /* reset de <a> */
+  -webkit-tap-highlight-color: transparent;
+  aspect-ratio: 4 / 3;
+  color: var(--text);
+  background: var(--surface);             /* suelo mientras carga la imagen */
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+/* el hover nunca depende solo del borde: lo acompañan el zoom y el velo */
+.mui-media-grid__item:hover { border-color: var(--border); }
+/* el outline se dibuja FUERA de la caja: el overflow:hidden no lo recorta */
+.mui-media-grid__item:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* el puente que llena la celda — <figure> en el camino <a>; en el camino
+   <button> el content model (solo phrasing) prohíbe <figure>: ahí el
+   puente es span.mui-media-grid__figure (mismo contrato, ver a11y) */
+.mui-media-grid__item figure,
+.mui-media-grid__item .mui-media-grid__figure {
+  display: block; margin: 0; height: 100%;
+}
+.mui-media-grid__item img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-moderate) var(--ease-settle);
+}
+/* zoom sutil — decorativo: bajo reduced-motion queda congelado en 1 frame */
+.mui-media-grid__item:hover img { transform: scale(1.03); }
+
+/* caption — velo inferior SIEMPRE visible (color-mix + blur, idioma del
+   topbar de docs): el texto lee sobre --bg efectivo (par text/bg del
+   gate). En hover el velo solo gana densidad — nunca aparece/desaparece:
+   touch y reduced-motion ven lo mismo, quieto. */
+.mui-media-grid__caption {
+  position: absolute; inset-inline: 0; inset-block-end: 0;
+  margin: 0;             /* reset de <figcaption>; inocuo en el span del camino <button> */
+  padding: var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--text);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition: background-color var(--dur-fast) var(--ease-standard);
+}
+.mui-media-grid__item:hover .mui-media-grid__caption {
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+}
+
+/* square — celdas cuadradas (catálogo, avatares) */
+.mui-media-grid--square .mui-media-grid__item { aspect-ratio: 1 / 1; }
+
+/* masonry — columnas CSS: cada pieza conserva su proporción natural.
+   El ritmo vertical lo pone el margin del item (las columnas no conocen
+   el gap del grid); --_cols es override documentado del consumidor. */
+.mui-media-grid--masonry {
+  --_cols: 3;
+  display: block;
+  columns: var(--_cols);
+  column-gap: var(--space-3);
+}
+.mui-media-grid--masonry .mui-media-grid__item {
+  aspect-ratio: auto;
+  break-inside: avoid;
+  margin-block-end: var(--space-3);
+}
+.mui-media-grid--masonry .mui-media-grid__item img { height: auto; }
+
+@media (max-width: 880px) { .mui-media-grid--masonry { --_cols: 2; } }
+@media (max-width: 560px) { .mui-media-grid--masonry { --_cols: 1; } }
+
+/* ---------- Lightbox · dialog.mui-lightbox ----------
+   Visor de media a pantalla: se aplica JUNTO a .mui-modal
+   (<dialog class="mui-modal mui-lightbox">) — hereda el contrato nativo
+   (top layer, focus trap del UA, Esc) y el ::backdrop SIN redeclararlos;
+   la capa layouts gana la cascada. Acá solo se desnuda el marco: la
+   media ES la superficie — radio y sombra viven en ella. La entrada
+   milpa-scale-in se MUDA del dialog a la media: un dialog con transform
+   es containing block de sus fixed, y al asentar el keyframe en
+   transform:none counter/nav/close brincarían del borde del dialog a
+   las esquinas reales del viewport — con el dialog quieto nacen
+   clavados. Todo texto/control flota sobre el scrim traslúcido (debajo
+   puede haber cualquier cosa): por eso llevan chip SÓLIDO
+   var(--overlay) — pares del gate, no composites. Sin --z-*: el top
+   layer del dialog ya vive encima de toda la escala. */
+.mui-lightbox {
+  width: fit-content;
+  max-width: min(92vw, 70rem);
+  max-height: 92vh;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* entrada — el dialog NO se anima (neutraliza el milpa-scale-in del
+   modal): mientras el keyframe porta transform, el dialog es containing
+   block de los controles fixed y al terminar saltarían de golpe. La
+   misma entrada vive en la media; counter/nav/close acompañan con el
+   fade del backdrop (mismo pulso) — bajo reduce todo cae a 1 frame. */
+.mui-lightbox[open] { animation: none; }
+.mui-lightbox[open] .mui-lightbox__media {
+  animation: milpa-scale-in var(--dur-moderate) var(--ease-grano) both;
+}
+.mui-lightbox[open] .mui-lightbox__counter,
+.mui-lightbox[open] .mui-lightbox__nav,
+.mui-lightbox[open] .mui-lightbox__close {
+  animation: milpa-fade var(--dur-moderate) var(--ease-standard) both;
+}
+
+/* media — la figura protagonista: el marco (radio + sombra) es suyo */
+.mui-lightbox__media { margin: 0; min-height: 0; }
+.mui-lightbox__media img,
+.mui-lightbox__media video {
+  display: block;
+  max-width: 100%;
+  max-height: 80vh;
+  margin-inline: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+/* caption — chip centrado con fondo sólido: sobre el scrim el composite
+   no es par gateable; text-secondary sobre var(--overlay) sí (4.5) */
+.mui-lightbox__caption {
+  width: fit-content; max-width: 100%;
+  margin-block-start: var(--space-3); margin-inline: auto;
+  padding: var(--space-1_5) var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: var(--leading-snug); text-align: center;
+  color: var(--text-secondary);
+  background: var(--overlay);
+  border-radius: var(--radius-sm);
+}
+
+/* counter — "3 / 12": mono, mismo chip overlay, anclado al arranque */
+.mui-lightbox__counter {
+  position: fixed;
+  inset-block-start: var(--space-4); inset-inline-start: var(--space-4);
+  padding: var(--space-1) var(--space-2);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-secondary);
+  background: var(--overlay);
+  border-radius: var(--radius-sm);
+}
+
+/* nav — banda fixed a lo ancho del viewport: prev a un lado, next al
+   otro, centrados en el eje de bloque SIN transform (el hover del
+   .mui-btn ya usa translateY y chocaría). pointer-events:none deja
+   pasar el click al backdrop (light-dismiss del consumidor); cada botón
+   VIVO lo reactiva — el guard :not() preserva el pointer-events:none
+   que primitives da a [disabled]/[aria-disabled]/[aria-busy] (esta capa
+   gana la cascada: sin guard, el botón muerto recuperaría hover y
+   bloquearía el click que debe caer al backdrop). */
+.mui-lightbox__nav {
+  position: fixed; inset-inline: 0; inset-block: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding-inline: var(--space-4);
+  pointer-events: none;
+}
+.mui-lightbox__nav .mui-btn:not([disabled], [aria-disabled="true"], [aria-busy="true"]) {
+  pointer-events: auto;
+}
+
+/* close — el botón compuesto (.mui-btn mui-btn--icon), arriba al final */
+.mui-lightbox__close {
+  position: fixed;
+  inset-block-start: var(--space-4); inset-inline-end: var(--space-4);
+}
+
+/* los controles compuestos ganan chip sólido: flotan sobre scrim y
+   fotos — el fill var(--overlay) asegura los pares del gate
+   (text-secondary reposo / text hover, ambos 4.5). El borde
+   var(--border) es decorativo: la definición la dan fill + sombra
+   (idioma exacto del toast). */
+.mui-lightbox__nav .mui-btn,
+.mui-lightbox__close {
+  background: var(--overlay);
+  border-color: var(--border);
+  box-shadow: var(--shadow-base);
+}
+
+/* focus de los chips — con el offset estándar (+2px) el anillo caería
+   sobre el scrim compuesto (no gateable: ver notes del cluster);
+   precedente del drawer: offset negativo y el anillo vive íntegro
+   sobre el fill var(--overlay) (focus/overlay ≥3, par del gate). */
+.mui-lightbox__nav .mui-btn:focus-visible,
+.mui-lightbox__close:focus-visible { outline-offset: -2px; }
+
+/* <560px — prev/next dejan los lados y pasan a fila centrada bajo la
+   media (el dialog ya es flex column vía .mui-modal[open]) */
+@media (max-width: 560px) {
+  .mui-lightbox__nav {
+    position: static;
+    justify-content: center; gap: var(--space-3);
+    margin-block-start: var(--space-3);
+    padding-inline: 0;
+  }
+}
+
 } /* @layer milpa.layouts */

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "feature-grid",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-feature-grid",
+  "summary": "Las tres hermanas de la landing formalizadas: grid fluido (auto-fit, minmax 16rem) de cards silenciosas para features/pilares. El __item habla el idioma de .mui-card pero es pieza propia — sin fill, sin sombra: borde 1px border-subtle + radius-lg, fondo transparente, vive SOBRE var(--bg). Icono de 2.25rem (olivo; --oro para la pieza núcleo), rol mono uppercase ('maíz · el núcleo'), título text-lg y body en voz baja. Interactivo SOLO como <a> completo: el hover afirma el boundary a border-strong (precedente .mui-docs__pager-link).",
+  "element": [
+    "div (.mui-feature-grid — el grid; va tras kicker/título/lede de la sección)",
+    "article | div (.mui-feature-grid__item — item estático)",
+    "a (.mui-feature-grid__item — item interactivo COMPLETO: un solo tap target)"
+  ],
+  "composes": [
+    "page (vive dentro de .mui-section + .mui-container; margin-top space-10 lo separa del lede)"
+  ],
+  "anatomy": {
+    "root": ".mui-feature-grid — grid repeat(auto-fit, minmax(16rem, 1fr)), gap space-4, margin-block-start space-10 (se apila solo: sin media query propia)",
+    "item": ".mui-feature-grid__item — display block, padding space-6, borde 1px var(--border-subtle), radius-lg, background transparent, color inherit; como <a> pierde el subrayado y gana hover/focus",
+    "icon": ".mui-feature-grid__icon — svg 2.25rem display block, color var(--secondary-text); SIEMPRE aria-hidden (decorativo, el texto porta el significado)",
+    "rol": ".mui-feature-grid__rol — <p> mono text-2xs uppercase tracking-wide var(--text-muted), margin space-4 0 0: 'maíz · el núcleo'",
+    "title": ".mui-feature-grid__title — text-lg weight-medium leading-snug, margin space-1 0 space-2; el nivel de heading lo elige el documento (h3 tras un h2 de sección)",
+    "body": ".mui-feature-grid__body — var(--text-muted) text-sm, margin 0"
+  },
+  "variants": {
+    "icon": {
+      "oro": ".mui-feature-grid__icon--oro — color var(--accent-text): la hermana núcleo. Jerarquía VISUAL — la semántica la porta el texto del __rol, no el color"
+    }
+  },
+  "states": {
+    "hover": "solo a.mui-feature-grid__item:hover — borde var(--border-strong) (≥3 sobre --bg): el boundary se afirma. El borde en reposo ya dibuja la card: sin hover (touch/reduced) no se pierde nada",
+    "focus": "a.mui-feature-grid__item:focus-visible — outline 2px var(--focus) offset 2px",
+    "static": "como <article>/<div> no hay estados: muestra, no acciona"
+  },
+  "tokens": [
+    "--border-subtle",
+    "--border-strong",
+    "--focus",
+    "--secondary-text",
+    "--accent-text",
+    "--text-muted",
+    "--font-mono",
+    "--text-2xs",
+    "--text-sm",
+    "--text-lg",
+    "--weight-medium",
+    "--leading-snug",
+    "--tracking-wide",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--space-6",
+    "--space-10",
+    "--radius-lg",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "item estático: <article> (o <div>). Interactivo: <a> que envuelve TODO el item — no anidar controles adentro (un solo tap target, precedente card --interactive); las acciones secundarias sacan al item de ser <a>",
+    "aria": [
+      "el icono SIEMPRE con aria-hidden=\"true\" — es decorativo; rol y título portan el significado",
+      "el __rol es <p> mono, no heading; el __title elige su <h*> por el outline del documento",
+      "la variante --oro del icono no comunica sola: el texto del __rol la acompaña ('maíz · el núcleo')"
+    ],
+    "keyboard": [
+      "como <a> el item entra al tab order con foco nativo; el anillo var(--focus) está verificado sobre --bg"
+    ],
+    "contrast": "todo sobre var(--bg), pares del gate: título var(--text) ≥4.5, rol y body var(--text-muted) ≥4.5, icono var(--secondary-text) / var(--accent-text) ≥4.5 (decorativo igual). Hover border-strong ≥3 sobre --bg (gate); el borde en reposo border-subtle es decorativo — el boundary no porta semántica (mismo estatus que card)"
+  },
+  "motion": {
+    "transitions": "solo el <a>: border-color en --dur-fast --ease-standard — el boundary se afirma, nada se mueve",
+    "reducedMotion": "contrato global: el cambio de borde queda instantáneo; el item lee completo sin hover"
+  },
+  "examples": [
+    {
+      "title": "Las tres hermanas (items estáticos, núcleo en oro)",
+      "html": "<div class=\"mui-feature-grid\"><article class=\"mui-feature-grid__item\"><svg class=\"mui-feature-grid__icon mui-feature-grid__icon--oro\" viewBox=\"0 0 36 36\" fill=\"currentColor\" aria-hidden=\"true\"><!-- granos --></svg><p class=\"mui-feature-grid__rol\">maíz · el núcleo</p><h3 class=\"mui-feature-grid__title\">Kernel determinista</h3><p class=\"mui-feature-grid__body\">Un núcleo pequeño, predecible y aburrido a propósito: la abundancia crece encima, no adentro.</p></article><article class=\"mui-feature-grid__item\"><svg class=\"mui-feature-grid__icon\" viewBox=\"0 0 36 36\" fill=\"currentColor\" aria-hidden=\"true\"><!-- enredadera --></svg><p class=\"mui-feature-grid__rol\">frijol · los módulos</p><h3 class=\"mui-feature-grid__title\">Plugins que se enredan al tallo</h3><p class=\"mui-feature-grid__body\">Se conectan por eventos y componen entre sí: cada uno nutre al sistema completo.</p></article><article class=\"mui-feature-grid__item\"><svg class=\"mui-feature-grid__icon\" viewBox=\"0 0 36 36\" fill=\"currentColor\" aria-hidden=\"true\"><!-- calabaza --></svg><p class=\"mui-feature-grid__rol\">calabaza · la cobertura</p><h3 class=\"mui-feature-grid__title\">Contratos que protegen</h3><p class=\"mui-feature-grid__body\">Cubren el suelo: tipado, gates y garantías donde otros dejan maleza.</p></article></div>"
+    },
+    {
+      "title": "Item interactivo (el <a> ES la card)",
+      "html": "<div class=\"mui-feature-grid\"><a class=\"mui-feature-grid__item\" href=\"/docs/0.2/plugins\"><p class=\"mui-feature-grid__rol\">frijol · los módulos</p><h3 class=\"mui-feature-grid__title\">Plugins</h3><p class=\"mui-feature-grid__body\">Cómo germinan, se conectan y componen.</p></a></div>"
+    }
+  ]
+}

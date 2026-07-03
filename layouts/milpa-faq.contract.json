@@ -1,0 +1,66 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "faq",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-faq",
+  "summary": "Preguntas frecuentes sobre <details>/<summary> nativos — el estado ES [open] y el plegado lo trae gratis la plataforma: cero JS. Columna de lectura a 48rem con filas separadas por hairlines (regla 1: la definición la dan los bordes). El summary pierde el marcador del UA y gana un chevron ::after dibujado con bordes (currentColor) que rota 180° al abrir; bajo reduced-motion queda congelado — OK: el estado lo cuenta la respuesta visible, no la flecha. Vive sobre var(--bg) o var(--surface), mismos pares del gate.",
+  "element": [
+    "div|section (el bloque .mui-faq); cada __item un <details> cuyo primer hijo es <summary class=\"mui-faq__q\">"
+  ],
+  "anatomy": {
+    "root": ".mui-faq — width 100%, max-width 48rem (columna de lectura); el consumidor lo centra o alinea",
+    "item": "details.mui-faq__item — border-top 1px border-subtle en todos (el primero también); el último suma border-bottom: la lista queda enmarcada por hairlines",
+    "q": "summary.mui-faq__q — la pregunta: flex space-between gap space-4, padding-block space-4, display text-base weight-medium var(--text), cursor pointer; list-style none + ::-webkit-details-marker display none (fuera el marcador del UA, patrón .mui-file-tree__dir)",
+    "chevron": ".mui-faq__q::after — 0.5em, bordes inline-end/block-end 2px currentColor rotados 45° (apunta abajo); hereda el color del summary en hover",
+    "a": ".mui-faq__a — la respuesta: padding-block 0 space-4, var(--text-secondary), leading-relaxed, max-width 62ch; como <p> directo o <div> con <p> adentro (márgenes internos resueltos: space-3 entre párrafos, 0 al final)"
+  },
+  "variants": {},
+  "states": {
+    "open": ".mui-faq__item[open] — atributo NATIVO del <details>: la respuesta es visible y el chevron rota a 225° (180° de giro). Nunca una clase",
+    "hover": ".mui-faq__q:hover — sube a var(--accent-text); el chevron acompaña (currentColor)",
+    "focus": ".mui-faq__q:focus-visible — outline 2px var(--focus) offset 2px"
+  },
+  "tokens": [
+    "--text",
+    "--text-secondary",
+    "--accent-text",
+    "--border-subtle",
+    "--focus",
+    "--font-display",
+    "--text-base",
+    "--weight-medium",
+    "--leading-snug",
+    "--leading-relaxed",
+    "--space-3",
+    "--space-4",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "<details>/<summary> nativos: el summary expone role button con estado expandido/colapsado gratis — sin aria-expanded manual ni JS. La sección lleva su propio heading FUERA del bloque (no anidar headings dentro del summary: los navegadores aplanan su semántica)",
+    "aria": [
+      "nada que declarar: la plataforma anuncia expandido/colapsado desde [open]",
+      "el chevron es ::after decorativo sin content textual — invisible para el lector"
+    ],
+    "keyboard": [
+      "Tab recorre los summaries; Enter/Espacio alterna [open] — comportamiento nativo"
+    ],
+    "behavior": [
+      "acordeón exclusivo (una abierta a la vez) SIN JS: mismo atributo name en todos los <details name=\"faq\"> — nativo desde 2023, degrada a independientes",
+      "buscar-en-página de Chromium abre el <details> que contiene el match — otro dividendo del elemento nativo"
+    ],
+    "contrast": "todos pares del gate: __q text ≥4.5 y hover accent-text ≥4.5 sobre --bg y sobre --surface; __a text-secondary ≥4.5 sobre ambos; el chevron hereda esos mismos pares (currentColor); hairlines border-subtle decorativas — exentas de 1.4.11; anillo focus ≥3 sobre ambos"
+  },
+  "motion": {
+    "transitions": "chevron: transform --dur-fast --ease-standard (45°→225°); color del summary: --dur-fast --ease-standard. El contenido del <details> aparece en 1 frame — sin animación de altura",
+    "reducedMotion": "contrato global de milpa-motion.css: la rotación cae a 1ms (chevron congelado en su estado final) — la semántica no depende de la flecha: la respuesta visible y el anuncio nativo de expandido la llevan"
+  },
+  "examples": [
+    {
+      "title": "FAQ como acordeón exclusivo nativo (name compartido)",
+      "html": "<div class=\"mui-faq\"><details class=\"mui-faq__item\" name=\"faq\" open><summary class=\"mui-faq__q\">¿Milpa necesita JavaScript?</summary><div class=\"mui-faq__a\"><p>No. El design system es CSS puro: los estados viven en atributos nativos y ARIA.</p><p>El único JS es del consumidor: alternar tema y abrir el drawer móvil.</p></div></details><details class=\"mui-faq__item\" name=\"faq\"><summary class=\"mui-faq__q\">¿Puedo pisar los estilos?</summary><p class=\"mui-faq__a\">Sí — todo vive en @layer milpa.*: tu CSS sin layer siempre gana, sin !important.</p></details></div>"
+    }
+  ]
+}

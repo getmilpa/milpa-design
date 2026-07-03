@@ -1,0 +1,58 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "testimonial",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-testimonial",
+  "summary": "Coro de voces — grilla equal-height de cards sutiles donde cada item ENVUELVE un blockquote.mui-quote (cluster content de artifacts) sin redeclararlo: este layout solo aporta la parcela (grid auto-fit 18rem), la card (surface + border-subtle + radius-lg) y los seams. Seams: el quote se estira para llenar la card y su __attr asienta al fondo (las atribuciones alinean entre vecinos); la variante --pull pierde barra y sangría dentro de la card — el marco ya define, sin doble borde (regla 1).",
+  "element": [
+    "section|div (la grilla; recomendado <section aria-label=\"Testimonios\">); cada __item un <div> que envuelve el <blockquote class=\"mui-quote\">"
+  ],
+  "composes": [
+    "quote (blockquote.mui-quote con __mark/__text/__attr — anatomía, ARIA y pares en SU contrato; acá NO se redeclara)",
+    "avatar (indirecto, vía el __attr del quote)"
+  ],
+  "anatomy": {
+    "root": ".mui-testimonial — grid repeat(auto-fit, minmax(min(18rem, 100%), 1fr)), gap space-4, margin-block-start space-10; el min() evita desborde bajo 18rem de lienzo",
+    "item": ".mui-testimonial__item — card sutil: fill var(--surface), borde 1px border-subtle, radius-lg, padding space-6; flex column para que el quote llene la altura",
+    "seam-fill": ".mui-testimonial__item > .mui-quote — flex 1 1 auto: el quote ocupa la card entera",
+    "seam-attr": ".mui-testimonial__item .mui-quote__attr — margin-block-start auto: la atribución asienta al fondo y alinea entre cards vecinas (equal-height del grid)",
+    "seam-pull": ".mui-testimonial__item > .mui-quote--pull — pierde border-inline-start y padding-inline-start: dentro de la card la barra de acento sobraría (doble marco)"
+  },
+  "variants": {},
+  "states": {
+    "static": "sin estados interactivos propios — pieza de display; los estados del contenido (si los hubiera) son del quote compuesto"
+  },
+  "tokens": [
+    "--surface",
+    "--border-subtle",
+    "--radius-lg",
+    "--space-4",
+    "--space-6",
+    "--space-10"
+  ],
+  "a11y": {
+    "element": "la semántica la lleva el quote compuesto: <blockquote> con __mark SIEMPRE aria-hidden (ornamento) y <cite> en el nombre — ver contrato quote. La sección lleva aria-label o heading propio",
+    "aria": [
+      "nada propio: el wrapper es layout puro"
+    ],
+    "keyboard": [
+      "sin interactivos propios"
+    ],
+    "behavior": [
+      "los seams tocan elementos del quote SOLO desde el wrapper (misma dirección que el resto del sistema: el layout ajusta, la pieza no se entera); milpa.layouts va después de milpa.artifacts en el orden de @layer — el ajuste gana sin especificidad extra"
+    ],
+    "contrast": "los pares del quote se re-verifican sobre --surface (la card) y todos están en el gate: __text text-secondary ≥4.5, __name text ≥4.5, __role text-muted ≥4.5, __mark accent ≥3 (ornamento aria-hidden — no porta semántica) sobre --surface. El borde border-subtle de la card es decorativo, mismo estatus que card"
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Grilla de dos testimonios (el segundo, pull sin barra)",
+      "html": "<section class=\"mui-testimonial\" aria-label=\"Testimonios\"><div class=\"mui-testimonial__item\"><blockquote class=\"mui-quote\" cite=\"https://milpa.lat/casos/kiosko\"><span class=\"mui-quote__mark\" aria-hidden=\"true\">“</span><p class=\"mui-quote__text\">Migramos el admin entero en una semana; el tema light salió gratis.</p><footer class=\"mui-quote__attr\"><span class=\"mui-avatar\" aria-hidden=\"true\">RV</span><cite class=\"mui-quote__name\">Rufina Vázquez</cite><span class=\"mui-quote__role\">CTO, Kiosko</span></footer></blockquote></div><div class=\"mui-testimonial__item\"><blockquote class=\"mui-quote mui-quote--pull\"><p class=\"mui-quote__text\">Siembra módulos, cosecha aplicaciones — y el CSS nunca estorba.</p><footer class=\"mui-quote__attr\"><cite class=\"mui-quote__name\">Baltasar Ruiz</cite><span class=\"mui-quote__role\">Lead, Cafetal</span></footer></blockquote></div></section>"
+    }
+  ]
+}

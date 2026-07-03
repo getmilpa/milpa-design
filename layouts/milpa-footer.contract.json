@@ -1,0 +1,76 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "footer",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-footer",
+  "summary": "El mega footer — la línea de tierra que cierra la página: hairline superior, marca con mantra (SIEMPRE en español: 'Siembra módulos, cosecha aplicaciones.') y columnas de links silenciosos sobre var(--bg). margin-block-start auto lo empuja al fondo cuando el wrapper (.mui-page o el body) es flex column con min-height 100dvh. La grilla usa tracks auto-fit de 9rem y la marca ocupa 2 (grid-column: span 2) — el spec de grid no admite fr junto a repeat(auto-fit) en una misma lista de tracks, así que 'brand 2fr' se logra por span: mismo resultado visual. ≤880px cae a una columna con la marca arriba (mismo breakpoint que el drawer de mui-docs).",
+  "element": [
+    "footer (landmark contentinfo — SIEMPRE <footer> hijo directo del <body> o de .mui-page, nunca anidado en <main>)"
+  ],
+  "anatomy": {
+    "root": "footer.mui-footer — border-top 1px border-subtle, padding-block space-16/space-10, padding-inline clamp(space-4..space-8) (--_pad-inline, la parcela de mui-docs), background var(--bg), margin-block-start auto, font-display",
+    "grid": ".mui-footer__grid — grid repeat(auto-fit, minmax(9rem, 1fr)) gap space-8, max-width 90rem centrado (--_max-w)",
+    "brand": ".mui-footer__brand — grid-column span 2 (doble de ancho que cada columna de links); flex column gap space-3: el wordmark (slot svg o texto) + __mantra",
+    "mantra": ".mui-footer__mantra — mono text-2xs var(--text-muted); el texto SIEMPRE en español: 'Siembra módulos, cosecha aplicaciones.'",
+    "heading": ".mui-footer__heading — rótulo de columna: mono 2xs uppercase tracking-wide var(--text-muted), margin-block-end space-3 (la voz de .mui-docs__nav-heading)",
+    "links": ".mui-footer__links — <ul> list none; li margin-block space-2; a: text-sm var(--text-muted) sin subrayado → hover var(--text) + subrayado (el cambio nunca es solo color)",
+    "legal": ".mui-footer__legal — border-top 1px border-subtle, margin-block-start space-10, padding-block-start space-6; flex wrap space-between gap space-2/space-4; text-xs var(--text-muted); centrado a --_max-w como la grilla; sus <a> comparten el idioma de __links"
+  },
+  "variants": {},
+  "states": {
+    "hover": "a de __links/__legal:hover — var(--text) + text-decoration underline: doble señal, nunca solo color",
+    "focus": "a de __links/__legal:focus-visible — outline 2px var(--focus) offset 2px"
+  },
+  "tokens": [
+    "--bg",
+    "--text",
+    "--text-muted",
+    "--border-subtle",
+    "--focus",
+    "--font-display",
+    "--font-mono",
+    "--text-2xs",
+    "--text-xs",
+    "--text-sm",
+    "--weight-regular",
+    "--tracking-wide",
+    "--leading-normal",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-6",
+    "--space-8",
+    "--space-10",
+    "--space-16",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "<footer> hijo directo del body (o de .mui-page) expone el landmark contentinfo gratis. Cada columna de links: <nav aria-labelledby={id del __heading}> envolviendo heading + ul — varios nav distinguibles por label; el __heading puede ser <h2> si la jerarquía de la página lo admite, o <p> con el nav etiquetado",
+    "aria": [
+      "el wordmark svg del brand: aria-hidden si el texto 'Milpa' lo acompaña visible; si el svg va solo, role=\"img\" + <title>",
+      "el mantra es contenido decorativo-editorial: se lee tal cual, sin ARIA extra"
+    ],
+    "keyboard": [
+      "Tab recorre wordmark (si es link) → links por columna → legal, en orden de documento"
+    ],
+    "behavior": [
+      "margin-block-start auto empuja el footer al fondo SOLO si el wrapper (.mui-page o body) es display flex, flex-direction column, min-height 100dvh — fuera de ese contexto el margin auto colapsa a 0 y el footer fluye normal: degradación segura",
+      "≤880px la grilla cae a 1 columna (brand primero, span reseteado); el orden de lectura no cambia",
+      "con menos columnas de links que tracks a ancho completo, los tracks vacíos colapsan (auto-fit)"
+    ],
+    "contrast": "todos pares del gate sobre --bg: links, mantra, headings y legal text-muted ≥4.5; hover text ≥4.5 + subrayado (doble señal); anillo focus ≥3; hairlines border-subtle decorativas — exentas de 1.4.11"
+  },
+  "motion": {
+    "transitions": "color de los links: --dur-fast --ease-standard; el subrayado aparece sin animar",
+    "reducedMotion": "contrato global de milpa-motion.css: la transición de color cae a 1ms — el hover sobrevive congelado (color final + subrayado inmediatos)"
+  },
+  "examples": [
+    {
+      "title": "Mega footer: brand + dos columnas + legal",
+      "html": "<footer class=\"mui-footer\"><div class=\"mui-footer__grid\"><div class=\"mui-footer__brand\"><a href=\"/\"><!-- wordmark Grano SVG + Milpa --></a><p class=\"mui-footer__mantra\">Siembra módulos, cosecha aplicaciones.</p></div><nav aria-labelledby=\"ft-producto\"><p class=\"mui-footer__heading\" id=\"ft-producto\">Producto</p><ul class=\"mui-footer__links\"><li><a href=\"/docs\">Documentación</a></li><li><a href=\"/docs/0.2/tokens\">Tokens</a></li><li><a href=\"/changelog\">Changelog</a></li></ul></nav><nav aria-labelledby=\"ft-comunidad\"><p class=\"mui-footer__heading\" id=\"ft-comunidad\">Comunidad</p><ul class=\"mui-footer__links\"><li><a href=\"https://github.com/milpa\">GitHub</a></li><li><a href=\"/contribuir\">Contribuir</a></li></ul></nav></div><div class=\"mui-footer__legal\"><p>© 2026 Milpa — Apache-2.0</p><p><a href=\"/privacidad\">Privacidad</a></p></div></footer>"
+    }
+  ]
+}

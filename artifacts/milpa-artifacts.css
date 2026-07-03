@@ -148,9 +148,9 @@
    Ventana de terminal para docs de CLI. Mismo marco que .mui-code.
    Los dots de la barra son cromo de ventana: un solo pseudo decorativo
    en border-strong (NO semánticos de estado), invisible para lectores.
-   El prompt usa --syntax-string (olivo, par verificado sobre syntax-bg;
-   mismo valor de rampa que --secondary-text en ambos temas) y queda
-   fuera de la selección: copiar la sesión no arrastra los "$". */
+   El prompt usa --secondary-text (la voz olivo; par verificado sobre
+   syntax-bg en el gate) y queda fuera de la selección: copiar la sesión
+   no arrastra los "$". */
 .mui-terminal {
   display: flex; flex-direction: column;
   font-family: var(--font-mono); font-size: var(--text-sm);

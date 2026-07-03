@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "status": "stable",
   "class": "mui-terminal",
-  "summary": "Ventana de terminal para docs de CLI — mismo marco que code (--syntax-bg + borde sutil + radius-lg, mono). La barra lleva tres dots de cromo en un solo pseudo decorativo (border-strong, NO semánticos de estado). El prompt (olivo vía --syntax-string, mismo valor de rampa que --secondary-text en ambos temas) queda fuera de la selección: copiar la sesión no arrastra los '$'. Corriendo se declara con aria-busy en el root: cursor de bloque pulsando al final de la última línea.",
+  "summary": "Ventana de terminal para docs de CLI — mismo marco que code (--syntax-bg + borde sutil + radius-lg, mono). La barra lleva tres dots de cromo en un solo pseudo decorativo (border-strong, NO semánticos de estado). El prompt (olivo vía --secondary-text, mismo valor de rampa que --secondary-text en ambos temas) queda fuera de la selección: copiar la sesión no arrastra los '$'. Corriendo se declara con aria-busy en el root: cursor de bloque pulsando al final de la última línea.",
   "element": [
     "div (bar + body; una <div> .mui-terminal__line por línea de sesión)"
   ],
@@ -14,7 +14,7 @@
     "bar": ".mui-terminal__bar — barra de ventana separada por border-subtle; los dots son ::before decorativo (un dot + dos box-shadow en var(--border-strong)): pseudo sin contenido, invisible para lectores, sin aria extra",
     "body": ".mui-terminal__body — padding space-4, overflow-x auto; si scrollea lleva role=\"region\" + aria-label + tabindex=\"0\"; con output en streaming, role=\"log\"",
     "line": ".mui-terminal__line — una línea de sesión: white-space pre-wrap (conserva espacios, parte líneas largas)",
-    "prompt": ".mui-terminal__prompt — '$' o 'coa': var(--syntax-string), user-select none; en el markup con aria-hidden=\"true\" (el lector lee solo el comando)",
+    "prompt": ".mui-terminal__prompt — '$' o 'coa': var(--secondary-text) (la voz olivo), user-select none; en el markup con aria-hidden=\"true\" (el lector lee solo el comando)",
     "out": ".mui-terminal__out — comando u output: hereda var(--syntax-text) del root; overflow-wrap anywhere"
   },
   "variants": {
@@ -62,7 +62,7 @@
       "el consumidor pone aria-busy=\"true\" en el root mientras el comando corre y lo remueve al terminar — el CSS enciende/apaga el cursor solo",
       "streaming: agregar cada línea como nodo nuevo dentro del body con role=\"log\" (el anuncio es automático); mantener el scroll pegado al fondo salvo que el usuario haya scrolleado hacia arriba"
     ],
-    "contrast": "syntax-text sobre syntax-bg ≥4.5, prompt --syntax-string sobre syntax-bg ≥4.5, líneas --error danger/syntax-bg 4.5 — los tres pares en el gate, ambos temas. Dots border-strong: cromo decorativo (el par border-strong/syntax-bg sostiene ≥3 igual, en el gate). El marco border-subtle es decorativo, mismo estatus que card."
+    "contrast": "syntax-text sobre syntax-bg ≥4.5, prompt --secondary-text sobre syntax-bg ≥4.5, líneas --error danger/syntax-bg 4.5 — los tres pares en el gate, ambos temas. Dots border-strong: cromo decorativo (el par border-strong/syntax-bg sostiene ≥3 igual, en el gate). El marco border-subtle es decorativo, mismo estatus que card."
   },
   "motion": {
     "transitions": "ninguna",

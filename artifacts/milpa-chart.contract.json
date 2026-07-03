@@ -16,7 +16,7 @@
     "legend": ".mui-chart__legend — flex wrap, text-xs var(--text-secondary). Obligatoria con más de una serie: la serie se distingue por texto, no solo por color",
     "legend-item": ".mui-chart__legend-item — swatch + etiqueta de la serie",
     "swatch": ".mui-chart__swatch — cuadrado 0.75rem radius-xs; la serie vía .mui-chart__swatch--1..6 (setean --_c: var(--viz-N) y --_ca: var(--viz-N-active)) o --_c/--_ca inline; regla 4: auto-borde 1px var(--_ca)",
-    "bar": ".mui-chart__bar — la marca de dato: fill var(--_c, var(--viz-1)); magnitud vía --_v inline (height en --bars, width en --bars-h); min 1px para que el cero exista. --_c hereda: seteado en el canvas colorea toda la serie Regla 4: auto-borde 1px var(--_ca, var(--viz-1-active)) — los pares viz-N/viz-N-active viajan juntos (setear --_ca junto a --_c).",
+    "bar": ".mui-chart__bar — la marca de dato: fill var(--_c, var(--viz-1)); magnitud vía --_v inline (height en --bars, width en --bars-h); min 1px para que el cero exista (con el auto-borde, el cero se ve ~3px: mejor para regla 4). --_c hereda: seteado en el canvas colorea toda la serie Regla 4: auto-borde 1px var(--_ca, var(--viz-1-active)) — los pares viz-N/viz-N-active viajan juntos (setear --_ca junto a --_c).",
     "axis": ".mui-chart__axis — eje X de --bars: espejo del grid del canvas (mismo gap, los ticks caen alineados bajo su barra); línea base var(--border-subtle) pegada a las barras",
     "tick": ".mui-chart__tick — etiqueta de categoría: mono 2xs var(--text-muted), ellipsis",
     "donut": ".mui-chart__donut — anillo redondo; el background conic-gradient lo arma el consumidor inline SOLO con tokens viz. Agujero vía ::after con var(--_hole, var(--surface)) (sobre --bg setear --_hole: var(--bg)); tamaño --_size (9rem) y grosor --_ring (space-6)",
@@ -24,10 +24,10 @@
   },
   "variants": {
     "tipo": {
-      "bars": ".mui-chart--bars — columnas iguales ancladas a la base; cada barra lleva style=\"--_v:62%\" (y opcional --_c: var(--viz-N)); radius superior sutil",
+      "bars": ".mui-chart--bars — columnas iguales ancladas a la base; cada barra lleva style=\"--_v:62%\" (y la serie con el PAR --_c: var(--viz-N); --_ca: var(--viz-N-active) — viajan juntos, regla 4); radius superior sutil",
       "bars-h": ".mui-chart--bars-h — filas apiladas; --_v pasa a ser el ancho",
       "line": ".mui-chart--line — el canvas contiene un <svg> del consumidor (viewBox propio; nosotros lo estiramos a width 100% × alto --_h)",
-      "donut": ".mui-chart--donut — proporciones de un todo; patrón del gradient: style=\"background: conic-gradient(var(--viz-1) 0 40%, var(--viz-2) 40% 75%, var(--viz-3) 75% 100%)\"",
+      "donut": ".mui-chart--donut — proporciones de un todo; el conic-gradient no admite borde por segmento (regla 4): separá las series con franjas finas de var(--_hole) entre paradas (patrón de gap ~1%, mejora la lectura y ayuda en CVD): style=\"background: conic-gradient(var(--viz-1) 0 39.5%, var(--_hole, var(--surface)) 39.5% 40.5%, var(--viz-2) 40.5% 74.5%, var(--_hole, var(--surface)) 74.5% 75.5%, var(--viz-3) 75.5% 99%, var(--_hole, var(--surface)) 99% 100%)\"",
       "sparkline": ".mui-chart--sparkline — mini inline (alto 2rem, ancho --_w default 6rem) para .mui-stat y celdas de tabla; compone con --bars o --line; sin título ni leyenda — el aria-label resume"
     },
     "series": {
@@ -90,7 +90,7 @@
       "al actualizar datos: reescribir --_v (la transición anima el cambio) Y el aria-label (o la tabla sr-only) en el mismo tick — visual y semántica nunca divergen",
       "mientras se carga: aria-busy=\"true\" en el root; quitarlo al llegar el dato"
     ],
-    "contrast": "viz-1..6 ≥3:1 sobre --bg y sobre --surface en ambos temas (en el gate) — el canvas vive sobre esas dos superficies; NO colocar charts sobre --surface-raised (ningún viz-N está verificado ahí). Título var(--text) ≥4.5, leyenda var(--text-secondary) ≥4.5, ticks/axis-labels var(--text-muted) ≥4.5 (todos en el gate). Grilla y línea base (border-subtle) son decorativas y exentas de 1.4.11: no son boundary de componente — la lectura la llevan las marcas viz, los ticks y la leyenda. El relleno __area-N (color-mix 18%) es refuerzo del trazo de 2px, que es quien sostiene el 3:1. Las marcas viz son fills no interactivos sin par -active (los tokens viz no lo tienen): su boundary es el propio 3:1 contra la superficie, sancionado por el gate"
+    "contrast": "viz-1..6 ≥3:1 sobre --bg y sobre --surface en ambos temas (en el gate) — el canvas vive sobre esas dos superficies; NO colocar charts sobre --surface-raised (ningún viz-N está verificado ahí). Título var(--text) ≥4.5, leyenda var(--text-secondary) ≥4.5, ticks/axis-labels var(--text-muted) ≥4.5 (todos en el gate). Grilla y línea base (border-subtle) son decorativas y exentas de 1.4.11: no son boundary de componente — la lectura la llevan las marcas viz, los ticks y la leyenda. El relleno __area-N (color-mix 18%) es refuerzo del trazo de 2px, que es quien sostiene el 3:1. Las marcas viz llevan auto-borde regla 4 (border 1px var(--_ca) = su viz-N-active, un paso más profundo de su serie); además el fill sostiene 3:1 contra la superficie, sancionado por el gate"
   },
   "motion": {
     "transitions": "height/width de las barras en --dur-moderate --ease-grano (el dato germina y se asienta, nunca rebota); opacity del canvas en --dur-fast --ease-standard al entrar/salir de aria-busy. Sin @keyframes propios ni animación continua",
@@ -103,7 +103,7 @@
     },
     {
       "title": "Donut (conic-gradient del consumidor) con tabla sr-only",
-      "html": "<figure class=\"mui-chart mui-chart--donut\"><figcaption class=\"mui-chart__title\">Distribución de siembra</figcaption><div class=\"mui-chart__canvas\" aria-hidden=\"true\"><div class=\"mui-chart__donut\" style=\"background: conic-gradient(var(--viz-1) 0 40%, var(--viz-2) 40% 75%, var(--viz-3) 75% 100%)\"></div></div><table class=\"mui-sr-only\"><caption>Distribución de siembra</caption><tbody><tr><th scope=\"row\">maíz</th><td>40%</td></tr><tr><th scope=\"row\">frijol</th><td>35%</td></tr><tr><th scope=\"row\">calabaza</th><td>25%</td></tr></tbody></table><div class=\"mui-chart__legend\"><span class=\"mui-chart__legend-item\"><span class=\"mui-chart__swatch mui-chart__swatch--1\"></span>maíz 40%</span><span class=\"mui-chart__legend-item\"><span class=\"mui-chart__swatch mui-chart__swatch--2\"></span>frijol 35%</span><span class=\"mui-chart__legend-item\"><span class=\"mui-chart__swatch mui-chart__swatch--3\"></span>calabaza 25%</span></div></figure>"
+      "html": "<figure class=\"mui-chart mui-chart--donut\"><figcaption class=\"mui-chart__title\">Distribución de siembra</figcaption><div class=\"mui-chart__canvas\" aria-hidden=\"true\"><div class=\"mui-chart__donut\" style=\"background: conic-gradient(var(--viz-1) 0 39.5%, var(--_hole, var(--surface)) 39.5% 40.5%, var(--viz-2) 40.5% 74.5%, var(--_hole, var(--surface)) 74.5% 75.5%, var(--viz-3) 75.5% 99%, var(--_hole, var(--surface)) 99% 100%)\"></div></div><table class=\"mui-sr-only\"><caption>Distribución de siembra</caption><tbody><tr><th scope=\"row\">maíz</th><td>40%</td></tr><tr><th scope=\"row\">frijol</th><td>35%</td></tr><tr><th scope=\"row\">calabaza</th><td>25%</td></tr></tbody></table><div class=\"mui-chart__legend\"><span class=\"mui-chart__legend-item\"><span class=\"mui-chart__swatch mui-chart__swatch--1\"></span>maíz 40%</span><span class=\"mui-chart__legend-item\"><span class=\"mui-chart__swatch mui-chart__swatch--2\"></span>frijol 35%</span><span class=\"mui-chart__legend-item\"><span class=\"mui-chart__swatch mui-chart__swatch--3\"></span>calabaza 25%</span></div></figure>"
     }
   ]
 }

@@ -111,7 +111,7 @@ No importás `primitives.css`/`components.css`/`artifacts.css`/`layouts.css` y t
 ## 6. Validación
 
 ```bash
-node scripts/verify-theme.mjs mi-skin.css   # (referencia; npm run verify:theme)
+npm run verify:theme -- mi-skin.css   # scripts/verify-theme.mjs (llega con la 0.2.0 — F5 del plan)
 ```
 
 Valida tu CSS de tokens (valores hex planos) contra `theme.contract.json`: presencia de

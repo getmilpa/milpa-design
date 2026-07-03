@@ -51,7 +51,24 @@
       "--info",
       "--info-bg",
       "--info-border",
-      "--focus"
+      "--focus",
+      "--syntax-bg",
+      "--syntax-text",
+      "--syntax-keyword",
+      "--syntax-string",
+      "--syntax-comment",
+      "--syntax-function",
+      "--syntax-number",
+      "--syntax-punctuation",
+      "--syntax-variable",
+      "--syntax-tag",
+      "--syntax-attribute",
+      "--viz-1",
+      "--viz-2",
+      "--viz-3",
+      "--viz-4",
+      "--viz-5",
+      "--viz-6"
     ],
     "type": [
       "--font-display",
@@ -505,6 +522,146 @@
       {
         "fg": "--accent",
         "bg": "--overlay",
+        "min": 3
+      },
+      {
+        "fg": "--syntax-text",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--syntax-keyword",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--syntax-string",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--syntax-comment",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--syntax-function",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--syntax-number",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--syntax-punctuation",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--syntax-variable",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--syntax-tag",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--syntax-attribute",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-secondary",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-muted",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--border-strong",
+        "bg": "--syntax-bg",
+        "min": 3
+      },
+      {
+        "fg": "--success",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--danger",
+        "bg": "--syntax-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--focus",
+        "bg": "--syntax-bg",
+        "min": 3
+      },
+      {
+        "fg": "--viz-1",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--viz-2",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--viz-3",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--viz-4",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--viz-5",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--viz-6",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--viz-1",
+        "bg": "--surface",
+        "min": 3
+      },
+      {
+        "fg": "--viz-2",
+        "bg": "--surface",
+        "min": 3
+      },
+      {
+        "fg": "--viz-3",
+        "bg": "--surface",
+        "min": 3
+      },
+      {
+        "fg": "--viz-4",
+        "bg": "--surface",
+        "min": 3
+      },
+      {
+        "fg": "--viz-5",
+        "bg": "--surface",
+        "min": 3
+      },
+      {
+        "fg": "--viz-6",
+        "bg": "--surface",
         "min": 3
       }
     ]

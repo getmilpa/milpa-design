@@ -25,9 +25,16 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { PAIRS, INVARIANTS } from './contrast-pairs.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tok = JSON.parse(readFileSync(join(root, 'tokens/milpa-tokens.json'), 'utf8'));
+
+// Orden canónico de capas: TODO CSS publicado lo declara íntegro en su primera línea de
+// código y envuelve sus reglas en su propia capa (THEMING.md). El CSS sin layer del
+// consumidor/plugin SIEMPRE le gana al CSS con layer — ese es el mecanismo de theming.
+export const LAYER_ORDER =
+  '@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;';
 
 // ---------- helpers ----------
 const ref2var = (v) => String(v).replace(/\{color\.([a-z]+)\.(\d+)\}/g, 'var(--$1-$2)');
@@ -43,7 +50,13 @@ let css = `/* Milpa — design tokens. Dark-first.
    Dark = default (:root, y [data-theme="dark"]). Light = [data-theme="light"] en <html>.
    IMPORTANTE: <html> SIEMPRE lleva data-theme ("dark" | "light"); nunca ausente (para que
    las utilidades dark: de Tailwind matcheen el estado por defecto).
+   Cascada: todo el CSS publicado vive en @layer milpa.* — el CSS sin layer del
+   consumidor/plugin SIEMPRE gana (THEMING.md).
    Todos los pares texto/UI verificados WCAG AA (npm test). */
+
+${LAYER_ORDER}
+
+@layer milpa.tokens {
 
 /* ===== color: primitives ===== */
 :root {
@@ -111,6 +124,7 @@ css += themeBlock(
    Regla 2: los acentos se profundizan en light. El primario NO es fill dorado (el oro no
    contrasta como fill sobre crema) — es GHOST: borde var(--accent) + texto var(--accent-text). */`
 );
+css += '\n} /* @layer milpa.tokens */\n';
 
 // ---------- dist/tailwind.config.js ----------
 const q = (s) => `'${s}'`;
@@ -164,8 +178,54 @@ ${entries(tok.easing).map(([k, n]) => `        '${k}': ${q(bezier(val(n)))},`).j
 };
 `;
 
+// ---------- theme.contract.json ----------
+// El quality floor como contrato ejecutable: tokens requeridos + pares AA (de
+// contrast-pairs.mjs) + invariantes. El framework (coa) valida themes de plugin
+// contra esto al instalarlos. Drift-gated igual que dist/.
+const themeContract = JSON.stringify({
+  name: 'milpa-theme',
+  layer: 'theme',
+  summary: 'Contract every injected theme/skin must honor. Generated from tokens + contrast-pairs.mjs — do not edit by hand (npm run build).',
+  cascade: {
+    order: LAYER_ORDER,
+    rule: 'All published Milpa CSS lives in @layer milpa.*. Un-layered (or later-layered) consumer/plugin CSS always wins — no !important, no specificity wars.',
+    levels: [
+      'L1 retokenize: override custom properties only (colors, type, radius, motion). Layout & a11y intact.',
+      'L2 reskin: add your own un-layered CSS replacing any mui-* skin or adding components.',
+      'L3 replace: skip Milpa component/artifact/layout bundles entirely; honor requiredTokens + contrast + invariants.',
+    ],
+  },
+  requiredTokens: {
+    color: entries(tok.theme.dark).map(([n]) => `--${n}`),
+    type: [
+      ...entries(tok.fontFamily).map(([k]) => `--font-${k}`),
+      ...entries(tok.fontSize).map(([k]) => `--text-${k}`),
+      ...entries(tok.lineHeight).map(([k]) => `--leading-${k}`),
+      ...entries(tok.fontWeight).map(([k]) => `--weight-${k}`),
+      ...entries(tok.letterSpacing).map(([k]) => `--tracking-${k}`),
+    ],
+    space: entries(tok.space).map(([k]) => `--space-${k}`),
+    radius: entries(tok.radius).map(([k]) => `--radius-${k}`),
+    zIndex: entries(tok.zIndex).map(([k]) => `--z-${k}`),
+    motion: [
+      ...entries(tok.duration).map(([k]) => `--dur-${k}`),
+      ...entries(tok.easing).map(([k]) => `--ease-${k}`),
+      ...entries(tok.stagger).map(([k]) => `--stagger-${k}`),
+      ...entries(tok.rise).map(([k]) => `--rise-${k}`),
+    ],
+    elevation: entries(tok.elevation.dark).map(([k]) => `--shadow-${k}`),
+  },
+  contrast: {
+    algorithm: 'WCAG 2.1 relative luminance',
+    themes: ['dark', 'light'],
+    pairs: PAIRS.map(([fg, bg, min, themes]) =>
+      ({ fg: `--${fg}`, bg: `--${bg}`, min, ...(themes ? { themes } : {}) })),
+  },
+  invariants: INVARIANTS,
+}, null, 2) + '\n';
+
 // ---------- write / check ----------
-const OUT = { 'dist/milpa-tokens.css': css, 'dist/tailwind.config.js': tw };
+const OUT = { 'dist/milpa-tokens.css': css, 'dist/tailwind.config.js': tw, 'theme.contract.json': themeContract };
 
 if (process.argv.includes('--check')) {
   let drift = 0;

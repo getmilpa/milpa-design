@@ -1,0 +1,518 @@
+{
+  "name": "milpa-theme",
+  "layer": "theme",
+  "summary": "Contract every injected theme/skin must honor. Generated from tokens + contrast-pairs.mjs — do not edit by hand (npm run build).",
+  "cascade": {
+    "order": "@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;",
+    "rule": "All published Milpa CSS lives in @layer milpa.*. Un-layered (or later-layered) consumer/plugin CSS always wins — no !important, no specificity wars.",
+    "levels": [
+      "L1 retokenize: override custom properties only (colors, type, radius, motion). Layout & a11y intact.",
+      "L2 reskin: add your own un-layered CSS replacing any mui-* skin or adding components.",
+      "L3 replace: skip Milpa component/artifact/layout bundles entirely; honor requiredTokens + contrast + invariants."
+    ]
+  },
+  "requiredTokens": {
+    "color": [
+      "--bg",
+      "--surface",
+      "--surface-raised",
+      "--overlay",
+      "--border-subtle",
+      "--border",
+      "--border-strong",
+      "--text",
+      "--text-secondary",
+      "--text-muted",
+      "--text-on-accent",
+      "--on-danger",
+      "--on-secondary",
+      "--accent",
+      "--accent-hover",
+      "--accent-active",
+      "--accent-subtle",
+      "--accent-text",
+      "--secondary",
+      "--secondary-hover",
+      "--secondary-active",
+      "--secondary-subtle",
+      "--secondary-border",
+      "--secondary-text",
+      "--success",
+      "--success-bg",
+      "--success-border",
+      "--warning",
+      "--warning-bg",
+      "--warning-border",
+      "--danger",
+      "--danger-hover",
+      "--danger-active",
+      "--danger-bg",
+      "--danger-border",
+      "--info",
+      "--info-bg",
+      "--info-border",
+      "--focus"
+    ],
+    "type": [
+      "--font-display",
+      "--font-mono",
+      "--text-2xs",
+      "--text-xs",
+      "--text-sm",
+      "--text-base",
+      "--text-lg",
+      "--text-xl",
+      "--text-2xl",
+      "--text-3xl",
+      "--text-4xl",
+      "--text-5xl",
+      "--text-6xl",
+      "--leading-tight",
+      "--leading-snug",
+      "--leading-normal",
+      "--leading-relaxed",
+      "--weight-regular",
+      "--weight-medium",
+      "--weight-bold",
+      "--tracking-tight",
+      "--tracking-normal",
+      "--tracking-wide",
+      "--tracking-display"
+    ],
+    "space": [
+      "--space-0",
+      "--space-1",
+      "--space-2",
+      "--space-3",
+      "--space-4",
+      "--space-5",
+      "--space-6",
+      "--space-8",
+      "--space-10",
+      "--space-12",
+      "--space-16",
+      "--space-20",
+      "--space-24",
+      "--space-32",
+      "--space-px",
+      "--space-0_5",
+      "--space-1_5"
+    ],
+    "radius": [
+      "--radius-none",
+      "--radius-xs",
+      "--radius-sm",
+      "--radius-base",
+      "--radius-md",
+      "--radius-lg",
+      "--radius-xl",
+      "--radius-2xl",
+      "--radius-full"
+    ],
+    "zIndex": [
+      "--z-base",
+      "--z-dropdown",
+      "--z-sticky",
+      "--z-backdrop",
+      "--z-drawer",
+      "--z-modal",
+      "--z-popover",
+      "--z-toast",
+      "--z-tooltip"
+    ],
+    "motion": [
+      "--dur-instant",
+      "--dur-fast",
+      "--dur-base",
+      "--dur-moderate",
+      "--dur-slow",
+      "--dur-deliberate",
+      "--ease-standard",
+      "--ease-settle",
+      "--ease-grano",
+      "--ease-in",
+      "--ease-linear",
+      "--stagger-tight",
+      "--stagger-base",
+      "--stagger-loose",
+      "--rise-sm",
+      "--rise-base",
+      "--rise-lg"
+    ],
+    "elevation": [
+      "--shadow-sm",
+      "--shadow-base",
+      "--shadow-md",
+      "--shadow-lg"
+    ]
+  },
+  "contrast": {
+    "algorithm": "WCAG 2.1 relative luminance",
+    "themes": [
+      "dark",
+      "light"
+    ],
+    "pairs": [
+      {
+        "fg": "--text",
+        "bg": "--bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-secondary",
+        "bg": "--bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-muted",
+        "bg": "--bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-secondary",
+        "bg": "--surface",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-muted",
+        "bg": "--surface",
+        "min": 4.5
+      },
+      {
+        "fg": "--accent-text",
+        "bg": "--bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-on-accent",
+        "bg": "--accent",
+        "min": 4.5,
+        "themes": [
+          "dark"
+        ]
+      },
+      {
+        "fg": "--secondary-text",
+        "bg": "--bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--on-secondary",
+        "bg": "--secondary",
+        "min": 4.5
+      },
+      {
+        "fg": "--success",
+        "bg": "--bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--warning",
+        "bg": "--bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--danger",
+        "bg": "--bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--on-danger",
+        "bg": "--danger",
+        "min": 4.5
+      },
+      {
+        "fg": "--info",
+        "bg": "--bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--border",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--border-strong",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--focus",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--accent",
+        "bg": "--bg",
+        "min": 3
+      },
+      {
+        "fg": "--text-on-accent",
+        "bg": "--accent-hover",
+        "min": 4.5,
+        "themes": [
+          "dark"
+        ]
+      },
+      {
+        "fg": "--text-on-accent",
+        "bg": "--accent-active",
+        "min": 4.5,
+        "themes": [
+          "dark"
+        ]
+      },
+      {
+        "fg": "--on-secondary",
+        "bg": "--secondary-hover",
+        "min": 4.5
+      },
+      {
+        "fg": "--on-secondary",
+        "bg": "--secondary-active",
+        "min": 4.5
+      },
+      {
+        "fg": "--on-danger",
+        "bg": "--danger-hover",
+        "min": 4.5
+      },
+      {
+        "fg": "--on-danger",
+        "bg": "--danger-active",
+        "min": 4.5
+      },
+      {
+        "fg": "--border-strong",
+        "bg": "--surface",
+        "min": 3
+      },
+      {
+        "fg": "--focus",
+        "bg": "--surface",
+        "min": 3
+      },
+      {
+        "fg": "--text",
+        "bg": "--surface",
+        "min": 4.5
+      },
+      {
+        "fg": "--accent",
+        "bg": "--surface",
+        "min": 3
+      },
+      {
+        "fg": "--accent-text",
+        "bg": "--surface",
+        "min": 4.5
+      },
+      {
+        "fg": "--secondary-text",
+        "bg": "--surface",
+        "min": 4.5
+      },
+      {
+        "fg": "--success",
+        "bg": "--surface",
+        "min": 4.5
+      },
+      {
+        "fg": "--warning",
+        "bg": "--surface",
+        "min": 4.5
+      },
+      {
+        "fg": "--danger",
+        "bg": "--surface",
+        "min": 4.5
+      },
+      {
+        "fg": "--info",
+        "bg": "--surface",
+        "min": 4.5
+      },
+      {
+        "fg": "--accent-text",
+        "bg": "--accent-subtle",
+        "min": 4.5
+      },
+      {
+        "fg": "--secondary-text",
+        "bg": "--secondary-subtle",
+        "min": 4.5
+      },
+      {
+        "fg": "--text",
+        "bg": "--accent-subtle",
+        "min": 4.5
+      },
+      {
+        "fg": "--accent",
+        "bg": "--accent-subtle",
+        "min": 3
+      },
+      {
+        "fg": "--text-secondary",
+        "bg": "--surface-raised",
+        "min": 4.5
+      },
+      {
+        "fg": "--text",
+        "bg": "--surface-raised",
+        "min": 4.5
+      },
+      {
+        "fg": "--success",
+        "bg": "--success-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--warning",
+        "bg": "--warning-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--danger",
+        "bg": "--danger-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--info",
+        "bg": "--info-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--accent-active",
+        "bg": "--accent-subtle",
+        "min": 3
+      },
+      {
+        "fg": "--accent",
+        "bg": "--surface-raised",
+        "min": 3
+      },
+      {
+        "fg": "--success",
+        "bg": "--surface-raised",
+        "min": 3
+      },
+      {
+        "fg": "--warning",
+        "bg": "--surface-raised",
+        "min": 3
+      },
+      {
+        "fg": "--danger",
+        "bg": "--surface-raised",
+        "min": 3
+      },
+      {
+        "fg": "--text",
+        "bg": "--success-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text",
+        "bg": "--warning-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text",
+        "bg": "--danger-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text",
+        "bg": "--info-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-secondary",
+        "bg": "--success-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-secondary",
+        "bg": "--warning-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-secondary",
+        "bg": "--danger-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-secondary",
+        "bg": "--info-bg",
+        "min": 4.5
+      },
+      {
+        "fg": "--border-strong",
+        "bg": "--success-bg",
+        "min": 3
+      },
+      {
+        "fg": "--border-strong",
+        "bg": "--warning-bg",
+        "min": 3
+      },
+      {
+        "fg": "--border-strong",
+        "bg": "--danger-bg",
+        "min": 3
+      },
+      {
+        "fg": "--border-strong",
+        "bg": "--info-bg",
+        "min": 3
+      },
+      {
+        "fg": "--text",
+        "bg": "--overlay",
+        "min": 4.5
+      },
+      {
+        "fg": "--text-secondary",
+        "bg": "--overlay",
+        "min": 4.5
+      },
+      {
+        "fg": "--success",
+        "bg": "--overlay",
+        "min": 3
+      },
+      {
+        "fg": "--warning",
+        "bg": "--overlay",
+        "min": 3
+      },
+      {
+        "fg": "--danger",
+        "bg": "--overlay",
+        "min": 3
+      },
+      {
+        "fg": "--info",
+        "bg": "--overlay",
+        "min": 3
+      },
+      {
+        "fg": "--secondary",
+        "bg": "--overlay",
+        "min": 3
+      },
+      {
+        "fg": "--accent",
+        "bg": "--overlay",
+        "min": 3
+      }
+    ]
+  },
+  "invariants": [
+    "reduced-motion parity: every animated affordance has a non-animated equivalent (see motion/milpa-motion.css contract)",
+    "focus-visible: interactive elements show a visible :focus-visible outline (--focus) >= 3:1 against its background",
+    "data-theme: <html> always carries data-theme=\"dark\" | \"light\", never absent",
+    "gold is never a solid fill in light theme (light primary = ghost)"
+  ]
+}

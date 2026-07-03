@@ -6,19 +6,21 @@
   "type": "module",
   "private": false,
   "publishConfig": { "access": "public" },
-  "files": ["dist", "tokens", "motion", "primitives", "components", "logo", "DESIGN.md"],
+  "files": ["dist", "tokens", "motion", "primitives", "components", "logo", "theme.contract.json", "THEMING.md", "DESIGN.md"],
   "exports": {
     ".": "./dist/milpa-tokens.css",
     "./css": "./dist/milpa-tokens.css",
     "./tokens": "./tokens/milpa-tokens.json",
     "./tailwind": "./dist/tailwind.config.js",
+    "./theme": "./theme.contract.json",
     "./motion.css": "./motion/milpa-motion.css",
     "./motion": "./motion/milpa-motion.js",
     "./primitives.css": "./primitives/milpa-primitives.css",
     "./components.css": "./components/milpa-components.css",
     "./primitives/*": "./primitives/*",
     "./components/*": "./components/*",
-    "./logo/*": "./logo/*"
+    "./logo/*": "./logo/*",
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "node scripts/build-tokens.mjs",

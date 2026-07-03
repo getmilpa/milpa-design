@@ -1,0 +1,76 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "version-switcher",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-version-switcher",
+  "summary": "Selector de versión de docs — en milpa.lat el lector SIEMPRE sabe qué versión lee (/docs/{version}/{page}) y puede cambiarla sin perder la página. Trigger <button> compacto de voz mono ('v0.2.0' + chevron CSS en currentColor) que abre un .mui-menu por COMPOSICIÓN: el panel no se re-declara — acá solo viven el trigger y la voz de versión del ítem. La versión actual se marca con [aria-current=\"true\"] (check en var(--accent), texto a plena voz heredado del Menu) y el ítem de latest compone un .mui-badge--accent. Elegir navega a /docs/{version}/{page} PRESERVANDO {page}; el routing es del framework.",
+  "element": [
+    "button (.mui-version-switcher, el trigger; type=\"button\")",
+    "div/ul (el panel: <div class=\"mui-menu\" role=\"menu\"> con <a class=\"mui-menu__item mui-version-switcher__item\">; trigger y panel hermanos dentro de un contenedor position:relative — patrón del Menu)"
+  ],
+  "composes": [
+    "menu (el panel completo: .mui-menu + .mui-menu__item — overlay, boundary border-strong, estados, teclado y milpa-scale-in vienen de su contrato)",
+    "badge (.mui-badge--accent 'latest' dentro del ítem de la última versión)"
+  ],
+  "anatomy": {
+    "root": ".mui-version-switcher — <button> trigger: mono text-xs, altura 2rem, texto var(--text-secondary), borde 1px var(--border) + radius-md, gap space-1_5; el contenido visible es la versión actual ('v0.2.0')",
+    "chevron": "::after — chevron CSS en currentColor (bordes rotados, sin glifo ni svg); pseudo decorativo: el estado abierto lo porta aria-expanded y el pseudo solo lo refleja girando a 'arriba'",
+    "item": ".mui-version-switcher__item — clase ADITIVA sobre .mui-menu__item: voz mono text-xs + canal fijo de 1ch (::before) para que las versiones queden alineadas con o sin check",
+    "check": "::before del ítem con [aria-current=\"true\"] — '✓' en var(--accent); refuerzo visual: la semántica la porta aria-current",
+    "badge": ".mui-badge mui-badge--accent dentro del ítem de latest — anclado al final con margin-inline-start auto"
+  },
+  "variants": {
+    "none": "sin variantes visuales — la variación es de contenido: cuántas versiones lista el panel y cuál lleva el badge de latest"
+  },
+  "states": {
+    "hover": ".mui-version-switcher:hover — texto var(--text) + borde var(--border-strong) (mismo gesto que .mui-search-trigger)",
+    "expanded": "[aria-expanded=\"true\"] — el chevron gira; el atributo lo sincroniza el consumidor al abrir/cerrar el panel",
+    "current": ".mui-version-switcher__item[aria-current=\"true\"] — check '✓' var(--accent) vía ::before; el fondo accent-subtle, el texto var(--text) y el peso medium los hereda de .mui-menu__item[aria-current] (components)",
+    "focus": ":focus-visible — outline 2px var(--focus) offset 2px en el trigger; los ítems traen el suyo del contrato del Menu"
+  },
+  "tokens": [
+    "--text-secondary",
+    "--text",
+    "--border",
+    "--border-strong",
+    "--accent",
+    "--focus",
+    "--font-mono",
+    "--text-xs",
+    "--weight-regular",
+    "--space-1_5",
+    "--space-2",
+    "--radius-md",
+    "--dur-fast",
+    "--ease-standard",
+    "--ease-settle"
+  ],
+  "a11y": {
+    "element": "trigger <button type=\"button\"> con aria-haspopup=\"menu\" + aria-expanded=\"true|false\" + aria-controls al id del panel — los pone el CONSUMIDOR (patrón del Menu, no el DS). Los ítems son <a role=\"menuitem\" href=\"/docs/{version}/{page}\">: cambiar de versión ES navegación",
+    "aria": [
+      "la versión actual lleva aria-current=\"true\" en su ítem — el check del ::before es refuerzo decorativo, la semántica la porta el atributo",
+      "el chevron es un pseudo sin contenido: invisible para lectores; el estado lo anuncia aria-expanded",
+      "el badge 'latest' es texto real dentro del ítem — se lee como parte del nombre accesible ('v0.3.0 latest')"
+    ],
+    "keyboard": [
+      "patrón menu-button heredado del contrato del Menu: Enter/Space/ArrowDown abren con foco al primer ítem (ArrowUp: al último); flechas navegan con wrap; Esc cierra y DEVUELVE el foco al trigger; Tab cierra"
+    ],
+    "behavior": [
+      "JS del consumidor: abrir/cerrar quitando [hidden] del panel y sincronizando aria-expanded; foco al abrir según el patrón del Menu",
+      "al elegir versión, navegar a /docs/{version}/{page} PRESERVANDO {page}; si la página no existe en la versión destino, el fallback (raíz de esa versión, redirect) lo decide el framework — routing del framework, no del DS"
+    ],
+    "contrast": "trigger: text-secondary y text ≥4.5 sobre bg y surface; bordes border/border-strong ≥3 sobre bg y surface; focus ≥3 (todos pares en el gate). Ítem actual: var(--text) ≥4.5 sobre accent-subtle y el check var(--accent) ≥3 sobre accent-subtle (pares en el gate) — el check es refuerzo, el AA lo lleva el texto. El resto del panel (overlay, focus/overlay, boundary) viene gateado del contrato del Menu."
+  },
+  "motion": {
+    "transitions": "color/border-color del trigger con --dur-fast --ease-standard; el giro del chevron con --dur-fast --ease-settle; el panel germina con milpa-scale-in (heredado del Menu)",
+    "reducedMotion": "el contrato global de milpa-motion.css neutraliza todo a 1ms — el chevron salta de estado sin giro"
+  },
+  "examples": [
+    {
+      "title": "Switcher abierto (el panel ES un .mui-menu; preserva {page} al navegar)",
+      "html": "<div style=\"position:relative\"><button type=\"button\" class=\"mui-version-switcher\" id=\"vs-trigger\" aria-haspopup=\"menu\" aria-expanded=\"true\" aria-controls=\"vs-menu\">v0.2.0</button><div class=\"mui-menu\" id=\"vs-menu\" role=\"menu\" aria-labelledby=\"vs-trigger\"><a class=\"mui-menu__item mui-version-switcher__item\" role=\"menuitem\" href=\"/docs/0.3.0/routing\">v0.3.0<span class=\"mui-badge mui-badge--accent\">latest</span></a><a class=\"mui-menu__item mui-version-switcher__item\" role=\"menuitem\" aria-current=\"true\" href=\"/docs/0.2.0/routing\">v0.2.0</a><a class=\"mui-menu__item mui-version-switcher__item\" role=\"menuitem\" href=\"/docs/0.1.0/routing\">v0.1.0</a></div></div>"
+    }
+  ]
+}

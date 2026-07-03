@@ -609,4 +609,16 @@
   content: ""; flex: 1; border-top: 1px solid var(--border-subtle);
 }
 
+/* ---------- Badge · variantes de estabilidad (kit de versionado 0.2.0) ----------
+   Ciclo de vida de API en docs versionadas: "Since v0.2.0" ·
+   "Deprecated" · "Experimental". Mismo patrón que las variantes
+   semánticas (texto de color + tinte + borde *-border): el AA lo lleva
+   el texto (pares ya gateados: secondary-text/secondary-subtle,
+   danger/danger-bg, warning/warning-bg), el borde es refuerzo
+   decorativo. La variante acompaña al texto del badge — el badge DICE
+   "Deprecated", el color no lo sustituye. */
+.mui-badge--since        { color: var(--secondary-text); background: var(--secondary-subtle); border-color: var(--secondary-border); }
+.mui-badge--deprecated   { color: var(--danger);  background: var(--danger-bg);  border-color: var(--danger-border); }
+.mui-badge--experimental { color: var(--warning); background: var(--warning-bg); border-color: var(--warning-border); }
+
 } /* @layer milpa.primitives */

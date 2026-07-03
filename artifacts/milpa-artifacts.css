@@ -1186,4 +1186,184 @@
 }
 .mui-search__hint { display: inline-flex; align-items: center; gap: var(--space-1_5); }
 
+/* ════════════════════════════════════════════════════════════════════
+   cluster · versioning (docs versionadas)
+   ════════════════════════════════════════════════════════════════════ */
+/* ---------- VersionSwitcher · .mui-version-switcher ----------
+   Selector de versión de las docs — el lector SIEMPRE sabe qué versión
+   lee (/docs/{version}/{page}) y puede cambiarla sin perder la página.
+   El trigger es un <button> compacto de voz mono (la versión ES un
+   dato técnico); el panel NO se declara acá: ES un .mui-menu —
+   composición pura, mismo contenedor position:relative y mismo
+   comportamiento menu-button del contrato del Menu (requiere
+   components/milpa-components.css). La versión actual se marca con
+   [aria-current="true"] — nunca una clase — y el ítem de latest
+   compone un .mui-badge--accent. Elegir navega PRESERVANDO {page};
+   el routing es del framework. */
+.mui-version-switcher {
+  display: inline-flex; align-items: center; gap: var(--space-1_5);
+  height: 2rem; padding: 0 var(--space-2);
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  font-weight: var(--weight-regular); line-height: 1;
+  white-space: nowrap; user-select: none; cursor: pointer;
+  color: var(--text-secondary); background: transparent;
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color        var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+.mui-version-switcher:hover { color: var(--text); border-color: var(--border-strong); }
+.mui-version-switcher:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* chevron — pseudo en currentColor (bordes rotados, sin glifo);
+   decorativo: el estado abierto lo porta aria-expanded (lo sincroniza
+   el consumidor) y el pseudo solo lo refleja girando */
+.mui-version-switcher::after {
+  content: ""; flex: none;
+  inline-size: 0.4em; block-size: 0.4em;
+  border-inline-end: 1px solid currentColor;
+  border-block-end: 1px solid currentColor;
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform var(--dur-fast) var(--ease-settle);
+}
+.mui-version-switcher[aria-expanded="true"]::after {
+  transform: translateY(25%) rotate(-135deg);
+}
+
+/* ítem del panel — clase ADITIVA sobre .mui-menu__item (el panel no se
+   re-declara): voz mono de versión + canal fijo de 1ch para el check,
+   así las versiones quedan alineadas con o sin marca */
+.mui-version-switcher__item {
+  font-family: var(--font-mono); font-size: var(--text-xs);
+}
+.mui-version-switcher__item::before {
+  content: ""; flex: none; inline-size: 1ch;
+}
+/* versión actual — la semántica ES el hook de estilo: check en
+   var(--accent), ≥3:1 sobre el tinte accent-subtle que el ítem hereda
+   de .mui-menu__item[aria-current] (par en el gate). Es refuerzo:
+   aria-current ya lo dice; el TEXTO va a plena voz var(--text) por la
+   misma regla del Menu. */
+.mui-version-switcher__item[aria-current="true"]::before {
+  content: "✓"; color: var(--accent);
+}
+/* el badge "latest" (compone .mui-badge--accent) se ancla al final */
+.mui-version-switcher__item .mui-badge { margin-inline-start: auto; }
+
+/* ---------- VersionBanner · .mui-version-banner ----------
+   Aviso persistente en toda doc no-latest: "estás leyendo v0.1.0".
+   Es un HECHO de la URL, no una alerta — NO se descarta (sin botón de
+   cierre) y NO es .mui-alert. Full-width con tinte warning y
+   borde-block; el AA lo lleva var(--text) sobre warning-bg (par en el
+   gate), el ícono var(--warning) refuerza. El link a latest vive
+   subrayado SIEMPRE (WCAG 1.4.1) y el hover engrosa el trazo — jamás
+   salta a un color no verificado sobre el tinte. */
+.mui-version-banner {
+  display: flex; align-items: flex-start; gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text);
+  background: var(--warning-bg);
+  border-block: 1px solid var(--warning-border);
+}
+/* guard: el display:flex de arriba pisaría el [hidden] del UA */
+.mui-version-banner[hidden] { display: none; }
+.mui-version-banner__icon {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  inline-size: 1.25em; block-size: 1.25em; line-height: 1;
+  margin-block-start: var(--space-0_5); /* alinea óptico con la 1.ª línea */
+  color: var(--warning);
+}
+.mui-version-banner__text { flex: 1; min-width: 0; margin: 0; }
+/* el número de versión: peso medio alcanza — la grasa no grita acá */
+.mui-version-banner__text strong { font-weight: var(--weight-medium); color: var(--text); }
+.mui-version-banner__link {
+  color: var(--text); font-weight: var(--weight-medium);
+  text-decoration: underline;
+  text-decoration-thickness: 1px; text-underline-offset: 2px;
+  border-radius: var(--radius-xs);
+  transition: text-decoration-thickness var(--dur-fast) var(--ease-standard);
+}
+.mui-version-banner__link:hover { text-decoration-thickness: 2px; }
+.mui-version-banner__link:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- Changelog · .mui-changelog ----------
+   Vista de cambios entre versiones — la cara renderizada del
+   CHANGELOG. Una __release por versión, separadas por el riel
+   border-subtle (decorativo: la jerarquía la da el header). El TIPO de
+   cambio se marca con [data-type] en el label — hook declarativo, como
+   data-tip del tooltip — y el label SIEMPRE lo dice en texto
+   ("Added"/"Fixed"): el color refuerza, nunca sustituye (WCAG 1.4.1).
+   Los breaking llevan el prefijo "BREAKING" como TEXTO real (content
+   textual del ::before: entra al árbol de accesibilidad). */
+.mui-changelog {
+  font-family: var(--font-display); color: var(--text);
+}
+.mui-changelog__release { padding-block: var(--space-10); }
+.mui-changelog__release:first-child { padding-block-start: 0; }
+/* el riel vive ENTRE releases, no alrededor */
+.mui-changelog__release + .mui-changelog__release {
+  border-block-start: 1px solid var(--border-subtle);
+}
+
+/* header de release — flex a baseline: versión + fecha + slot de badges */
+.mui-changelog__header {
+  display: flex; align-items: baseline; flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin-block-end: var(--space-4);
+}
+.mui-changelog__version {
+  margin: 0;
+  font-family: var(--font-mono); font-size: var(--text-xl);
+  font-weight: var(--weight-bold); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text);
+}
+.mui-changelog__date { font-size: var(--text-sm); color: var(--text-muted); }
+/* slot — compone .mui-badge: --accent "latest", --since, --deprecated… */
+.mui-changelog__badges { display: inline-flex; align-items: center; gap: var(--space-1_5); }
+
+/* grupo por tipo de cambio (Added / Changed / Fixed / Removed) */
+.mui-changelog__group + .mui-changelog__group { margin-block-start: var(--space-6); }
+.mui-changelog__type {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-secondary);
+}
+/* el tipo tiñe su label — el TEXTO ya lo nombra; los cuatro pares
+   ≥4.5 sobre bg y surface (gate) */
+.mui-changelog__type[data-type="added"]   { color: var(--success); }
+.mui-changelog__type[data-type="changed"] { color: var(--info); }
+.mui-changelog__type[data-type="fixed"]   { color: var(--secondary-text); }
+.mui-changelog__type[data-type="removed"] { color: var(--danger); }
+
+.mui-changelog__list {
+  margin: 0; padding-inline-start: var(--space-5);
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+}
+.mui-changelog__item { margin-block: var(--space-1_5); color: var(--text-secondary); }
+.mui-changelog__item::marker { color: var(--text-muted); }
+/* code inline dentro del ítem — la misma voz que el code de .mui-prose,
+   un paso más chico que el cuerpo sm del ítem */
+.mui-changelog__item code {
+  padding: 0.1em 0.35em;
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+}
+/* breaking — prefijo TEXTUAL en danger + bold: dice BREAKING, el color
+   solo lo grita (danger ≥4.5 sobre bg y surface, pares en el gate) */
+.mui-changelog__item--breaking::before {
+  content: "BREAKING";
+  margin-inline-end: var(--space-2);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wide);
+  color: var(--danger);
+}
+
 } /* @layer milpa.artifacts */

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "version-banner",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-version-banner",
+  "summary": "Aviso persistente en toda página de docs no-latest: 'You're viewing docs for v0.1.0'. Es un HECHO de la URL, no una alerta — NO se descarta (sin botón de cierre) y NO es .mui-alert. Full-width con tinte var(--warning-bg) y borde-block var(--warning-border); el AA lo lleva var(--text) sobre el tinte (par en el gate), el ícono var(--warning) refuerza. El link a latest preserva {page}, vive subrayado SIEMPRE (WCAG 1.4.1) y el hover engrosa el trazo en lugar de saltar a un color no verificado sobre el tinte.",
+  "element": [
+    "div (role=\"status\" — región de estado; el contenido se renderiza con la página, no se inyecta: no dispara anuncios espurios)"
+  ],
+  "anatomy": {
+    "root": ".mui-version-banner — flex full-width: tinte warning-bg + border-block 1px warning-border, padding space-2/space-4, text-sm var(--text)",
+    "icon": ".mui-version-banner__icon — 1.25em en var(--warning), alineado óptico a la 1.ª línea; decorativo: SIEMPRE aria-hidden=\"true\"",
+    "text": ".mui-version-banner__text — la frase; el número de versión va en <strong> (weight-medium, var(--text): peso, no grasa)",
+    "link": ".mui-version-banner__link — <a> a la MISMA página en latest: var(--text) + subrayado permanente + weight-medium"
+  },
+  "variants": {
+    "none": "sin variantes — el banner dice un solo hecho con una sola voz (warning). Para avisos accionables o descartables está .mui-alert"
+  },
+  "states": {
+    "static": "pieza persistente sin estados propios — no se descarta: desaparece cuando el lector navega a latest",
+    "link-hover": ".mui-version-banner__link:hover — el subrayado engrosa a 2px (mismo gesto que los links de .mui-prose); el color NO cambia: text es el único par de texto pleno verificado sobre warning-bg",
+    "focus": ".mui-version-banner__link:focus-visible — outline 2px var(--focus) offset 2px"
+  },
+  "tokens": [
+    "--text",
+    "--warning",
+    "--warning-bg",
+    "--warning-border",
+    "--focus",
+    "--font-display",
+    "--text-sm",
+    "--weight-medium",
+    "--leading-normal",
+    "--space-0_5",
+    "--space-2",
+    "--space-4",
+    "--radius-xs",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "div[role=\"status\"]: se expone como región de estado (aria-live polite implícito) — correcto para un hecho de la página que los AT deben poder encontrar; renderizado server-side con la página, nunca inyectado después (evita el anuncio en frío)",
+    "aria": [
+      "el ícono lleva aria-hidden=\"true\": es refuerzo — ambas versiones se nombran EN TEXTO dentro de __text",
+      "el link dice la versión destino ('v0.3.0'), no un 'acá' genérico: el nombre accesible es autosuficiente fuera de contexto"
+    ],
+    "behavior": [
+      "NO dismissible: es un hecho de la URL, no una alerta — sin botón de cierre, sin persistencia de estado",
+      "el link navega a la MISMA página en latest (/docs/{latest}/{page}); si no existe en latest, el fallback lo decide el framework"
+    ],
+    "contrast": "text sobre warning-bg ≥4.5 en ambos temas (par en el gate) — sostiene texto, strong y link; warning sobre warning-bg ≥4.5 (par X/--X-bg en el gate) para el ícono; warning-border es refuerzo decorativo (mismo estatus que en callout: la semántica y el AA los lleva el texto). El link no depende del color: subrayado permanente (1.4.1). PENDIENTE de gate 0.2.0: focus sobre warning-bg (el anillo del link cae sobre el tinte; con offset 2px el par queda por verificar — ver notes del cluster)."
+  },
+  "motion": {
+    "transitions": "solo el trazo del link: text-decoration-thickness con --dur-fast --ease-standard",
+    "reducedMotion": "el contrato global de milpa-motion.css rige igual (1ms)"
+  },
+  "examples": [
+    {
+      "title": "Banner en docs v0.1.0 (latest es v0.3.0; el link preserva {page})",
+      "html": "<div class=\"mui-version-banner\" role=\"status\"><span class=\"mui-version-banner__icon\" aria-hidden=\"true\">⚠</span><p class=\"mui-version-banner__text\">You're viewing docs for <strong>v0.1.0</strong> — latest is <a class=\"mui-version-banner__link\" href=\"/docs/0.3.0/routing\">v0.3.0</a>.</p></div>"
+    }
+  ]
+}

@@ -25,16 +25,10 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { PAIRS, INVARIANTS } from './contrast-pairs.mjs';
+import { PAIRS, INVARIANTS, LAYER_ORDER } from './contrast-pairs.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tok = JSON.parse(readFileSync(join(root, 'tokens/milpa-tokens.json'), 'utf8'));
-
-// Orden canónico de capas: TODO CSS publicado lo declara íntegro en su primera línea de
-// código y envuelve sus reglas en su propia capa (THEMING.md). El CSS sin layer del
-// consumidor/plugin SIEMPRE le gana al CSS con layer — ese es el mecanismo de theming.
-export const LAYER_ORDER =
-  '@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;';
 
 // ---------- helpers ----------
 const ref2var = (v) => String(v).replace(/\{color\.([a-z]+)\.(\d+)\}/g, 'var(--$1-$2)');

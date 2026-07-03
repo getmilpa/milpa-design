@@ -50,7 +50,27 @@ export const PAIRS = [
   ['success', 'overlay', 3], ['warning', 'overlay', 3],
   ['danger', 'overlay', 3], ['info', 'overlay', 3],
   ['secondary', 'overlay', 3], ['accent', 'overlay', 3], // boundary de --secondary/--primary en __action
+  // --- artifacts: código y terminal (todo sobre --syntax-bg) ---
+  ['syntax-text', 'syntax-bg', 4.5], ['syntax-keyword', 'syntax-bg', 4.5],
+  ['syntax-string', 'syntax-bg', 4.5], ['syntax-comment', 'syntax-bg', 4.5],
+  ['syntax-function', 'syntax-bg', 4.5], ['syntax-number', 'syntax-bg', 4.5],
+  ['syntax-punctuation', 'syntax-bg', 4.5], ['syntax-variable', 'syntax-bg', 4.5],
+  ['syntax-tag', 'syntax-bg', 4.5], ['syntax-attribute', 'syntax-bg', 4.5],
+  ['text-secondary', 'syntax-bg', 4.5], ['text-muted', 'syntax-bg', 4.5], // header de mui-code / prompt
+  ['border-strong', 'syntax-bg', 3],   // boundary del bloque y del botón copiar
+  ['success', 'syntax-bg', 4.5], ['danger', 'syntax-bg', 4.5], // líneas diff +/-
+  ['focus', 'syntax-bg', 3],
+  // --- artifacts: paleta categórica de charts (fills 3:1 sobre ambos fondos) ---
+  ['viz-1', 'bg', 3], ['viz-2', 'bg', 3], ['viz-3', 'bg', 3],
+  ['viz-4', 'bg', 3], ['viz-5', 'bg', 3], ['viz-6', 'bg', 3],
+  ['viz-1', 'surface', 3], ['viz-2', 'surface', 3], ['viz-3', 'surface', 3],
+  ['viz-4', 'surface', 3], ['viz-5', 'surface', 3], ['viz-6', 'surface', 3],
 ];
+
+// Orden canónico de capas — módulo side-effect-free compartido por
+// build-tokens.mjs (generador) y verify-governance.mjs (gate).
+export const LAYER_ORDER =
+  '@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;';
 
 export const INVARIANTS = [
   'reduced-motion parity: every animated affordance has a non-animated equivalent (see motion/milpa-motion.css contract)',

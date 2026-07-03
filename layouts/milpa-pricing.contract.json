@@ -1,0 +1,86 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "pricing",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-pricing",
+  "summary": "La feria de planes — grilla equal-height de commerce: cada plan es una card silenciosa (idioma de card sin redeclarar .mui-card, precedente .mui-docs__pager-link) en flex column, con el CTA anclado al fondo por margin auto. El plan destacado se marca con [data-featured] (hook de layout documentado): borde var(--accent) + flag que compone .mui-badge--accent a caballo del borde superior — la semántica 'recomendado' la lleva el TEXTO del flag, nunca solo el borde. Las features son una checklist con glifos ✓/— de alt vacío: incluido/no-incluido también viaja en texto (.mui-sr-only).",
+  "element": [
+    "section|div (la grilla .mui-pricing; recomendado <section aria-label=\"Planes\">); cada __plan un <article aria-labelledby={id del __name}>"
+  ],
+  "composes": [
+    "badge (el __flag: .mui-badge mui-badge--accent — sus pares AA vienen de su contrato)",
+    "button (el CTA dentro de __cta: .mui-btn; el plan destacado lleva EL primario de la vista — .mui-btn--primary, uno por vista)"
+  ],
+  "anatomy": {
+    "root": ".mui-pricing — grid repeat(auto-fit, minmax(min(16rem, 100%), 1fr)), gap space-4, align-items stretch, margin-block-start space-10; el min() evita desborde bajo 16rem de lienzo",
+    "plan": ".mui-pricing__plan — card silenciosa: fill var(--surface), borde border-subtle, radius-lg, padding space-6; flex column gap space-1 (el CTA baja solo)",
+    "flag": ".mui-pricing__flag — compone .mui-badge mui-badge--accent; absolute a caballo del borde superior (top 0 + translateY(-50%)), centrado RTL-safe con inset-inline 0 + margin-inline auto + width fit-content. Solo tiene sentido dentro de [data-featured] (necesita el position relative del plan)",
+    "name": ".mui-pricing__name — display text-lg weight-medium leading-snug var(--text); margin 0 (es el heading del <article>)",
+    "desc": ".mui-pricing__desc — text-sm var(--text-muted)",
+    "price": ".mui-pricing__price — mono text-4xl weight-bold leading-tight tracking-tight var(--text); margin-block space-4: la cifra es el dato",
+    "period": ".mui-pricing__period — DENTRO de __price: text-sm weight-regular tracking-normal var(--text-muted) (hereda el mono del precio)",
+    "features": ".mui-pricing__features — <ul> list none, flex column gap space-2; li: flex baseline gap space-2, text-sm text-secondary, glifo ::before \"✓\" var(--success) weight-bold con alt vacío (content \"✓\" / \"\")",
+    "cta": ".mui-pricing__cta — wrapper del botón: margin-block-start auto (ancla al fondo) + padding-block-start space-6 (respiro mínimo garantizado); flex column → el .mui-btn compuesto se estira al ancho del plan"
+  },
+  "variants": {},
+  "states": {
+    "featured": ".mui-pricing__plan[data-featured] — borde var(--accent) + position relative (ancla del __flag). Hook de layout documentado (data-*), NO clase de estado: la semántica la lleva el texto del flag compuesto",
+    "off": ".mui-pricing__features li[data-off] — feature no incluida: glifo \"—\" y texto en var(--text-muted), sin check. La semántica va en texto: componer <span class=\"mui-sr-only\"> (no incluido)</span> dentro del li",
+    "focus": "sin foco propio — lo traen los botones compuestos del __cta"
+  },
+  "tokens": [
+    "--surface",
+    "--border-subtle",
+    "--accent",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--success",
+    "--font-display",
+    "--font-mono",
+    "--text-lg",
+    "--text-sm",
+    "--text-4xl",
+    "--weight-regular",
+    "--weight-medium",
+    "--weight-bold",
+    "--leading-tight",
+    "--leading-snug",
+    "--leading-normal",
+    "--tracking-tight",
+    "--tracking-normal",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--space-6",
+    "--space-10",
+    "--radius-lg"
+  ],
+  "a11y": {
+    "element": "cada plan como <article aria-labelledby={id del __name}> con el __name como heading real (h3 dentro de una sección con h2). El precio en un <p>: cifra + __period en el mismo párrafo para que el lector lo lea de corrido ('$12 /mes')",
+    "aria": [
+      "el __flag es contenido, no cromo: 'Recomendado' lo lee el lector dentro del article — nada que ocultar",
+      "los glifos ✓/— son pseudos con alt vacío: en li normales el texto alcanza; en li[data-off] SIEMPRE añadir .mui-sr-only ' (no incluido)' — el atenuado text-muted solo no porta semántica"
+    ],
+    "keyboard": [
+      "Tab recorre los CTAs en orden de documento; el resto es contenido estático"
+    ],
+    "behavior": [
+      "un solo .mui-btn--primary por vista: el CTA del plan [data-featured]; los demás planes usan el .mui-btn neutral",
+      "equal-height sale del grid (align-items stretch) + margin auto del __cta: los botones alinean al fondo aunque las listas difieran"
+    ],
+    "contrast": "todos pares del gate: __name y __price text ≥4.5 sobre --surface; __desc, __period y li[data-off] text-muted ≥4.5 sobre --surface; features text-secondary ≥4.5 sobre --surface; glifo ✓ success ≥4.5 sobre --surface; borde destacado accent ≥3 sobre --surface (refuerzo — la semántica va en el flag); el flag hereda los pares del badge accent (accent-text ≥4.5 y borde accent-active ≥3 sobre --accent-subtle). El borde border-subtle del plan es decorativo, mismo estatus que card"
+  },
+  "motion": {
+    "transitions": "ninguna propia — el CTA compuesto (.mui-btn) trae la suya",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Dos planes, el destacado con flag y primario",
+      "html": "<section class=\"mui-pricing\" aria-label=\"Planes\"><article class=\"mui-pricing__plan\" aria-labelledby=\"plan-milpa\"><h3 class=\"mui-pricing__name\" id=\"plan-milpa\">Milpa</h3><p class=\"mui-pricing__desc\">Para sembrar el primer módulo.</p><p class=\"mui-pricing__price\">$0<span class=\"mui-pricing__period\"> /mes</span></p><ul class=\"mui-pricing__features\"><li>3 módulos</li><li>Tokens y temas</li><li data-off>Soporte prioritario<span class=\"mui-sr-only\"> (no incluido)</span></li></ul><div class=\"mui-pricing__cta\"><a class=\"mui-btn\" href=\"/registro\">Empezar gratis</a></div></article><article class=\"mui-pricing__plan\" data-featured aria-labelledby=\"plan-hacienda\"><span class=\"mui-pricing__flag mui-badge mui-badge--accent\">Recomendado</span><h3 class=\"mui-pricing__name\" id=\"plan-hacienda\">Hacienda</h3><p class=\"mui-pricing__desc\">Para cosechar en equipo.</p><p class=\"mui-pricing__price\">$12<span class=\"mui-pricing__period\"> /mes</span></p><ul class=\"mui-pricing__features\"><li>Módulos ilimitados</li><li>Tokens y temas</li><li>Soporte prioritario</li></ul><div class=\"mui-pricing__cta\"><a class=\"mui-btn mui-btn--primary\" href=\"/registro\">Sembrar ahora</a></div></article></section>"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "media-grid",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-media-grid",
+  "summary": "La parcela de imágenes — grid de media uniforme (auto-fill minmax(14rem,1fr), celdas 4/3 o 1/1 con --square) o masonry por columnas (--masonry: proporción natural, 3→2→1 columnas). Cada item es un <a> (navega — figure/figcaption conformes) o <button> (abre el lightbox — puente span.mui-media-grid__figure: el content model de <button> solo admite phrasing, ver a11y) con reset idioma .mui-card--interactive. La caption es un velo inferior color-mix + blur SIEMPRE visible — nada de opacity 0→1 en hover: touch y reduced-motion ven lo mismo; el hover solo intensifica el velo y el zoom de la imagen es decorativo.",
+  "element": [
+    "div (o <ul> semántica con cada item dentro de <li>); los items son <a> (navegan) o <button type=\"button\"> (abren el lightbox)"
+  ],
+  "composes": [
+    "lightbox (los items <button> con aria-haspopup=\"dialog\" abren el visor dialog.mui-modal.mui-lightbox)"
+  ],
+  "anatomy": {
+    "root": ".mui-media-grid — grid repeat(auto-fill, minmax(14rem,1fr)), gap space-3; guard [hidden] (display none, precedente .mui-alert)",
+    "item": "a.mui-media-grid__item | button.mui-media-grid__item — envolvente con reset de <a>/<button> (idioma .mui-card--interactive): position relative, aspect-ratio 4/3, fondo var(--surface) como suelo mientras carga la imagen, borde 1px border-subtle + radius-md, overflow hidden",
+    "figure": "figure bare (camino <a>) | span.mui-media-grid__figure (camino <button>) — display block, margin 0, height 100%: puente para que la imagen llene la celda. <figure> dentro de <button> es HTML no conforme (el content model de <button> es solo phrasing content): en el camino <button> el puente y la caption son <span>",
+    "img": "img — display block, 100%×100%, object-fit cover; zoom decorativo scale(1.03) en hover del item (--dur-moderate --ease-settle)",
+    "caption": "figcaption.mui-media-grid__caption (camino <a>) | span.mui-media-grid__caption (camino <button>) — velo inferior: absolute inset-inline 0 + inset-block-end 0, padding space-3, text-sm var(--text) sobre color-mix(in srgb, var(--bg) 78%, transparent) + blur(4px). SIEMPRE visible; en hover el velo sube a 88% — nunca aparece/desaparece"
+  },
+  "variants": {
+    "block": {
+      "square": ".mui-media-grid--square — celdas 1/1 (catálogo, avatares); mismo contrato",
+      "masonry": ".mui-media-grid--masonry — display block + columns var(--_cols) (default 3; override documentado vía --_cols), column-gap space-3. Los items pierden el aspect (auto), la img vuelve a height auto, break-inside avoid + margin-block-end space-3 ponen el ritmo vertical. ≤880px 2 columnas, ≤560px 1"
+    }
+  },
+  "states": {
+    "hover": ".mui-media-grid__item:hover — el borde sube a var(--border), la img hace zoom 1.03 y el velo de la caption gana densidad (78%→88%). Nada aparece ni desaparece: el hover nunca porta contenido",
+    "focus": ":focus-visible outline 2px var(--focus) offset 2px — el outline se dibuja FUERA de la caja: el overflow:hidden del item no lo recorta",
+    "disabled": "n/a — un item no disponible se quita del grid, no se apaga"
+  },
+  "tokens": [
+    "--bg",
+    "--surface",
+    "--text",
+    "--border",
+    "--border-subtle",
+    "--focus",
+    "--font-display",
+    "--text-sm",
+    "--leading-snug",
+    "--space-3",
+    "--radius-md",
+    "--dur-fast",
+    "--dur-moderate",
+    "--ease-standard",
+    "--ease-settle"
+  ],
+  "a11y": {
+    "element": "items interactivos reales: <a href> para navegar, <button type=\"button\"> para abrir el lightbox — nunca un <div> con listener. Content model: <button> solo acepta phrasing content, así que <figure>/<figcaption> adentro es HTML NO conforme (falla validadores de markup) aunque en la práctica el DOM no se re-anide y el name-from-content funcione; con caption visible preferir el item <a> (content model transparente: figure/figcaption conformes) y en el camino <button> usar span.mui-media-grid__figure + span.mui-media-grid__caption — la caption sigue siendo texto real dentro del botón y porta el nombre. Colecciones semánticas: <ul> + <li> envolviendo cada item",
+    "aria": [
+      "cada item necesita nombre accesible: la __caption como texto real dentro del item, o aria-label en el <a>/<button>",
+      "si la caption ya nombra la pieza, el img lleva alt=\"\" (evita el nombre duplicado); sin caption visible, el alt (o el aria-label del item) porta el nombre",
+      "items que abren el lightbox: aria-haspopup=\"dialog\""
+    ],
+    "keyboard": [
+      "Tab recorre los items en orden de documento; Enter (y Space en <button>) activan — todo nativo, cero JS de teclado propio"
+    ],
+    "behavior": [
+      "al cerrar el lightbox el foco vuelve solo al item disparador (contrato del dialog nativo)",
+      "la caption es contenido, no cromo: SIEMPRE visible — regla dura para touch y reduced-motion; prohibido esconderla tras el hover"
+    ],
+    "contrast": "caption var(--text) sobre el velo color-mix 78% de --bg + blur(4px): lee sobre --bg efectivo (par text/bg ≥4.5 del gate); sobre fotografía el composite exacto no es gateable — 78% + blur es el piso del contrato y el hover solo sube la densidad (88%), nunca la baja (ver notes del cluster). Borde border-subtle decorativo (estatus card); el hover a var(--border) ≥3 sobre --bg (par del gate) pero el boundary no porta semántica: lo acompañan zoom y velo. Focus var(--focus) ≥3 sobre --bg (par del gate)"
+  },
+  "motion": {
+    "transitions": "img: transform --dur-moderate --ease-settle (zoom 1.03, decorativo — germina y se asienta); borde del item y velo de la caption: --dur-fast --ease-standard",
+    "reducedMotion": "contrato global de milpa-motion.css (1ms): el zoom queda congelado en 1 frame y la caption — siempre visible — no pierde nada; ningún contenido depende del movimiento ni del hover"
+  },
+  "examples": [
+    {
+      "title": "Grid uniforme 4/3: items <button> que abren el lightbox (puente de <span> — content model conforme)",
+      "html": "<div class=\"mui-media-grid\"><button type=\"button\" class=\"mui-media-grid__item\" aria-haspopup=\"dialog\"><span class=\"mui-media-grid__figure\"><img src=\"/media/terrazas.avif\" alt=\"\"><span class=\"mui-media-grid__caption\">Terrazas de cultivo — Oaxaca</span></span></button><button type=\"button\" class=\"mui-media-grid__item\" aria-haspopup=\"dialog\"><span class=\"mui-media-grid__figure\"><img src=\"/media/nixtamal.avif\" alt=\"\"><span class=\"mui-media-grid__caption\">Nixtamal en la olla</span></span></button></div>"
+    },
+    {
+      "title": "Masonry de 3 columnas: items <a> con aria-label (sin caption visible)",
+      "html": "<div class=\"mui-media-grid mui-media-grid--masonry\"><a class=\"mui-media-grid__item\" href=\"/galeria/milpa-01\" aria-label=\"Milpa 01 — amanecer entre surcos\"><figure><img src=\"/media/milpa-01.avif\" alt=\"\"></figure></a><a class=\"mui-media-grid__item\" href=\"/galeria/milpa-02\" aria-label=\"Milpa 02 — cosecha\"><figure><img src=\"/media/milpa-02.avif\" alt=\"\"></figure></a><a class=\"mui-media-grid__item\" href=\"/galeria/milpa-03\" aria-label=\"Milpa 03 — elotes\"><figure><img src=\"/media/milpa-03.avif\" alt=\"\"></figure></a></div>"
+    },
+    {
+      "title": "Items <a> con caption visible: figure/figcaption conformes (camino preferido cuando el item navega)",
+      "html": "<div class=\"mui-media-grid\"><a class=\"mui-media-grid__item\" href=\"/galeria/terrazas\"><figure><img src=\"/media/terrazas.avif\" alt=\"\"><figcaption class=\"mui-media-grid__caption\">Terrazas de cultivo — Oaxaca</figcaption></figure></a><a class=\"mui-media-grid__item\" href=\"/galeria/nixtamal\"><figure><img src=\"/media/nixtamal.avif\" alt=\"\"><figcaption class=\"mui-media-grid__caption\">Nixtamal en la olla</figcaption></figure></a></div>"
+    }
+  ]
+}

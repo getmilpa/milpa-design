@@ -1,0 +1,90 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "page",
+  "layer": "layout",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-page",
+  "summary": "El lienzo de una página de marketing/contenido — los ld-* de la landing formalizados. Tres piezas en un contrato: .mui-page (100svh, flex column, pinta var(--bg)/var(--text) y la voz display — ES el body de la landing), .mui-container (la parcela centrada de 72rem con padding-inline fluido; --narrow para prosa, --wide para la parcela ancha) y .mui-section (respiro vertical clamp + costura border-subtle entre hermanas, con kicker mono uppercase, título clamp con balance y lede de 62ch). Las secciones van full-bleed como hijas de .mui-page; el ancho lo pone el .mui-container ADENTRO de cada una — nunca al revés.",
+  "element": [
+    "div o main (.mui-page — como <div> envuelve header+main+footer; como <main> cuando header/footer viven fuera)",
+    "section (.mui-section — cada bloque temático, con aria-labelledby a su __title)",
+    "div (.mui-container — el ancho; SIEMPRE hijo de la section)"
+  ],
+  "composes": [
+    "hero (dentro de .mui-section + .mui-container — suele ir en una section --flush si administra su propio respiro)",
+    "feature-grid (dentro de .mui-section + .mui-container, tras kicker/título/lede)",
+    "cta-band (hermana full-bleed de las .mui-section — trae su propio respiro, fondo y costuras)"
+  ],
+  "anatomy": {
+    "root": ".mui-page — min-height 100svh, flex column (un footer con margin-block-start auto cae al pie solo); background var(--bg), color var(--text), font-family var(--font-display), text-base + leading-normal. Fundido de tema: transition background-color/color --dur-moderate --ease-settle",
+    "container": ".mui-container — width 100%, max-width 72rem, margin-inline auto, padding-inline clamp(space-5, 4vw, space-8)",
+    "section": ".mui-section — padding-block clamp(space-16, 10vw, space-24); .mui-section + .mui-section cose con border-block-start 1px var(--border-subtle) (regla 1: estructura por bordes, no sombras)",
+    "kicker": ".mui-section__kicker — <p> mono text-2xs uppercase tracking-wide var(--secondary-text): la voz de la máquina que abre cada sección. Selector AGRUPADO con .mui-hero__kicker — misma voz, cero drift",
+    "title": ".mui-section__title — clamp(text-2xl, 4vw, text-4xl) weight-medium tracking-tight leading-snug text-wrap balance; margin space-2 0 space-3. Selector AGRUPADO con .mui-cta-band__title",
+    "lede": ".mui-section__lede — var(--text-secondary), max-width 62ch, margin 0: el párrafo que abre la sección"
+  },
+  "variants": {
+    "container": {
+      "narrow": ".mui-container--narrow — max-width 48rem: prosa/legal (≈65ch a text-base)",
+      "wide": ".mui-container--wide — max-width 90rem: la parcela ancha (mismo ancho que mui-docs)"
+    },
+    "section": {
+      "tight": ".mui-section--tight — padding-block clamp(space-10, 6vw, space-16): secciones de apoyo, pre-footer",
+      "flush": ".mui-section--flush — padding-block 0: cuando el contenido pone su propio respiro (hero a pantalla, cta-band adentro de un main)"
+    }
+  },
+  "states": {
+    "static": "sin estados interactivos — es el marco; los estados viven en las piezas compuestas"
+  },
+  "tokens": [
+    "--bg",
+    "--text",
+    "--text-secondary",
+    "--secondary-text",
+    "--border-subtle",
+    "--font-display",
+    "--font-mono",
+    "--text-base",
+    "--text-2xs",
+    "--text-2xl",
+    "--text-4xl",
+    "--weight-medium",
+    "--tracking-wide",
+    "--tracking-tight",
+    "--leading-normal",
+    "--leading-snug",
+    "--space-0",
+    "--space-2",
+    "--space-3",
+    "--space-5",
+    "--space-8",
+    "--space-10",
+    "--space-16",
+    "--space-24",
+    "--dur-moderate",
+    "--ease-settle"
+  ],
+  "a11y": {
+    "element": "un solo <main> por documento (destino del skip-link). Cada .mui-section lleva aria-labelledby al id de su __title (o aria-label si no hay título visible)",
+    "aria": [
+      "el kicker es <p>, NUNCA un heading — el outline lo llevan los __title (<h2> normalmente; elegir nivel por documento, no por estética — precedente card__title)",
+      "el orden visual kicker → título → lede coincide con el orden del documento: nada que reordenar para lectores"
+    ],
+    "contrast": "todo el cluster vive sobre var(--bg) — ningún par nuevo: kicker var(--secondary-text) ≥4.5, título var(--text) ≥4.5, lede var(--text-secondary) ≥4.5 (pares del gate). La costura border-subtle entre secciones es decorativa: el boundary no porta semántica (mismo estatus que card)"
+  },
+  "motion": {
+    "transitions": "solo el fundido del flip de tema: background-color/color en --dur-moderate --ease-settle (idioma exacto del body de la landing)",
+    "reducedMotion": "contrato global de milpa-motion.css: cae a 1ms — el flip es instantáneo, nada se pierde"
+  },
+  "examples": [
+    {
+      "title": "Página completa: secciones cosidas + container",
+      "html": "<div class=\"mui-page\"><header><!-- header del consumidor --></header><main><section class=\"mui-section\" aria-labelledby=\"h-sistema\"><div class=\"mui-container\"><p class=\"mui-section__kicker\">el sistema</p><h2 class=\"mui-section__title\" id=\"h-sistema\">Un policultivo, no un monocultivo</h2><p class=\"mui-section__lede\">Las tres hermanas — maíz, frijol y calabaza — crecen juntas y se nutren entre sí.</p><!-- .mui-feature-grid --></div></section><section class=\"mui-section mui-section--tight\" aria-labelledby=\"h-faq\"><div class=\"mui-container mui-container--narrow\"><p class=\"mui-section__kicker\">preguntas</p><h2 class=\"mui-section__title\" id=\"h-faq\">FAQ</h2><!-- prosa --></div></section></main><footer style=\"margin-block-start:auto\"><!-- cae al pie solo --></footer></div>"
+    },
+    {
+      "title": "Section --flush hospedando un hero",
+      "html": "<main class=\"mui-page\"><section class=\"mui-section mui-section--flush\" aria-label=\"Milpa\"><div class=\"mui-container\"><!-- .mui-hero (ver contrato hero) --></div></section></main>"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "quote",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-quote",
+  "summary": "Cita editorial para documentación y sitios. La comilla grande es ornamento en el markup (aria-hidden, var(--accent)); el texto respira en text-lg/leading-relaxed sobre var(--text-secondary) y la atribución compone .mui-avatar. La variante --pull la vuelve pull-quote: barra de acento inline-start, sin comilla. No es interactiva.",
+  "element": [
+    "blockquote"
+  ],
+  "anatomy": {
+    "root": ".mui-quote — <blockquote>: columna con gap (múltiples __text quedan espaciados gratis); margin del UA reseteado. Si la cita tiene origen citable, atributo cite=\"url\" en el blockquote",
+    "mark": ".mui-quote__mark — comilla decorativa grande (text-5xl, display bold) en var(--accent); el glifo vive en el markup y SIEMPRE lleva aria-hidden=\"true\" — jamás llega al lector. line-height 0.6 recorta el colchón del em-box",
+    "text": ".mui-quote__text — el cuerpo de la cita: text-lg, leading-relaxed, var(--text-secondary)",
+    "attr": ".mui-quote__attr — atribución en fila (flex + gap): opcional .mui-avatar existente + __name + __role; puede ser un <footer> dentro del blockquote",
+    "name": ".mui-quote__name — quién lo dijo: text-sm weight-medium var(--text); usar <cite> (la itálica del UA queda neutralizada)",
+    "role": ".mui-quote__role — cargo/contexto: text-sm var(--text-muted)"
+  },
+  "variants": {
+    "display": {
+      "default": "cita con comilla decorativa — para testimonios y citas largas",
+      "pull": ".mui-quote--pull — pull-quote destacada en el flujo: border-inline-start 3px var(--accent) + padding-inline-start; __mark se oculta (la barra ya marca). Puro énfasis visual, sin semántica extra"
+    }
+  },
+  "states": {
+    "static": "sin estados interactivos — la cita muestra, no acciona"
+  },
+  "tokens": [
+    "--accent",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--font-display",
+    "--text-5xl",
+    "--text-lg",
+    "--text-sm",
+    "--weight-bold",
+    "--weight-medium",
+    "--leading-relaxed",
+    "--space-1",
+    "--space-3",
+    "--space-5"
+  ],
+  "a11y": {
+    "element": "<blockquote> semántico; la atribución puede envolverse en <footer> y el nombre va en <cite>. No es un control: nunca recibe foco ni handlers",
+    "aria": [
+      "__mark SIEMPRE con aria-hidden=\"true\" — es ornamento en el markup, no contenido",
+      "en --pull no hace falta nodo decorativo alguno: la barra es CSS puro",
+      "si compone .mui-avatar con iniciales, el avatar lleva aria-hidden — el nombre ya está en __name"
+    ],
+    "contrast": "texto de la cita var(--text-secondary) ≥4.5 sobre --bg y --surface; __name var(--text) y __role var(--text-muted) ídem — pares en el gate. La comilla y la barra de --pull (var(--accent)) son ornamento no-textual: ≥3:1 sobre bg/surface, par en el gate"
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Testimonio con avatar",
+      "html": "<blockquote class=\"mui-quote\" cite=\"https://milpa.lat/casos/kiosko\"><span class=\"mui-quote__mark\" aria-hidden=\"true\">“</span><p class=\"mui-quote__text\">Migramos el admin entero en una semana; el tema light salió gratis.</p><footer class=\"mui-quote__attr\"><span class=\"mui-avatar\" aria-hidden=\"true\">RV</span><cite class=\"mui-quote__name\">Rufina Vázquez</cite><span class=\"mui-quote__role\">CTO, Kiosko</span></footer></blockquote>"
+    },
+    {
+      "title": "Pull-quote en prosa de docs",
+      "html": "<blockquote class=\"mui-quote mui-quote--pull\"><p class=\"mui-quote__text\">El grano primero: tokens antes que componentes.</p><footer class=\"mui-quote__attr\"><cite class=\"mui-quote__name\">DESIGN.md</cite><span class=\"mui-quote__role\">principio 3</span></footer></blockquote>"
+    }
+  ]
+}

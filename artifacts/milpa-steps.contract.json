@@ -1,0 +1,81 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "steps",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-steps",
+  "summary": "Procedimiento numerado para documentación (instalación, migraciones, wizards). El número es un counter CSS con alt vacío — la posición real la anuncia el <ol>. El paso actual se declara con aria-current=\"step\" y los anteriores se marcan completados vía :has(), puro CSS sin JS.",
+  "element": [
+    "ol (raíz) · li (pasos)"
+  ],
+  "anatomy": {
+    "root": ".mui-steps — <ol> con list-style none + counter-reset; el orden semántico ES la numeración",
+    "item": ".mui-steps__item — <li> en grid (marker | contenido), counter-increment; el conector vertical es su ::before (línea de 1px de inline-size, var(--border-subtle), decorativa, propiedades lógicas — sobrevive writing-modes verticales) y desaparece en el último paso",
+    "marker": ".mui-steps__marker — círculo de 2rem (prop privada --_marker): fondo var(--surface-raised), borde 1px var(--border-strong), número mono vía counter en ::before con alt vacío. Recomendado aria-hidden=\"true\" en el span: el número es presentación",
+    "title": ".mui-steps__title — text-base weight-medium var(--text); padding-block-start calibrado para centrar la 1.ª línea con el marker",
+    "body": ".mui-steps__body — text-sm var(--text-secondary), leading-normal"
+  },
+  "variants": {
+    "none": "sin variantes en 0.2.0 — actual/completado NO son variantes: viven en aria-current y en la posición relativa dentro del <ol>"
+  },
+  "states": {
+    "pending": "default — número text-secondary sobre surface-raised, borde border-strong",
+    "current": "li[aria-current=\"step\"] .mui-steps__marker — fondo var(--accent-subtle), borde var(--accent), número var(--accent-text)",
+    "done": "li:has(~ [aria-current=\"step\"]) .mui-steps__marker — hermanos ANTERIORES al actual: borde var(--success) y check ✓ en var(--success) reemplaza al número (content, alt vacío). Derivado en CSS, sin JS"
+  },
+  "tokens": [
+    "--surface-raised",
+    "--border-strong",
+    "--border-subtle",
+    "--accent",
+    "--accent-subtle",
+    "--accent-text",
+    "--success",
+    "--text",
+    "--text-secondary",
+    "--font-display",
+    "--font-mono",
+    "--text-base",
+    "--text-sm",
+    "--text-xs",
+    "--weight-medium",
+    "--leading-snug",
+    "--leading-normal",
+    "--space-1",
+    "--space-1_5",
+    "--space-3",
+    "--space-6",
+    "--radius-full",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "<ol> semántico SIEMPRE — el lector anuncia 'elemento 2 de 4'; el counter del marker es presentación duplicada, por eso lleva alt vacío y el span aria-hidden",
+    "aria": [
+      "el paso actual lleva aria-current=\"step\" en su <li>",
+      "el número y el check del marker son pseudos con alt vacío: posición por el <ol>, estado por aria-current",
+      "si hace falta anunciar 'completado' en texto, un <span class=\"mui-sr-only\"> en el título del paso lo dice"
+    ],
+    "behavior": [
+      "procedimiento estático (docs): cero JS — con o sin aria-current funciona",
+      "wizard (JS del consumidor): mover aria-current=\"step\" al <li> activo; los anteriores se pintan solos vía :has() — nunca clases de estado",
+      "fallback: sin soporte de :has() los completados quedan como pendientes (número visible, sin pérdida semántica); el estilo del actual no depende de :has()"
+    ],
+    "contrast": "número text-secondary/surface-raised ≥4.5 (gate); borde border-strong ≥3 sobre bg y surface (gate). Actual: accent-text/accent-subtle ≥4.5 y borde accent/accent-subtle ≥3 (gate). Completado: el check es glifo no-textual con alt vacío — par success/surface-raised ≥3 (gate) y borde success ≥3 sobre bg/surface; la semántica nunca depende del glifo. Conector border-subtle decorativo, exento (no es boundary de componente)"
+  },
+  "motion": {
+    "transitions": "color/fondo/borde del marker en --dur-fast --ease-standard (para wizards que mueven aria-current); sin @keyframes propios",
+    "reducedMotion": "contrato global de milpa-motion.css: transiciones a 1ms, estado final directo — sin pérdida semántica"
+  },
+  "examples": [
+    {
+      "title": "Procedimiento de instalación (paso 2 actual, paso 1 completado solo)",
+      "html": "<ol class=\"mui-steps\"><li class=\"mui-steps__item\"><span class=\"mui-steps__marker\" aria-hidden=\"true\"></span><h4 class=\"mui-steps__title\">Sembrá los tokens</h4><p class=\"mui-steps__body\">Importá dist/milpa-tokens.css antes que todo lo demás.</p></li><li class=\"mui-steps__item\" aria-current=\"step\"><span class=\"mui-steps__marker\" aria-hidden=\"true\"></span><h4 class=\"mui-steps__title\">Regá los componentes</h4><p class=\"mui-steps__body\">Sumá components/ y artifacts/ según lo que cultive tu página.</p></li><li class=\"mui-steps__item\"><span class=\"mui-steps__marker\" aria-hidden=\"true\"></span><h4 class=\"mui-steps__title\">Cosechá</h4><p class=\"mui-steps__body\">npm test verifica contraste y drift antes del build.</p></li></ol>"
+    },
+    {
+      "title": "Procedimiento estático de docs (sin estado)",
+      "html": "<ol class=\"mui-steps\"><li class=\"mui-steps__item\"><span class=\"mui-steps__marker\" aria-hidden=\"true\"></span><h4 class=\"mui-steps__title\">Cloná el repo</h4></li><li class=\"mui-steps__item\"><span class=\"mui-steps__marker\" aria-hidden=\"true\"></span><h4 class=\"mui-steps__title\">Corré npm install</h4></li></ol>"
+    }
+  ]
+}

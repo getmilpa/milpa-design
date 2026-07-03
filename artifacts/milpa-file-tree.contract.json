@@ -1,0 +1,83 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "file-tree",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-file-tree",
+  "summary": "Árbol de archivos para documentación (estructura de proyecto, scaffolds). Directorios con <details>/<summary>: colapso nativo accesible sin una línea de JS. Voz mono text-sm; anotaciones __badge con la semántica en el texto ('new', 'gen'). El archivo activo se declara con aria-current=\"true\".",
+  "element": [
+    "ul (raíz) · details/summary (directorios) · li (archivos)"
+  ],
+  "anatomy": {
+    "root": ".mui-file-tree — <ul> mono text-sm, list-style none; color base var(--text-secondary)",
+    "dir": ".mui-file-tree__dir — <details> dentro de un <li>; su <summary> es la fila del directorio: var(--text), cursor pointer, glifo ▸/▾ en ::before (alt vacío, cambia con [open]), marker nativo removido",
+    "group": "<ul> anidado hijo directo del __dir — indentación por padding/margin-inline-start + guía vertical 1px var(--border-subtle) (decorativa) bajo el glifo del padre",
+    "file": ".mui-file-tree__file — <li> de archivo: glifo · en ::before (alt vacío, var(--text-muted)); comparte métrica de fila con el summary",
+    "badge": ".mui-file-tree__badge — anotación mono text-2xs a la derecha del nombre; el significado va en la palabra, el color solo refuerza"
+  },
+  "variants": {
+    "badge": {
+      "default": "neutral — var(--text-muted)",
+      "new": ".mui-file-tree__badge--new — 'new' en var(--success)",
+      "gen": ".mui-file-tree__badge--gen — 'gen' (generado) en var(--text-muted)"
+    }
+  },
+  "states": {
+    "open": "details[open] > summary — el glifo pasa de ▸ a ▾; el colapso lo maneja el elemento nativo",
+    "hover": "summary:not([aria-current=\"true\"]):hover — velo color-mix (8% de --text sobre transparente). El summary ACTIVO queda excluido del velo: al hover conserva su fondo var(--accent-subtle) — sin el :not(), el velo (mayor especificidad) pisaría al estado y accent-text caería sobre el composite (4.17 en light, < 4.5)",
+    "focus": "summary:focus-visible — outline 2px var(--focus) offset 2px",
+    "current": "[aria-current=\"true\"] (en el <li> del archivo o en el <summary>) — fondo var(--accent-subtle), texto var(--accent-text), radius-xs; glifo y badge heredan la voz de la fila. El estado se conserva íntegro bajo hover"
+  },
+  "tokens": [
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--border-subtle",
+    "--accent-subtle",
+    "--accent-text",
+    "--success",
+    "--focus",
+    "--font-mono",
+    "--text-sm",
+    "--text-2xs",
+    "--tracking-wide",
+    "--leading-normal",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--radius-xs",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "raíz <ul>, directorios <details><summary> dentro de <li>, archivos <li>. Sin roles extra el patrón es disclosure nativo: accesible de fábrica",
+    "keyboard": [
+      "Tab llega a cada <summary>; Enter/Space colapsa/expande (nativo de details)",
+      "con el patrón tree ARIA completo (opcional): ← → colapsan/expanden, ↑ ↓ mueven foco, Home/End extremos — roving tabindex vía JS del consumidor, según APG"
+    ],
+    "aria": [
+      "NO duplicar aria-expanded en el summary: <details> ya anuncia expandido/colapsado",
+      "patrón tree completo (opcional): role=\"tree\" en la raíz, role=\"treeitem\" en las filas, role=\"group\" en los <ul> anidados — el CSS no cambia",
+      "archivo activo: aria-current=\"true\" en su fila",
+      "los glifos ▸/▾/· son pseudos con alt vacío — jamás llegan al lector",
+      "las anotaciones __badge llevan la semántica en su texto: nunca solo color"
+    ],
+    "behavior": [
+      "colapso: nativo de <details> — cero JS",
+      "si los archivos son links, el <a> va dentro del <li> y hereda la fila; el foco del link usa el outline global del consumidor o compone .mui-* según el caso",
+      "tree ARIA (opcional): el JS del consumidor implementa roving tabindex y flechas; aria-current viaja con la selección"
+    ],
+    "contrast": "archivos var(--text-secondary) y directorios var(--text) ≥4.5 sobre --bg y --surface (gate). Glifos ▸/▾/· var(--text-muted): DECORATIVOS (alt vacío; la apertura la anuncia <details>, no el glifo) — umbral 3:1, que sostienen en reposo (≥4.5 sobre bg/surface, gate) y bajo el velo de hover (composite: 6.67/4.48 dark sobre bg/surface · 4.14/4.74 light). El velo de hover es un par compuesto FUERA del gate — color-mix 8% de --text sobre bg/surface, ratios computados con node: texto del summary var(--text) 14.18/9.52 dark · 12.73/14.58 light, siempre ≥4.5. El summary activo está excluido del velo, así el hover conserva el par del gate accent-text/accent-subtle (9.29 dark · 5.10 light ≥4.5). Badges: 'new' var(--success) y 'gen' var(--text-muted) ≥4.5 sobre bg/surface (gate); viven en filas de archivo, sin velo de hover. Fila activa: accent-text/accent-subtle ≥4.5 (gate) — glifo y badge caen a color inherit dentro de la fila activa porque text-muted sobre accent-subtle NO está en el gate. Guía vertical border-subtle decorativa, exenta (la jerarquía la da la sangría)"
+  },
+  "motion": {
+    "transitions": "background del summary en --dur-fast --ease-standard; el details abre sin animación (mostrar/ocultar nativo, sin height animado)",
+    "reducedMotion": "contrato global de milpa-motion.css: la transición cae a 1ms — sin pérdida semántica"
+  },
+  "examples": [
+    {
+      "title": "Estructura de proyecto con archivo activo y anotaciones",
+      "html": "<ul class=\"mui-file-tree\"><li><details class=\"mui-file-tree__dir\" open><summary>src</summary><ul><li class=\"mui-file-tree__file\" aria-current=\"true\">index.ts</li><li class=\"mui-file-tree__file\">app.ts <span class=\"mui-file-tree__badge mui-file-tree__badge--new\">new</span></li><li><details class=\"mui-file-tree__dir\"><summary>plugins</summary><ul><li class=\"mui-file-tree__file\">mail.plugin.ts</li></ul></details></li></ul></details></li><li class=\"mui-file-tree__file\">milpa.config.ts <span class=\"mui-file-tree__badge mui-file-tree__badge--gen\">gen</span></li></ul>"
+    }
+  ]
+}

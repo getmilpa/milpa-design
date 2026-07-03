@@ -1,0 +1,91 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "changelog",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-changelog",
+  "summary": "Vista de cambios entre versiones — la cara renderizada del CHANGELOG en las docs. Una __release por versión (separadas por el riel border-subtle, decorativo), header a baseline (versión mono grande + fecha + slot de badges) y grupos por tipo de cambio. El TIPO se marca con [data-type] en el label __type — hook declarativo, como data-tip del tooltip — y el label SIEMPRE lo dice en texto ('Added'/'Fixed'): el color refuerza, nunca sustituye (WCAG 1.4.1). Los breaking llevan el prefijo 'BREAKING' como TEXTO real (content textual del ::before). Pieza de display pura: sin estados interactivos.",
+  "element": [
+    "section (raíz, con aria-label; cada __release como <article aria-labelledby> apuntando al heading de __version)"
+  ],
+  "composes": [
+    "badge (slot __badges: .mui-badge--accent 'latest', --since, --deprecated, --experimental)"
+  ],
+  "anatomy": {
+    "root": ".mui-changelog — <section>: voz display, var(--text)",
+    "release": ".mui-changelog__release — una por versión (<article>); padding-block generoso (space-10) y borde superior border-subtle SOLO entre releases (el riel vive entre, no alrededor)",
+    "header": ".mui-changelog__header — flex a baseline con wrap: __version + __date + __badges",
+    "version": ".mui-changelog__version — heading real (h2/h3): mono text-xl weight-bold, 'v0.2.0'",
+    "date": ".mui-changelog__date — <time datetime>: text-sm var(--text-muted)",
+    "badges": ".mui-changelog__badges — slot que compone .mui-badge (--accent 'latest', variantes de estabilidad)",
+    "group": ".mui-changelog__group — un bloque por tipo de cambio; respiran space-6 entre sí",
+    "type": ".mui-changelog__type — label del grupo, heading real (h3/h4): mono 2xs uppercase tracking-wide; default var(--text-secondary), teñido por [data-type]",
+    "list": "ul.mui-changelog__list — lista con marcadores; ::marker en var(--text-muted)",
+    "item": "li.mui-changelog__item — text-sm var(--text-secondary); admite <code> inline con la misma voz que el code de .mui-prose (surface + border-subtle + radius-xs)"
+  },
+  "variants": {
+    "type": {
+      "added": "[data-type=\"added\"] en __type → var(--success); el label DICE 'Added'",
+      "changed": "[data-type=\"changed\"] → var(--info); el label DICE 'Changed'",
+      "fixed": "[data-type=\"fixed\"] → var(--secondary-text); el label DICE 'Fixed'",
+      "removed": "[data-type=\"removed\"] → var(--danger); el label DICE 'Removed'"
+    },
+    "item": {
+      "breaking": ".mui-changelog__item--breaking — antepone 'BREAKING' en mono 2xs weight-bold var(--danger) vía ::before con content TEXTUAL: texto, no solo color"
+    }
+  },
+  "states": {
+    "static": "sin estados interactivos — el changelog muestra; los links que contengan sus ítems son HTML desnudo o piezas compuestas con su propio contrato"
+  },
+  "tokens": [
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--success",
+    "--info",
+    "--secondary-text",
+    "--danger",
+    "--surface",
+    "--border-subtle",
+    "--font-display",
+    "--font-mono",
+    "--text-xl",
+    "--text-sm",
+    "--text-xs",
+    "--text-2xs",
+    "--weight-regular",
+    "--weight-bold",
+    "--leading-tight",
+    "--leading-normal",
+    "--tracking-tight",
+    "--tracking-wide",
+    "--space-1_5",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-5",
+    "--space-6",
+    "--space-10",
+    "--radius-xs"
+  ],
+  "a11y": {
+    "element": "<section aria-label=\"Changelog\"> con cada release en <article aria-labelledby> → __version como heading real (h2/h3) y __type como heading un nivel abajo: el changelog entero es navegable por headings desde el AT. La fecha en <time datetime=\"YYYY-MM-DD\">",
+    "aria": [
+      "el tipo de cambio se comunica en TEXTO ('Added', 'Removed') — [data-type] solo tiñe el label, jamás lo sustituye",
+      "el prefijo BREAKING es content textual del ::before: entra al árbol de accesibilidad y se anuncia — no es un tinte; si el consumidor necesita redundancia total, puede además abrir el ítem con la palabra en el markup",
+      "los badges de __badges no comunican solo por color: dicen 'latest', 'Deprecated' (contrato del badge)"
+    ],
+    "contrast": "cuerpo: text-secondary ≥4.5 sobre bg y surface; fecha y marcadores text-muted ≥4.5; los cuatro colores de tipo (success/info/secondary-text/danger) ≥4.5 sobre bg y surface; BREAKING en danger ≥4.5 (todos pares en el gate). El code inline hereda text-secondary del ítem — ≥4.5 sobre su fondo var(--surface) (par en el gate). El riel border-subtle entre releases y el marco del code inline son decorativos: no portan semántica (precedente card/prose)."
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Release latest con grupos y un breaking",
+      "html": "<section class=\"mui-changelog\" aria-label=\"Changelog\"><article class=\"mui-changelog__release\" aria-labelledby=\"rel-020\"><header class=\"mui-changelog__header\"><h2 class=\"mui-changelog__version\" id=\"rel-020\">v0.2.0</h2><time class=\"mui-changelog__date\" datetime=\"2026-07-01\">1 de julio, 2026</time><span class=\"mui-changelog__badges\"><span class=\"mui-badge mui-badge--accent\">latest</span></span></header><section class=\"mui-changelog__group\"><h3 class=\"mui-changelog__type\" data-type=\"added\">Added</h3><ul class=\"mui-changelog__list\"><li class=\"mui-changelog__item\">Kit de versionado: <code>mui-version-switcher</code>, <code>mui-version-banner</code> y <code>mui-changelog</code>.</li><li class=\"mui-changelog__item\">Variantes de estabilidad del badge: <code>--since</code>, <code>--deprecated</code>, <code>--experimental</code>.</li></ul></section><section class=\"mui-changelog__group\"><h3 class=\"mui-changelog__type\" data-type=\"removed\">Removed</h3><ul class=\"mui-changelog__list\"><li class=\"mui-changelog__item mui-changelog__item--breaking\">Se elimina el build con Style Dictionary — regenerá <code>dist/</code> con <code>npm run build</code>.</li></ul></section></article><article class=\"mui-changelog__release\" aria-labelledby=\"rel-010\"><header class=\"mui-changelog__header\"><h2 class=\"mui-changelog__version\" id=\"rel-010\">v0.1.0</h2><time class=\"mui-changelog__date\" datetime=\"2026-05-12\">12 de mayo, 2026</time></header><section class=\"mui-changelog__group\"><h3 class=\"mui-changelog__type\" data-type=\"added\">Added</h3><ul class=\"mui-changelog__list\"><li class=\"mui-changelog__item\">Base de componentes admin: 32 piezas con contrato.</li></ul></section></article></section>"
+    }
+  ]
+}

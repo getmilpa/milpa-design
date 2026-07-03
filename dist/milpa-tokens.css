@@ -88,6 +88,23 @@
   --info-bg:var(--cielo-950);
   --info-border:var(--cielo-800);
   --focus:var(--oro-300);
+  --syntax-bg:var(--tierra-950);
+  --syntax-text:var(--tierra-50);
+  --syntax-keyword:var(--oro-300);
+  --syntax-string:var(--olivo-400);
+  --syntax-comment:var(--tierra-400);
+  --syntax-function:var(--warning-400);
+  --syntax-number:var(--cielo-400);
+  --syntax-punctuation:var(--tierra-300);
+  --syntax-variable:var(--tierra-50);
+  --syntax-tag:var(--danger-400);
+  --syntax-attribute:var(--success-400);
+  --viz-1:var(--oro-300);
+  --viz-2:var(--cielo-400);
+  --viz-3:var(--olivo-400);
+  --viz-4:var(--danger-500);
+  --viz-5:var(--success-400);
+  --viz-6:var(--warning-400);
   /* ===== elevation (dark) ===== */
   --shadow-sm:0 1px 2px rgba(0,0,0,0.4);
   --shadow-base:0 2px 8px rgba(0,0,0,0.45);
@@ -138,6 +155,23 @@
   --info-bg:var(--cielo-100);
   --info-border:var(--cielo-300);
   --focus:var(--oro-700);
+  --syntax-bg:var(--tierra-50);
+  --syntax-text:var(--tierra-950);
+  --syntax-keyword:var(--oro-700);
+  --syntax-string:var(--olivo-700);
+  --syntax-comment:var(--tierra-700);
+  --syntax-function:var(--warning-700);
+  --syntax-number:var(--cielo-700);
+  --syntax-punctuation:var(--tierra-800);
+  --syntax-variable:var(--tierra-950);
+  --syntax-tag:var(--danger-700);
+  --syntax-attribute:var(--success-700);
+  --viz-1:var(--oro-600);
+  --viz-2:var(--cielo-700);
+  --viz-3:var(--olivo-700);
+  --viz-4:var(--danger-800);
+  --viz-5:var(--success-800);
+  --viz-6:var(--warning-700);
   /* ===== elevation (light) ===== */
   --shadow-sm:0 1px 2px rgba(23,18,13,0.08);
   --shadow-base:0 2px 8px rgba(23,18,13,0.1);

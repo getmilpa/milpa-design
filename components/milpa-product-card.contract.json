@@ -1,0 +1,85 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "product-card",
+  "layer": "component",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-product-card",
+  "summary": "El puesto del mercado: card de producto para grillas de catálogo. Marco de card (var(--surface) + borde sutil + radius-lg, overflow hidden), media retrato 4/5 edge-to-edge y cuerpo compacto que compone badge, precio y rating. La interactividad la trae el <a> del __title como stretched link (::after inset 0); el afford de hover (borde strong + sombra) SOLO existe cuando ese link existe (:has) — una card sin link no finge ser clickeable. Las acciones germinan al hover únicamente en desktop con puntero fino; en touch y bajo reduced-motion viven SIEMPRE visibles.",
+  "element": [
+    "article (root — un producto por article; el título con el <h*> correcto para el outline)"
+  ],
+  "composes": [
+    "badge (__badge ES un .mui-badge: --info \"New\" · --danger \"Sale\" · --warning \"Low stock\" — acá solo se posiciona sobre la media)",
+    "price (.mui-price dentro de __body)",
+    "rating (.mui-rating dentro de __body; con stretched link el __count va como texto, no como <a>: quedaría debajo del overlay)",
+    "button (__actions compone .mui-btn — p. ej. --secondary --sm --full para \"Agregar al carrito\")"
+  ],
+  "anatomy": {
+    "root": ".mui-product-card — position:relative (ancla del stretched link); card: var(--surface), borde 1px var(--border-subtle), radius-lg, overflow hidden (la media respeta el radio)",
+    "media": ".mui-product-card__media — position:relative, aspect-ratio 4/5; img cover edge-to-edge (display block, 100%/100%)",
+    "badge": ".mui-product-card__badge — SOLO posicionamiento: absolute, top var(--space-2), inset-inline-start var(--space-2); la pieza es un .mui-badge con su propia semántica de color",
+    "body": ".mui-product-card__body — padding var(--space-4); flex column gap var(--space-1): título, meta, precio/rating",
+    "title": ".mui-product-card__title — display sm/medium var(--text); si es <a> (o contiene un <a> hijo directo): sin subrayado + ::after inset 0 = stretched link, toda la card navega",
+    "meta": ".mui-product-card__meta — text-xs var(--text-muted): material, colores, colección",
+    "actions": ".mui-product-card__actions — padding 0 space-4 space-4, flex gap space-2; position:relative para pintar ENCIMA del stretched link (orden del árbol). Desktop puntero fino: nace oculta (opacity 0, translateY(4px)) y germina en :hover/:focus-within; touch y reduced-motion: siempre visible"
+  },
+  "variants": {
+    "behavior": {
+      "linked": "sin clase — el <a> del __title activa el stretched link y el afford de hover del marco (:has). Sin link: card estática, sin hover",
+      "out-of-stock": "[aria-disabled=\"true\"] en el article (atributo, no clase): atenúa la imagen (opacity .5 sobre el img, NO sobre el contenedor — el __badge encima sigue AA) y apaga el hover del marco; los botones internos van [disabled] DE VERDAD"
+    }
+  },
+  "states": {
+    "hover": "solo con link primario y sin [aria-disabled=\"true\"]: borde var(--border-strong) + var(--shadow-base) en --dur-fast; :focus-within espeja el afford para teclado",
+    "focus": "el <a> del título: outline 2px var(--focus) offset 2px SOLO en :focus-visible; el :focus-within del root revela las acciones ocultas en desktop",
+    "disabled": "[aria-disabled=\"true\"] en el article + [disabled] en los botones — la verdad interactiva vive en los controles"
+  },
+  "tokens": [
+    "--surface",
+    "--border-subtle",
+    "--border-strong",
+    "--text",
+    "--text-muted",
+    "--focus",
+    "--shadow-base",
+    "--radius-lg",
+    "--font-display",
+    "--text-sm",
+    "--text-xs",
+    "--weight-medium",
+    "--leading-snug",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--dur-fast",
+    "--ease-standard",
+    "--ease-settle"
+  ],
+  "a11y": {
+    "element": "un <article> por producto (dentro de <ul>/<li> si la grilla es lista); el título con <h3>/<h4> según el documento. El img de __media con alt=\"\" cuando el título visible ya nombra el producto (evita lectura doble); alt descriptivo si aporta información propia (color, vista)",
+    "aria": [
+      "stretched link: UN solo destino primario por card; no colocar otros links bajo el overlay (solo __actions tiene position para pintar encima) — el rating interno lleva __count como texto",
+      "agotado: [aria-disabled=\"true\"] en el article es la señal de estilo; la semántica real la llevan los botones [disabled] y el badge visible con texto (\"Agotado\") — nunca solo el atenuado de la imagen",
+      "el __badge es un .mui-badge con texto real: el estado nunca viaja solo en color"
+    ],
+    "keyboard": [
+      "Tab → link del título (ring en :focus-visible) → botones de __actions; el :focus-within del root revela las acciones ocultas en desktop: nada queda inalcanzable"
+    ],
+    "contrast": "título var(--text) ≥4.5 y meta var(--text-muted) ≥4.5 sobre --surface (gate); el badge y los botones traen sus propios pares. El paso subtle→strong del borde en hover es refuerzo decorativo: el afford nunca depende solo del borde (sombra + motion lo acompañan, precedente de card --interactive)"
+  },
+  "motion": {
+    "transitions": "marco: border-color/box-shadow en --dur-fast --ease-standard. Acciones (solo @media hover:hover + pointer:fine): opacity --ease-standard + transform --ease-settle en --dur-fast — germinan 4px y se asientan, nunca rebotan",
+    "reducedMotion": "el contrato global congela las transiciones (1ms); además un @media reduce LOCAL fuerza las acciones a opacity 1 / translate none — caso legítimo: el estado por defecto es oculto y nada puede depender de un hover que no existe. En touch (@media hover:none) idéntico"
+  },
+  "examples": [
+    {
+      "title": "Card con badge, stretched link, precio y acciones",
+      "html": "<article class=\"mui-product-card\"><div class=\"mui-product-card__media\"><img src=\"/img/milpa-tee.jpg\" alt=\"\"><span class=\"mui-badge mui-badge--info mui-product-card__badge\">New</span></div><div class=\"mui-product-card__body\"><h3 class=\"mui-product-card__title\"><a href=\"/tienda/milpa-tee\">Milpa Tee</a></h3><p class=\"mui-product-card__meta\">Algodón orgánico · 3 colores</p><span class=\"mui-price\"><span class=\"mui-price__amount\">$29</span><s class=\"mui-price__compare\"><span class=\"mui-sr-only\">antes </span>$39</s></span></div><div class=\"mui-product-card__actions\"><button type=\"button\" class=\"mui-btn mui-btn--secondary mui-btn--sm mui-btn--full\">Agregar al carrito</button></div></article>"
+    },
+    {
+      "title": "Agotado ([aria-disabled] + badge + botón [disabled])",
+      "html": "<article class=\"mui-product-card\" aria-disabled=\"true\"><div class=\"mui-product-card__media\"><img src=\"/img/huipil.jpg\" alt=\"\"><span class=\"mui-badge mui-badge--warning mui-product-card__badge\">Agotado</span></div><div class=\"mui-product-card__body\"><h3 class=\"mui-product-card__title\"><a href=\"/tienda/huipil\">Huipil bordado</a></h3><p class=\"mui-product-card__meta\">Pieza única · hecho a mano</p><span class=\"mui-price\"><span class=\"mui-price__amount\">$120</span></span></div><div class=\"mui-product-card__actions\"><button type=\"button\" class=\"mui-btn mui-btn--sm mui-btn--full\" disabled>Sin stock</button></div></article>"
+    }
+  ]
+}

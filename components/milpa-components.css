@@ -1055,4 +1055,252 @@
   .mui-topbar__nav-toggle { display: inline-flex; }
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   cluster · commerce
+   ════════════════════════════════════════════════════════════════════ */
+/* ---------- ProductCard · .mui-product-card ----------
+   El puesto del mercado: card de producto para grillas de catálogo.
+   Compone .mui-badge (__badge), .mui-price y .mui-rating (__body) y
+   .mui-btn (__actions) — acá solo vive la parcela: el marco, la media
+   4/5, el stretched link y la coreografía de las acciones. */
+.mui-product-card {
+  position: relative;                /* ancla del stretched link (__title <a>::after) */
+  display: flex; flex-direction: column;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;                  /* la media edge-to-edge respeta el radio */
+  transition:
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow   var(--dur-fast) var(--ease-standard);
+}
+/* el afford de hover SOLO existe si hay link primario (stretched) — una
+   card sin link no finge ser clickeable; :focus-within lo espeja para teclado */
+.mui-product-card:not([aria-disabled="true"]):has(a.mui-product-card__title, .mui-product-card__title > a):hover,
+.mui-product-card:not([aria-disabled="true"]):has(a.mui-product-card__title, .mui-product-card__title > a):focus-within {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-base);
+}
+
+/* media — retrato 4/5 edge-to-edge; el badge se ancla acá */
+.mui-product-card__media { position: relative; aspect-ratio: 4 / 5; }
+.mui-product-card__media img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+
+/* badge — ES un .mui-badge (--info "New" · --danger "Sale" · --warning
+   "Low stock"); esta clase SOLO lo posiciona sobre la media */
+.mui-product-card__badge {
+  position: absolute;
+  top: var(--space-2); inset-inline-start: var(--space-2);
+}
+
+.mui-product-card__body {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  padding: var(--space-4);
+}
+.mui-product-card__title {
+  margin: 0;
+  font-family: var(--font-display); font-size: var(--text-sm);
+  font-weight: var(--weight-medium); line-height: var(--leading-snug);
+  color: var(--text);
+}
+/* link primario — stretched: el ::after cubre la card entera (el root es
+   relative). Todo control extra necesita position para pintar encima. */
+a.mui-product-card__title,
+.mui-product-card__title > a { color: var(--text); text-decoration: none; }
+a.mui-product-card__title::after,
+.mui-product-card__title > a::after { content: ""; position: absolute; inset: 0; }
+a.mui-product-card__title:focus-visible,
+.mui-product-card__title > a:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 2px;
+}
+.mui-product-card__meta { margin: 0; font-size: var(--text-xs); color: var(--text-muted); }
+
+/* acciones — compone .mui-btn; position:relative las saca de abajo del
+   stretched link (pintan después en el orden del árbol → clickeables) */
+.mui-product-card__actions {
+  position: relative;
+  display: flex; gap: var(--space-2);
+  padding: 0 var(--space-4) var(--space-4);
+}
+/* coreografía SOLO en desktop con hover fino: nacen ocultas y germinan al
+   hover/focus-within. Caso legítimo de @media reduce local (abajo): el
+   estado por defecto es oculto y nada puede depender de un hover ausente. */
+@media (hover: hover) and (pointer: fine) {
+  .mui-product-card__actions {
+    opacity: 0; transform: translateY(4px);
+    transition:
+      opacity   var(--dur-fast) var(--ease-standard),
+      transform var(--dur-fast) var(--ease-settle);
+  }
+  .mui-product-card:hover .mui-product-card__actions,
+  .mui-product-card:focus-within .mui-product-card__actions {
+    opacity: 1; transform: translateY(0);
+  }
+}
+/* touch y reduced-motion: las acciones NUNCA dependen del hover */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .mui-product-card__actions { opacity: 1; transform: none; }
+}
+
+/* agotado — [aria-disabled] en el article atenúa la IMAGEN (no el
+   contenedor: el __badge encima sigue AA); los botones internos van
+   [disabled] de verdad y el hover del marco no aplica (:not de arriba) */
+.mui-product-card[aria-disabled="true"] .mui-product-card__media img { opacity: 0.5; }
+
+/* ---------- Price · .mui-price ----------
+   El número del puesto: mono, monto protagonista, moneda/unidad como
+   susurro. El precio anterior (__compare) va tachado — el tachado visual
+   NO viaja al lector: nombre accesible obligatorio (ver contrato). */
+.mui-price {
+  display: inline-flex; align-items: baseline; gap: var(--space-1_5);
+  font-family: var(--font-mono);
+}
+.mui-price__amount {
+  font-size: var(--text-base); font-weight: var(--weight-bold);
+  color: var(--text);
+}
+.mui-price__currency { font-size: var(--text-xs); color: var(--text-secondary); }
+.mui-price__compare {
+  font-size: var(--text-xs); color: var(--text-muted);
+  text-decoration: line-through;
+}
+.mui-price__unit { font-size: var(--text-xs); color: var(--text-muted); }
+/* lg — protagonista de PDP */
+.mui-price--lg .mui-price__amount { font-size: var(--text-3xl); line-height: var(--leading-tight); }
+
+/* ---------- Rating · .mui-rating ----------
+   Valoración de producto. Las estrellas son puro dibujo (glifo ★ en
+   ::before, aria-hidden en el markup): la lectura real vive en el
+   aria-label del nodo role="img". Llena var(--accent), vacía
+   var(--border-strong) — ambos ≥3:1 sobre --bg y --surface (gráfico). */
+.mui-rating { display: inline-flex; align-items: center; gap: var(--space-1_5); }
+.mui-rating__stars { display: inline-flex; gap: var(--space-0_5); line-height: 1; }
+.mui-rating__star {
+  position: relative; display: inline-block;
+  color: var(--accent);                        /* default = llena */
+}
+.mui-rating__star::before { content: "★"; }
+.mui-rating__star--empty { color: var(--border-strong); }
+/* media — dos capas: base vacía + ::after lleno recortado a la mitad
+   inicial; clip-path es físico → espejo explícito en RTL */
+.mui-rating__star--half { color: var(--border-strong); }
+.mui-rating__star--half::after {
+  content: "★";
+  position: absolute; inset: 0;
+  color: var(--accent);
+  clip-path: inset(0 50% 0 0);
+}
+[dir="rtl"] .mui-rating__star--half::after { clip-path: inset(0 0 0 50%); }
+.mui-rating__value {
+  font-family: var(--font-mono); font-size: var(--text-sm);
+  color: var(--text);
+}
+.mui-rating__count { font-size: var(--text-xs); color: var(--text-muted); }
+/* si el conteo es link: subrayado = afford (nunca solo color) */
+a.mui-rating__count { color: var(--text-muted); text-decoration: underline; }
+a.mui-rating__count:hover { color: var(--text-secondary); }
+a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- MediaGallery · .mui-media-gallery ----------
+   Galería de PDP: principal 1:1 enmarcada (regla 1: borde, no sombra) +
+   tira de thumbs scrolleable. La activa la marca [aria-current="true"]
+   (la mueve el consumidor): borde var(--accent) + opacity 1 — la
+   selección nunca viaja solo en el borde. */
+.mui-media-gallery { display: flex; flex-direction: column; gap: var(--space-3); }
+.mui-media-gallery__main {
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.mui-media-gallery__main img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+/* tira — scrollea en inline; el padding-block deja respirar el ring de foco */
+.mui-media-gallery__thumbs {
+  display: flex; gap: var(--space-2);
+  overflow-x: auto;
+  padding-block: var(--space-1);
+}
+.mui-media-gallery__thumb {
+  width: 4rem; height: 4rem; flex: none;
+  padding: 0; cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  opacity: 0.75;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    opacity      var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+.mui-media-gallery__thumb img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+.mui-media-gallery__thumb:hover { opacity: 1; }
+.mui-media-gallery__thumb:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-media-gallery__thumb[aria-current="true"] {
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+/* ---------- CartLine · .mui-cart-line ----------
+   Línea de carrito: media | info | cantidad | precio | quitar. Todo lo
+   interactivo es composición — el qty compone .mui-input-group +
+   .mui-input--sm + .mui-btn--sm --icon (acá SOLO ancho y fila), el
+   precio es un .mui-price hijo directo y el quitar un .mui-btn--ghost
+   --icon --sm. Hermanas separadas por borde (regla 1). */
+.mui-cart-line {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding-block: var(--space-4);
+  list-style: none;                  /* la línea suele ser un <li> */
+}
+.mui-cart-line + .mui-cart-line { border-top: 1px solid var(--border-subtle); }
+.mui-cart-line__media {
+  width: 4rem; height: 4rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.mui-cart-line__media img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+.mui-cart-line__info { min-width: 0; }       /* habilita el ellipsis del título */
+.mui-cart-line__title {
+  margin: 0;
+  font-size: var(--text-sm); font-weight: var(--weight-medium);
+  color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mui-cart-line__variant { margin: 0; font-size: var(--text-xs); color: var(--text-muted); }
+/* qty — compone .mui-input-group: acá solo la fila y el ancho del input */
+.mui-cart-line__qty { display: inline-flex; align-items: center; gap: var(--space-1); }
+.mui-cart-line__qty .mui-input { width: 3rem; text-align: center; }
+/* remove — slot de composición (.mui-btn--ghost --icon --sm); solo anclaje */
+.mui-cart-line__remove { justify-self: end; }
+
+/* <560px: media+info arriba; qty/precio/quitar en fila abajo. El área qty
+   pisa la columna 1fr para que la col 1 siga midiendo la media (4rem);
+   el precio DEBE ser hijo directo para recibir su área. */
+@media (max-width: 560px) {
+  .mui-cart-line {
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-areas:
+      "media info info info"
+      "qty   qty  price remove";
+  }
+  .mui-cart-line__media { grid-area: media; }
+  .mui-cart-line__info  { grid-area: info; }
+  .mui-cart-line__qty   { grid-area: qty; justify-self: start; }
+  .mui-cart-line > .mui-price { grid-area: price; justify-self: end; }
+  .mui-cart-line__remove { grid-area: remove; }
+}
+
 } /* @layer milpa.components */

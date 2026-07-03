@@ -1,0 +1,73 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "rating",
+  "layer": "component",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-rating",
+  "summary": "Valoración de producto: estrellas + valor + conteo de reseñas. Las estrellas son puro dibujo (glifo ★ en ::before, decorativas en el markup): la lectura real vive en el aria-label del nodo role=\"img\" (\"4.5 de 5, 128 reseñas\"). Llena var(--accent), vacía var(--border-strong) — ambos ≥3:1 sobre --bg y --surface como gráfico; la media estrella son dos capas con clip-path (espejado explícito en RTL). Es DISPLAY: para capturar una valoración se usa un grupo de radios, no esta pieza.",
+  "element": [
+    "div | span — el nodo con role=\"img\" + aria-label lleva la lectura completa (dónde va el role depende de si __count es link: ver a11y)"
+  ],
+  "anatomy": {
+    "root": ".mui-rating — inline-flex center gap space-1_5",
+    "stars": ".mui-rating__stars — inline-flex gap space-0_5 (2px) line-height 1; en el markup SIEMPRE decorativas (aria-hidden, o hijas presentacionales del role=\"img\")",
+    "star": ".mui-rating__star — inline-block relative; glifo ★ vía ::before; default = llena var(--accent)",
+    "value": ".mui-rating__value — mono text-sm var(--text): el número (4.5)",
+    "count": ".mui-rating__count — text-xs var(--text-muted); si es <a>: subrayado (afford que no depende del color) + hover text-secondary + ring estándar"
+  },
+  "variants": {
+    "star": {
+      "full": "default — var(--accent)",
+      "half": ".mui-rating__star--half — base vacía var(--border-strong) + ::after ★ var(--accent) recortado con clip-path inset(0 50% 0 0); [dir=\"rtl\"] espeja el recorte (clip-path es físico)",
+      "empty": ".mui-rating__star--empty — var(--border-strong)"
+    }
+  },
+  "states": {
+    "static": "estrellas y valor no son interactivos",
+    "hover": "solo a.mui-rating__count — var(--text-muted) → var(--text-secondary)",
+    "focus": "solo a.mui-rating__count — outline 2px var(--focus) offset 2px SOLO en :focus-visible"
+  },
+  "tokens": [
+    "--accent",
+    "--border-strong",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--focus",
+    "--font-mono",
+    "--text-sm",
+    "--text-xs",
+    "--space-1_5",
+    "--space-0_5"
+  ],
+  "a11y": {
+    "element": "el número de estrellas del markup es cosmético: la verdad es el aria-label del role=\"img\"",
+    "aria": [
+      "patrón base (sin link): role=\"img\" + aria-label=\"4.5 de 5, 128 reseñas\" en el ROOT; __stars con aria-hidden=\"true\"; __value/__count quedan presentacionales (el label ya lo dice todo)",
+      "patrón con link (__count como <a>): un link NO puede vivir dentro de role=\"img\" (children presentational) — mover role=\"img\" + aria-label=\"4.2 de 5\" a __stars (sin aria-hidden: el role ya oculta a sus hijas) y dejar __value/__count como texto/link reales",
+      "el consumidor redondea la representación (4.2 → 4 llenas) pero el aria-label lleva el valor exacto"
+    ],
+    "keyboard": [
+      "solo el link de __count entra al orden de tabulación (foco nativo de <a> + ring estándar)"
+    ],
+    "behavior": [
+      "pieza de display: la captura de valoraciones (input) es un grupo de radios del consumidor o una pieza futura — no reutilizar esta con JS de click"
+    ],
+    "contrast": "llena var(--accent) y vacía var(--border-strong) ≥3:1 sobre --bg y --surface (gráficos, no texto — pares del gate); la media combina ambos con boundary nítido del clip. __value var(--text) ≥4.5; __count var(--text-muted) ≥4.5 y hover var(--text-secondary) ≥4.5 (gate). La distinción llena/vacía no depende del matiz: contraste de luminancia verificado + el valor numérico visible al lado"
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática (el color del link de __count cambia sin transición)",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Patrón base — role=img en el root, conteo como texto",
+      "html": "<div class=\"mui-rating\" role=\"img\" aria-label=\"4.5 de 5, 128 reseñas\"><span class=\"mui-rating__stars\" aria-hidden=\"true\"><span class=\"mui-rating__star\"></span><span class=\"mui-rating__star\"></span><span class=\"mui-rating__star\"></span><span class=\"mui-rating__star\"></span><span class=\"mui-rating__star mui-rating__star--half\"></span></span><span class=\"mui-rating__value\">4.5</span><span class=\"mui-rating__count\">128 reseñas</span></div>"
+    },
+    {
+      "title": "Con link a reseñas — role=img baja a __stars",
+      "html": "<div class=\"mui-rating\"><span class=\"mui-rating__stars\" role=\"img\" aria-label=\"4.2 de 5\"><span class=\"mui-rating__star\"></span><span class=\"mui-rating__star\"></span><span class=\"mui-rating__star\"></span><span class=\"mui-rating__star\"></span><span class=\"mui-rating__star mui-rating__star--empty\"></span></span><span class=\"mui-rating__value\">4.2</span><a class=\"mui-rating__count\" href=\"#resenas\">128 reseñas</a></div>"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "cart-line",
+  "layer": "component",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-cart-line",
+  "summary": "Línea de carrito: media | info | cantidad | precio | quitar en una grilla de cinco columnas; líneas hermanas separadas por borde (regla 1: & + & border-top, sin cards anidadas). Todo lo interactivo es composición — el qty compone .mui-input-group + .mui-input--sm + .mui-btn--sm --icon (acá SOLO ancho y fila), el precio es un .mui-price hijo DIRECTO y el quitar un .mui-btn--ghost --icon --sm. <560px se repliega sin wrapper extra: media+info arriba, qty/precio/quitar en fila abajo (grid-template-areas).",
+  "element": [
+    "li (dentro del <ul> del carrito — preferido; el root ya trae list-style:none, el reset del <ul> lo pone el layout)",
+    "div"
+  ],
+  "composes": [
+    "input-group (__qty: .mui-input-group en fila con .mui-input--sm centrado a 3rem y dos .mui-btn--sm --icon −/+, cada uno con aria-label)",
+    "button (__remove ES un .mui-btn--ghost --icon --sm con aria-label; la clase solo lo ancla al final)",
+    "price (.mui-price hijo DIRECTO del root — sin clase de elemento propia: el grid lo ubica en la col 4 en desktop y en el área \"price\" en mobile)"
+  ],
+  "anatomy": {
+    "root": ".mui-cart-line — grid auto 1fr auto auto auto, gap space-3, align center, padding-block space-4; hermanas: border-top 1px var(--border-subtle)",
+    "media": ".mui-cart-line__media — 4rem cuadrado, radius-md, overflow hidden, borde var(--border-subtle); img cover",
+    "info": ".mui-cart-line__info — min-width 0 (habilita el ellipsis del título)",
+    "title": ".mui-cart-line__title — text-sm medium var(--text), una línea con ellipsis (el nombre completo viaja en los aria-label de los controles)",
+    "variant": ".mui-cart-line__variant — text-xs var(--text-muted): talle, color",
+    "qty": ".mui-cart-line__qty — inline-flex gap space-1; el .mui-input interno pasa a 3rem centrado. Solo composición: los estados los traen las piezas",
+    "remove": ".mui-cart-line__remove — justify-self end; slot puro para el botón de quitar"
+  },
+  "variants": {
+    "responsive": {
+      "stacked": "<560px sin clase (media query): grid-template-areas — fila 1: media + info; fila 2: qty (start — su área pisa la columna 1fr para que la col 1 siga midiendo los 4rem de la media) · precio (end) · quitar (end). El precio DEBE ser hijo directo para recibir su área"
+    }
+  },
+  "states": {
+    "composed": "sin estados propios: [disabled] en los botones −/+/quitar cuando aplica (mínimo/máximo alcanzado, línea en vuelo), [aria-invalid] en el input de cantidad — cada pieza compuesta trae los suyos"
+  },
+  "tokens": [
+    "--border-subtle",
+    "--text",
+    "--text-muted",
+    "--text-sm",
+    "--text-xs",
+    "--weight-medium",
+    "--radius-md",
+    "--space-1",
+    "--space-3",
+    "--space-4"
+  ],
+  "a11y": {
+    "element": "cada línea un <li> del <ul> del carrito: los lectores anuncian el total de ítems gratis. El img de __media con alt=\"\" (el título ya nombra el producto)",
+    "aria": [
+      "los botones −/+ con aria-label que incluye el producto (\"Restar uno, Milpa Tee\" / \"Sumar uno, Milpa Tee\"): fuera del contexto visual siguen teniendo sentido",
+      "el input de cantidad con aria-label (\"Cantidad, Milpa Tee\") + inputmode=\"numeric\"; el cambio de subtotal se anuncia en una región aria-live=\"polite\" del resumen (consumidor)",
+      "__remove con aria-label que nombra el producto (\"Quitar Milpa Tee\")",
+      "el título trunca solo VISUALMENTE (ellipsis): el texto completo sigue en el DOM/accessibility tree y en los labels de los controles"
+    ],
+    "keyboard": [
+      "Tab recorre − → input → + → quitar en orden DOM; todos controles nativos con el ring estándar de sus piezas"
+    ],
+    "contrast": "título var(--text) ≥4.5 y variante var(--text-muted) ≥4.5 sobre --bg y --surface (gate); el border-top separador y el marco de la media son decorativos (la estructura la da el layout)"
+  },
+  "motion": {
+    "transitions": "ninguna propia — los botones e inputs compuestos traen la suya",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Dos líneas en el carrito (el borde separa hermanas)",
+      "html": "<ul><li class=\"mui-cart-line\"><div class=\"mui-cart-line__media\"><img src=\"/img/tee-thumb.jpg\" alt=\"\"></div><div class=\"mui-cart-line__info\"><p class=\"mui-cart-line__title\">Milpa Tee</p><p class=\"mui-cart-line__variant\">M · Olivo</p></div><div class=\"mui-input-group mui-cart-line__qty\"><button type=\"button\" class=\"mui-btn mui-btn--sm mui-btn--icon\" aria-label=\"Restar uno, Milpa Tee\">−</button><input class=\"mui-input mui-input--sm\" inputmode=\"numeric\" value=\"1\" aria-label=\"Cantidad, Milpa Tee\"><button type=\"button\" class=\"mui-btn mui-btn--sm mui-btn--icon\" aria-label=\"Sumar uno, Milpa Tee\">+</button></div><span class=\"mui-price\"><span class=\"mui-price__amount\">$29</span></span><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-cart-line__remove\" aria-label=\"Quitar Milpa Tee\">✕</button></li><li class=\"mui-cart-line\"><div class=\"mui-cart-line__media\"><img src=\"/img/gorra-thumb.jpg\" alt=\"\"></div><div class=\"mui-cart-line__info\"><p class=\"mui-cart-line__title\">Gorra Elote</p><p class=\"mui-cart-line__variant\">Única · Oro</p></div><div class=\"mui-input-group mui-cart-line__qty\"><button type=\"button\" class=\"mui-btn mui-btn--sm mui-btn--icon\" aria-label=\"Restar uno, Gorra Elote\" disabled>−</button><input class=\"mui-input mui-input--sm\" inputmode=\"numeric\" value=\"1\" aria-label=\"Cantidad, Gorra Elote\"><button type=\"button\" class=\"mui-btn mui-btn--sm mui-btn--icon\" aria-label=\"Sumar uno, Gorra Elote\">+</button></div><span class=\"mui-price\"><span class=\"mui-price__amount\">$19</span></span><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-cart-line__remove\" aria-label=\"Quitar Gorra Elote\">✕</button></li></ul>"
+    }
+  ]
+}

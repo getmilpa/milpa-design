@@ -1,0 +1,63 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "price",
+  "layer": "component",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-price",
+  "summary": "El número del puesto: precio en mono (dígitos estables entre estados) con el monto protagonista y moneda/unidad como susurro. El precio anterior (__compare) va tachado en <s> — el tachado visual NO viaja a los lectores: el contrato exige nombre accesible (sr-only \"antes \" dentro del <s>, o aria-label). --lg para el protagonista de la PDP.",
+  "element": [
+    "span (inline — dentro de card bodies, cart lines; en PDP el bloque lo aporta el layout)"
+  ],
+  "anatomy": {
+    "root": ".mui-price — inline-flex align baseline gap space-1_5, var(--font-mono)",
+    "amount": ".mui-price__amount — text-base bold var(--text): el monto con su símbolo pegado ($29)",
+    "currency": ".mui-price__currency — text-xs var(--text-secondary): código ISO (USD, MXN) cuando el símbolo es ambiguo",
+    "compare": ".mui-price__compare — text-xs var(--text-muted) line-through: precio anterior, SIEMPRE con nombre accesible (ver a11y)",
+    "unit": ".mui-price__unit — text-xs var(--text-muted): la unidad (\"/mo\", \"/kg\")"
+  },
+  "variants": {
+    "size": {
+      "default": "amount text-base — grillas, cart lines",
+      "lg": ".mui-price--lg — amount text-3xl leading-tight: el protagonista de la PDP"
+    }
+  },
+  "states": {
+    "static": "pieza de display pura: sin estados interactivos ni foco propio"
+  },
+  "tokens": [
+    "--font-mono",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--text-base",
+    "--text-xs",
+    "--text-3xl",
+    "--weight-bold",
+    "--leading-tight",
+    "--space-1_5"
+  ],
+  "a11y": {
+    "element": "__compare como <s> (semántica de \"ya no vigente\") — pero <s> NO se anuncia de forma consistente entre lectores: el nombre accesible es obligatorio",
+    "aria": [
+      "__compare: anteponer <span class=\"mui-sr-only\">antes </span> dentro del <s> (preferido — aria-label sobre <span>/<s> es inconsistente entre lectores); sin esto el lector anuncia dos precios sin distinción",
+      "orden de lectura = orden del DOM: currency/amount primero, compare después, unit al final",
+      "la unidad (__unit) es texto real, no pseudo: siempre se anuncia"
+    ],
+    "contrast": "amount var(--text) ≥4.5; currency var(--text-secondary) ≥4.5; compare/unit var(--text-muted) ≥4.5 — todos sobre --bg y --surface (gate). LÍMITE heredado del contrato de card: sobre --surface-raised var(--text-muted) NO alcanza AA — los precios con compare/unit van en cards default, no en --raised"
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Precio con anterior y unidad",
+      "html": "<span class=\"mui-price\"><span class=\"mui-price__currency\">USD</span><span class=\"mui-price__amount\">$29</span><s class=\"mui-price__compare\"><span class=\"mui-sr-only\">antes </span>$39</s><span class=\"mui-price__unit\">/mo</span></span>"
+    },
+    {
+      "title": "PDP (--lg)",
+      "html": "<span class=\"mui-price mui-price--lg\"><span class=\"mui-price__amount\">$120</span><span class=\"mui-price__currency\">MXN</span></span>"
+    }
+  ]
+}

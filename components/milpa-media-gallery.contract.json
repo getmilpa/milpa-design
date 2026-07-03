@@ -1,0 +1,67 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "media-gallery",
+  "layer": "component",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-media-gallery",
+  "summary": "Galería de PDP: imagen principal 1:1 enmarcada (regla 1: la definición la da el borde, no la sombra) + tira de thumbs scrolleable en inline. Cada thumb es un <button> nativo con aria-label por imagen; la activa la marca [aria-current=\"true\"] (la mueve el consumidor al intercambiar la principal): borde var(--accent) ≥3:1 + opacity 1 — la selección nunca viaja solo en el borde, la opacidad acompaña.",
+  "element": [
+    "div (root)",
+    "button (cada __thumb — type=\"button\")"
+  ],
+  "anatomy": {
+    "root": ".mui-media-gallery — flex column gap space-3",
+    "main": ".mui-media-gallery__main — aspect-ratio 1/1, radius-lg, overflow hidden, borde 1px var(--border-subtle); img cover (display block, 100%/100%)",
+    "thumbs": ".mui-media-gallery__thumbs — flex gap space-2, overflow-x auto, padding-block space-1 (respiro para que el overflow no recorte el ring de foco en bloque); en el markup: role=\"group\" + aria-label",
+    "thumb": ".mui-media-gallery__thumb — button 4rem cuadrado, radius-md, overflow hidden, borde 1px var(--border-subtle), flex none; img cover; reposa a opacity .75"
+  },
+  "variants": {
+    "base": {
+      "default": "sin variantes de clase en 0.2.0 — el tamaño del thumb (4rem) y el aspecto de la principal (1:1) son fijos del molde"
+    }
+  },
+  "states": {
+    "hover": "__thumb:hover — opacity .75 → 1 en --dur-fast",
+    "current": "__thumb[aria-current=\"true\"] — borde var(--accent) + opacity 1; el atributo lo mueve el consumidor junto con el swap de la principal",
+    "focus": "__thumb:focus-visible — outline 2px var(--focus) offset 2px (foco nativo de <button>)"
+  },
+  "tokens": [
+    "--border-subtle",
+    "--accent",
+    "--focus",
+    "--radius-lg",
+    "--radius-md",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "cada thumb es <button type=\"button\"> nativo con aria-label que nombra la vista (\"Ver imagen 2: espalda\"); su img interno con alt=\"\" (el label ya la nombra)",
+    "aria": [
+      "__thumbs con role=\"group\" + aria-label (\"Imágenes del producto\")",
+      "[aria-current=\"true\"] marca la vista activa — lo mueve el consumidor al intercambiar src/srcset de __main",
+      "el img de __main con alt descriptivo que se ACTUALIZA en cada swap — es LA imagen del producto, nunca alt vacío"
+    ],
+    "keyboard": [
+      "Tab recorre los botones de la tira (foco secuencial nativo); flechas opcionales vía roving tabindex del consumidor",
+      "la tira scrollea sola al enfocar un thumb fuera de vista (overflow-x auto + scroll de foco del navegador)"
+    ],
+    "behavior": [
+      "el swap de la principal es JS del consumidor: cambiar src/srcset + alt de __main y mover [aria-current] al thumb elegido"
+    ],
+    "contrast": "borde activo var(--accent) ≥3:1 sobre --bg y --surface (gate) — y la opacidad 1 vs .75 refuerza: la selección no viaja solo en el borde. El borde subtle en reposo es decorativo. Los ratios sobre fotografía no se pueden garantizar: por eso la selección se marca FUERA del bitmap (borde + opacidad del thumb completo)"
+  },
+  "motion": {
+    "transitions": "__thumb: opacity y border-color en --dur-fast --ease-standard",
+    "reducedMotion": "contrato global (1ms): el cambio queda instantáneo — reposo .75 y activa 1 son ESTADOS, no animación: nada se pierde congelado"
+  },
+  "examples": [
+    {
+      "title": "Galería de PDP con tres vistas",
+      "html": "<div class=\"mui-media-gallery\"><div class=\"mui-media-gallery__main\"><img src=\"/img/tee-frente.jpg\" alt=\"Milpa Tee, vista frontal\"></div><div class=\"mui-media-gallery__thumbs\" role=\"group\" aria-label=\"Imágenes del producto\"><button type=\"button\" class=\"mui-media-gallery__thumb\" aria-current=\"true\" aria-label=\"Ver imagen 1: frente\"><img src=\"/img/tee-frente-thumb.jpg\" alt=\"\"></button><button type=\"button\" class=\"mui-media-gallery__thumb\" aria-label=\"Ver imagen 2: espalda\"><img src=\"/img/tee-espalda-thumb.jpg\" alt=\"\"></button><button type=\"button\" class=\"mui-media-gallery__thumb\" aria-label=\"Ver imagen 3: detalle del bordado\"><img src=\"/img/tee-detalle-thumb.jpg\" alt=\"\"></button></div></div>"
+    }
+  ]
+}

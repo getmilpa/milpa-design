@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troje — automated backups for Milpa apps</title>
+<meta name="description" content="Troje is the granary for your Milpa field: continuous, contract-aware backups with nightly restore drills. Store the harvest. Restore in seconds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../dist/milpa-tokens.css">
+<link rel="stylesheet" href="../motion/milpa-motion.css">
+<link rel="stylesheet" href="../primitives/milpa-primitives.css">
+<link rel="stylesheet" href="../components/milpa-components.css">
+<link rel="stylesheet" href="../artifacts/milpa-artifacts.css">
+<link rel="stylesheet" href="../layouts/milpa-layouts.css">
+<style>
+/* ===== page styles (troje-*) — the system does the rest; all tokens ===== */
+body { margin: 0; }
+.troje-header { position: sticky; top: 0; z-index: var(--z-sticky); background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(10px); border-block-end: 1px solid var(--border-subtle); }
+.troje-header__row { display: flex; align-items: center; gap: var(--space-4); height: 3.5rem; }
+.troje-brand { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--text); text-decoration: none; }
+.troje-nav { display: flex; gap: var(--space-1); margin-inline-start: auto; }
+.troje-mono { font-family: var(--font-mono); }
+.troje-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr)); gap: var(--space-4); }
+.troje-stats { margin-block-start: var(--space-10); }
+.troje-logos { margin-block-start: var(--space-6); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted); }
+.troje-dash { width: 100%; }
+.troje-dash .mui-card__body { display: grid; gap: var(--space-5); }
+</style>
+</head>
+<body>
+
+<a class="mui-shell__skip" href="#main">Skip to content</a>
+
+<div class="mui-page">
+
+<!-- ============ HEADER ============ -->
+<header class="troje-header">
+  <div class="mui-container troje-header__row">
+    <a class="troje-brand troje-mono" href="#">
+      <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" rx="3" fill="var(--accent)"/></svg>
+      troje
+    </a>
+    <nav class="troje-nav" aria-label="Primary">
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#features">Features</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#pricing">Pricing</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#faq">FAQ</a>
+      <button type="button" class="mui-btn mui-btn--sm troje-mono" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
+      <a class="mui-btn mui-btn--secondary mui-btn--sm" href="#pricing">Start free</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ============ HERO ============ -->
+  <section class="mui-section" aria-label="Troje — automated backups for Milpa apps">
+    <div class="mui-container">
+      <div class="mui-hero">
+        <div>
+          <p class="mui-hero__kicker">automated backups · contract-aware · runs on milpa</p>
+          <h1 class="mui-hero__title">Store the harvest. Restore in seconds.</h1>
+          <p class="mui-hero__tagline">every backup verified · every restore rehearsed</p>
+          <p class="mui-hero__sub">Troje watches your Milpa field and streams every module, event and byte into the granary — continuously, encrypted, and drilled nightly so a restore is never a surprise.</p>
+          <div class="mui-hero__cta">
+            <a class="mui-btn mui-btn--primary" href="#pricing">Start backing up</a>
+            <a class="mui-btn mui-btn--ghost" href="/docs/troje">Read the docs</a>
+          </div>
+          <div class="mui-hero__meta">
+            <span class="mui-badge mui-badge--accent">v1.2</span>
+            <span class="mui-badge">Runs on Milpa</span>
+            <span class="mui-badge mui-badge--secondary">SOC 2 Type II</span>
+          </div>
+        </div>
+
+        <!-- simulated dashboard: the product, composed from the system -->
+        <div class="mui-hero__media">
+          <div class="mui-card troje-dash">
+            <header class="mui-card__header">
+              <p class="mui-card__title">Granary — production</p>
+              <span class="mui-badge mui-badge--success mui-badge--dot">protected</span>
+            </header>
+            <div class="mui-card__body">
+              <div class="troje-grid">
+                <div class="mui-stat">
+                  <span class="mui-stat__label">Last harvest</span>
+                  <span class="mui-stat__value">2m ago</span>
+                  <span class="mui-stat__meta">auto · every 5 min</span>
+                </div>
+                <div class="mui-stat">
+                  <span class="mui-stat__label">Restore points</span>
+                  <span class="mui-stat__value">1,440</span>
+                  <span class="mui-stat__delta mui-stat__delta--up mui-stat__delta--positive">+36<span class="mui-sr-only"> up</span></span>
+                  <span class="mui-stat__meta">rolling 30 days</span>
+                </div>
+              </div>
+              <div class="mui-chart mui-chart--line">
+                <p class="mui-chart__title">Backups per day · last 7 days</p>
+                <div class="mui-chart__canvas" role="img" aria-label="Backups per day, last 7 days: volume rose from 38 to 61 gigabytes per day; restore drills held steady between 6 and 9 per day.">
+                  <svg viewBox="0 0 400 160" preserveAspectRatio="none" aria-hidden="true">
+                    <line class="mui-chart__grid-line" x1="0" y1="10" x2="400" y2="10" vector-effect="non-scaling-stroke"/>
+                    <line class="mui-chart__grid-line" x1="0" y1="68" x2="400" y2="68" vector-effect="non-scaling-stroke"/>
+                    <line class="mui-chart__grid-line" x1="0" y1="126" x2="400" y2="126" vector-effect="non-scaling-stroke"/>
+                    <polygon class="mui-chart__area-1" points="0,104 66,88 133,94 200,64 266,52 333,34 400,20 400,126 0,126"/>
+                    <polyline class="mui-chart__stroke-1" points="0,104 66,88 133,94 200,64 266,52 333,34 400,20" vector-effect="non-scaling-stroke"/>
+                    <polyline class="mui-chart__stroke-2" points="0,118 66,112 133,116 200,108 266,113 333,104 400,108" vector-effect="non-scaling-stroke"/>
+                    <text class="mui-chart__axis-label" x="2" y="150" text-anchor="start">Mon</text>
+                    <text class="mui-chart__axis-label" x="66" y="150" text-anchor="middle">Tue</text>
+                    <text class="mui-chart__axis-label" x="133" y="150" text-anchor="middle">Wed</text>
+                    <text class="mui-chart__axis-label" x="200" y="150" text-anchor="middle">Thu</text>
+                    <text class="mui-chart__axis-label" x="266" y="150" text-anchor="middle">Fri</text>
+                    <text class="mui-chart__axis-label" x="333" y="150" text-anchor="middle">Sat</text>
+                    <text class="mui-chart__axis-label" x="398" y="150" text-anchor="end">Sun</text>
+                  </svg>
+                </div>
+                <div class="mui-chart__legend">
+                  <span class="mui-chart__legend-item"><span class="mui-chart__swatch mui-chart__swatch--1"></span>backups (GB)</span>
+                  <span class="mui-chart__legend-item"><span class="mui-chart__swatch mui-chart__swatch--2"></span>restore drills</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOCIAL PROOF (logos) ============ -->
+  <section class="mui-section mui-section--tight" aria-label="Teams using Troje">
+    <div class="mui-container">
+      <p class="mui-section__kicker">harvested by teams at</p>
+      <div class="troje-grid troje-logos">
+        <span>kiosko</span>
+        <span>cafetal</span>
+        <span>nixtamal co.</span>
+        <span>comal labs</span>
+        <span>la parcela</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="mui-section" id="features" aria-labelledby="h-features">
+    <div class="mui-container">
+      <p class="mui-section__kicker">the granary</p>
+      <h2 class="mui-section__title" id="h-features">Everything worth keeping, kept.</h2>
+      <p class="mui-section__lede">Six ways Troje earns its name — a troje is the barn where the good harvest sleeps, and nothing that matters is ever left in the field.</p>
+
+      <div class="mui-feature-grid">
+        <article class="mui-feature-grid__item">
+          <svg class="mui-feature-grid__icon mui-feature-grid__icon--oro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 4l9 6"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/></svg>
+          <p class="mui-feature-grid__rol">harvest · continuous</p>
+          <h3 class="mui-feature-grid__title">Continuous backups</h3>
+          <p class="mui-feature-grid__body">Every module state, event stream and artifact flows into the granary as it happens — not once a night, always.</p>
+        </article>
+        <article class="mui-feature-grid__item">
+          <svg class="mui-feature-grid__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.7"/><path d="M4 4v5h5"/><path d="M12 8v4l3 2"/></svg>
+          <p class="mui-feature-grid__rol">restore · one command</p>
+          <h3 class="mui-feature-grid__title">One-command restore</h3>
+          <p class="mui-feature-grid__body"><code>troje restore --to 14:02</code> rolls the whole field back — modules, database, events — to any point you can name.</p>
+        </article>
+        <article class="mui-feature-grid__item">
+          <svg class="mui-feature-grid__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 14l2 2 4-4"/></svg>
+          <p class="mui-feature-grid__rol">contracts · aware</p>
+          <h3 class="mui-feature-grid__title">Contract-aware snapshots</h3>
+          <p class="mui-feature-grid__body">Troje reads your module contracts to know what is source of truth. Builds and caches can be re-harvested — they stay out of the barn.</p>
+        </article>
+        <article class="mui-feature-grid__item">
+          <svg class="mui-feature-grid__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 1 1 .6-8.9A6 6 0 0 1 19 11a3.5 3.5 0 0 1-1 7z"/></svg>
+          <p class="mui-feature-grid__rol">storage · anywhere</p>
+          <h3 class="mui-feature-grid__title">Any barn you trust</h3>
+          <p class="mui-feature-grid__body">S3, GCS, or a disk in your own shed. The granary is your storage — Troje just fills it and keeps the manifest.</p>
+        </article>
+        <article class="mui-feature-grid__item">
+          <svg class="mui-feature-grid__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+          <p class="mui-feature-grid__rol">drills · nightly</p>
+          <h3 class="mui-feature-grid__title">Restore drills</h3>
+          <p class="mui-feature-grid__body">Every night Troje restores your latest backup into a shadow field and runs your smoke tests. A backup only counts when it restores.</p>
+        </article>
+        <article class="mui-feature-grid__item">
+          <svg class="mui-feature-grid__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          <p class="mui-feature-grid__rol">security · sealed</p>
+          <h3 class="mui-feature-grid__title">Sealed and encrypted</h3>
+          <p class="mui-feature-grid__body">AES-256 before anything leaves the field, with per-module keys. Not even Troje can open a barn it doesn't hold keys to.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ METRICS ============ -->
+  <section class="mui-section" aria-labelledby="h-metrics">
+    <div class="mui-container">
+      <p class="mui-section__kicker">proof of harvest</p>
+      <h2 class="mui-section__title" id="h-metrics">The granary, measured.</h2>
+      <p class="mui-section__lede">Live numbers from every field Troje protects — drilled, verified, and better every quarter.</p>
+
+      <div class="troje-grid troje-stats">
+        <div class="mui-stat">
+          <span class="mui-stat__label">Restore-verified uptime</span>
+          <span class="mui-stat__value">99.99%</span>
+          <span class="mui-stat__delta mui-stat__delta--up mui-stat__delta--positive">+0.02%<span class="mui-sr-only"> up, improving</span></span>
+          <span class="mui-stat__meta">last 90 days</span>
+        </div>
+        <div class="mui-stat">
+          <span class="mui-stat__label">Backups harvested / day</span>
+          <span class="mui-stat__value">48,210</span>
+          <span class="mui-stat__delta mui-stat__delta--up mui-stat__delta--positive">+18%<span class="mui-sr-only"> up</span></span>
+          <span class="mui-stat__meta">across all fields</span>
+        </div>
+        <div class="mui-stat">
+          <span class="mui-stat__label">Median restore time</span>
+          <span class="mui-stat__value">38s</span>
+          <span class="mui-stat__delta mui-stat__delta--down mui-stat__delta--positive">−12s<span class="mui-sr-only"> down, improving</span></span>
+          <span class="mui-stat__meta">p50 · full app restore</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="mui-section" id="pricing" aria-labelledby="h-pricing">
+    <div class="mui-container">
+      <p class="mui-section__kicker">plans</p>
+      <h2 class="mui-section__title" id="h-pricing">Pick the size of your barn.</h2>
+      <p class="mui-section__lede">Start free and grow when the field does. Every plan restores everything — the barn size only changes how much history it holds.</p>
+
+      <div class="mui-pricing">
+        <article class="mui-pricing__plan" aria-labelledby="plan-sprout">
+          <h3 class="mui-pricing__name" id="plan-sprout">Sprout</h3>
+          <p class="mui-pricing__desc">For the first field.</p>
+          <p class="mui-pricing__price">$0<span class="mui-pricing__period"> /mo</span></p>
+          <ul class="mui-pricing__features">
+            <li>1 Milpa app</li>
+            <li>Daily backups</li>
+            <li>7-day retention</li>
+            <li data-off>Restore drills<span class="mui-sr-only"> (not included)</span></li>
+            <li data-off>Priority support<span class="mui-sr-only"> (not included)</span></li>
+          </ul>
+          <div class="mui-pricing__cta"><a class="mui-btn" href="/signup">Start free</a></div>
+        </article>
+
+        <article class="mui-pricing__plan" data-featured aria-labelledby="plan-field">
+          <span class="mui-pricing__flag mui-badge mui-badge--accent">Most planted</span>
+          <h3 class="mui-pricing__name" id="plan-field">Field</h3>
+          <p class="mui-pricing__desc">For working farms.</p>
+          <p class="mui-pricing__price">$19<span class="mui-pricing__period"> /mo</span></p>
+          <ul class="mui-pricing__features">
+            <li>10 Milpa apps</li>
+            <li>Continuous backups</li>
+            <li>90-day retention</li>
+            <li>Nightly restore drills</li>
+            <li>Priority support</li>
+          </ul>
+          <div class="mui-pricing__cta"><a class="mui-btn mui-btn--primary" href="/signup">Plant Troje</a></div>
+        </article>
+
+        <article class="mui-pricing__plan" aria-labelledby="plan-hacienda">
+          <h3 class="mui-pricing__name" id="plan-hacienda">Hacienda</h3>
+          <p class="mui-pricing__desc">For the whole cooperative.</p>
+          <p class="mui-pricing__price">$99<span class="mui-pricing__period"> /mo</span></p>
+          <ul class="mui-pricing__features">
+            <li>Unlimited apps</li>
+            <li>Continuous + geo-replicated barns</li>
+            <li>1-year retention</li>
+            <li>Hourly restore drills</li>
+            <li>SSO + audit log</li>
+          </ul>
+          <div class="mui-pricing__cta"><a class="mui-btn" href="/contact">Talk to us</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="mui-section" aria-labelledby="h-voices">
+    <div class="mui-container">
+      <p class="mui-section__kicker">voices from the field</p>
+      <h2 class="mui-section__title" id="h-voices">Farmers sleep at night.</h2>
+      <p class="mui-section__lede">Teams that stopped fearing Friday deploys — because the harvest is already in the barn.</p>
+
+      <div class="mui-testimonial">
+        <div class="mui-testimonial__item">
+          <blockquote class="mui-quote">
+            <span class="mui-quote__mark" aria-hidden="true">“</span>
+            <p class="mui-quote__text">We lost a database on a Friday. By the time the coffee was ready, Troje had the whole field back — modules, events, everything.</p>
+            <footer class="mui-quote__attr">
+              <span class="mui-avatar" aria-hidden="true">RV</span>
+              <cite class="mui-quote__name">Rufina Vázquez</cite>
+              <span class="mui-quote__role">CTO, Kiosko</span>
+            </footer>
+          </blockquote>
+        </div>
+        <div class="mui-testimonial__item">
+          <blockquote class="mui-quote mui-quote--pull">
+            <p class="mui-quote__text">The restore drills sold it. Every morning there's a note in the channel: “restored production in 41s”. That's not a backup — that's a promise.</p>
+            <footer class="mui-quote__attr">
+              <span class="mui-avatar" aria-hidden="true">BR</span>
+              <cite class="mui-quote__name">Baltasar Ruiz</cite>
+              <span class="mui-quote__role">Platform lead, Cafetal</span>
+            </footer>
+          </blockquote>
+        </div>
+        <div class="mui-testimonial__item">
+          <blockquote class="mui-quote">
+            <span class="mui-quote__mark" aria-hidden="true">“</span>
+            <p class="mui-quote__text">Contract-aware backups mean we store a tenth of what we used to. The granary keeps the grain, not the husks.</p>
+            <footer class="mui-quote__attr">
+              <span class="mui-avatar" aria-hidden="true">AS</span>
+              <cite class="mui-quote__name">Amaranta Solís</cite>
+              <span class="mui-quote__role">SRE, Nixtamal Co.</span>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="mui-section" id="faq" aria-labelledby="h-faq">
+    <div class="mui-container">
+      <p class="mui-section__kicker">questions</p>
+      <h2 class="mui-section__title" id="h-faq">Before you fill the barn</h2>
+      <p class="mui-section__lede">The short answers. The long ones live in the docs.</p>
+
+      <div class="mui-faq">
+        <details class="mui-faq__item" name="troje-faq" open>
+          <summary class="mui-faq__q">What exactly does Troje back up?</summary>
+          <div class="mui-faq__a">
+            <p>Everything your contracts declare as source of truth: module state, database, event streams and uploaded artifacts.</p>
+            <p>Because Troje reads Milpa module contracts, it also knows what can be re-harvested — builds, caches and generated files stay out of the barn.</p>
+          </div>
+        </details>
+        <details class="mui-faq__item" name="troje-faq">
+          <summary class="mui-faq__q">How fast is a restore?</summary>
+          <p class="mui-faq__a">Median full-app restore is 38 seconds. Point-in-time is one command: <code>troje restore --to 14:02</code> — Troje replays events on top of the nearest snapshot.</p>
+        </details>
+        <details class="mui-faq__item" name="troje-faq">
+          <summary class="mui-faq__q">What is a restore drill?</summary>
+          <p class="mui-faq__a">Every night Troje restores your latest backup into a disposable shadow field, runs your smoke tests and posts the result. A backup only counts when it restores — the drill is the proof.</p>
+        </details>
+        <details class="mui-faq__item" name="troje-faq">
+          <summary class="mui-faq__q">Where does my data live?</summary>
+          <p class="mui-faq__a">In your own barn: S3, GCS or a disk you control. Everything is AES-256 encrypted with per-module keys before it leaves the field — Troje holds the manifest, you hold the keys.</p>
+        </details>
+        <details class="mui-faq__item" name="troje-faq">
+          <summary class="mui-faq__q">Does Troje work outside Milpa?</summary>
+          <p class="mui-faq__a">It runs best on Milpa, where contracts tell it exactly what matters. A generic adapter covers any PHP app — filesystem plus database — without the contract-aware pruning.</p>
+        </details>
+        <details class="mui-faq__item" name="troje-faq">
+          <summary class="mui-faq__q">What happens to my backups if I cancel?</summary>
+          <p class="mui-faq__a">The grain is yours. Backups live in your storage as standard archives with an open manifest, and the CLI keeps restoring them for free — cancelling only stops new harvests.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA BAND ============ -->
+  <section class="mui-cta-band" aria-labelledby="h-cta">
+    <div class="mui-container">
+      <h2 class="mui-cta-band__title" id="h-cta">Put the harvest somewhere safe.</h2>
+      <p class="mui-cta-band__sub">Five minutes to your first verified backup. Connect your field, pick a barn, and let tonight's drill prove it.</p>
+      <div class="mui-cta-band__actions">
+        <a class="mui-btn mui-btn--primary mui-btn--lg" href="/signup">Start free</a>
+        <a class="mui-btn mui-btn--secondary mui-btn--lg" href="/demo">Book a demo</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="mui-footer">
+  <div class="mui-footer__grid">
+    <div class="mui-footer__brand">
+      <a class="troje-brand troje-mono" href="#">
+        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" rx="3" fill="var(--accent)"/></svg>
+        troje
+      </a>
+      <p class="mui-footer__mantra">Keep what the field grows.</p>
+    </div>
+    <nav aria-labelledby="ft-product">
+      <p class="mui-footer__heading" id="ft-product">Product</p>
+      <ul class="mui-footer__links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="/changelog">Changelog</a></li>
+      </ul>
+    </nav>
+    <nav aria-labelledby="ft-resources">
+      <p class="mui-footer__heading" id="ft-resources">Resources</p>
+      <ul class="mui-footer__links">
+        <li><a href="/docs/troje">Documentation</a></li>
+        <li><a href="/docs/troje/restore">Restore guide</a></li>
+        <li><a href="/status">Status</a></li>
+      </ul>
+    </nav>
+    <nav aria-labelledby="ft-company">
+      <p class="mui-footer__heading" id="ft-company">Company</p>
+      <ul class="mui-footer__links">
+        <li><a href="/about">About</a></li>
+        <li><a href="https://github.com/getmilpa">GitHub</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="mui-footer__legal">
+    <p>© 2026 Troje Labs · composed with @milpa/design 0.2.0</p>
+    <p><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(() => {
+  'use strict';
+  /* theme: toggle + persistence + label — the only JS on this page */
+  const root = document.documentElement, btn = document.getElementById('theme-toggle');
+  const apply = t => {
+    root.dataset.theme = t;
+    btn.textContent = '◐ ' + t;
+    try { localStorage.setItem('troje-theme', t); } catch {}
+  };
+  let saved = null; try { saved = localStorage.getItem('troje-theme'); } catch {}
+  apply(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
+  btn.addEventListener('click', () => apply(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+})();
+</script>
+
+</body>
+</html>

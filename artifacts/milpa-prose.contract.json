@@ -1,0 +1,103 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "prose",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-prose",
+  "summary": "Scope tipográfico long-form — la base de docs y blog (capa el elote). Estiliza HTML desnudo (el que emite un Markdown) por descendencia con guarda not-prose en cada regla: las piezas mui-* anidadas — el elemento y todo su subárbol — quedan fuera del scope y conservan su contrato; .mui-not-prose excluye subárboles de HTML desnudo. Medida de 65ch, jerarquía por escala con un solo peso, links siempre subrayados, código en la voz mono del sistema.",
+  "element": [
+    "article (documento completo; section/div para fragmentos)"
+  ],
+  "anatomy": {
+    "root": ".mui-prose — el scope: max-width 65ch, font-display, text-base, leading-relaxed, color var(--text); primer y último hijo sin margen hacia afuera",
+    "guard": "toda regla del scope lleva :not(:where(…)) al estilo tailwind-typography: excluye (a) el elemento que ES una pieza mui-* (un <a class=\"mui-btn\"> conserva su contrato) y (b) el subárbol de una pieza mui-* anidada DENTRO del scope (los th de una .mui-table demo, los p de un .mui-alert) — el término (b) se ancla a .mui-prose para que un article dentro de .mui-shell no se auto-excluya. Escape hatch para HTML desnudo: .mui-not-prose (marker sin reglas propias, lo captura el prefijo mui-). Límite conocido: sin re-entrada — un .mui-prose anidado dentro de una pieza no re-activa el scope",
+    "headings": "h1–h6 — escala text-4xl→text-base con weight-medium, leading-snug y text-wrap balance; scroll-margin-top var(--space-20) para que los anchors (#id) aterricen despejados bajo un topbar sticky; h2 lleva divisor inferior border-subtle (decorativo)",
+    "links": "a — var(--accent-text) SIEMPRE subrayado (offset 2px); el hover engrosa el trazo a 2px sin cambiar de color",
+    "code-inline": "code fuera de <pre> — mono text-sm sobre var(--surface), borde border-subtle, radius-xs; el code de los <pre> queda fuera vía la guarda (pre *)",
+    "pre": "pre — fallback para bloques sin resaltar: lienzo var(--syntax-bg) + tinta var(--syntax-text), borde border-strong (en dark syntax-bg ES bg: el borde define el bloque), overflow-x auto, radius-md. La doc con sintaxis compone .mui-code",
+    "quote": "blockquote — guía inline-start de 3px border-strong, texto text-secondary",
+    "lists": "ul/ol — padding-inline-start space-6; ::marker en text-muted",
+    "table": "table — colapsada y sin card (la versión desnuda de .mui-table): th mono 2xs uppercase text-secondary con separador border-strong; td con border-subtle decorativo. Una .mui-table demo anidada conserva su contrato (border-collapse separate, thead sticky) gracias a la guarda",
+    "media": "img/figure — max-width 100%, radius-md; figcaption text-xs text-muted",
+    "kbd": "kbd — la misma receta que el primitivo .mui-kbd: keycap mono text-2xs sobre var(--surface-raised) con var(--text), borde var(--border) con base de 2px, radius-xs"
+  },
+  "variants": {
+    "none": "sin variantes en 0.2.0 — un solo registro long-form; la medida y el aire se ajustan desde el layout que lo compone"
+  },
+  "states": {
+    "hover": "a:hover — text-decoration-thickness 2px (el color no se mueve: sigue verificado)",
+    "focus": "a:focus-visible — outline 2px var(--focus) offset 2px",
+    "static": "el resto del scope no tiene estados: es contenido, no controles"
+  },
+  "tokens": [
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--accent-text",
+    "--focus",
+    "--surface",
+    "--surface-raised",
+    "--syntax-bg",
+    "--syntax-text",
+    "--border",
+    "--border-subtle",
+    "--border-strong",
+    "--font-display",
+    "--font-mono",
+    "--text-2xs",
+    "--text-xs",
+    "--text-sm",
+    "--text-base",
+    "--text-lg",
+    "--text-xl",
+    "--text-2xl",
+    "--text-4xl",
+    "--weight-regular",
+    "--weight-medium",
+    "--weight-bold",
+    "--leading-snug",
+    "--leading-normal",
+    "--leading-relaxed",
+    "--tracking-tight",
+    "--tracking-wide",
+    "--tracking-display",
+    "--space-0_5",
+    "--space-1_5",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-5",
+    "--space-6",
+    "--space-10",
+    "--space-20",
+    "--radius-xs",
+    "--radius-md",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "usar <article> para el documento (con su h1 adentro); la jerarquía h1→h6 sin saltos la garantiza el contenido — el CSS solo la viste",
+    "aria": [
+      "links siempre subrayados: el color nunca es la única señal (WCAG 1.4.1)",
+      "los headings llevan id: alimentan los anchors del .mui-toc y el scroll-margin-top los deja visibles bajo un topbar sticky",
+      "img siempre con alt (o alt=\"\" si es decorativa); figcaption complementa la alternativa, no la sustituye"
+    ],
+    "behavior": "ninguno — scope CSS puro, sin JS. El consumidor solo garantiza jerarquía de headings sin saltos e ids estables para los anchors; las piezas mui-* incrustadas conservan su propio contrato (a11y incluida) gracias a la guarda",
+    "contrast": "text, text-secondary, text-muted y accent-text ≥4.5 sobre --bg y --surface (pares en el gate): el scope funciona sobre ambos fondos. Código: text/surface (inline) y syntax-text/syntax-bg (pre) ≥4.5; el borde del pre es border-strong/syntax-bg ≥3 (par en el gate) porque en dark syntax-bg ES bg y el borde define el bloque — misma lógica que .mui-menu. Separador del thead border-strong ≥3 sobre bg y surface. Kbd: el AA lo lleva var(--text) sobre var(--surface-raised) (par en el gate); su borde var(--border) es decorativo como en el primitivo .mui-kbd (medido con la fórmula del gate: 3.08 dark / 3.38 light sobre el bg de página y 3.88 sobre surface en light; en dark sobre surface 2.17 y sobre surface-raised 1.48) — no es fallo WCAG duro porque el kbd es contenido tipográfico, no un control, y el keycap se sigue insinuando por el fondo raised y la base de 2px. Los divisores border-subtle (h2, td, hr) y el borde del code inline son decorativos (exentos de 1.4.11): la jerarquía la lleva la tipografía"
+  },
+  "motion": {
+    "transitions": "solo el grosor del subrayado de los links en --dur-fast --ease-standard; nada más se mueve — es lectura",
+    "reducedMotion": "contrato global de milpa-motion.css: la transición cae a 1ms (estado final directo, sin pérdida semántica)"
+  },
+  "examples": [
+    {
+      "title": "Artículo de doc (Markdown renderizado + pieza mui-* que conserva su contrato)",
+      "html": "<article class=\"mui-prose\"><h1>Sembrar un plugin</h1><p>Todo plugin se declara en <code>milpa.config.ts</code> y se registra en <a href=\"#registro\">el registro central</a>.</p><h2 id=\"instalacion\">Instalación</h2><pre><code>npm install @milpa/design</code></pre><p><a class=\"mui-btn mui-btn--primary\" href=\"#demo\">Probar la demo</a> — la guarda lo deja fuera del scope: ni subrayado ni color de link.</p><blockquote><p>La milpa no se apura: primero el suelo, después la semilla.</p></blockquote></article>"
+    },
+    {
+      "title": "Tabla, kbd, figura y escape hatch para HTML desnudo",
+      "html": "<article class=\"mui-prose\"><h2 id=\"atajos\">Atajos</h2><p>Guardá con <kbd>Ctrl</kbd> + <kbd>S</kbd>.</p><table><thead><tr><th>Token</th><th>Rol</th></tr></thead><tbody><tr><td><code>--accent</code></td><td>acento oro</td></tr><tr><td><code>--bg</code></td><td>lienzo</td></tr></tbody></table><figure><img src=\"milpa.png\" alt=\"Diagrama de capas de la milpa\"><figcaption>Las cuatro capas: grano, frijol, elote, parcela.</figcaption></figure><div class=\"mui-not-prose\"><table><tr><td>HTML crudo sin voz prose</td></tr></table></div></article>"
+    }
+  ]
+}

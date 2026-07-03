@@ -1,0 +1,84 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "toc",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-toc",
+  "summary": "Tabla de contenidos del documento — la columna derecha de la doc. Riel vertical (border-subtle) con links atenuados; el heading visible se declara con aria-current=\"location\" — nunca una clase — y habla el mismo lenguaje que .mui-sidebar: texto oro + barra-grano sobre el riel. El scroll-spy lo aporta el consumidor; el sticky, el layout.",
+  "element": [
+    "nav (SIEMPRE con aria-label propio, ej. \"En esta página\")"
+  ],
+  "anatomy": {
+    "root": ".mui-toc — el <nav>: scroll container opcional (max-height var(--_max-h) + overflow-y auto; --_max-h: none por defecto — la doc lo fija si el índice es largo, ej. calc(100vh - var(--space-32))); padding space-1 para que el anillo de foco sobreviva al scroll container",
+    "title": ".mui-toc__title — rótulo mono 2xs uppercase text-muted (la misma voz que .mui-sidebar__section-label)",
+    "list": ".mui-toc__list — <ul> sin list-style con el riel: border-inline-start 1px border-subtle (decorativo: la señal AA la lleva el texto)",
+    "item": ".mui-toc__item — <li> estructural, sin estilos propios",
+    "link": ".mui-toc__link — <a href=\"#id\">: text-sm text-muted sin subrayado, padding-block space-1; hover → var(--text)",
+    "bar": "::before del link activo — barra-grano de 2px var(--accent) que pisa el riel; pseudo decorativo, el estado lo anuncia aria-current"
+  },
+  "variants": {
+    "level": {
+      "sub": ".mui-toc__item--sub — entrada de h3: el link entra un paso (padding-inline-start space-6); el riel sigue siendo uno solo"
+    }
+  },
+  "states": {
+    "hover": ".mui-toc__link:hover — color var(--text)",
+    "current": "a[aria-current=\"location\"] — texto var(--accent-text) weight-medium + barra-grano de 2px var(--accent) sobre el riel; UNO solo a la vez",
+    "focus": ".mui-toc__link:focus-visible — outline 2px var(--focus) offset 2px"
+  },
+  "tokens": [
+    "--text",
+    "--text-muted",
+    "--accent",
+    "--accent-text",
+    "--focus",
+    "--border-subtle",
+    "--font-display",
+    "--font-mono",
+    "--text-2xs",
+    "--text-sm",
+    "--weight-regular",
+    "--weight-medium",
+    "--tracking-wide",
+    "--leading-snug",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-6",
+    "--radius-full",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "<nav> SIEMPRE con aria-label (o aria-labelledby apuntando a un __title con id) — lo distingue de la navegación principal ante lectores de pantalla",
+    "keyboard": [
+      "Tab recorre los links en orden de documento; Enter navega al anchor (nativo de <a>)"
+    ],
+    "aria": [
+      "el link del heading visible lleva aria-current=\"location\" — \"location\" y no \"page\": la página es la misma, cambia la ubicación dentro de ella",
+      "UNO solo a la vez: al mover el atributo se quita del resto",
+      "la barra-grano es un ::before decorativo — el estado lo anuncia aria-current, no el color"
+    ],
+    "behavior": [
+      "scroll-spy (JS del consumidor): un IntersectionObserver sobre los headings con id del artículo (rootMargin negativo para compensar el topbar sticky) mueve aria-current=\"location\" al link del heading visible — set en uno, remove en el resto",
+      "los anchors aterrizan despejados gracias al scroll-margin-top de .mui-prose — el TOC no compensa el scroll",
+      "si el índice supera el viewport, fijar la prop privada --_max-h (ej. style=\"--_max-h: calc(100vh - var(--space-32))\") y el nav scrollea solo"
+    ],
+    "contrast": "reposo text-muted ≥4.5 y hover text ≥4.5 sobre --bg y --surface; activo accent-text ≥4.5 + barra accent ≥3 sobre ambos fondos (todos pares en el gate). El riel border-subtle es decorativo (exento de 1.4.11): la señal la llevan color y peso del texto"
+  },
+  "motion": {
+    "transitions": "color de los links en --dur-fast --ease-standard; la barra aparece sin animación — el cambio lo dispara el scroll-spy, no un gesto",
+    "reducedMotion": "contrato global de milpa-motion.css: la transición cae a 1ms — sin animaciones continuas ni pérdida semántica"
+  },
+  "examples": [
+    {
+      "title": "TOC con heading activo y sub-nivel",
+      "html": "<nav class=\"mui-toc\" aria-label=\"En esta página\"><p class=\"mui-toc__title\">En esta página</p><ul class=\"mui-toc__list\"><li class=\"mui-toc__item\"><a class=\"mui-toc__link\" href=\"#instalacion\" aria-current=\"location\">Instalación</a></li><li class=\"mui-toc__item\"><a class=\"mui-toc__link\" href=\"#uso\">Uso</a></li><li class=\"mui-toc__item mui-toc__item--sub\"><a class=\"mui-toc__link\" href=\"#uso-tokens\">Tokens</a></li><li class=\"mui-toc__item mui-toc__item--sub\"><a class=\"mui-toc__link\" href=\"#uso-temas\">Temas</a></li></ul></nav>"
+    },
+    {
+      "title": "Índice largo con alto máximo (scrollea solo)",
+      "html": "<nav class=\"mui-toc\" aria-label=\"Contenido de la guía\" style=\"--_max-h: calc(100vh - var(--space-32))\"><p class=\"mui-toc__title\">Contenido</p><ul class=\"mui-toc__list\"><li class=\"mui-toc__item\"><a class=\"mui-toc__link\" href=\"#tokens\">Tokens</a></li><li class=\"mui-toc__item\"><a class=\"mui-toc__link\" href=\"#primitives\">Primitives</a></li><li class=\"mui-toc__item\"><a class=\"mui-toc__link\" href=\"#components\" aria-current=\"location\">Components</a></li><li class=\"mui-toc__item\"><a class=\"mui-toc__link\" href=\"#artifacts\">Artifacts</a></li></ul></nav>"
+    }
+  ]
+}

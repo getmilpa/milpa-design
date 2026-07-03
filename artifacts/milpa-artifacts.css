@@ -1,0 +1,1182 @@
+/* ════════════════════════════════════════════════════════════════════
+   Milpa — artifacts (el elote) · @milpa/design
+   Artefactos de contenido: code, terminal, code-group, chart, quote,
+   callout, steps, file-tree, prose, toc, api, search (+ kit de
+   versionado). La cara de la documentación y de los sitios que los
+   plugins componen.
+   Requiere: dist/milpa-tokens.css (incluye --syntax-* y --viz-*) +
+   motion/milpa-motion.css + primitives/milpa-primitives.css
+   + components/milpa-components.css (compone tabs, table, modal, kbd,
+   badge, avatar, empty).
+   Sigue el molde de primitives/milpa-primitives.css — mismas convenciones.
+   Cascada: este archivo vive en @layer — el CSS del consumidor/plugin
+   gana sin !important (THEMING.md).
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;
+
+@layer milpa.artifacts {
+
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · code
+   ════════════════════════════════════════════════════════════════════ */
+/* ---------- Code · .mui-code ----------
+   Bloque de código para docs/blog/API. La superficie es --syntax-bg
+   (una por tema) y los once --syntax-* sostienen AA sobre ella en dark
+   y light (pares en el gate). El marco sigue a card: borde sutil +
+   radius-lg — la definición la dan los bordes (regla 1). El botón de
+   copiar NO vive acá: se compone .mui-btn--ghost --sm en el slot
+   __actions. Si el body scrollea, lleva role="region" + aria-label +
+   tabindex="0" (mismo patrón que .mui-table-wrap). */
+.mui-code {
+  display: flex; flex-direction: column;
+  font-family: var(--font-mono); font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--syntax-text); background: var(--syntax-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+.mui-code__header {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-2);
+  padding-inline-start: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+/* filename — trunca con ellipsis; empuja lang y acciones al final */
+.mui-code__file {
+  flex: 1 1 auto; min-width: 0;
+  font-size: var(--text-xs); color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* badge de lenguaje — pill mono; border-strong sostiene ≥3 sobre syntax-bg */
+.mui-code__lang {
+  flex: none;
+  padding: var(--space-0_5) var(--space-2);
+  font-size: var(--text-2xs); line-height: var(--leading-snug);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+}
+/* slot de acciones — compone .mui-btn mui-btn--ghost mui-btn--sm (copiar) */
+.mui-code__actions {
+  flex: none;
+  display: flex; align-items: center; gap: var(--space-1);
+  margin-inline-start: auto;
+}
+/* body — el padding inline vive en el <pre> (min-width max-content):
+   los tintes de línea llegan al borde aun con scroll horizontal y el
+   respiro derecho sobrevive dentro del scroll */
+.mui-code__body {
+  overflow-x: auto;
+  padding-block: var(--space-4);
+  tab-size: 2;
+}
+/* ring interior (offset negativo): el body scrollea dentro del marco
+   redondeado — precedente de .mui-tabs__tab */
+.mui-code__body:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+/* reset del UA: pre/code heredan la voz mono del bloque */
+.mui-code__body pre {
+  font: inherit; margin: 0;
+  padding-inline: var(--space-4);
+  min-width: max-content;
+}
+.mui-code__body code { font: inherit; }
+/* línea — full-bleed: el margen negativo pisa el padding del pre para
+   que highlight/diff corran de borde a borde. OJO markup: sin saltos
+   de línea entre spans de línea (el <pre> los duplicaría) */
+.mui-code__line {
+  display: block;
+  padding-inline: var(--space-4);
+  margin-inline: calc(var(--space-4) * -1);
+}
+/* números de línea (variante --numbered) — cromo: fuera de la copia
+   manual (user-select) y del lector (aria-hidden en el markup) */
+.mui-code__ln {
+  display: inline-block;
+  inline-size: calc(3ch + var(--space-3));
+  padding-inline-end: var(--space-3);
+  text-align: end;
+  color: var(--text-muted);
+  user-select: none;
+}
+/* línea destacada en docs — tinte oro; refuerzo visual: el significado
+   lo lleva la prosa alrededor, no el color */
+.mui-code__line--highlight { background: var(--accent-subtle); }
+/* líneas diff — tinte de estado + glifo en ::before. El glifo vive en
+   el canal del padding (ancho space-4, margen negativo): las columnas
+   de código no se corren respecto a las líneas de contexto */
+.mui-code__line--add    { background: var(--success-bg); }
+.mui-code__line--remove { background: var(--danger-bg); }
+.mui-code__line--add::before,
+.mui-code__line--remove::before {
+  display: inline-block;
+  inline-size: var(--space-4);
+  margin-inline-start: calc(var(--space-4) * -1);
+  text-align: center;
+  user-select: none;
+}
+.mui-code__line--add::before {
+  content: "+";
+  content: "+" / ""; /* alt vacío — la semántica va en <ins>, no en el glifo */
+  color: var(--success);
+}
+.mui-code__line--remove::before {
+  content: "−";
+  content: "−" / "";
+  color: var(--danger);
+}
+/* <ins>/<del> portan la semántica del diff — sin la decoración del UA */
+.mui-code__line--add ins, .mui-code__line--remove del {
+  text-decoration: none; color: inherit;
+}
+
+/* tokens del highlighter — el framework emite clases .tok-* (no son
+   bloques mui-): SIEMPRE scopeadas bajo .mui-code para no filtrar */
+.mui-code .tok-kw   { color: var(--syntax-keyword); }
+.mui-code .tok-str  { color: var(--syntax-string); }
+.mui-code .tok-com  { color: var(--syntax-comment); font-style: italic; }
+.mui-code .tok-fn   { color: var(--syntax-function); }
+.mui-code .tok-num  { color: var(--syntax-number); }
+.mui-code .tok-punc { color: var(--syntax-punctuation); }
+.mui-code .tok-var  { color: var(--syntax-variable); }
+.mui-code .tok-tag  { color: var(--syntax-tag); }
+.mui-code .tok-attr { color: var(--syntax-attribute); }
+
+/* ---------- Terminal · .mui-terminal ----------
+   Ventana de terminal para docs de CLI. Mismo marco que .mui-code.
+   Los dots de la barra son cromo de ventana: un solo pseudo decorativo
+   en border-strong (NO semánticos de estado), invisible para lectores.
+   El prompt usa --syntax-string (olivo, par verificado sobre syntax-bg;
+   mismo valor de rampa que --secondary-text en ambos temas) y queda
+   fuera de la selección: copiar la sesión no arrastra los "$". */
+.mui-terminal {
+  display: flex; flex-direction: column;
+  font-family: var(--font-mono); font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--syntax-text); background: var(--syntax-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+.mui-terminal__bar {
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+/* tres dots con un solo pseudo: el box-shadow pinta los otros dos y el
+   margen reserva su espacio en el flex */
+.mui-terminal__bar::before {
+  content: "";
+  flex: none;
+  inline-size: 0.625rem; block-size: 0.625rem;
+  margin-inline-end: 2.25rem;
+  border-radius: var(--radius-full);
+  background: var(--border-strong);
+  box-shadow: 1.125rem 0 0 var(--border-strong), 2.25rem 0 0 var(--border-strong);
+}
+.mui-terminal__body {
+  padding: var(--space-4);
+  overflow-x: auto;
+}
+.mui-terminal__body:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.mui-terminal__line { white-space: pre-wrap; }
+.mui-terminal__prompt {
+  margin-inline-end: var(--space-2);
+  color: var(--syntax-string);
+  user-select: none;
+}
+/* el output hereda --syntax-text del root; anywhere: una URL larga
+   puede partir en vez de forzar scroll */
+.mui-terminal__out { overflow-wrap: anywhere; }
+/* línea de error — danger sostiene 4.5 sobre syntax-bg (par en el gate) */
+.mui-terminal__line--error { color: var(--danger); }
+/* corriendo — cursor al final de la última línea. Pulso de opacity con
+   tokens de motion (steps() queda fuera del molde); bajo reduced-motion
+   el contrato global (1ms × 1 iteración) lo deja ESTÁTICO y visible —
+   bloque lleno fijo: la semántica la lleva aria-busy, no el parpadeo */
+.mui-terminal[aria-busy="true"] .mui-terminal__line:last-child::after {
+  content: "";
+  display: inline-block;
+  inline-size: 1ch; block-size: 1em;
+  margin-inline-start: var(--space-1);
+  vertical-align: text-bottom;
+  background: var(--syntax-text);
+  animation: mui-terminal-blink var(--dur-deliberate) var(--ease-standard) infinite;
+}
+@keyframes mui-terminal-blink { 50% { opacity: 0; } }
+
+/* ---------- CodeGroup · .mui-code-group ----------
+   Código multipestaña (PHP/CLI/JSON) — composición pura sobre
+   .mui-tabs: la pestaña activa la marca [aria-selected] y los panels
+   no activos llevan [hidden] nativo (todo resuelto por el contrato de
+   tabs). Acá solo se cose el seam: el panel pierde su respiro superior
+   y el bloque interno (.mui-code o .mui-terminal) colapsa borde y
+   radios de arriba — la línea base del tablist ES el borde superior
+   del bloque y el indicador oro la pisa (margin -1px de tabs). */
+.mui-code-group { display: block; }
+.mui-code-group .mui-tabs__panel { padding-block-start: 0; }
+.mui-code-group .mui-code,
+.mui-code-group .mui-terminal {
+  border-block-start: 0;
+  border-start-start-radius: var(--radius-none);
+  border-start-end-radius: var(--radius-none);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · chart
+   ════════════════════════════════════════════════════════════════════ */
+/* ---------- Chart · .mui-chart ----------
+   Shell de visualización CSS/SVG: nosotros damos anatomía, color y
+   estados; los DATOS los inyecta el consumidor — props privadas inline
+   (--_v magnitud, --_c serie) o un <svg> propio en --line. Series SOLO
+   con --viz-1..6; grilla y ejes con --border-subtle (decorativos: la
+   lectura la llevan marcas, ticks y leyenda); labels con --text-muted.
+   El canvas es imagen para el lector: role="img" + aria-label con el
+   resumen, o aria-hidden + tabla .mui-sr-only hermana — el color nunca
+   es la única fuente del dato (T8.1 aplica también aquí). */
+.mui-chart {
+  --_h: 10rem;                       /* alto del área de datos */
+  display: flex; flex-direction: column; gap: var(--space-3);
+  font-family: var(--font-display);
+  color: var(--text);
+}
+.mui-chart__title {
+  margin: 0;
+  font-size: var(--text-sm); font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  color: var(--text);
+}
+.mui-chart__canvas {
+  min-width: 0;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+/* cargando — el consumidor marca aria-busy mientras llega el dato:
+   el canvas baja a media opacidad (o componer .mui-skeleton en su lugar) */
+.mui-chart[aria-busy="true"] .mui-chart__canvas { opacity: 0.5; }
+
+/* leyenda — cada serie SIEMPRE etiquetada con texto: el swatch acompaña,
+   nunca distingue por sí solo */
+.mui-chart__legend {
+  display: flex; flex-wrap: wrap;
+  gap: var(--space-1_5) var(--space-4);
+  font-size: var(--text-xs); color: var(--text-secondary);
+}
+.mui-chart__legend-item {
+  display: inline-flex; align-items: center; gap: var(--space-1_5);
+}
+.mui-chart__swatch {
+  width: 0.75rem; height: 0.75rem; flex: none;
+  border-radius: var(--radius-xs);
+  background: var(--_c, var(--viz-1));
+}
+.mui-chart__swatch--1 { --_c: var(--viz-1); }
+.mui-chart__swatch--2 { --_c: var(--viz-2); }
+.mui-chart__swatch--3 { --_c: var(--viz-3); }
+.mui-chart__swatch--4 { --_c: var(--viz-4); }
+.mui-chart__swatch--5 { --_c: var(--viz-5); }
+.mui-chart__swatch--6 { --_c: var(--viz-6); }
+
+/* la marca de dato — el consumidor la siembra con style="--_v:62%"
+   (y --_c: var(--viz-N) para la serie; --_c hereda: seteado en el
+   canvas colorea toda una serie de una vez) */
+.mui-chart__bar {
+  background: var(--_c, var(--viz-1));
+  min-height: 1px;                   /* el cero también se ve */
+}
+
+/* barras verticales — grid de columnas iguales, ancladas a la base */
+.mui-chart--bars .mui-chart__canvas {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  align-items: end; gap: var(--space-2);
+  height: var(--_h);
+}
+.mui-chart--bars .mui-chart__bar {
+  height: var(--_v, 0%);
+  border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+  transition: height var(--dur-moderate) var(--ease-grano);
+}
+
+/* barras horizontales — filas apiladas; --_v pasa a ser el ancho */
+.mui-chart--bars-h .mui-chart__canvas {
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.mui-chart--bars-h .mui-chart__bar {
+  width: var(--_v, 0%); height: var(--space-4);
+  min-width: 1px;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  transition: width var(--dur-moderate) var(--ease-grano);
+}
+
+/* eje X de --bars — espejo del grid del canvas: los ticks caen alineados
+   bajo su barra. El margin negativo cancela el gap del root para que la
+   línea base TOQUE las barras (si cambia el gap del root, cambia esto). */
+.mui-chart__axis {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  gap: var(--space-2);
+  margin-top: calc(-1 * var(--space-3));
+  padding-top: var(--space-1_5);
+  border-top: 1px solid var(--border-subtle);
+}
+.mui-chart__tick {
+  min-width: 0; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+  text-align: center;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  color: var(--text-muted);
+}
+
+/* línea/área — el consumidor trae su <svg> (viewBox propio); nosotros
+   damos trazo, relleno, grilla y labels. El AA no-texto lo sostiene el
+   trazo de 2px (viz/bg y viz/surface ≥3, en el gate); el área al 18%
+   es refuerzo decorativo del trazo, nunca la única marca. */
+.mui-chart--line .mui-chart__canvas > svg {
+  display: block; width: 100%; height: var(--_h);
+}
+.mui-chart__stroke-1, .mui-chart__stroke-2, .mui-chart__stroke-3,
+.mui-chart__stroke-4, .mui-chart__stroke-5, .mui-chart__stroke-6 {
+  fill: none; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.mui-chart__stroke-1 { stroke: var(--viz-1); }
+.mui-chart__stroke-2 { stroke: var(--viz-2); }
+.mui-chart__stroke-3 { stroke: var(--viz-3); }
+.mui-chart__stroke-4 { stroke: var(--viz-4); }
+.mui-chart__stroke-5 { stroke: var(--viz-5); }
+.mui-chart__stroke-6 { stroke: var(--viz-6); }
+.mui-chart__area-1 { fill: color-mix(in srgb, var(--viz-1) 18%, transparent); stroke: none; }
+.mui-chart__area-2 { fill: color-mix(in srgb, var(--viz-2) 18%, transparent); stroke: none; }
+.mui-chart__area-3 { fill: color-mix(in srgb, var(--viz-3) 18%, transparent); stroke: none; }
+.mui-chart__area-4 { fill: color-mix(in srgb, var(--viz-4) 18%, transparent); stroke: none; }
+.mui-chart__area-5 { fill: color-mix(in srgb, var(--viz-5) 18%, transparent); stroke: none; }
+.mui-chart__area-6 { fill: color-mix(in srgb, var(--viz-6) 18%, transparent); stroke: none; }
+.mui-chart__grid-line  { stroke: var(--border-subtle); stroke-width: 1; }
+.mui-chart__axis-label {
+  fill: var(--text-muted);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+}
+
+/* donut — el conic-gradient lo ARMA el consumidor inline, solo con
+   tokens viz (ver contrato); el agujero se recorta con ::after. Sobre
+   otra superficie, setear --_hole (ej. style="--_hole: var(--bg)"). */
+.mui-chart--donut .mui-chart__canvas {
+  display: flex; justify-content: center;
+}
+.mui-chart__donut {
+  position: relative; flex: none;
+  width: var(--_size, 9rem); aspect-ratio: 1;
+  border-radius: var(--radius-full);
+}
+.mui-chart__donut::after {
+  content: "";
+  position: absolute; inset: var(--_ring, var(--space-6));
+  border-radius: var(--radius-full);
+  background: var(--_hole, var(--surface));
+}
+
+/* sparkline — mini chart inline para stats y celdas de tabla; compone
+   con --bars o --line. Sin título ni leyenda: el aria-label resume. */
+.mui-chart--sparkline {
+  --_h: 2rem;
+  display: inline-flex; vertical-align: middle;
+}
+.mui-chart--sparkline .mui-chart__canvas {
+  width: var(--_w, 6rem);
+  gap: var(--space-0_5);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · content
+   ════════════════════════════════════════════════════════════════════ */
+/* ---------- Quote · .mui-quote ----------
+   Cita editorial para docs y sitios. La comilla grande vive en el
+   markup (SIEMPRE aria-hidden — ornamento, jamás llega al lector) y el
+   texto respira en leading-relaxed. La atribución compone .mui-avatar.
+   La variante --pull la vuelve pull-quote: barra de acento, sin comilla. */
+.mui-quote {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  margin: 0;                                   /* reset de <blockquote> */
+  font-family: var(--font-display);
+}
+.mui-quote__mark {
+  display: block;
+  font-size: var(--text-5xl); font-weight: var(--weight-bold);
+  line-height: 0.6;        /* la comilla asienta sin el colchón del em-box */
+  color: var(--accent);
+  user-select: none;
+}
+.mui-quote__text {
+  margin: 0;
+  font-size: var(--text-lg); line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+}
+.mui-quote__attr {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-block-start: var(--space-1);
+}
+.mui-quote__name {
+  font-size: var(--text-sm); font-weight: var(--weight-medium);
+  font-style: normal;                /* la itálica del UA en <cite> no aporta */
+  color: var(--text);
+}
+.mui-quote__role { font-size: var(--text-sm); color: var(--text-muted); }
+
+/* pull-quote — destacada en el flujo: la barra ya marca, fuera la comilla */
+.mui-quote--pull {
+  border-inline-start: 3px solid var(--accent);
+  padding-inline-start: var(--space-5);
+}
+.mui-quote--pull .mui-quote__mark { display: none; }
+
+/* ---------- Callout · .mui-callout ----------
+   Nota de documento: prosa al margen del flujo (role="note"), sin
+   acciones — para avisos con botones o aria-live está .mui-alert.
+   Default neutral (surface + borde). Variantes: fondo/borde teñidos con
+   la familia semántica, título e icono en su color y el AA siempre en
+   el texto — el borde refuerza, no sostiene. */
+.mui-callout {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  padding: var(--space-4);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-base);
+}
+/* guard: el display:flex de arriba pisaría el [hidden] del UA */
+.mui-callout[hidden] { display: none; }
+.mui-callout__icon {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  inline-size: 1.25em; block-size: 1.25em; line-height: 1;
+  margin-block-start: var(--space-0_5); /* alinea óptico con la 1.ª línea */
+}
+.mui-callout__content {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: var(--space-1);
+}
+.mui-callout__title { margin: 0; font-weight: var(--weight-medium); color: var(--text); }
+.mui-callout__body  { margin: 0; color: var(--text-secondary); }
+/* anatomía de prosa: párrafos sueltos dentro del cuerpo */
+.mui-callout__body p { margin: 0; }
+.mui-callout__body p + p { margin-block-start: var(--space-2); }
+
+/* variantes semánticas — el título nombra la naturaleza; el color refuerza */
+.mui-callout--note    { background: var(--info-bg);          border-color: var(--info-border); }
+.mui-callout--tip     { background: var(--secondary-subtle); border-color: var(--secondary-border); }
+.mui-callout--warning { background: var(--warning-bg);       border-color: var(--warning-border); }
+.mui-callout--danger  { background: var(--danger-bg);        border-color: var(--danger-border); }
+.mui-callout--note    .mui-callout__icon, .mui-callout--note    .mui-callout__title { color: var(--info); }
+.mui-callout--tip     .mui-callout__icon, .mui-callout--tip     .mui-callout__title { color: var(--secondary-text); }
+.mui-callout--warning .mui-callout__icon, .mui-callout--warning .mui-callout__title { color: var(--warning); }
+.mui-callout--danger  .mui-callout__icon, .mui-callout--danger  .mui-callout__title { color: var(--danger); }
+/* sobre --secondary-subtle el único par de texto verificado es
+   secondary-text (≥4.5 en el gate) → el cuerpo del tip lo acompaña */
+.mui-callout--tip .mui-callout__body { color: var(--secondary-text); }
+
+/* version — "Added in vX.Y": tinte de acento, borde var(--accent)
+   (≥3:1 sobre accent-subtle, en el gate) y cuerpo a plena voz */
+.mui-callout--version { background: var(--accent-subtle); border-color: var(--accent); }
+.mui-callout--version .mui-callout__icon,
+.mui-callout--version .mui-callout__title { color: var(--accent-text); }
+.mui-callout--version .mui-callout__body  { color: var(--text); }
+
+/* ---------- Steps · .mui-steps ----------
+   Procedimiento numerado para docs. El número es un counter CSS (mono,
+   alt vacío) — la posición real la anuncia el <ol>. El paso actual se
+   declara con aria-current="step" y los ANTERIORES se pintan solos vía
+   :has(): check en success, cero JS. El conector es decorativo. */
+.mui-steps {
+  list-style: none; margin: 0; padding: 0;
+  counter-reset: mui-step;
+  font-family: var(--font-display);
+}
+.mui-steps__item {
+  --_marker: 2rem;
+  position: relative;
+  display: grid; grid-template-columns: var(--_marker) 1fr;
+  column-gap: var(--space-3);
+  counter-increment: mui-step;
+  padding-block-end: var(--space-6);
+}
+.mui-steps__item:last-child { padding-block-end: 0; }
+/* conector vertical — nace bajo el círculo y muere al pie del item */
+.mui-steps__item::before {
+  content: "";
+  position: absolute;
+  inset-block-start: calc(var(--_marker) + var(--space-1));
+  inset-block-end: var(--space-1);
+  inset-inline-start: calc(var(--_marker) / 2 - 0.5px);
+  inline-size: 1px;
+  background: var(--border-subtle);
+}
+.mui-steps__item:last-child::before { display: none; }
+
+.mui-steps__marker {
+  grid-row: 1 / span 2;
+  display: inline-flex; align-items: center; justify-content: center;
+  inline-size: var(--_marker); block-size: var(--_marker);
+  font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1;
+  color: var(--text-secondary);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  transition:
+    color        var(--dur-fast) var(--ease-standard),
+    background   var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+/* número con alt vacío: presentación — el <ol> ya cuenta */
+.mui-steps__marker::before {
+  content: counter(mui-step);
+  content: counter(mui-step) / "";
+}
+.mui-steps__title {
+  grid-column: 2; margin: 0;
+  padding-block-start: var(--space-1_5); /* (2rem − base·snug)/2: centra la
+                                            1.ª línea con el marker */
+  font-size: var(--text-base); font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  color: var(--text);
+}
+.mui-steps__body {
+  grid-column: 2; margin: var(--space-1) 0 0;
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+/* actual — aria-current="step" ES el hook de estilo */
+.mui-steps__item[aria-current="step"] .mui-steps__marker {
+  color: var(--accent-text);
+  background: var(--accent-subtle);
+  border-color: var(--accent);
+}
+/* completados — todo hermano ANTERIOR al actual, sin JS. El check (alt
+   vacío) reemplaza al número; la semántica sigue en el orden del <ol>. */
+.mui-steps__item:has(~ [aria-current="step"]) .mui-steps__marker {
+  color: var(--success);
+  border-color: var(--success);
+}
+.mui-steps__item:has(~ [aria-current="step"]) .mui-steps__marker::before {
+  content: "✓";
+  content: "✓" / "";
+}
+
+/* ---------- FileTree · .mui-file-tree ----------
+   Árbol de archivos para docs (estructuras de proyecto, scaffolds).
+   Directorios = <details>/<summary>: colapso nativo accesible, cero JS;
+   el glifo del summary cambia con [open]. Los roles de árbol ARIA
+   (tree/treeitem/group + roving tabindex) son opcionales y los pone el
+   consumidor según el contrato — este CSS no cambia. El archivo activo
+   se declara con aria-current="true". */
+.mui-file-tree, .mui-file-tree ul { list-style: none; margin: 0; padding: 0; }
+.mui-file-tree {
+  font-family: var(--font-mono); font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+/* grupo anidado: indentación + guía vertical bajo el glifo del padre
+   (decorativa — la jerarquía la da la sangría, no la línea) */
+.mui-file-tree__dir > ul {
+  margin-inline-start: var(--space-3);
+  padding-inline-start: var(--space-2);
+  border-inline-start: 1px solid var(--border-subtle);
+}
+
+/* filas — summary de directorio y archivo comparten métrica */
+.mui-file-tree__dir > summary,
+.mui-file-tree__file {
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-xs);
+}
+/* glifos decorativos (alt vacío) a ancho fijo: las filas alinean en 1ch */
+.mui-file-tree__dir > summary::before,
+.mui-file-tree__file::before {
+  flex: none; inline-size: 1ch; text-align: center;
+  color: var(--text-muted);
+}
+
+.mui-file-tree__dir > summary {
+  cursor: pointer; user-select: none;
+  list-style: none;                      /* fuera el marker nativo */
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+.mui-file-tree__dir > summary::-webkit-details-marker { display: none; }
+.mui-file-tree__dir > summary::before       { content: "▸"; content: "▸" / ""; }
+.mui-file-tree__dir[open] > summary::before { content: "▾"; content: "▾" / ""; }
+/* hover — velo SOLO en filas no activas: si el velo pisara al activo,
+   accent-text quedaría sobre el composite (4.17 en light, < 4.5) y la
+   fila perdería su resaltado. El activo conserva accent-subtle al
+   hover: par del gate (9.29 dark · 5.10 light). */
+.mui-file-tree__dir > summary:not([aria-current="true"]):hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+.mui-file-tree__dir > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.mui-file-tree__file::before { content: "·"; content: "·" / ""; }
+
+/* anotación — mono 2xs; el significado va en la palabra, no solo en el color */
+.mui-file-tree__badge {
+  flex: none;
+  font-size: var(--text-2xs); letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+}
+.mui-file-tree__badge--new { color: var(--success); }
+.mui-file-tree__badge--gen { color: var(--text-muted); }
+
+/* activo — el archivo abierto/actual; glifo y badge caen a la voz de la
+   fila (text-muted sobre accent-subtle no está en el gate) */
+.mui-file-tree [aria-current="true"] {
+  color: var(--accent-text);
+  background: var(--accent-subtle);
+  border-radius: var(--radius-xs);
+}
+.mui-file-tree [aria-current="true"]::before,
+.mui-file-tree [aria-current="true"] .mui-file-tree__badge { color: inherit; }
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · prose
+   ════════════════════════════════════════════════════════════════════ */
+/* ---------- Prose · .mui-prose ----------
+   Scope tipográfico long-form — la base de docs y blog. Estiliza HTML
+   desnudo (el que emite un Markdown) por descendencia, con guarda
+   not-prose en CADA regla: queda fuera todo elemento que ES una pieza
+   mui-* (un <a class="mui-btn"> conserva su contrato) y todo el
+   subárbol de una pieza mui-* anidada en el scope (los th de una
+   .mui-table demo, los p de un .mui-alert) — dentro de la pieza manda
+   su contrato. El segundo término se ancla a .mui-prose a propósito:
+   solo cuentan piezas DENTRO del scope — un article.mui-prose que vive
+   dentro de .mui-shell no se auto-excluye. Para HTML desnudo que no
+   debe recibir voz prose, el escape hatch es .mui-not-prose (marker
+   sin reglas propias: lo captura el prefijo mui- de la guarda).
+   Límite conocido: sin re-entrada — un .mui-prose anidado dentro de
+   una pieza no re-activa el scope (mismo límite que not-prose de
+   tailwind-typography).
+   La guarda vive en :where() (especificidad plana 0,1,0): dentro del
+   cluster decide el orden; hover/focus/:first-child quedan fuera del
+   :where para ganar por especificidad.
+   Medida de 65ch, jerarquía por escala con un solo peso (la grasa se
+   reserva para strong), links siempre subrayados. El código real de la
+   doc compone .mui-code; el <pre> de acá es el fallback sano. */
+.mui-prose {
+  max-width: 65ch;
+  font-family: var(--font-display); font-size: var(--text-base);
+  font-weight: var(--weight-regular); line-height: var(--leading-relaxed);
+  color: var(--text);
+}
+/* el flujo respira hacia abajo; los extremos no empujan el contenedor */
+.mui-prose > :first-child:not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block-start: 0;
+}
+.mui-prose > :last-child:not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block-end: 0;
+}
+
+/* encabezados — la jerarquía la da el tamaño, no el peso. scroll-margin:
+   los anchors (#id) aterrizan despejados bajo un topbar sticky. */
+.mui-prose :where(h1, h2, h3, h4, h5, h6):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block: var(--space-10) var(--space-4);
+  font-weight: var(--weight-medium); line-height: var(--leading-snug);
+  color: var(--text); text-wrap: balance;
+  scroll-margin-top: var(--space-20);
+}
+.mui-prose :where(h1):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  font-size: var(--text-4xl);
+  letter-spacing: var(--tracking-display);
+}
+.mui-prose :where(h2):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  font-size: var(--text-2xl); letter-spacing: var(--tracking-tight);
+  padding-block-end: var(--space-2);
+  border-block-end: 1px solid var(--border-subtle); /* divisor de sección, decorativo */
+}
+.mui-prose :where(h3):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  font-size: var(--text-xl);
+}
+.mui-prose :where(h4):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  font-size: var(--text-lg);
+}
+.mui-prose :where(h5, h6):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  font-size: var(--text-base);
+}
+
+.mui-prose :where(p):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block: var(--space-4);
+}
+
+/* links — subrayado SIEMPRE (el color nunca es la única señal, WCAG
+   1.4.1); el hover engrosa el trazo — jamás salta a un color no
+   verificado. accent-text ≥4.5 sobre bg y surface (pares en el gate). */
+.mui-prose :where(a):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px; text-underline-offset: 2px;
+  border-radius: var(--radius-xs);
+  transition: text-decoration-thickness var(--dur-fast) var(--ease-standard);
+}
+.mui-prose :where(a):hover:not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  text-decoration-thickness: 2px;
+}
+.mui-prose :where(a):focus-visible:not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  outline: 2px solid var(--focus); outline-offset: 2px;
+}
+
+/* énfasis */
+.mui-prose :where(strong):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  color: var(--text); font-weight: var(--weight-bold);
+}
+.mui-prose :where(em):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  font-style: italic;
+}
+
+/* código inline — voz mono sobre un paso de superficie; el code de los
+   <pre> queda fuera vía la guarda (ahí manda el bloque) */
+.mui-prose :where(code):not(:where(pre *,
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  padding: 0.1em 0.35em;
+  font-family: var(--font-mono); font-size: var(--text-sm);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+}
+
+/* bloque de código — fallback sano para Markdown sin resaltar, con el
+   lienzo del resaltado real (--syntax-*). En dark syntax-bg ES bg: el
+   borde define el bloque — border-strong/syntax-bg ≥3:1 (par en el
+   gate), misma lógica que .mui-menu. La doc con sintaxis compone
+   .mui-code, artifact hermano. */
+.mui-prose :where(pre):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block: var(--space-5);
+  padding: var(--space-4);
+  overflow-x: auto;
+  font-family: var(--font-mono); font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  background: var(--syntax-bg); color: var(--syntax-text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+}
+
+/* listas — el contenido manda, el glifo acompaña */
+.mui-prose :where(ul, ol):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block: var(--space-4);
+  padding-inline-start: var(--space-6);
+}
+.mui-prose :where(li):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block: var(--space-1_5);
+}
+.mui-prose :where(li):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *))::marker {
+  color: var(--text-muted);
+}
+.mui-prose :where(li > ul, li > ol):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block: var(--space-1_5);
+}
+
+/* cita — voz que se hace a un lado: guía de 3px + tinta secundaria */
+.mui-prose :where(blockquote):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block: var(--space-5); margin-inline: 0;
+  padding-inline-start: var(--space-4);
+  border-inline-start: 3px solid var(--border-strong);
+  color: var(--text-secondary);
+}
+
+/* tabla Markdown — la versión desnuda de .mui-table: colapsada, sin
+   card; el thead habla en la voz mono del sistema. Una .mui-table demo
+   anidada queda fuera vía la guarda (conserva su border-collapse:
+   separate y su thead sticky). Separador del thead = border-strong
+   (≥3:1 sobre bg y surface, pares en el gate); los de fila
+   (border-subtle) son decorativos, como en .mui-table. */
+.mui-prose :where(table):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  width: 100%; margin-block: var(--space-5);
+  border-collapse: collapse;
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+}
+.mui-prose :where(th):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  padding: var(--space-2) var(--space-3);
+  text-align: start;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-secondary);
+  border-block-end: 1px solid var(--border-strong);
+}
+.mui-prose :where(td):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  padding: var(--space-2) var(--space-3);
+  border-block-end: 1px solid var(--border-subtle);
+}
+
+/* pausa de sección — decorativa */
+.mui-prose :where(hr):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block: var(--space-10);
+  border: 0; border-block-start: 1px solid var(--border-subtle);
+}
+
+/* medios — nunca desbordan la medida; el radio los asienta en el sistema */
+.mui-prose :where(img):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  max-width: 100%; height: auto; border-radius: var(--radius-md);
+}
+.mui-prose :where(figure):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block: var(--space-6); margin-inline: 0;
+}
+.mui-prose :where(figcaption):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  margin-block-start: var(--space-2);
+  font-size: var(--text-xs); color: var(--text-muted);
+}
+
+/* kbd — la MISMA receta que el primitivo .mui-kbd: keycap mono 2xs
+   sobre surface-raised, la "tecla" la da el borde inferior de 2px, no
+   una sombra (regla 1). En dark el borde queda decorativo (ratios en
+   el contrato): el AA siempre lo lleva el texto. */
+.mui-prose :where(kbd):not(:where(
+    :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
+    .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
+  display: inline-block;
+  padding: var(--space-0_5) var(--space-1_5);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  line-height: var(--leading-snug);
+  color: var(--text);
+  background: var(--surface-raised);
+  border: 1px solid var(--border); border-block-end-width: 2px;
+  border-radius: var(--radius-xs);
+  vertical-align: middle;
+}
+
+/* ---------- TOC · .mui-toc ----------
+   Tabla de contenidos — la columna derecha de la doc. <nav> con
+   aria-label del consumidor. El riel (border-subtle) es la guía; el
+   heading visible se declara con aria-current="location" — nunca una
+   clase — y habla el mismo lenguaje que .mui-sidebar: texto oro +
+   barra-grano sobre el riel. El scroll-spy lo aporta el consumidor
+   (IntersectionObserver, contrato a11y.behavior); el sticky, el layout. */
+.mui-toc {
+  --_max-h: none;           /* la doc lo fija si el índice es largo, ej. calc(100vh - var(--space-32)) */
+  max-height: var(--_max-h);
+  overflow-y: auto; overscroll-behavior: contain;
+  padding: var(--space-1);  /* aire: el anillo de foco sobrevive al scroll container */
+  font-family: var(--font-display);
+}
+.mui-toc__title {
+  margin: 0 0 var(--space-2);
+  padding-inline-start: var(--space-3);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+}
+/* el riel — decorativo: la señal AA la llevan color y peso del texto */
+.mui-toc__list {
+  margin: 0; padding: 0; list-style: none;
+  border-inline-start: 1px solid var(--border-subtle);
+}
+.mui-toc__link {
+  position: relative;
+  display: block;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm); line-height: var(--leading-snug);
+  color: var(--text-muted); text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.mui-toc__link:hover { color: var(--text); }
+.mui-toc__link:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* heading visible (scroll-spy) — la semántica ES el hook de estilo */
+.mui-toc__link[aria-current="location"] {
+  color: var(--accent-text); font-weight: var(--weight-medium);
+}
+/* la firma: el grano que germina sobre el riel — accent ≥3:1 sobre bg
+   y surface (pares en el gate); pisa el border-subtle de la lista */
+.mui-toc__link[aria-current="location"]::before {
+  content: ""; position: absolute;
+  inset-inline-start: -1px; inset-block: var(--space-1);
+  width: 2px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+}
+/* sub-nivel (h3) — un paso adentro; el riel sigue siendo uno solo */
+.mui-toc__item--sub > .mui-toc__link { padding-inline-start: var(--space-6); }
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · api
+   ════════════════════════════════════════════════════════════════════ */
+/* ---------- ApiEntry · .mui-api ----------
+   Entrada de referencia de API — la cara renderizada de los docblocks
+   del framework: @param → fila de __params · @return/@throws →
+   __section + prosa · @since/@deprecated → badge en __meta (y
+   __deprecated-note). La firma vive sobre var(--syntax-bg) y su
+   contenido usa los .tok-* del cluster code (acá no se redefinen).
+   Pieza de display pura: sin estados propios; la tabla de parámetros
+   conserva los suyos de .mui-table. */
+.mui-api {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  font-family: var(--font-display);
+  color: var(--text);
+}
+/* la referencia se lee como lista: separador entre entradas consecutivas */
+.mui-api + .mui-api {
+  margin-block-start: var(--space-6);
+  padding-block-start: var(--space-6);
+  border-block-start: 1px solid var(--border-subtle);
+}
+
+.mui-api__header {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+/* el nombre es un heading real (h3/h4 según la página) con id — el
+   <section> lo referencia con aria-labelledby */
+.mui-api__name {
+  margin: 0;
+  font-family: var(--font-mono); font-size: var(--text-lg);
+  font-weight: var(--weight-bold); line-height: var(--leading-snug);
+  color: var(--text);
+  overflow-wrap: anywhere; /* Namespace\Clase::metodoLargo() no desborda */
+}
+/* metadatos — compone .mui-badge; las variantes de estabilidad
+   (--since / --deprecated / --experimental) llegan del cluster badges */
+.mui-api__meta {
+  display: inline-flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-1_5);
+}
+
+/* firma — bloque código con scroll horizontal propio. En dark
+   syntax-bg == bg: el hairline es decorativo (precedente card/table-wrap)
+   y el bloque lo definen el padding y la voz mono; el AA de los .tok-*
+   viene gateado del cluster code. */
+.mui-api__signature {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+  font-family: var(--font-mono); font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  white-space: pre;
+  color: var(--syntax-text);
+  background: var(--syntax-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.mui-api__desc {
+  margin: 0;
+  max-width: 70ch;
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+/* label de sección — la voz mono de la máquina: "Parameters",
+   "Returns", "Throws" */
+.mui-api__section {
+  margin: 0; margin-block-start: var(--space-2);
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+}
+
+/* params — la clase va EN el .mui-table-wrap de la tabla de @param;
+   aprieta la densidad a la de --compact sin pedirle la variante */
+.mui-api__params .mui-table thead th,
+.mui-api__params .mui-table td { padding: var(--space-2) var(--space-3); }
+
+/* tipo PHP del parámetro — dato, no prosa */
+.mui-api__type {
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  color: var(--info);
+}
+
+/* @deprecated — el término (<strong>) lidera en danger y la prosa queda
+   en calma; sin fondo: la alarma es puntual, el banner ya lo pone el
+   badge del __meta */
+.mui-api__deprecated-note {
+  margin: 0;
+  max-width: 70ch;
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+.mui-api__deprecated-note > strong {
+  color: var(--danger);
+  font-weight: var(--weight-medium);
+}
+
+/* ---------- Search · .mui-search-trigger + .mui-search ----------
+   Búsqueda de docs (⌘K). El trigger es un <button> vestido de input
+   (la voz de .mui-input: bg + borde): invita a escribir pero solo abre
+   el dialog. El shell COMPONE .mui-modal (<dialog class="mui-modal
+   mui-search">): top layer, focus trap, Esc y backdrop vienen del
+   Modal — acá solo la silueta: angosto, arriba, edge-to-edge. Patrón
+   combobox + listbox con aria-activedescendant: el foco DOM vive en
+   __input y el ítem activo se marca con li[aria-selected="true"]
+   (JS del consumidor; el índice es del framework). */
+.mui-search-trigger {
+  display: flex; align-items: center; gap: var(--space-2);
+  width: 100%; max-width: 16rem; height: 2.25rem;
+  padding: 0 var(--space-2) 0 var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-sm);
+  line-height: 1; white-space: nowrap;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  cursor: pointer; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color        var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+.mui-search-trigger:hover { color: var(--text-secondary); border-color: var(--border-strong); }
+.mui-search-trigger:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-search-trigger__icon {
+  flex: none; display: inline-flex;
+  inline-size: 1em; block-size: 1em; /* lupa decorativa: aria-hidden */
+}
+/* el atajo se ancla al final — el hueco del medio es la promesa de input */
+.mui-search-trigger .mui-kbd { margin-inline-start: auto; }
+
+/* shell — hereda scale-in, backdrop y radio del Modal; cae angosto y
+   arriba: la lista crece hacia abajo sin recentrar el panel */
+.mui-search {
+  width: min(92vw, 36rem);
+  margin-block-start: 10vh; /* el block-end queda auto (margin: auto del Modal) */
+  font-family: var(--font-display);
+}
+
+/* input — sin borde propio: el subrayado separa consulta de resultados.
+   Los corners superiores siguen la curva del Modal para que el anillo
+   de foco (por dentro, patrón drawer: es edge-to-edge) no la pise. */
+.mui-search__input {
+  flex: none; width: 100%;
+  margin: 0; padding: var(--space-4);
+  font-family: inherit; font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  color: var(--text);
+  background: transparent;
+  border: 0; border-block-end: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0; /* = radio del Modal */
+}
+.mui-search__input::placeholder { color: var(--text-muted); }
+.mui-search__input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+/* resultados — listbox: el foco DOM no entra acá; el activo lo marca
+   aria-selected y el JS lo trae a la vista (scrollIntoView nearest) */
+.mui-search__results {
+  flex: 1 1 auto; min-height: 0;
+  max-height: 50vh;
+  margin: 0; padding: var(--space-2);
+  overflow-y: auto; overscroll-behavior: contain;
+  scroll-padding-block: var(--space-2);
+  list-style: none;
+}
+.mui-search__result > a {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  color: inherit; text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--dur-fast) var(--ease-standard);
+}
+.mui-search__result > a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* pista de mouse — se hunde a bg (patrón hover de .mui-table); el
+   estado real es aria-selected, declarado después: gana */
+.mui-search__result > a:hover { background: var(--bg); }
+
+.mui-search__crumb {
+  display: block;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+}
+.mui-search__title-line {
+  display: block;
+  font-size: var(--text-sm); font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  color: var(--text);
+}
+.mui-search__excerpt {
+  display: block;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: var(--text-xs); line-height: var(--leading-snug);
+  color: var(--text-muted);
+}
+
+/* activo — TODO el texto sube de contraste sobre el tinte oro:
+   text-muted/accent-subtle no está en el gate → crumb pasa a
+   accent-text; título y excerpt a var(--text) (pares gateados) */
+.mui-search__result[aria-selected="true"] > a { background: var(--accent-subtle); }
+.mui-search__result[aria-selected="true"] .mui-search__crumb { color: var(--accent-text); }
+.mui-search__result[aria-selected="true"] .mui-search__title-line,
+.mui-search__result[aria-selected="true"] .mui-search__excerpt { color: var(--text); }
+
+/* vacío — sin matches; para más ceremonia, componer .mui-empty acá */
+.mui-search__empty {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* footer — hints de teclado con .mui-kbd */
+.mui-search__footer {
+  flex: none;
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-2xs);
+  color: var(--text-muted);
+  border-block-start: 1px solid var(--border-subtle);
+}
+.mui-search__hint { display: inline-flex; align-items: center; gap: var(--space-1_5); }
+
+} /* @layer milpa.artifacts */

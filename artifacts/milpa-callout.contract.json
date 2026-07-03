@@ -1,0 +1,86 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "callout",
+  "layer": "artifact",
+  "version": "0.2.0",
+  "status": "stable",
+  "class": "mui-callout",
+  "summary": "Nota de documento: prosa al margen del flujo (role=note), sin acciones ni dismiss — NO es .mui-alert (ese interrumpe y acciona; este acompaña la lectura). Default neutral surface+borde; las variantes tiñen con las familias semánticas y el AA lo lleva siempre el texto. Incluye --version para marcar novedades ('Added in v0.2.0').",
+  "element": [
+    "div (con role=\"note\")"
+  ],
+  "anatomy": {
+    "root": ".mui-callout — flex fila: padding space-4, borde 1px completo, radius-base, text-sm display. Guard [hidden] incluido (el flex pisaría el hidden del UA)",
+    "icon": ".mui-callout__icon — glifo o SVG a 1.25em, SIEMPRE aria-hidden=\"true\"; alineado óptico con la primera línea; toma el color de estado de la variante",
+    "content": ".mui-callout__content — columna con gap: __title + __body",
+    "title": ".mui-callout__title — weight-medium; toma el color de estado de la variante y NOMBRA la naturaleza de la nota ('Nota', 'Tip', 'Ojo', 'Added in v0.2.0')",
+    "body": ".mui-callout__body — prosa en var(--text-secondary); admite párrafos sueltos (p + p espaciados). En --tip cae a var(--secondary-text) y en --version sube a var(--text) — ver contrast"
+  },
+  "variants": {
+    "intent": {
+      "default": "neutral — var(--surface) + borde var(--border); título var(--text)",
+      "note": ".mui-callout--note — fondo var(--info-bg), borde var(--info-border), título/icono var(--info)",
+      "tip": ".mui-callout--tip — fondo var(--secondary-subtle), borde var(--secondary-border), título/icono/cuerpo var(--secondary-text)",
+      "warning": ".mui-callout--warning — fondo var(--warning-bg), borde var(--warning-border), título/icono var(--warning)",
+      "danger": ".mui-callout--danger — fondo var(--danger-bg), borde var(--danger-border), título/icono var(--danger)",
+      "version": ".mui-callout--version — 'Added in vX.Y': fondo var(--accent-subtle), borde var(--accent) (≥3:1, en el gate), título/icono var(--accent-text), cuerpo var(--text)"
+    }
+  },
+  "states": {
+    "static": "sin estados interactivos — la nota acompaña, no acciona. Para descartar: atributo hidden o remover el nodo (guard incluido)"
+  },
+  "tokens": [
+    "--surface",
+    "--border",
+    "--text",
+    "--text-secondary",
+    "--info",
+    "--info-bg",
+    "--info-border",
+    "--secondary-subtle",
+    "--secondary-border",
+    "--secondary-text",
+    "--warning",
+    "--warning-bg",
+    "--warning-border",
+    "--danger",
+    "--danger-bg",
+    "--danger-border",
+    "--accent",
+    "--accent-subtle",
+    "--accent-text",
+    "--font-display",
+    "--text-sm",
+    "--weight-medium",
+    "--leading-normal",
+    "--space-0_5",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--radius-base"
+  ],
+  "a11y": {
+    "element": "<div role=\"note\"> — contenido complementario al flujo de lectura. NO es un aviso vivo: para interrupciones, acciones o aria-live están .mui-alert y .mui-toast",
+    "aria": [
+      "__icon decorativo SIEMPRE con aria-hidden=\"true\"",
+      "la variante refuerza, no sustituye: el __title nombra la naturaleza en texto — nunca comunicar solo por color",
+      "con varias notas en la página, aria-label en el role=note ayuda a distinguirlas ('Nota sobre tokens')"
+    ],
+    "contrast": "título/icono de cada variante sobre su tinte ≥4.5 en ambos temas: info|warning|danger sobre su *-bg, secondary-text sobre secondary-subtle, accent-text sobre accent-subtle — pares en el gate. Cuerpo var(--text-secondary) ≥4.5 sobre surface y sobre los *-bg de info/warning/danger (gate); sobre --secondary-subtle el único par de texto verificado es secondary-text → el cuerpo del tip lo usa; en --version el cuerpo es var(--text) sobre accent-subtle (≥4.5, gate). Bordes: el de --version (var(--accent)) pasa 3:1 sobre su tinte (gate); los *-border de las demás variantes son refuerzo decorativo — la semántica y el AA los lleva el texto (precedente sancionado en badge/alert)"
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (el contrato global de milpa-motion.css rige igual)"
+  },
+  "examples": [
+    {
+      "title": "Nota de docs",
+      "html": "<div class=\"mui-callout mui-callout--note\" role=\"note\"><span class=\"mui-callout__icon\" aria-hidden=\"true\">ℹ</span><div class=\"mui-callout__content\"><p class=\"mui-callout__title\">Nota</p><p class=\"mui-callout__body\">Los tokens se regeneran desde el JSON — no edites dist/ a mano.</p></div></div>"
+    },
+    {
+      "title": "Added in v0.2.0",
+      "html": "<div class=\"mui-callout mui-callout--version\" role=\"note\"><span class=\"mui-callout__icon\" aria-hidden=\"true\">✦</span><div class=\"mui-callout__content\"><p class=\"mui-callout__title\">Added in v0.2.0</p><p class=\"mui-callout__body\">Los tokens --syntax-* y --viz-* llegan con el bundle artifacts/.</p></div></div>"
+    }
+  ]
+}

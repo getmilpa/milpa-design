@@ -6,7 +6,7 @@
   "type": "module",
   "private": false,
   "publishConfig": { "access": "public" },
-  "files": ["dist", "tokens", "motion", "primitives", "components", "logo", "theme.contract.json", "THEMING.md", "DESIGN.md"],
+  "files": ["dist", "tokens", "motion", "primitives", "components", "artifacts", "logo", "theme.contract.json", "THEMING.md", "DESIGN.md"],
   "exports": {
     ".": "./dist/milpa-tokens.css",
     "./css": "./dist/milpa-tokens.css",
@@ -17,8 +17,10 @@
     "./motion": "./motion/milpa-motion.js",
     "./primitives.css": "./primitives/milpa-primitives.css",
     "./components.css": "./components/milpa-components.css",
+    "./artifacts.css": "./artifacts/milpa-artifacts.css",
     "./primitives/*": "./primitives/*",
     "./components/*": "./components/*",
+    "./artifacts/*": "./artifacts/*",
     "./logo/*": "./logo/*",
     "./package.json": "./package.json"
   },

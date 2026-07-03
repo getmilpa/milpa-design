@@ -1,0 +1,39 @@
+/* ════════════════════════════════════════════════════════════════════
+   Skin "Nopal" — demo del contrato de theming (THEMING.md, nivel 1).
+   Un plugin retokeniza: tuna (rosa) como acento, nopal (verde) como
+   secundario, otra cadencia de radios y tipografía. Los valores son
+   HEX PLANOS a propósito: este archivo se valida con
+   `npm run verify:theme -- proof/themed-skin.css` contra
+   theme.contract.json (los 193 pares AA en ambos temas).
+   Nada de esto toca los bundles publicados — CSS sin layer: gana.
+   ════════════════════════════════════════════════════════════════════ */
+:root, [data-theme="dark"] {
+  --accent: #E97FB2;
+  --accent-hover: #F2A3C6;
+  --accent-active: #D45E96;
+  --accent-subtle: #38101F;
+  --accent-text: #E97FB2;
+  --focus: #E97FB2;
+  --secondary: #7FAE7F;
+  --secondary-hover: #9AC29A;
+  --secondary-active: #659465;
+  --secondary-subtle: #0E2412;
+  --secondary-border: #2C5232;
+  --secondary-text: #8FBF93;
+}
+[data-theme="light"] {
+  --accent: #A62A66;
+  --accent-hover: #8F1F55;
+  --accent-active: #771646;
+  --accent-subtle: #F7DCE9;
+  --accent-text: #8F1F55;
+  --focus: #A62A66;
+  --secondary: #2F6B33;
+  --secondary-hover: #265929;
+  --secondary-active: #1E4A22;
+  --secondary-subtle: #DEEDDE;
+  --secondary-border: #A8CCA9;
+  --secondary-text: #2F6B33;
+}
+/* el resto (tierra, sintaxis, viz, semánticos de estado) se hereda de
+   Milpa: un skin parcial es un skin válido — el gate decide. */

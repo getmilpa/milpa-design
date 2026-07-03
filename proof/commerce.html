@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trueque · Merch of the Milpa ecosystem</title>
+<meta name="description" content="Trueque — the Milpa ecosystem merch store: apparel, prints and kits. A commerce storefront composed entirely from @milpa/design 0.2.0 contracts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../logo/symbol/milpa-symbol-color.svg">
+<link rel="stylesheet" href="../dist/milpa-tokens.css">
+<link rel="stylesheet" href="../motion/milpa-motion.css">
+<link rel="stylesheet" href="../primitives/milpa-primitives.css">
+<link rel="stylesheet" href="../components/milpa-components.css">
+<link rel="stylesheet" href="../artifacts/milpa-artifacts.css">
+<link rel="stylesheet" href="../layouts/milpa-layouts.css">
+<style>
+/* ===== page styles (shop-*) — the system does the rest; all tokens ===== */
+body { margin:0; }
+.shop-wordmark { display:block; height:1rem; width:auto; }
+.shop-theme-toggle { font-family:var(--font-mono); }
+/* SVG placeholders — the media contracts size `img`; the inline SVG mirrors that */
+.shop-ph { display:block; width:100%; height:100%; }
+.mui-product-card[aria-disabled="true"] .shop-ph { opacity:.5; }
+.shop-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(14rem,1fr)); gap:var(--space-5); margin-block-start:var(--space-8); }
+.shop-pdp { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr)); gap:clamp(var(--space-8),6vw,var(--space-16)); margin-block-start:var(--space-6); }
+.shop-buy > * + * { margin-block-start:var(--space-5); }
+.shop-buy fieldset { border:0; margin:0; padding:0; } /* UA fieldset chrome — .mui-field doesn't reset it */
+.shop-options { display:flex; flex-wrap:wrap; gap:var(--space-3) var(--space-5); }
+/* the cart-line qty idiom, standalone on the PDP */
+.shop-qty { display:inline-flex; align-items:center; gap:var(--space-1); }
+.shop-qty .mui-input { width:3rem; text-align:center; }
+.shop-buy-row { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); }
+.shop-badges { margin:0; }
+/* drawer demo stage — the dialog is fixed/full-height by contract; docked here to show the composition */
+.shop-cart-stage { margin-block-start:var(--space-8); }
+.shop-cart-stage .mui-drawer { position:static; height:auto; max-height:none; animation:none; }
+.shop-gap { margin-block-start:var(--space-10); }
+.shop-cart-list { margin:0; padding:0; }
+.shop-summary-row { display:flex; justify-content:space-between; margin:0; }
+</style>
+</head>
+<body>
+
+<a class="mui-shell__skip" href="#main">Skip to content</a>
+
+<!-- wordmark vector (official kit snippet — letters currentColor, grain oro-300 constant) -->
+<svg style="display:none" aria-hidden="true"><symbol id="wm-milpa" viewBox="0 0 2406.90 900.00"><g fill="currentColor"><path d="M76.299560546875 0V492.500244140625H177.201171875V435.00048828125H193.101318359375Q206.80126953125 460.700439453125 237.8511962890625 480.9503173828125Q268.901123046875 501.2001953125 322.100830078125 501.2001953125Q377.20068359375 501.2001953125 410.77557373046875 478.42535400390625Q444.3504638671875 455.6505126953125 461.00048828125 420.900634765625H476.900634765625Q493.900634765625 455.00048828125 526.6505126953125 478.100341796875Q559.400390625 501.2001953125 619.2001953125 501.2001953125Q666.60009765625 501.2001953125 703.9251098632812 481.3502197265625Q741.2501220703125 461.500244140625 763.2251586914062 423.0501708984375Q785.2001953125 384.60009765625 785.2001953125 328.4498291015625V0H682.298583984375V320.499755859375Q682.298583984375 365.3494873046875 657.6238403320312 389.69921875Q632.9490966796875 414.0489501953125 588.299560546875 414.0489501953125Q540.0499267578125 414.0489501953125 511.12530517578125 383.0491943359375Q482.20068359375 352.0494384765625 482.20068359375 293.699951171875V0H379.299072265625V320.499755859375Q379.299072265625 365.3494873046875 354.62432861328125 389.69921875Q329.9495849609375 414.0489501953125 285.300048828125 414.0489501953125Q237.0504150390625 414.0489501953125 208.12579345703125 383.0491943359375Q179.201171875 352.0494384765625 179.201171875 293.699951171875V0Z" transform="translate(-76.30,700.00) scale(1,-1)"/><path d="M76.299560546875 0V492.500244140625H179.201171875V0Z" transform="translate(760.70,700.00) scale(1,-1)"/><path d="M76.299560546875 0V700H179.201171875V0Z" transform="translate(996.70,700.00) scale(1,-1)"/><path d="M76.299560546875 -200V492.500244140625H177.201171875V422.3509521484375H193.101318359375Q211.501220703125 455.20068359375 250.47601318359375 480.8504638671875Q289.4508056640625 506.500244140625 361.00048828125 506.500244140625Q422.7503662109375 506.500244140625 474.4503173828125 476.6502685546875Q526.1502685546875 446.80029296875 557.3252563476562 390.1502685546875Q588.500244140625 333.500244140625 588.500244140625 253.5501708984375V238.9500732421875Q588.500244140625 159.3499755859375 557.500244140625 102.52496337890625Q526.500244140625 45.699951171875 474.80029296875 15.8499755859375Q423.100341796875 -14 361.00048828125 -14Q313.20068359375 -14 280.2508544921875 -2.10009765625Q247.301025390625 9.7998046875 227.0511474609375 28.57464599609375Q206.80126953125 47.3494873046875 195.101318359375 66.79931640625H179.201171875V-200ZM331.39990234375 76.4013671875Q398.79931640625 76.4013671875 441.8489990234375 119.32598876953125Q484.898681640625 162.2506103515625 484.898681640625 241.60009765625V250.900146484375Q484.898681640625 330.2496337890625 441.52398681640625 373.17425537109375Q398.1492919921875 416.098876953125 331.39990234375 416.098876953125Q265.00048828125 416.098876953125 221.4508056640625 373.17425537109375Q177.901123046875 330.2496337890625 177.901123046875 250.900146484375V241.60009765625Q177.901123046875 162.2506103515625 221.4508056640625 119.32598876953125Q265.00048828125 76.4013671875 331.39990234375 76.4013671875Z" transform="translate(1232.70,700.00) scale(1,-1)"/><path d="M228.5496826171875 -14Q176.2496337890625 -14 134.42462158203125 4.1500244140625Q92.599609375 22.300048828125 68.27459716796875 57.27508544921875Q43.9495849609375 92.2501220703125 43.9495849609375 142.2001953125Q43.9495849609375 192.500244140625 68.27459716796875 226.12530517578125Q92.599609375 259.7503662109375 135.22467041015625 276.72540283203125Q177.8497314453125 293.700439453125 231.7498779296875 293.700439453125H382.4488525390625V325.5501708984375Q382.4488525390625 368.9495849609375 356.2491455078125 395.12432861328125Q330.0494384765625 421.299072265625 276.099853515625 421.299072265625Q223.1502685546875 421.299072265625 195.07562255859375 396.29931640625Q167.0009765625 371.299560546875 157.901123046875 330.6500244140625L62.19970703125 361.9505615234375Q74.19970703125 401.700439453125 100.52471923828125 434.2503662109375Q126.8497314453125 466.80029296875 170.82476806640625 486.6502685546875Q214.7998046875 506.500244140625 277.39990234375 506.500244140625Q373.300048828125 506.500244140625 428.02520751953125 457.8502197265625Q482.7503662109375 409.2001953125 482.7503662109375 318.6500244140625V115.80126953125Q482.7503662109375 85.80126953125 510.7503662109375 85.80126953125H553.2001953125V0H476.19970703125Q441.299560546875 0 419.3994140625 18.17498779296875Q397.499267578125 36.3499755859375 397.499267578125 67.0499267578125V70.1497802734375H381.6490478515625Q374.499267578125 54.6500244140625 358.22442626953125 34.62506103515625Q341.9495849609375 14.60009765625 310.899658203125 0.300048828125Q279.8497314453125 -14 228.5496826171875 -14ZM244.2501220703125 71.201171875Q305.6495361328125 71.201171875 344.0491943359375 106.6507568359375Q382.4488525390625 142.100341796875 382.4488525390625 203.699462890625V214.3994140625H237.9500732421875Q197.00048828125 214.3994140625 171.92584228515625 196.77459716796875Q146.8511962890625 179.1497802734375 146.8511962890625 145.1502685546875Q146.8511962890625 111.1507568359375 172.92584228515625 91.17596435546875Q199.00048828125 71.201171875 244.2501220703125 71.201171875Z" transform="translate(1853.70,700.00) scale(1,-1)"/></g><rect x="818.99" y="40.80" width="138.92" height="138.92" rx="34.73" fill="var(--oro-300)"/></symbol></svg>
+
+<div class="mui-page">
+
+<!-- ============ TOPBAR ============ -->
+<header class="mui-topbar">
+  <div class="mui-topbar__start">
+    <a class="mui-btn mui-btn--ghost" href="/">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
+        <g fill="var(--oro-300)">
+          <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="25" width="10" height="10" rx="2.5"/><rect x="25" y="25" width="10" height="10" rx="2.5"/><rect x="50" y="25" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="37.5" width="10" height="10" rx="2.5"/><rect x="50" y="37.5" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="50" width="10" height="10" rx="2.5"/><rect x="50" y="50" width="10" height="10" rx="2.5"/>
+        </g>
+      </svg>
+      <svg class="shop-wordmark" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+      <span class="mui-badge">trueque</span>
+    </a>
+  </div>
+
+  <div class="mui-topbar__search">
+    <div class="mui-input-group mui-input-group--prefix">
+      <input class="mui-input mui-input--sm" type="search" aria-label="Search the store" placeholder="Search apparel, prints, kits…">
+      <span class="mui-input-group__prefix" aria-hidden="true">⌕</span>
+    </div>
+  </div>
+
+  <div class="mui-topbar__end">
+    <button type="button" class="mui-btn mui-btn--sm shop-theme-toggle" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
+    <button type="button" class="mui-btn mui-btn--ghost" aria-label="Open cart, 3 items">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12l-1.2 11H5.2L4 6z"/><path d="M7 6a3 3 0 0 1 6 0"/></svg>
+      <span class="mui-badge mui-badge--accent">3</span>
+    </button>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ============ VIEW A · STOREFRONT — hero ============ -->
+  <section class="mui-section" aria-labelledby="hero-title">
+    <div class="mui-container">
+      <div class="mui-hero mui-hero--center">
+        <div>
+          <p class="mui-hero__kicker">summer drop '26 · printed &amp; packed to order</p>
+          <h1 class="mui-hero__title" id="hero-title">Wear the field.</h1>
+          <p class="mui-hero__tagline">apparel · prints · kits — merch of the Milpa ecosystem</p>
+          <p class="mui-hero__sub">Trueque is the ecosystem's market stall: heavyweight cotton, risograph prints and grower kits, all stamped with the grain.</p>
+          <div class="mui-hero__cta">
+            <a class="mui-btn mui-btn--primary" href="#catalog-title">Shop the drop</a>
+            <a class="mui-btn" href="/shop/prints">Browse prints</a>
+          </div>
+          <div class="mui-hero__meta">
+            <span class="mui-badge mui-badge--accent">summer drop</span>
+            <span class="mui-badge mui-badge--success">Free shipping over $60</span>
+            <span class="mui-badge">ships in 48 h</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIEW A · STOREFRONT — catalog grid ============ -->
+  <section class="mui-section" aria-labelledby="catalog-title">
+    <div class="mui-container mui-container--wide">
+      <p class="mui-section__kicker">the stall</p>
+      <h2 class="mui-section__title" id="catalog-title">Featured goods</h2>
+      <p class="mui-section__lede">Eight pieces from the summer drop — everything grown from the same tokens, harvested small-batch.</p>
+
+      <div class="shop-grid">
+
+        <!-- 1 · New -->
+        <article class="mui-product-card">
+          <div class="mui-product-card__media">
+            <svg class="shop-ph" viewBox="0 0 320 400" aria-hidden="true">
+              <rect width="320" height="400" fill="var(--surface-raised)"/>
+              <path d="M110 96 L52 130l22 44 30-14v144h112V160l30 14 22-44-58-34a26 26 0 0 1-100 0z" fill="var(--viz-3)"/>
+              <rect x="148" y="196" width="24" height="24" rx="6" fill="var(--oro-300)"/>
+            </svg>
+            <span class="mui-badge mui-badge--info mui-product-card__badge">New</span>
+          </div>
+          <div class="mui-product-card__body">
+            <h3 class="mui-product-card__title"><a href="/shop/milpa-tee">Milpa Tee</a></h3>
+            <p class="mui-product-card__meta">Organic cotton · 3 colors</p>
+            <span class="mui-price"><span class="mui-price__amount">$29</span></span>
+            <div class="mui-rating" role="img" aria-label="4.5 out of 5, 128 reviews">
+              <span class="mui-rating__stars" aria-hidden="true"><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star mui-rating__star--half"></span></span>
+              <span class="mui-rating__value">4.5</span>
+              <span class="mui-rating__count">128 reviews</span>
+            </div>
+          </div>
+          <div class="mui-product-card__actions">
+            <button type="button" class="mui-btn mui-btn--secondary mui-btn--sm mui-btn--full">Add to cart</button>
+          </div>
+        </article>
+
+        <!-- 2 · Sale (compare price) -->
+        <article class="mui-product-card">
+          <div class="mui-product-card__media">
+            <svg class="shop-ph" viewBox="0 0 320 400" aria-hidden="true">
+              <rect width="320" height="400" fill="var(--surface-raised)"/>
+              <circle cx="160" cy="130" r="40" fill="var(--viz-2)"/>
+              <path d="M112 110 58 142l20 42 28-13v141h108V171l28 13 20-42-54-32a24 24 0 0 1-96 0z" fill="var(--viz-2)"/>
+              <path d="M150 152v28M170 152v28" stroke="var(--text-muted)" stroke-width="4" stroke-linecap="round"/>
+              <rect x="148" y="212" width="24" height="24" rx="6" fill="var(--oro-300)"/>
+            </svg>
+            <span class="mui-badge mui-badge--danger mui-product-card__badge">Sale</span>
+          </div>
+          <div class="mui-product-card__body">
+            <h3 class="mui-product-card__title"><a href="/shop/kernel-hoodie">Kernel Hoodie</a></h3>
+            <p class="mui-product-card__meta">Heavyweight fleece · Ash</p>
+            <span class="mui-price"><span class="mui-price__amount">$54</span><s class="mui-price__compare"><span class="mui-sr-only">was </span>$72</s></span>
+            <div class="mui-rating" role="img" aria-label="4.8 out of 5, 214 reviews">
+              <span class="mui-rating__stars" aria-hidden="true"><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span></span>
+              <span class="mui-rating__value">4.8</span>
+              <span class="mui-rating__count">214 reviews</span>
+            </div>
+          </div>
+          <div class="mui-product-card__actions">
+            <button type="button" class="mui-btn mui-btn--secondary mui-btn--sm mui-btn--full">Add to cart</button>
+          </div>
+        </article>
+
+        <!-- 3 · Low stock -->
+        <article class="mui-product-card">
+          <div class="mui-product-card__media">
+            <svg class="shop-ph" viewBox="0 0 320 400" aria-hidden="true">
+              <rect width="320" height="400" fill="var(--surface-raised)"/>
+              <path d="M92 214a68 68 0 0 1 136 0z" fill="var(--oro-300)"/>
+              <circle cx="160" cy="150" r="7" fill="var(--oro-600)"/>
+              <rect x="86" y="214" width="190" height="14" rx="7" fill="var(--oro-600)"/>
+            </svg>
+            <span class="mui-badge mui-badge--warning mui-product-card__badge">Low stock</span>
+          </div>
+          <div class="mui-product-card__body">
+            <h3 class="mui-product-card__title"><a href="/shop/contract-cap">Contract Cap</a></h3>
+            <p class="mui-product-card__meta">Corduroy · One size fits most</p>
+            <span class="mui-price"><span class="mui-price__amount">$24</span></span>
+            <div class="mui-rating" role="img" aria-label="4.0 out of 5, 57 reviews">
+              <span class="mui-rating__stars" aria-hidden="true"><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star mui-rating__star--empty"></span></span>
+              <span class="mui-rating__value">4.0</span>
+              <span class="mui-rating__count">57 reviews</span>
+            </div>
+          </div>
+          <div class="mui-product-card__actions">
+            <button type="button" class="mui-btn mui-btn--secondary mui-btn--sm mui-btn--full">Add to cart</button>
+          </div>
+        </article>
+
+        <!-- 4 · normal -->
+        <article class="mui-product-card">
+          <div class="mui-product-card__media">
+            <svg class="shop-ph" viewBox="0 0 320 400" aria-hidden="true">
+              <rect width="320" height="400" fill="var(--surface-raised)"/>
+              <rect x="60" y="70" width="200" height="260" rx="4" fill="var(--surface)" stroke="var(--border-strong)"/>
+              <rect x="96" y="130" width="14" height="110" rx="7" fill="var(--viz-3)"/>
+              <circle cx="160" cy="200" r="28" fill="var(--oro-300)"/>
+              <rect x="200" y="170" width="28" height="70" rx="14" fill="var(--viz-2)"/>
+            </svg>
+          </div>
+          <div class="mui-product-card__body">
+            <h3 class="mui-product-card__title"><a href="/shop/three-sisters-print">Three Sisters Print</a></h3>
+            <p class="mui-product-card__meta">A3 risograph · Numbered run of 200</p>
+            <span class="mui-price"><span class="mui-price__amount">$18</span></span>
+            <div class="mui-rating" role="img" aria-label="4.2 out of 5, 89 reviews">
+              <span class="mui-rating__stars" aria-hidden="true"><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star mui-rating__star--empty"></span></span>
+              <span class="mui-rating__value">4.2</span>
+              <span class="mui-rating__count">89 reviews</span>
+            </div>
+          </div>
+          <div class="mui-product-card__actions">
+            <button type="button" class="mui-btn mui-btn--secondary mui-btn--sm mui-btn--full">Add to cart</button>
+          </div>
+        </article>
+
+        <!-- 5 · out of stock ([aria-disabled] + badge + [disabled] button) -->
+        <article class="mui-product-card" aria-disabled="true">
+          <div class="mui-product-card__media">
+            <svg class="shop-ph" viewBox="0 0 320 400" aria-hidden="true">
+              <rect width="320" height="400" fill="var(--surface-raised)"/>
+              <rect x="100" y="150" width="110" height="130" rx="16" fill="var(--viz-6)"/>
+              <path d="M210 180h16a26 26 0 0 1 0 52h-16" fill="none" stroke="var(--viz-6)" stroke-width="14"/>
+              <rect x="138" y="196" width="22" height="22" rx="6" fill="var(--oro-700)"/>
+              <path d="M132 122q7-13 0-26M162 128q7-13 0-26" stroke="var(--text-muted)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span class="mui-badge mui-badge--warning mui-product-card__badge">Out of stock</span>
+          </div>
+          <div class="mui-product-card__body">
+            <h3 class="mui-product-card__title"><a href="/shop/harvest-mug">Harvest Mug</a></h3>
+            <p class="mui-product-card__meta">Stoneware · 350 ml</p>
+            <span class="mui-price"><span class="mui-price__amount">$16</span></span>
+            <div class="mui-rating" role="img" aria-label="4.7 out of 5, 173 reviews">
+              <span class="mui-rating__stars" aria-hidden="true"><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star mui-rating__star--half"></span></span>
+              <span class="mui-rating__value">4.7</span>
+              <span class="mui-rating__count">173 reviews</span>
+            </div>
+          </div>
+          <div class="mui-product-card__actions">
+            <button type="button" class="mui-btn mui-btn--sm mui-btn--full" disabled>Out of stock</button>
+          </div>
+        </article>
+
+        <!-- 6 · normal -->
+        <article class="mui-product-card">
+          <div class="mui-product-card__media">
+            <svg class="shop-ph" viewBox="0 0 320 400" aria-hidden="true">
+              <rect width="320" height="400" fill="var(--surface-raised)"/>
+              <rect x="76" y="110" width="130" height="180" rx="10" fill="var(--viz-2)"/>
+              <rect x="76" y="152" width="130" height="22" fill="var(--oro-300)"/>
+              <rect x="228" y="120" width="14" height="160" rx="7" fill="var(--text-muted)"/>
+              <circle cx="120" cy="330" r="9" fill="var(--viz-3)"/><circle cx="150" cy="338" r="9" fill="var(--viz-3)"/><circle cx="180" cy="330" r="9" fill="var(--viz-3)"/>
+            </svg>
+          </div>
+          <div class="mui-product-card__body">
+            <h3 class="mui-product-card__title"><a href="/shop/field-notes-kit">Field Notes Kit</a></h3>
+            <p class="mui-product-card__meta">Notebook, pen &amp; a packet of seeds</p>
+            <span class="mui-price"><span class="mui-price__amount">$32</span></span>
+            <div class="mui-rating" role="img" aria-label="3.5 out of 5, 41 reviews">
+              <span class="mui-rating__stars" aria-hidden="true"><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star mui-rating__star--half"></span><span class="mui-rating__star mui-rating__star--empty"></span></span>
+              <span class="mui-rating__value">3.5</span>
+              <span class="mui-rating__count">41 reviews</span>
+            </div>
+          </div>
+          <div class="mui-product-card__actions">
+            <button type="button" class="mui-btn mui-btn--secondary mui-btn--sm mui-btn--full">Add to cart</button>
+          </div>
+        </article>
+
+        <!-- 7 · normal -->
+        <article class="mui-product-card">
+          <div class="mui-product-card__media">
+            <svg class="shop-ph" viewBox="0 0 320 400" aria-hidden="true">
+              <rect width="320" height="400" fill="var(--surface-raised)"/>
+              <rect x="70" y="90" width="56" height="56" rx="14" fill="var(--oro-300)"/>
+              <circle cx="216" cy="140" r="30" fill="var(--viz-2)"/>
+              <circle cx="114" cy="244" r="24" fill="var(--viz-3)"/>
+              <rect x="180" y="230" width="60" height="60" rx="14" fill="var(--viz-6)" transform="rotate(12 210 260)"/>
+            </svg>
+          </div>
+          <div class="mui-product-card__body">
+            <h3 class="mui-product-card__title"><a href="/shop/grano-sticker-pack">Grano Sticker Pack</a></h3>
+            <p class="mui-product-card__meta">12 die-cut · Matte vinyl</p>
+            <span class="mui-price"><span class="mui-price__amount">$8</span></span>
+            <div class="mui-rating" role="img" aria-label="4.9 out of 5, 312 reviews">
+              <span class="mui-rating__stars" aria-hidden="true"><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span></span>
+              <span class="mui-rating__value">4.9</span>
+              <span class="mui-rating__count">312 reviews</span>
+            </div>
+          </div>
+          <div class="mui-product-card__actions">
+            <button type="button" class="mui-btn mui-btn--secondary mui-btn--sm mui-btn--full">Add to cart</button>
+          </div>
+        </article>
+
+        <!-- 8 · normal -->
+        <article class="mui-product-card">
+          <div class="mui-product-card__media">
+            <svg class="shop-ph" viewBox="0 0 320 400" aria-hidden="true">
+              <rect width="320" height="400" fill="var(--surface-raised)"/>
+              <circle cx="160" cy="180" r="64" fill="var(--oro-300)"/>
+              <rect x="138" y="158" width="44" height="44" rx="11" fill="var(--oro-700)"/>
+              <rect x="154" y="252" width="12" height="70" rx="6" fill="var(--border-strong)"/>
+            </svg>
+          </div>
+          <div class="mui-product-card__body">
+            <h3 class="mui-product-card__title"><a href="/shop/siembra-pin">Siembra Enamel Pin</a></h3>
+            <p class="mui-product-card__meta">Brass &amp; hard enamel</p>
+            <span class="mui-price"><span class="mui-price__amount">$12</span></span>
+            <div class="mui-rating" role="img" aria-label="4.6 out of 5, 66 reviews">
+              <span class="mui-rating__stars" aria-hidden="true"><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star mui-rating__star--half"></span></span>
+              <span class="mui-rating__value">4.6</span>
+              <span class="mui-rating__count">66 reviews</span>
+            </div>
+          </div>
+          <div class="mui-product-card__actions">
+            <button type="button" class="mui-btn mui-btn--secondary mui-btn--sm mui-btn--full">Add to cart</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIEW B · PRODUCT PAGE (PDP) ============ -->
+  <section class="mui-section" aria-labelledby="pdp-title">
+    <div class="mui-container">
+      <p class="mui-section__kicker">product · apparel</p>
+
+      <div class="shop-pdp">
+
+        <!-- gallery: main + 4 thumbs, one current -->
+        <div class="mui-media-gallery">
+          <div class="mui-media-gallery__main">
+            <svg class="shop-ph" viewBox="0 0 480 480" role="img" aria-label="Kernel Hoodie — front view, ash fleece with the grain mark on the chest">
+              <rect width="480" height="480" fill="var(--surface-raised)"/>
+              <circle cx="240" cy="170" r="56" fill="var(--viz-2)"/>
+              <path d="M172 142 96 186l28 58 40-19v185h152V225l40 19 28-58-76-44a34 34 0 0 1-136 0z" fill="var(--viz-2)"/>
+              <path d="M226 200v38M254 200v38" stroke="var(--text-muted)" stroke-width="5" stroke-linecap="round"/>
+              <rect x="222" y="282" width="36" height="36" rx="9" fill="var(--oro-300)"/>
+            </svg>
+          </div>
+          <div class="mui-media-gallery__thumbs" role="group" aria-label="Product images">
+            <button type="button" class="mui-media-gallery__thumb" aria-current="true" aria-label="View image 1: front">
+              <svg class="shop-ph" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="var(--surface-raised)"/><path d="M34 30 18 39l6 12 8-4v29h32V47l8 4 6-12-16-9a14 14 0 0 1-28 0z" fill="var(--viz-2)"/><rect x="42" y="52" width="12" height="12" rx="3" fill="var(--oro-300)"/></svg>
+            </button>
+            <button type="button" class="mui-media-gallery__thumb" aria-label="View image 2: back">
+              <svg class="shop-ph" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="var(--surface-raised)"/><path d="M34 30 18 39l6 12 8-4v29h32V47l8 4 6-12-16-9a14 14 0 0 1-28 0z" fill="var(--viz-2)"/><rect x="36" y="42" width="24" height="8" rx="4" fill="var(--text-muted)"/></svg>
+            </button>
+            <button type="button" class="mui-media-gallery__thumb" aria-label="View image 3: hood detail">
+              <svg class="shop-ph" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="var(--surface-raised)"/><circle cx="48" cy="44" r="26" fill="var(--viz-2)"/><path d="M42 58v16M54 58v16" stroke="var(--text-muted)" stroke-width="4" stroke-linecap="round"/></svg>
+            </button>
+            <button type="button" class="mui-media-gallery__thumb" aria-label="View image 4: flat lay">
+              <svg class="shop-ph" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="var(--surface-raised)"/><rect x="20" y="26" width="56" height="44" rx="10" fill="var(--viz-2)" transform="rotate(-8 48 48)"/><rect x="42" y="42" width="12" height="12" rx="3" fill="var(--oro-300)"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- buy column -->
+        <div class="shop-buy">
+          <h2 class="mui-section__title" id="pdp-title">Kernel Hoodie <span class="mui-badge mui-badge--danger">Sale</span></h2>
+
+          <div class="mui-rating">
+            <span class="mui-rating__stars" role="img" aria-label="4.8 out of 5">
+              <span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span><span class="mui-rating__star"></span>
+            </span>
+            <span class="mui-rating__value">4.8</span>
+            <a class="mui-rating__count" href="#reviews">214 reviews</a>
+          </div>
+
+          <span class="mui-price mui-price--lg"><span class="mui-price__currency">USD</span><span class="mui-price__amount">$54</span><s class="mui-price__compare"><span class="mui-sr-only">was </span>$72</s></span>
+
+          <fieldset class="mui-field">
+            <legend class="mui-field__label">Size</legend>
+            <div class="shop-options">
+              <label class="mui-choice"><input type="radio" class="mui-radio" name="size" value="s"><span class="mui-choice__text">S</span></label>
+              <label class="mui-choice"><input type="radio" class="mui-radio" name="size" value="m" checked><span class="mui-choice__text">M</span></label>
+              <label class="mui-choice"><input type="radio" class="mui-radio" name="size" value="l"><span class="mui-choice__text">L</span></label>
+              <label class="mui-choice"><input type="radio" class="mui-radio" name="size" value="xl" disabled><span class="mui-choice__text">XL<span class="mui-choice__hint">Sold out</span></span></label>
+            </div>
+          </fieldset>
+
+          <div class="shop-buy-row">
+            <div class="mui-input-group shop-qty">
+              <button type="button" class="mui-btn mui-btn--icon" aria-label="Decrease quantity, Kernel Hoodie">−</button>
+              <input class="mui-input" inputmode="numeric" value="1" aria-label="Quantity, Kernel Hoodie">
+              <button type="button" class="mui-btn mui-btn--icon" aria-label="Increase quantity, Kernel Hoodie">+</button>
+            </div>
+            <button type="button" class="mui-btn mui-btn--primary">Add to cart</button>
+            <button type="button" class="mui-btn">Save for later</button>
+          </div>
+
+          <p class="shop-badges">
+            <span class="mui-badge mui-badge--success">Free shipping over $60</span>
+            <span class="mui-badge">Ships in 48 h</span>
+            <span class="mui-badge mui-badge--info">30-day returns</span>
+          </p>
+
+          <div class="mui-faq">
+            <details class="mui-faq__item" name="pdp" open>
+              <summary class="mui-faq__q">Materials &amp; care</summary>
+              <div class="mui-faq__a">
+                <p>420 gsm brushed fleece, 100% organic cotton grown in rotation plots. The grain mark is embroidered, not printed.</p>
+                <p>Wash cold, inside out. Line dry — the field doesn't tumble.</p>
+              </div>
+            </details>
+            <details class="mui-faq__item" name="pdp">
+              <summary class="mui-faq__q">Sizing</summary>
+              <p class="mui-faq__a">Boxy, true to size. Between sizes? Size down — the fleece relaxes half a size after the first wash.</p>
+            </details>
+            <details class="mui-faq__item" name="pdp" id="reviews">
+              <summary class="mui-faq__q">Reviews (214)</summary>
+              <p class="mui-faq__a">4.8 average across 214 harvests. Most-quoted line: “heavier than it has any right to be at this price.”</p>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIEW C · CART & CHECKOUT ============ -->
+  <section class="mui-section" aria-labelledby="cart-title">
+    <div class="mui-container">
+      <p class="mui-section__kicker">your cart</p>
+      <h2 class="mui-section__title" id="cart-title">Cart &amp; checkout</h2>
+      <p class="mui-section__lede">The cart drawer as the store composes it — three lines, the order summary, and the path to checkout.</p>
+
+      <div class="shop-cart-stage">
+        <dialog class="mui-drawer" id="cart-drawer" open aria-labelledby="cart-drawer-title">
+          <header class="mui-drawer__header">
+            <h3 class="mui-drawer__title" id="cart-drawer-title">Your cart · 3 items</h3>
+            <form method="dialog">
+              <button type="submit" class="mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm" aria-label="Close cart"><span aria-hidden="true">✕</span></button>
+            </form>
+          </header>
+
+          <div class="mui-drawer__body">
+            <ul class="shop-cart-list">
+              <li class="mui-cart-line">
+                <div class="mui-cart-line__media">
+                  <svg class="shop-ph" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="var(--surface-raised)"/><path d="M34 30 18 39l6 12 8-4v29h32V47l8 4 6-12-16-9a14 14 0 0 1-28 0z" fill="var(--viz-2)"/><rect x="42" y="52" width="12" height="12" rx="3" fill="var(--oro-300)"/></svg>
+                </div>
+                <div class="mui-cart-line__info">
+                  <p class="mui-cart-line__title">Kernel Hoodie</p>
+                  <p class="mui-cart-line__variant">M · Ash</p>
+                </div>
+                <div class="mui-input-group mui-cart-line__qty">
+                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Decrease quantity, Kernel Hoodie">−</button>
+                  <input class="mui-input mui-input--sm" inputmode="numeric" value="1" aria-label="Quantity, Kernel Hoodie">
+                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Increase quantity, Kernel Hoodie">+</button>
+                </div>
+                <span class="mui-price"><span class="mui-price__amount">$54</span></span>
+                <button type="button" class="mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-cart-line__remove" aria-label="Remove Kernel Hoodie">✕</button>
+              </li>
+              <li class="mui-cart-line">
+                <div class="mui-cart-line__media">
+                  <svg class="shop-ph" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="var(--surface-raised)"/><path d="M33 28 16 38l7 13 8-4v31h34V47l8 4 7-13-17-10a13 13 0 0 1-30 0z" fill="var(--viz-3)"/><rect x="43" y="52" width="10" height="10" rx="3" fill="var(--oro-300)"/></svg>
+                </div>
+                <div class="mui-cart-line__info">
+                  <p class="mui-cart-line__title">Milpa Tee</p>
+                  <p class="mui-cart-line__variant">L · Olive</p>
+                </div>
+                <div class="mui-input-group mui-cart-line__qty">
+                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Decrease quantity, Milpa Tee">−</button>
+                  <input class="mui-input mui-input--sm" inputmode="numeric" value="2" aria-label="Quantity, Milpa Tee">
+                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Increase quantity, Milpa Tee">+</button>
+                </div>
+                <span class="mui-price"><span class="mui-price__amount">$58</span></span>
+                <button type="button" class="mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-cart-line__remove" aria-label="Remove Milpa Tee">✕</button>
+              </li>
+              <li class="mui-cart-line">
+                <div class="mui-cart-line__media">
+                  <svg class="shop-ph" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="var(--surface-raised)"/><rect x="18" y="22" width="20" height="20" rx="5" fill="var(--oro-300)"/><circle cx="64" cy="38" r="12" fill="var(--viz-2)"/><rect x="40" y="56" width="22" height="22" rx="5" fill="var(--viz-6)" transform="rotate(10 51 67)"/></svg>
+                </div>
+                <div class="mui-cart-line__info">
+                  <p class="mui-cart-line__title">Grano Sticker Pack</p>
+                </div>
+                <div class="mui-input-group mui-cart-line__qty">
+                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Decrease quantity, Grano Sticker Pack" disabled>−</button>
+                  <input class="mui-input mui-input--sm" inputmode="numeric" value="1" aria-label="Quantity, Grano Sticker Pack">
+                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Increase quantity, Grano Sticker Pack">+</button>
+                </div>
+                <span class="mui-price"><span class="mui-price__amount">$8</span></span>
+                <button type="button" class="mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-cart-line__remove" aria-label="Remove Grano Sticker Pack">✕</button>
+              </li>
+            </ul>
+
+            <hr class="mui-divider" aria-hidden="true">
+
+            <div aria-live="polite">
+              <p class="shop-summary-row">Subtotal <span class="mui-price"><span class="mui-price__amount">$120.00</span></span></p>
+              <p class="shop-summary-row">Shipping <span class="mui-price"><span class="mui-price__amount">Free</span><span class="mui-price__unit">over $60</span></span></p>
+              <p class="shop-summary-row"><strong>Total</strong> <span class="mui-price"><span class="mui-price__currency">USD</span><span class="mui-price__amount">$120.00</span></span></p>
+            </div>
+
+            <hr class="mui-divider" aria-hidden="true">
+
+            <ol class="mui-steps">
+              <li class="mui-steps__item">
+                <span class="mui-steps__marker" aria-hidden="true"></span>
+                <h4 class="mui-steps__title">Cart</h4>
+                <p class="mui-steps__body">3 items · $120.00.</p>
+              </li>
+              <li class="mui-steps__item" aria-current="step">
+                <span class="mui-steps__marker" aria-hidden="true"></span>
+                <h4 class="mui-steps__title">Shipping</h4>
+                <p class="mui-steps__body">Free carbon-neutral shipping — the order clears $60.</p>
+              </li>
+              <li class="mui-steps__item">
+                <span class="mui-steps__marker" aria-hidden="true"></span>
+                <h4 class="mui-steps__title">Payment</h4>
+                <p class="mui-steps__body">Cards and wallets, handled by the payments module.</p>
+              </li>
+              <li class="mui-steps__item">
+                <span class="mui-steps__marker" aria-hidden="true"></span>
+                <h4 class="mui-steps__title">Confirmation</h4>
+                <p class="mui-steps__body">Receipt and tracking land in your inbox.</p>
+              </li>
+            </ol>
+          </div>
+
+          <footer class="mui-drawer__footer">
+            <form method="dialog"><button type="submit" class="mui-btn">Keep shopping</button></form>
+            <button type="button" class="mui-btn mui-btn--primary">Checkout — $120.00</button>
+          </footer>
+        </dialog>
+      </div>
+
+      <!-- empty state, demonstrated apart -->
+      <p class="mui-section__kicker shop-gap">and when it's empty</p>
+      <div class="mui-empty">
+        <span class="mui-empty__icon" aria-hidden="true">◌</span>
+        <h3 class="mui-empty__title">Your cart is empty</h3>
+        <p class="mui-empty__desc">Nothing from the field yet. Everything in the drop is printed and packed to order — it ships within 48 hours.</p>
+        <div class="mui-empty__actions">
+          <a class="mui-btn" href="#catalog-title">Browse the drop</a>
+          <button type="button" class="mui-btn mui-btn--ghost">View gift cards</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="mui-footer">
+  <div class="mui-footer__grid">
+    <div class="mui-footer__brand">
+      <a class="mui-btn mui-btn--ghost" href="/">
+        <svg class="shop-wordmark" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+        <span class="mui-badge">trueque</span>
+      </a>
+      <p class="mui-footer__mantra">Siembra módulos, cosecha aplicaciones.</p>
+    </div>
+    <nav aria-labelledby="ft-shop">
+      <p class="mui-footer__heading" id="ft-shop">Shop</p>
+      <ul class="mui-footer__links">
+        <li><a href="/shop/apparel">Apparel</a></li>
+        <li><a href="/shop/prints">Prints</a></li>
+        <li><a href="/shop/kits">Kits</a></li>
+        <li><a href="/shop/gift-cards">Gift cards</a></li>
+      </ul>
+    </nav>
+    <nav aria-labelledby="ft-support">
+      <p class="mui-footer__heading" id="ft-support">Support</p>
+      <ul class="mui-footer__links">
+        <li><a href="/support/shipping">Shipping</a></li>
+        <li><a href="/support/returns">Returns &amp; exchanges</a></li>
+        <li><a href="/support/size-guide">Size guide</a></li>
+        <li><a href="/support/contact">Contact</a></li>
+      </ul>
+    </nav>
+    <nav aria-labelledby="ft-ecosystem">
+      <p class="mui-footer__heading" id="ft-ecosystem">Ecosystem</p>
+      <ul class="mui-footer__links">
+        <li><a href="https://milpa.lat">milpa.lat</a></li>
+        <li><a href="/docs">Docs</a></li>
+        <li><a href="https://github.com/milpa-lat/milpa">GitHub</a></li>
+        <li><a href="https://www.npmjs.com/package/@milpa/design">@milpa/design</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="mui-footer__legal">
+    <p>© 2026 Trueque · Merch of the Milpa ecosystem · Apache-2.0</p>
+    <p><a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a></p>
+  </div>
+</footer>
+
+</div><!-- /.mui-page -->
+
+<script>
+(() => {
+  'use strict';
+  /* ---------- theme: toggle + persistence + label (docs proof pattern) ---------- */
+  const root = document.documentElement, themeBtn = document.querySelector('#theme-toggle');
+  const applyTheme = t => {
+    root.dataset.theme = t;
+    themeBtn.textContent = '◐ ' + t;
+    try { localStorage.setItem('milpa-theme', t); } catch {}
+  };
+  let saved = null; try { saved = localStorage.getItem('milpa-theme'); } catch {}
+  applyTheme(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
+  themeBtn.addEventListener('click', () => applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+})();
+</script>
+
+</body>
+</html>

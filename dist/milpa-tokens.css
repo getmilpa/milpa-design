@@ -4,7 +4,13 @@
    Dark = default (:root, y [data-theme="dark"]). Light = [data-theme="light"] en <html>.
    IMPORTANTE: <html> SIEMPRE lleva data-theme ("dark" | "light"); nunca ausente (para que
    las utilidades dark: de Tailwind matcheen el estado por defecto).
+   Cascada: todo el CSS publicado vive en @layer milpa.* — el CSS sin layer del
+   consumidor/plugin SIEMPRE gana (THEMING.md).
    Todos los pares texto/UI verificados WCAG AA (npm test). */
+
+@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;
+
+@layer milpa.tokens {
 
 /* ===== color: primitives ===== */
 :root {
@@ -138,3 +144,5 @@
   --shadow-md:0 8px 24px rgba(23,18,13,0.12);
   --shadow-lg:0 16px 48px rgba(23,18,13,0.14);
 }
+
+} /* @layer milpa.tokens */

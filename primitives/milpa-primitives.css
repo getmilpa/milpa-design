@@ -20,7 +20,13 @@
    · Motion: transition con --dur-* / --ease-*; germina y se asienta,
      nunca rebota. El reduce lo cubre milpa-motion.css globalmente.
    · Alturas de control: sm 2rem · md 2.5rem · lg 3rem (props privadas --_h).
+   · Cascada: este archivo vive en @layer — el CSS del consumidor/plugin
+     gana sin !important (THEMING.md).
    ════════════════════════════════════════════════════════════════════ */
+
+@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;
+
+@layer milpa.primitives {
 
 /* ---------- base · box model + utilidades compartidas ---------- */
 [class^="mui-"], [class*=" mui-"],
@@ -602,3 +608,5 @@
 .mui-divider--label::after {
   content: ""; flex: 1; border-top: 1px solid var(--border-subtle);
 }
+
+} /* @layer milpa.primitives */

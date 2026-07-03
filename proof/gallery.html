@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campo Abierto — a photographic survey of the milpa fields · Milpa Gallery proof</title>
+<meta name="description" content="Battle-test of the gallery/portfolio use case: a fictional documentary photography portfolio composed entirely from @milpa/design 0.2.0 — media grid masonry, lightbox over the native dialog, tabs as filters, prose piece page.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../logo/symbol/milpa-symbol-color.svg">
+<link rel="stylesheet" href="../dist/milpa-tokens.css">
+<link rel="stylesheet" href="../motion/milpa-motion.css">
+<link rel="stylesheet" href="../primitives/milpa-primitives.css">
+<link rel="stylesheet" href="../components/milpa-components.css">
+<link rel="stylesheet" href="../artifacts/milpa-artifacts.css">
+<link rel="stylesheet" href="../layouts/milpa-layouts.css">
+<style>
+/* ===== page styles (gal-*) — the system does the rest; all tokens ===== */
+body { margin:0; background:var(--bg); }
+.gal-wordmark { height:1rem; width:auto; display:block; }
+/* minimal header — brand + theme toggle; the shell/topbar stays home */
+.gal-header { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-4) clamp(var(--space-5),4vw,var(--space-8)); border-block-end:1px solid var(--border-subtle); }
+.gal-push { margin-inline-start:auto; }
+.gal-theme-toggle { font-family:var(--font-mono); }
+/* token-driven SVG placeholders — the contract styles img; inline <svg> needs the same plumbing.
+   Aspect comes from each viewBox (intrinsic ratio), never hardcoded here. */
+.gal-ph { display:block; width:100%; height:auto; border-radius:var(--radius-md); }
+/* caption meta line — the mono voice under the piece title, always-visible velo (contract) */
+.gal-meta { display:block; font-family:var(--font-mono); font-size:var(--text-2xs); color:var(--text-secondary); }
+/* demo stage: transform creates a containing block, so the lightbox's fixed
+   controls pin to the stage instead of the viewport — static state demo only */
+.gal-stage { position:relative; transform:translate(0); padding:var(--space-10) var(--space-4); background:var(--surface); border-radius:var(--radius-xl); }
+.gal-static { position:static; } /* keeps the demo dialog in flow (UA default is absolute) */
+/* media inside the real lightbox — mirrors the img treatment of the contract for inline svg */
+.gal-lb-ph { width:auto; height:min(60vh,36rem); max-width:100%; box-shadow:var(--shadow-lg); }
+/* piece prev/next — the docs pager is contract-bound to the docs shell, so buttons */
+.gal-pager { display:flex; justify-content:space-between; gap:var(--space-3); margin-block-start:var(--space-10); }
+</style>
+</head>
+<body>
+
+<a class="mui-shell__skip" href="#main">Skip to content</a>
+
+<!-- wordmark vector (official kit snippet — letters currentColor, grain oro-300 constant) -->
+<svg style="display:none" aria-hidden="true"><symbol id="wm-milpa" viewBox="0 0 2406.90 900.00"><g fill="currentColor"><path d="M76.299560546875 0V492.500244140625H177.201171875V435.00048828125H193.101318359375Q206.80126953125 460.700439453125 237.8511962890625 480.9503173828125Q268.901123046875 501.2001953125 322.100830078125 501.2001953125Q377.20068359375 501.2001953125 410.77557373046875 478.42535400390625Q444.3504638671875 455.6505126953125 461.00048828125 420.900634765625H476.900634765625Q493.900634765625 455.00048828125 526.6505126953125 478.100341796875Q559.400390625 501.2001953125 619.2001953125 501.2001953125Q666.60009765625 501.2001953125 703.9251098632812 481.3502197265625Q741.2501220703125 461.500244140625 763.2251586914062 423.0501708984375Q785.2001953125 384.60009765625 785.2001953125 328.4498291015625V0H682.298583984375V320.499755859375Q682.298583984375 365.3494873046875 657.6238403320312 389.69921875Q632.9490966796875 414.0489501953125 588.299560546875 414.0489501953125Q540.0499267578125 414.0489501953125 511.12530517578125 383.0491943359375Q482.20068359375 352.0494384765625 482.20068359375 293.699951171875V0H379.299072265625V320.499755859375Q379.299072265625 365.3494873046875 354.62432861328125 389.69921875Q329.9495849609375 414.0489501953125 285.300048828125 414.0489501953125Q237.0504150390625 414.0489501953125 208.12579345703125 383.0491943359375Q179.201171875 352.0494384765625 179.201171875 293.699951171875V0Z" transform="translate(-76.30,700.00) scale(1,-1)"/><path d="M76.299560546875 0V492.500244140625H179.201171875V0Z" transform="translate(760.70,700.00) scale(1,-1)"/><path d="M76.299560546875 0V700H179.201171875V0Z" transform="translate(996.70,700.00) scale(1,-1)"/><path d="M76.299560546875 -200V492.500244140625H177.201171875V422.3509521484375H193.101318359375Q211.501220703125 455.20068359375 250.47601318359375 480.8504638671875Q289.4508056640625 506.500244140625 361.00048828125 506.500244140625Q422.7503662109375 506.500244140625 474.4503173828125 476.6502685546875Q526.1502685546875 446.80029296875 557.3252563476562 390.1502685546875Q588.500244140625 333.500244140625 588.500244140625 253.5501708984375V238.9500732421875Q588.500244140625 159.3499755859375 557.500244140625 102.52496337890625Q526.500244140625 45.699951171875 474.80029296875 15.8499755859375Q423.100341796875 -14 361.00048828125 -14Q313.20068359375 -14 280.2508544921875 -2.10009765625Q247.301025390625 9.7998046875 227.0511474609375 28.57464599609375Q206.80126953125 47.3494873046875 195.101318359375 66.79931640625H179.201171875V-200ZM331.39990234375 76.4013671875Q398.79931640625 76.4013671875 441.8489990234375 119.32598876953125Q484.898681640625 162.2506103515625 484.898681640625 241.60009765625V250.900146484375Q484.898681640625 330.2496337890625 441.52398681640625 373.17425537109375Q398.1492919921875 416.098876953125 331.39990234375 416.098876953125Q265.00048828125 416.098876953125 221.4508056640625 373.17425537109375Q177.901123046875 330.2496337890625 177.901123046875 250.900146484375V241.60009765625Q177.901123046875 162.2506103515625 221.4508056640625 119.32598876953125Q265.00048828125 76.4013671875 331.39990234375 76.4013671875Z" transform="translate(1232.70,700.00) scale(1,-1)"/><path d="M228.5496826171875 -14Q176.2496337890625 -14 134.42462158203125 4.1500244140625Q92.599609375 22.300048828125 68.27459716796875 57.27508544921875Q43.9495849609375 92.2501220703125 43.9495849609375 142.2001953125Q43.9495849609375 192.500244140625 68.27459716796875 226.12530517578125Q92.599609375 259.7503662109375 135.22467041015625 276.72540283203125Q177.8497314453125 293.700439453125 231.7498779296875 293.700439453125H382.4488525390625V325.5501708984375Q382.4488525390625 368.9495849609375 356.2491455078125 395.12432861328125Q330.0494384765625 421.299072265625 276.099853515625 421.299072265625Q223.1502685546875 421.299072265625 195.07562255859375 396.29931640625Q167.0009765625 371.299560546875 157.901123046875 330.6500244140625L62.19970703125 361.9505615234375Q74.19970703125 401.700439453125 100.52471923828125 434.2503662109375Q126.8497314453125 466.80029296875 170.82476806640625 486.6502685546875Q214.7998046875 506.500244140625 277.39990234375 506.500244140625Q373.300048828125 506.500244140625 428.02520751953125 457.8502197265625Q482.7503662109375 409.2001953125 482.7503662109375 318.6500244140625V115.80126953125Q482.7503662109375 85.80126953125 510.7503662109375 85.80126953125H553.2001953125V0H476.19970703125Q441.299560546875 0 419.3994140625 18.17498779296875Q397.499267578125 36.3499755859375 397.499267578125 67.0499267578125V70.1497802734375H381.6490478515625Q374.499267578125 54.6500244140625 358.22442626953125 34.62506103515625Q341.9495849609375 14.60009765625 310.899658203125 0.300048828125Q279.8497314453125 -14 228.5496826171875 -14ZM244.2501220703125 71.201171875Q305.6495361328125 71.201171875 344.0491943359375 106.6507568359375Q382.4488525390625 142.100341796875 382.4488525390625 203.699462890625V214.3994140625H237.9500732421875Q197.00048828125 214.3994140625 171.92584228515625 196.77459716796875Q146.8511962890625 179.1497802734375 146.8511962890625 145.1502685546875Q146.8511962890625 111.1507568359375 172.92584228515625 91.17596435546875Q199.00048828125 71.201171875 244.2501220703125 71.201171875Z" transform="translate(1853.70,700.00) scale(1,-1)"/></g><rect x="818.99" y="40.80" width="138.92" height="138.92" rx="34.73" fill="var(--oro-300)"/></symbol></svg>
+
+<div class="mui-page">
+
+  <!-- ============ HEADER (minimal — a portfolio built on the system) ============ -->
+  <header class="gal-header">
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
+      <g fill="var(--oro-300)">
+        <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
+        <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
+        <rect x="0" y="25" width="10" height="10" rx="2.5"/><rect x="25" y="25" width="10" height="10" rx="2.5"/><rect x="50" y="25" width="10" height="10" rx="2.5"/>
+        <rect x="0" y="37.5" width="10" height="10" rx="2.5"/><rect x="50" y="37.5" width="10" height="10" rx="2.5"/>
+        <rect x="0" y="50" width="10" height="10" rx="2.5"/><rect x="50" y="50" width="10" height="10" rx="2.5"/>
+      </g>
+    </svg>
+    <svg class="gal-wordmark" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+    <span class="mui-badge">gallery</span>
+    <button type="button" class="mui-btn mui-btn--sm gal-theme-toggle gal-push" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <!-- ============ A · COVER — mui-hero--center, short ============ -->
+    <section class="mui-section" aria-label="Campo Abierto">
+      <div class="mui-container">
+        <div class="mui-hero mui-hero--center">
+          <div>
+            <p class="mui-hero__kicker">a photographic survey of the milpa fields · 2025—2026</p>
+            <h1 class="mui-hero__title">Campo Abierto</h1>
+            <p class="mui-hero__sub">Twelve frames from one terraced plot in the Mixteca Alta — a single season of seed, growth and harvest, photographed on film.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ B · GRID — mui-tabs filters + mui-media-grid --masonry ============ -->
+    <section class="mui-section" aria-labelledby="survey-title">
+      <div class="mui-container mui-container--wide">
+        <p class="mui-section__kicker">the survey</p>
+        <h2 class="mui-section__title" id="survey-title">Twelve pieces, one plot</h2>
+        <p class="mui-section__lede">Filter by stage of the season. Every frame opens in the viewer — arrow keys cycle the collection, Esc returns you to the field.</p>
+
+        <!-- filter tabs — all four control the same panel: its content is what the filter changes -->
+        <div class="mui-tabs" role="tablist" aria-label="Filter pieces by season stage">
+          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-all" aria-controls="gal-grid-panel" aria-selected="true">All <span class="mui-badge">12</span></button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-seed" aria-controls="gal-grid-panel" aria-selected="false" tabindex="-1">Seed <span class="mui-badge">3</span></button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-growth" aria-controls="gal-grid-panel" aria-selected="false" tabindex="-1">Growth <span class="mui-badge">5</span></button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="ftab-harvest" aria-controls="gal-grid-panel" aria-selected="false" tabindex="-1">Harvest <span class="mui-badge">4</span></button>
+        </div>
+
+        <div class="mui-tabs__panel" role="tabpanel" id="gal-grid-panel" aria-labelledby="ftab-all">
+          <!-- masonry: natural proportions per piece (3/4 · 1/1 · 4/3 · 16/9 mixed);
+               items are <button> — the span bridge keeps the content model conforming -->
+          <div class="mui-media-grid mui-media-grid--masonry" id="gal-grid">
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 300 400" aria-hidden="true" focusable="false">
+                  <rect width="300" height="400" fill="var(--surface-raised)"/>
+                  <circle cx="150" cy="96" r="40" fill="var(--viz-1)"/>
+                  <path d="M0 180 H300" stroke="var(--border-strong)" stroke-width="2"/>
+                  <path d="M20 400 L150 190 M90 400 L165 190 M160 400 L180 190 M230 400 L195 190 M300 380 L210 190" stroke="var(--viz-3)" stroke-width="3" fill="none"/>
+                </svg>
+                <span class="mui-media-grid__caption">Furrows at First Light<span class="gal-meta">No. 01 · Portra 400 · Yanhuitlán</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 640 360" aria-hidden="true" focusable="false">
+                  <rect width="640" height="360" fill="var(--surface)"/>
+                  <rect x="40" y="40" width="560" height="280" fill="none" stroke="var(--border-strong)" stroke-width="2"/>
+                  <g fill="var(--viz-1)"><circle cx="130" cy="110" r="10"/><circle cx="230" cy="110" r="10"/><circle cx="330" cy="110" r="10"/><circle cx="430" cy="110" r="10"/><circle cx="530" cy="110" r="10"/></g>
+                  <g fill="var(--viz-6)"><circle cx="130" cy="180" r="10"/><circle cx="230" cy="180" r="10"/><circle cx="330" cy="180" r="10"/><circle cx="430" cy="180" r="10"/><circle cx="530" cy="180" r="10"/></g>
+                  <g fill="var(--viz-3)"><circle cx="130" cy="250" r="10"/><circle cx="230" cy="250" r="10"/><circle cx="330" cy="250" r="10"/><circle cx="430" cy="250" r="10"/><circle cx="530" cy="250" r="10"/></g>
+                </svg>
+                <span class="mui-media-grid__caption">Seedbed Geometry<span class="gal-meta">No. 02 · Tri-X 400 · Yanhuitlán</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+                  <rect width="400" height="400" fill="var(--surface-raised)"/>
+                  <g stroke="var(--viz-3)" stroke-width="6" fill="none">
+                    <path d="M80 400 V120 M80 200 q40 -30 60 -80 M80 260 q-40 -30 -56 -76"/>
+                    <path d="M200 400 V80 M200 170 q45 -25 62 -90 M200 240 q-45 -25 -62 -86"/>
+                    <path d="M320 400 V140 M320 210 q38 -28 55 -75 M320 275 q-38 -28 -52 -72"/>
+                  </g>
+                  <circle cx="344" cy="56" r="28" fill="var(--viz-1)"/>
+                </svg>
+                <span class="mui-media-grid__caption">Maize Rows, Midsummer<span class="gal-meta">No. 03 · Portra 400 · Mixteca Alta</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 400 300" aria-hidden="true" focusable="false">
+                  <rect width="400" height="300" fill="var(--surface)"/>
+                  <circle cx="160" cy="130" r="72" fill="var(--viz-1)"/>
+                  <circle cx="240" cy="150" r="64" fill="var(--viz-3)"/>
+                  <circle cx="190" cy="200" r="52" fill="var(--viz-6)"/>
+                  <circle cx="196" cy="158" r="120" fill="none" stroke="var(--border-strong)" stroke-width="2"/>
+                </svg>
+                <span class="mui-media-grid__caption">The Three Sisters<span class="gal-meta">No. 04 · Ektar 100 · Yanhuitlán</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 300 400" aria-hidden="true" focusable="false">
+                  <rect width="300" height="400" fill="var(--surface-raised)"/>
+                  <g stroke="var(--viz-2)" stroke-width="3" stroke-linecap="round">
+                    <path d="M50 50 l-8 26 M110 36 l-8 26 M170 50 l-8 26 M230 40 l-8 26 M80 110 l-8 26 M150 100 l-8 26 M220 116 l-8 26"/>
+                  </g>
+                  <rect x="0" y="220" width="240" height="44" fill="var(--viz-3)"/>
+                  <rect x="0" y="284" width="270" height="44" fill="var(--viz-5)"/>
+                  <rect x="0" y="348" width="300" height="52" fill="var(--viz-3)"/>
+                </svg>
+                <span class="mui-media-grid__caption">Rain Over the Terraces<span class="gal-meta">No. 05 · Portra 160 · Mixteca Alta</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+                  <rect width="400" height="400" fill="var(--surface)"/>
+                  <g fill="var(--border-strong)">
+                    <circle cx="90" cy="120" r="6"/><circle cx="150" cy="70" r="4"/><circle cx="260" cy="100" r="5"/><circle cx="330" cy="160" r="4"/>
+                    <circle cx="70" cy="250" r="4"/><circle cx="140" cy="320" r="5"/><circle cx="290" cy="300" r="6"/><circle cx="340" cy="350" r="4"/>
+                  </g>
+                  <circle cx="210" cy="225" r="22" fill="var(--viz-1)"/>
+                  <circle cx="210" cy="225" r="40" fill="none" stroke="var(--viz-6)" stroke-width="2"/>
+                </svg>
+                <span class="mui-media-grid__caption">Ash and Seed<span class="gal-meta">No. 06 · HP5 Plus · Yanhuitlán</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 400 300" aria-hidden="true" focusable="false">
+                  <rect width="400" height="300" fill="var(--surface-raised)"/>
+                  <ellipse cx="130" cy="66" rx="72" ry="26" fill="var(--viz-2)"/>
+                  <ellipse cx="200" cy="56" rx="52" ry="20" fill="var(--viz-2)"/>
+                  <g stroke="var(--viz-2)" stroke-width="3" stroke-linecap="round"><path d="M96 110 l-6 22 M140 106 l-6 22 M184 102 l-6 22 M228 98 l-6 22"/></g>
+                  <rect x="0" y="180" width="300" height="36" fill="var(--viz-3)"/>
+                  <rect x="0" y="230" width="350" height="36" fill="var(--viz-5)"/>
+                  <rect x="0" y="280" width="400" height="20" fill="var(--viz-3)"/>
+                </svg>
+                <span class="mui-media-grid__caption">First Rain on the Terraces<span class="gal-meta">No. 07 · Portra 400 · Yanhuitlán</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 640 360" aria-hidden="true" focusable="false">
+                  <rect width="640" height="360" fill="var(--surface)"/>
+                  <g fill="var(--viz-3)"><rect x="40" y="60" width="56" height="56" rx="8"/><rect x="180" y="130" width="56" height="56" rx="8"/><rect x="320" y="50" width="56" height="56" rx="8"/><rect x="460" y="200" width="56" height="56" rx="8"/><rect x="110" y="240" width="56" height="56" rx="8"/></g>
+                  <g fill="var(--viz-5)"><rect x="110" y="60" width="56" height="56" rx="8"/><rect x="250" y="220" width="56" height="56" rx="8"/><rect x="390" y="120" width="56" height="56" rx="8"/><rect x="530" y="60" width="56" height="56" rx="8"/><rect x="460" y="270" width="56" height="56" rx="8"/></g>
+                  <g fill="var(--surface-raised)"><rect x="250" y="130" width="56" height="56" rx="8"/><rect x="530" y="130" width="56" height="56" rx="8"/><rect x="40" y="170" width="56" height="56" rx="8"/></g>
+                </svg>
+                <span class="mui-media-grid__caption">Green Noise<span class="gal-meta">No. 08 · Ektar 100 · Mixteca Alta</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 300 400" aria-hidden="true" focusable="false">
+                  <rect width="300" height="400" fill="var(--surface)"/>
+                  <ellipse cx="150" cy="220" rx="72" ry="130" fill="var(--viz-6)"/>
+                  <ellipse cx="150" cy="230" rx="44" ry="102" fill="var(--viz-1)"/>
+                  <g fill="var(--surface)"><circle cx="150" cy="170" r="6"/><circle cx="130" cy="210" r="6"/><circle cx="170" cy="210" r="6"/><circle cx="150" cy="250" r="6"/><circle cx="130" cy="290" r="6"/><circle cx="170" cy="290" r="6"/></g>
+                  <path d="M150 92 q30 -40 62 -50 M150 96 q-22 -46 -54 -60" stroke="var(--viz-4)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                </svg>
+                <span class="mui-media-grid__caption">Husk and Silk<span class="gal-meta">No. 09 · Portra 400 · Yanhuitlán</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+                  <rect width="400" height="400" fill="var(--surface-raised)"/>
+                  <circle cx="200" cy="200" r="150" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="3"/>
+                  <path d="M110 262 a112 112 0 0 1 28 -142 M150 292 a112 112 0 0 1 -18 -60" stroke="var(--border)" stroke-width="2" fill="none"/>
+                  <g fill="var(--viz-1)"><circle cx="180" cy="160" r="7"/><circle cx="230" cy="140" r="7"/><circle cx="260" cy="200" r="7"/><circle cx="210" cy="230" r="7"/><circle cx="160" cy="250" r="7"/><circle cx="250" cy="270" r="7"/><circle cx="140" cy="200" r="7"/></g>
+                </svg>
+                <span class="mui-media-grid__caption">Threshing Floor<span class="gal-meta">No. 10 · Tri-X 400 · Yanhuitlán</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 400 300" aria-hidden="true" focusable="false">
+                  <rect width="400" height="300" fill="var(--surface)"/>
+                  <rect x="40" y="44" width="320" height="14" fill="var(--viz-6)"/>
+                  <rect x="60" y="70" width="120" height="210" fill="var(--surface-raised)" stroke="var(--border-strong)" stroke-width="3"/>
+                  <rect x="220" y="70" width="120" height="210" fill="var(--surface-raised)" stroke="var(--border-strong)" stroke-width="3"/>
+                  <circle cx="168" cy="180" r="6" fill="var(--viz-4)"/><circle cx="232" cy="180" r="6" fill="var(--viz-4)"/>
+                </svg>
+                <span class="mui-media-grid__caption">Granary Doors<span class="gal-meta">No. 11 · Portra 160 · Mixteca Alta</span></span>
+              </span>
+            </button>
+
+            <button type="button" class="mui-media-grid__item" aria-haspopup="dialog">
+              <span class="mui-media-grid__figure">
+                <svg class="gal-ph" viewBox="0 0 640 360" aria-hidden="true" focusable="false">
+                  <rect width="640" height="360" fill="var(--surface)"/>
+                  <rect y="240" width="640" height="120" fill="var(--surface-raised)"/>
+                  <path d="M0 240 H640" stroke="var(--border-strong)" stroke-width="2"/>
+                  <circle cx="520" cy="90" r="34" fill="var(--viz-2)"/>
+                  <g stroke="var(--viz-6)" stroke-width="3" stroke-linecap="round"><path d="M60 240 v-18 M120 240 v-12 M200 240 v-16 M290 240 v-10 M380 240 v-16 M470 240 v-12 M560 240 v-18"/></g>
+                </svg>
+                <span class="mui-media-grid__caption">The Field, Resting<span class="gal-meta">No. 12 · HP5 Plus · Yanhuitlán</span></span>
+              </span>
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ C · LIGHTBOX — static open state, pinned to a demo stage ============
+         The [open] dialog demonstrates BOTH edge states at once: a [disabled] prev
+         (start-of-collection affordance) and the mid-collection counter "3 / 12".
+         The stage's transform re-roots the contract's fixed controls to the stage box. -->
+    <section class="mui-section" aria-labelledby="viewer-title">
+      <div class="mui-container">
+        <p class="mui-section__kicker">composition · mui-modal + mui-lightbox</p>
+        <h2 class="mui-section__title" id="viewer-title">The viewer, pinned open</h2>
+        <p class="mui-section__lede">The lightbox composes over the native dialog — captured here in its open state: naked frame, solid overlay chips for caption and counter, icon buttons for prev/next/close, the disabled prev keeping its dead pointer.</p>
+        <div class="gal-stage">
+          <dialog class="mui-modal mui-lightbox gal-static" open aria-label="Image viewer — static demonstration">
+            <figure class="mui-lightbox__media">
+              <svg class="gal-ph gal-lb-ph" viewBox="0 0 400 400" role="img" aria-label="Maize Rows, Midsummer">
+                <rect width="400" height="400" fill="var(--surface-raised)"/>
+                <g stroke="var(--viz-3)" stroke-width="6" fill="none">
+                  <path d="M80 400 V120 M80 200 q40 -30 60 -80 M80 260 q-40 -30 -56 -76"/>
+                  <path d="M200 400 V80 M200 170 q45 -25 62 -90 M200 240 q-45 -25 -62 -86"/>
+                  <path d="M320 400 V140 M320 210 q38 -28 55 -75 M320 275 q-38 -28 -52 -72"/>
+                </g>
+                <circle cx="344" cy="56" r="28" fill="var(--viz-1)"/>
+              </svg>
+              <figcaption class="mui-lightbox__caption">Maize Rows, Midsummer — No. 03 · Portra 400 · Mixteca Alta</figcaption>
+            </figure>
+            <div class="mui-lightbox__nav">
+              <button type="button" class="mui-btn mui-btn--icon" aria-label="Previous" disabled>
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 4l-6 6 6 6"/></svg>
+              </button>
+              <button type="button" class="mui-btn mui-btn--icon" aria-label="Next">
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 4l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <button type="button" class="mui-btn mui-btn--icon mui-lightbox__close" aria-label="Close">
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>
+            </button>
+            <span class="mui-lightbox__counter">3 / 12</span>
+          </dialog>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ D · PIECE PAGE — narrow container, prose + quote + pager ============ -->
+    <section class="mui-section" aria-labelledby="piece-title">
+      <div class="mui-container mui-container--narrow">
+        <article class="mui-prose">
+          <p class="mui-section__kicker">piece 07 · growth</p>
+          <h2 id="piece-title">First Rain on the Terraces</h2>
+          <figure>
+            <svg class="gal-ph" viewBox="0 0 400 300" role="img" aria-label="First Rain on the Terraces — clouds breaking over stepped green terraces">
+              <rect width="400" height="300" fill="var(--surface-raised)"/>
+              <ellipse cx="130" cy="66" rx="72" ry="26" fill="var(--viz-2)"/>
+              <ellipse cx="200" cy="56" rx="52" ry="20" fill="var(--viz-2)"/>
+              <g stroke="var(--viz-2)" stroke-width="3" stroke-linecap="round"><path d="M96 110 l-6 22 M140 106 l-6 22 M184 102 l-6 22 M228 98 l-6 22"/></g>
+              <rect x="0" y="180" width="300" height="36" fill="var(--viz-3)"/>
+              <rect x="0" y="230" width="350" height="36" fill="var(--viz-5)"/>
+              <rect x="0" y="280" width="400" height="20" fill="var(--viz-3)"/>
+            </svg>
+            <figcaption>Archival pigment print, 40 × 30 cm — edition of 8.</figcaption>
+          </figure>
+          <p>The first rain of the season arrives sideways, pushed uphill by wind that has crossed the whole valley to get here. The terraces take it in order — the highest bench first, then the overflow walking down the stone lips one step at a time. By the third hour the plot sounds like a slow applause. Nothing in the field moves faster than it must.</p>
+          <p>I made this frame from the neighbouring bench with the camera under a plastic sheet, waiting for the moment the clouds thinned enough to separate the two greens: the hard green of young maize and the soft green of the bean cover between rows. One exposure, no reframe. The negative kept the whole argument.</p>
+          <table>
+            <thead><tr><th scope="col">Field</th><th scope="col">Detail</th></tr></thead>
+            <tbody>
+              <tr><td>Camera</td><td>Hasselblad 500C/M, 80&nbsp;mm</td></tr>
+              <tr><td>Film</td><td>Kodak Portra 400, 120</td></tr>
+              <tr><td>Location</td><td>Terraces above Yanhuitlán, Mixteca Alta</td></tr>
+              <tr><td>Date</td><td>June 2025</td></tr>
+            </tbody>
+          </table>
+          <blockquote class="mui-quote mui-quote--pull">
+            <p class="mui-quote__text">The field drinks first; the photographer waits.</p>
+            <footer class="mui-quote__attr"><cite class="mui-quote__name">Field notebook</cite><span class="mui-quote__role">June 2025</span></footer>
+          </blockquote>
+        </article>
+        <!-- piece prev/next — the mui-docs pager is contract-bound to the docs shell, so composed buttons -->
+        <nav class="gal-pager" aria-label="Pieces">
+          <a class="mui-btn" href="#gal-grid-panel"><span aria-hidden="true">←</span>&nbsp;No. 06 — Ash and Seed</a>
+          <a class="mui-btn" href="#gal-grid-panel">No. 08 — Green Noise&nbsp;<span aria-hidden="true">→</span></a>
+        </nav>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ E · FOOTER — mui-footer ============ -->
+  <footer class="mui-footer">
+    <div class="mui-footer__grid">
+      <div class="mui-footer__brand">
+        <svg class="gal-wordmark" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+        <p class="mui-footer__mantra">Siembra módulos, cosecha aplicaciones.</p>
+      </div>
+      <nav aria-labelledby="ft-portfolio">
+        <p class="mui-footer__heading" id="ft-portfolio">Portfolio</p>
+        <ul class="mui-footer__links">
+          <li><a href="#gal-grid-panel">The survey</a></li>
+          <li><a href="#piece-title">Pieces</a></li>
+          <li><a href="#viewer-title">Prints</a></li>
+        </ul>
+      </nav>
+      <nav aria-labelledby="ft-elsewhere">
+        <p class="mui-footer__heading" id="ft-elsewhere">Elsewhere</p>
+        <ul class="mui-footer__links">
+          <li><a href="https://milpa.lat">milpa.lat</a></li>
+          <li><a href="https://github.com/milpa-lat/milpa">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="mui-footer__legal">
+      <p>© 2026 Campo Abierto — a fictional portfolio; every photograph is a token-drawn placeholder.</p>
+      <p>Built with <a href="https://www.npmjs.com/package/@milpa/design">@milpa/design 0.2.0</a></p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ============ THE REAL LIGHTBOX (opens over the grid via showModal) ============ -->
+<dialog class="mui-modal mui-lightbox" id="gal-lightbox" aria-label="Image viewer">
+  <figure class="mui-lightbox__media">
+    <figcaption class="mui-lightbox__caption"></figcaption>
+  </figure>
+  <div class="mui-lightbox__nav">
+    <button type="button" class="mui-btn mui-btn--icon" id="lb-prev" aria-label="Previous">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 4l-6 6 6 6"/></svg>
+    </button>
+    <button type="button" class="mui-btn mui-btn--icon" id="lb-next" aria-label="Next">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 4l6 6-6 6"/></svg>
+    </button>
+  </div>
+  <button type="button" class="mui-btn mui-btn--icon mui-lightbox__close" id="lb-close" aria-label="Close" autofocus>
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>
+  </button>
+  <span class="mui-lightbox__counter" aria-live="polite">1 / 12</span>
+</dialog>
+
+<script>
+(() => {
+  'use strict';
+  const $  = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+
+  /* ---------- theme: toggle + persistence + label (docs proof pattern) ---------- */
+  const root = document.documentElement, themeBtn = $('#theme-toggle');
+  const applyTheme = t => {
+    root.dataset.theme = t;
+    themeBtn.textContent = '◐ ' + t;
+    try { localStorage.setItem('milpa-theme', t); } catch {}
+  };
+  let saved = null; try { saved = localStorage.getItem('milpa-theme'); } catch {}
+  applyTheme(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
+  themeBtn.addEventListener('click', () => applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+  /* ---------- lightbox: real viewer over the grid (contract: showModal gives top
+     layer/trap/Esc; ←/→ navigate; prev/next LOOP the collection — documented; media,
+     caption and counter update in the SAME dialog, never close/reopen) ---------- */
+  const lb = $('#gal-lightbox'), media = $('.mui-lightbox__media', lb),
+        cap = $('.mui-lightbox__caption', lb), counter = $('.mui-lightbox__counter', lb),
+        items = $$('#gal-grid .mui-media-grid__item');
+  let idx = 0;
+  const show = i => {
+    idx = (i + items.length) % items.length;
+    const item  = items[idx];
+    const title = $('.mui-media-grid__caption', item).childNodes[0].textContent.trim();
+    const meta  = $('.gal-meta', item).textContent.trim();
+    const art   = $('svg', item).cloneNode(true);      // clone keeps the token vars live
+    art.classList.add('gal-lb-ph');
+    art.removeAttribute('aria-hidden');
+    art.setAttribute('role', 'img');
+    art.setAttribute('aria-label', title);             // in the viewer the media IS the content
+    $('svg', media)?.remove();
+    media.prepend(art);
+    cap.textContent = title + ' — ' + meta;
+    counter.textContent = (idx + 1) + ' / ' + items.length;
+  };
+  items.forEach((item, i) => item.addEventListener('click', () => { show(i); lb.showModal(); }));
+  $('#lb-prev').addEventListener('click', () => show(idx - 1));
+  $('#lb-next').addEventListener('click', () => show(idx + 1));
+  $('#lb-close').addEventListener('click', () => lb.close());
+  lb.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); show(idx - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); show(idx + 1); }
+  });
+})();
+</script>
+
+</body>
+</html>

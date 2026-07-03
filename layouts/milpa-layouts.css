@@ -815,6 +815,7 @@ a.mui-feature-grid__item:focus-visible {
 }
 /* guard: el display de arriba pisaría el [hidden] del UA (precedente .mui-alert) */
 .mui-media-grid[hidden] { display: none; }
+.mui-media-grid__item[hidden] { display: none; } /* mismo guard para la pieza (filtros) */
 
 /* item — <a> o <button> envolvente; el reset sigue a .mui-card--interactive */
 .mui-media-grid__item {

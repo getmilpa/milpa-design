@@ -133,16 +133,17 @@
 }
 
 /* tokens del highlighter — el framework emite clases .tok-* (no son
-   bloques mui-): SIEMPRE scopeadas bajo .mui-code para no filtrar */
-.mui-code .tok-kw   { color: var(--syntax-keyword); }
-.mui-code .tok-str  { color: var(--syntax-string); }
-.mui-code .tok-com  { color: var(--syntax-comment); font-style: italic; }
-.mui-code .tok-fn   { color: var(--syntax-function); }
-.mui-code .tok-num  { color: var(--syntax-number); }
-.mui-code .tok-punc { color: var(--syntax-punctuation); }
-.mui-code .tok-var  { color: var(--syntax-variable); }
-.mui-code .tok-tag  { color: var(--syntax-tag); }
-.mui-code .tok-attr { color: var(--syntax-attribute); }
+   bloques mui-): SIEMPRE scopeadas (mui-code y la firma de mui-api)
+   para no filtrar */
+:is(.mui-code, .mui-api__signature) .tok-kw   { color: var(--syntax-keyword); }
+:is(.mui-code, .mui-api__signature) .tok-str  { color: var(--syntax-string); }
+:is(.mui-code, .mui-api__signature) .tok-com  { color: var(--syntax-comment); font-style: italic; }
+:is(.mui-code, .mui-api__signature) .tok-fn   { color: var(--syntax-function); }
+:is(.mui-code, .mui-api__signature) .tok-num  { color: var(--syntax-number); }
+:is(.mui-code, .mui-api__signature) .tok-punc { color: var(--syntax-punctuation); }
+:is(.mui-code, .mui-api__signature) .tok-var  { color: var(--syntax-variable); }
+:is(.mui-code, .mui-api__signature) .tok-tag  { color: var(--syntax-tag); }
+:is(.mui-code, .mui-api__signature) .tok-attr { color: var(--syntax-attribute); }
 
 /* ---------- Terminal · .mui-terminal ----------
    Ventana de terminal para docs de CLI. Mismo marco que .mui-code.

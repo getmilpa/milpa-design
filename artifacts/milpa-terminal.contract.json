@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "status": "stable",
   "class": "mui-terminal",
-  "summary": "Ventana de terminal para docs de CLI — mismo marco que code (--syntax-bg + borde sutil + radius-lg, mono). La barra lleva tres dots de cromo en un solo pseudo decorativo (border-strong, NO semánticos de estado). El prompt (olivo vía --secondary-text, mismo valor de rampa que --secondary-text en ambos temas) queda fuera de la selección: copiar la sesión no arrastra los '$'. Corriendo se declara con aria-busy en el root: cursor de bloque pulsando al final de la última línea.",
+  "summary": "Ventana de terminal para docs de CLI — mismo marco que code (--syntax-bg + borde sutil + radius-lg, mono). La barra lleva tres dots de cromo en un solo pseudo decorativo (border-strong, NO semánticos de estado). El prompt (olivo vía --secondary-text) queda fuera de la selección: copiar la sesión no arrastra los '$'. Corriendo se declara con aria-busy en el root: cursor de bloque pulsando al final de la última línea.",
   "element": [
     "div (bar + body; una <div> .mui-terminal__line por línea de sesión)"
   ],

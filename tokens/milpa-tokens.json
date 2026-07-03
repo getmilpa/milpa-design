@@ -152,7 +152,13 @@
       "viz-3": { "$type": "color", "$value": "{color.olivo.400}" },
       "viz-4": { "$type": "color", "$value": "{color.danger.500}" },
       "viz-5": { "$type": "color", "$value": "{color.success.400}" },
-      "viz-6": { "$type": "color", "$value": "{color.warning.400}" }
+      "viz-6": { "$type": "color", "$value": "{color.warning.400}" },
+      "viz-1-active": { "$type": "color", "$value": "{color.oro.400}", "$description": "auto-borde de los fills viz (regla 4): un paso más profundo de su propia serie" },
+      "viz-2-active": { "$type": "color", "$value": "{color.cielo.500}" },
+      "viz-3-active": { "$type": "color", "$value": "{color.olivo.500}" },
+      "viz-4-active": { "$type": "color", "$value": "{color.danger.600}" },
+      "viz-5-active": { "$type": "color", "$value": "{color.success.500}" },
+      "viz-6-active": { "$type": "color", "$value": "{color.warning.500}" }
     },
     "light": {
       "bg": { "$type": "color", "$value": "{color.tierra.100}" },
@@ -210,7 +216,13 @@
       "viz-3": { "$type": "color", "$value": "{color.olivo.700}" },
       "viz-4": { "$type": "color", "$value": "{color.danger.800}" },
       "viz-5": { "$type": "color", "$value": "{color.success.800}" },
-      "viz-6": { "$type": "color", "$value": "{color.warning.700}" }
+      "viz-6": { "$type": "color", "$value": "{color.warning.700}" },
+      "viz-1-active": { "$type": "color", "$value": "{color.oro.700}" },
+      "viz-2-active": { "$type": "color", "$value": "{color.cielo.800}" },
+      "viz-3-active": { "$type": "color", "$value": "{color.olivo.800}" },
+      "viz-4-active": { "$type": "color", "$value": "{color.danger.900}" },
+      "viz-5-active": { "$type": "color", "$value": "{color.success.900}" },
+      "viz-6-active": { "$type": "color", "$value": "{color.warning.800}" }
     }
   },
   "fontFamily": {

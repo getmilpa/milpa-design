@@ -15,8 +15,8 @@
     "canvas": ".mui-chart__canvas — el área de datos; SIEMPRE role=\"img\" + aria-label con el resumen, O aria-hidden=\"true\" + tabla .mui-sr-only hermana con los mismos datos",
     "legend": ".mui-chart__legend — flex wrap, text-xs var(--text-secondary). Obligatoria con más de una serie: la serie se distingue por texto, no solo por color",
     "legend-item": ".mui-chart__legend-item — swatch + etiqueta de la serie",
-    "swatch": ".mui-chart__swatch — cuadrado 0.75rem radius-xs; la serie vía .mui-chart__swatch--1..6 (setean --_c: var(--viz-N)) o --_c inline",
-    "bar": ".mui-chart__bar — la marca de dato: fill var(--_c, var(--viz-1)); magnitud vía --_v inline (height en --bars, width en --bars-h); min 1px para que el cero exista. --_c hereda: seteado en el canvas colorea toda la serie",
+    "swatch": ".mui-chart__swatch — cuadrado 0.75rem radius-xs; la serie vía .mui-chart__swatch--1..6 (setean --_c: var(--viz-N) y --_ca: var(--viz-N-active)) o --_c/--_ca inline; regla 4: auto-borde 1px var(--_ca)",
+    "bar": ".mui-chart__bar — la marca de dato: fill var(--_c, var(--viz-1)); magnitud vía --_v inline (height en --bars, width en --bars-h); min 1px para que el cero exista. --_c hereda: seteado en el canvas colorea toda la serie Regla 4: auto-borde 1px var(--_ca, var(--viz-1-active)) — los pares viz-N/viz-N-active viajan juntos (setear --_ca junto a --_c).",
     "axis": ".mui-chart__axis — eje X de --bars: espejo del grid del canvas (mismo gap, los ticks caen alineados bajo su barra); línea base var(--border-subtle) pegada a las barras",
     "tick": ".mui-chart__tick — etiqueta de categoría: mono 2xs var(--text-muted), ellipsis",
     "donut": ".mui-chart__donut — anillo redondo; el background conic-gradient lo arma el consumidor inline SOLO con tokens viz. Agujero vía ::after con var(--_hole, var(--surface)) (sobre --bg setear --_hole: var(--bg)); tamaño --_size (9rem) y grosor --_ring (space-6)",
@@ -69,7 +69,13 @@
     "--dur-fast",
     "--dur-moderate",
     "--ease-standard",
-    "--ease-grano"
+    "--ease-grano",
+    "--viz-1-active",
+    "--viz-2-active",
+    "--viz-3-active",
+    "--viz-4-active",
+    "--viz-5-active",
+    "--viz-6-active"
   ],
   "a11y": {
     "element": "<figure> con <figcaption class=\"mui-chart__title\"> ata título y gráfico semánticamente. El canvas es la imagen: role=\"img\" + aria-label con el RESUMEN de los datos ('Cosechas por mes: enero 40, febrero 62, …'). Si el dataset es largo, mejor canvas aria-hidden=\"true\" + <table> .mui-sr-only hermana con los datos completos",

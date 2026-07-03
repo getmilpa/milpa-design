@@ -2,10 +2,10 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "badge",
   "layer": "primitive",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "stable",
   "class": "mui-badge",
-  "summary": "Etiqueta de metadato/estado en línea. Pill mono definida por borde; default neutral transparente. Las semánticas usan texto de color + tinte *-bg + borde *-border (patrón del proof): el AA lo lleva el texto, el borde es refuerzo. No es interactiva — para acciones usar Button.",
+  "summary": "Etiqueta de metadato/estado en línea. Pill mono definida por borde; default neutral transparente. Las semánticas usan texto de color + tinte *-bg + borde *-border (patrón del proof): el AA lo lleva el texto, el borde es refuerzo. 0.2.0 suma las variantes de estabilidad del kit de versionado (--since/--deprecated/--experimental) para el ciclo de vida de API en docs versionadas — mismo patrón, mismos pares. No es interactiva — para acciones usar Button.",
   "element": [
     "span"
   ],
@@ -22,6 +22,11 @@
       "warning": ".mui-badge--warning — var(--warning) sobre var(--warning-bg), borde var(--warning-border)",
       "danger": ".mui-badge--danger — var(--danger) sobre var(--danger-bg), borde var(--danger-border)",
       "info": ".mui-badge--info — var(--info) sobre var(--info-bg), borde var(--info-border)"
+    },
+    "stability": {
+      "since": ".mui-badge--since — var(--secondary-text) sobre var(--secondary-subtle), borde var(--secondary-border). Ciclo de vida: 'Since v0.2.0' (nuevo en esta versión)",
+      "deprecated": ".mui-badge--deprecated — var(--danger) sobre var(--danger-bg), borde var(--danger-border). 'Deprecated': se va — el texto puede decir desde cuándo",
+      "experimental": ".mui-badge--experimental — var(--warning) sobre var(--warning-bg), borde var(--warning-border). 'Experimental': puede cambiar sin aviso"
     },
     "marker": {
       "dot": ".mui-badge--dot — antepone un punto currentColor (estado \"vivo\")"
@@ -62,9 +67,9 @@
     "element": "usar <span>: es contenido, no control — nunca recibe foco ni handlers",
     "aria": [
       "el punto de --dot es un pseudo decorativo; el significado SIEMPRE va en el texto del badge",
-      "no comunicar solo por color: la variante acompaña al texto ('activo', 'caído'), no lo sustituye"
+      "no comunicar solo por color: la variante acompaña al texto ('activo', 'caído', 'Deprecated'), no lo sustituye — las de estabilidad EXIGEN el texto ('Since v0.2.0', no un tinte olivo suelto)"
     ],
-    "contrast": "texto de cada variante sobre su tinte verificado ≥4.5 en dark y light — pares success|warning|danger|info sobre su *-bg, accent-text/accent-subtle y secondary-text/secondary-subtle cableados en scripts/verify-contrast.mjs (npm test, 95/95). Bordes: el de --accent pasa 3:1 sobre su tinte (accent-active/accent-subtle, en el gate); los bordes *-border de las variantes semánticas NO llegan a 3:1 contra su propio tinte — medidos con la fórmula del gate: dark success 2.09, warning 1.95, danger 1.92, info 2.31, secondary 2.38; light 1.47–1.55 — y quedan sancionados como refuerzo decorativo porque la semántica y el AA los lleva el texto (≥4.88 en todos) y las variantes exigen texto, no solo color. Badge default (fondo transparente): su borde var(--border) pasa 3:1 sobre bg (3.08 dark / 3.38 light) y sobre cualquier superficie en light (3.88); en dark sobre surface (2.17) y surface-raised (1.48) el boundary queda decorativo — el texto var(--text-secondary) conserva AA en todos los contextos (par en el gate)."
+    "contrast": "texto de cada variante sobre su tinte verificado ≥4.5 en dark y light — pares success|warning|danger|info sobre su *-bg, accent-text/accent-subtle y secondary-text/secondary-subtle cableados en scripts/verify-contrast.mjs (npm test, 95/95). Las variantes de estabilidad (0.2.0) REUTILIZAN pares ya gateados: --since = par secondary (secondary-text/secondary-subtle), --deprecated = par danger (danger/danger-bg), --experimental = par warning (warning/warning-bg) — sin pares nuevos. Bordes: el de --accent pasa 3:1 sobre su tinte (accent-active/accent-subtle, en el gate); los bordes *-border de las variantes semánticas y de estabilidad NO llegan a 3:1 contra su propio tinte — medidos con la fórmula del gate: dark success 2.09, warning 1.95, danger 1.92, info 2.31, secondary 2.38; light 1.47–1.55 — y quedan sancionados como refuerzo decorativo porque la semántica y el AA los lleva el texto (≥4.88 en todos) y las variantes exigen texto, no solo color. Badge default (fondo transparente): su borde var(--border) pasa 3:1 sobre bg (3.08 dark / 3.38 light) y sobre cualquier superficie en light (3.88); en dark sobre surface (2.17) y surface-raised (1.48) el boundary queda decorativo — el texto var(--text-secondary) conserva AA en todos los contextos (par en el gate)."
   },
   "motion": {
     "transitions": "ninguna — pieza estática",
@@ -82,6 +87,10 @@
     {
       "title": "Marca + info",
       "html": "<span class=\"mui-badge mui-badge--accent\">core</span> <span class=\"mui-badge mui-badge--secondary\">plugin</span> <span class=\"mui-badge mui-badge--info\">beta</span>"
+    },
+    {
+      "title": "Estabilidad (kit de versionado — el texto porta la semántica)",
+      "html": "<span class=\"mui-badge mui-badge--since\">Since v0.2.0</span> <span class=\"mui-badge mui-badge--deprecated\">Deprecated</span> <span class=\"mui-badge mui-badge--experimental\">Experimental</span>"
     }
   ]
 }

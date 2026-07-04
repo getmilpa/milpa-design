@@ -197,6 +197,25 @@ semánticos de la **paleta cerrada** — nacen de las rampas, como todo.
 superficies (los casos de uso son *proofs* compuestos, no CSS nuevo). El par de referencia
 (Button + Input) ya fija el patrón; el resto es repetición disciplinada bajo el mismo molde.
 
+**Taxonomía de los tres headers (0.3.0 — la plaza).** El sistema tiene tres barras superiores,
+cada una en su capa y con su contrato, y **no se mezclan entre sí**:
+- **`mui-topbar`** (`components/`) — el shell **admin**: parte del dashboard, vive con Sidebar/Rail.
+- **`mui-docs__topbar`** (`layouts/`, dentro de `mui-docs`) — el shell de **documentación
+  versionada**: switcher de versión, search ⌘K, pager.
+- **`mui-header`** (`layouts/`) — el header **público/marketing**: barra + off-canvas móvil +
+  variante `--overlay` sobre un hero. Consumido por landing, blog, saas, gallery y commerce.
+
+Los tres comparten el mismo lenguaje de off-canvas (`[data-nav-open]` en el root, `aria-expanded`
+en el toggle, scrim `aria-hidden`) pero **no se sustituyen entre sí** — cada uno resuelve un
+contexto de navegación distinto (admin / docs / sitio público).
+
+**Invariante del overlay:** `mui-header--overlay` nace transparente sobre el hero y se solidifica
+(fondo + blur + borde) al recibir `[data-scrolled]` — pero el contrato **asume un hero
+oscuro/sólido** para que el texto quede AA mientras está transparente. Sobre un hero fotográfico
+(imagen/video arbitrario) el gate **no puede garantizar contraste**: es responsabilidad del
+consumidor añadir su propio scrim (velo semi-opaco) sobre la foto antes de que el texto del header
+la cruce. Sin scrim, `--overlay` sobre foto es un uso indebido del contrato, no un bug del gate.
+
 ---
 
 ## 7. Cómo usar este documento
@@ -231,10 +250,10 @@ superficies (los casos de uso son *proofs* compuestos, no CSS nuevo). El par de 
 | `THEMING.md`                      | los 3 niveles de inyección de look & feel (cascade layers) |
 | `primitives/milpa-primitives.css` | *el grano*: Button, Field, Input, Textarea, Select, Checkbox, Radio, Switch, Badge (+variantes de estabilidad), Kbd, Avatar, Spinner, Progress, Divider — **el molde vive en el header del archivo** |
 | `primitives/milpa-*.contract.json`| contratos de las primitivas (plantilla: `milpa-button.contract.json`) |
-| `components/milpa-components.css` | *el frijol*: Tooltip, Menu, Card, Stat, Empty, Skeleton, Table, Pagination, Tabs, Breadcrumbs, Alert, Toast, Modal, Drawer, Shell/Sidebar/Topbar/PageHeader + commerce (ProductCard, Price, Rating, MediaGallery, CartLine) |
+| `components/milpa-components.css` | *el frijol*: Tooltip, Menu, Card (+`__media`), Stat, Empty, Skeleton, Table, Pagination, Tabs, Breadcrumbs, Alert, Toast, Modal, Drawer, Shell/Sidebar/Topbar/PageHeader, Byline + commerce (ProductCard, Price, Rating, MediaGallery, CartLine) |
 | `components/milpa-*.contract.json`| contratos de los componentes (comportamiento JS del consumidor en `a11y.behavior`) |
 | `artifacts/milpa-artifacts.css`   | *el elote*: Code (tokens `--syntax-*`), Terminal, CodeGroup, Chart (`--viz-*`), Quote, Callout, Api, Steps, FileTree, Prose, Toc, Search + kit de versionado (VersionSwitcher, VersionBanner, Changelog) |
-| `layouts/milpa-layouts.css`       | *la parcela*: Docs (shell de documentación versionada), Page/Section/Container, Hero, FeatureGrid, CtaBand, Pricing, Faq, Testimonial, Footer, MediaGrid, Lightbox |
+| `layouts/milpa-layouts.css`       | *la parcela*: Docs (shell de documentación versionada), Header (el header público — barra + off-canvas + overlay), Page/Section/Container, Hero, FeatureGrid, CtaBand, Pricing, Faq, Testimonial, Footer, MediaGrid, Lightbox |
 | `proof/docs.html` · `blog` · `commerce` · `gallery` · `saas` | battle-tests de casos de uso — compuestos SOLO del sistema |
 | `proof/themed.html` + `themed-skin.css` | la prueba del contrato de theming: el blog con el skin "Nopal" (193/193) |
 | `logo/*`                          | kit de logo: símbolo Grano, wordmark grano-i, lockups h/v, app icon (mono-oro) |

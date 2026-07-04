@@ -17,7 +17,7 @@ converger:** el framework y el DS avanzan en paralelo y se reencuentran en una *
 El framework *consume* `@milpa/design@x.y.z`. **Nadie edita los internals del otro**; se cambian
 cosas vía bump semver + nota de compat. (Esto es Milpa aplicado a sí mismo: contract-first.)
 
-## 2. Estado actual (v0.2)
+## 2. Estado actual (v0.3)
 
 ✅ **Paleta cerrada y verificada.** `oro` (primario/marca) + `olivo` (secundario / la milpa viva,
 OKLCH ~124°) + `tierra` (neutro); `cielo` = `info`. Dark-first. Tokens DTCG + salida CSS + preset
@@ -43,13 +43,23 @@ todo el CSS en `@layer milpa.*` + `theme.contract.json` generado + `THEMING.md` 
 `verify-theme.mjs`. Gate: **193/193 AA · 63 contratos**. Seis proofs (docs/blog/commerce/
 gallery/saas/themed — el skin "Nopal" pasa el gate sin tocar bundles). Landing en inglés.
 
-⚠️ **Falta:** Storybook formal (T5 — los seis proofs cubren v0.2).
+✅ **0.3.0 — la plaza (T9 cumplido, backlog A/B/E):** el header público **`mui-header`** (barra +
+off-canvas + variante overlay — el tercer header, junto a `mui-topbar` admin y `mui-docs__topbar`
+docs), migrado en landing/blog/saas/gallery/commerce (retiran sus headers bespoke); contenido/media
+(`mui-card__media` cover edge-to-edge, `mui-byline` avatar+nombre+meta reusando `mui-avatar`); media
+slots `:is(img, svg, picture)` en card/product-card/media-gallery/media-grid; el gate `@layer` pasa
+de substring a **brace-walk** (`scripts/layer-guard.mjs` + test propio en `npm test`); el lightbox
+del gallery **respeta el filtro activo** (contador n/filtrados). Gate: **193/193 AA · 65
+contratos**. AA-pairs audit de cierre: **0 pares nuevos** — mui-header/mui-byline reusan
+`text`/`text-muted` sobre `bg`/`surface`, ya cubiertos.
+
+⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.3). Backlog 0.4 abajo (§4).
 
 ## 3. Cómo correr
 
 ```bash
 npm install
-npm test               # triple gate: 193 AA + governance (molde + @layer + 63 contratos) + drift
+npm test               # 193 AA + governance (molde + @layer brace-walk + 65 contratos) + drift
 npm run proof          # sirve el repo en http://localhost:4321 (proof/*.html, landing/)
 npm run build          # genera dist/ + theme.contract.json desde tokens/milpa-tokens.json
 npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.json
@@ -76,22 +86,50 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
 - **T5 · Storybook** (o seguir extendiendo `proof/`) para estados exhaustivos por pieza. Los
   seis proofs de 0.2.0 ya battle-testean la composición completa por caso de uso.
 - **T9 · Backlog 0.3 — lo que los battle-tests destaparon** (gaps reales reportados por los
-  builders de los proofs, por frecuencia de dolor):
-  1. **Header de marketing/sitio** compartido (hoy landing, blog, saas y commerce lo re-escriben;
-     `mui-topbar` es del shell admin y `mui-docs__topbar` del shell docs).
-  2. `mui-card__media` (cover edge-to-edge en cards) y `mui-byline` (avatar+nombre+fecha ×3 usos).
-  3. Media slots como `:is(img, svg, picture)` en product-card/media-gallery/media-grid/lightbox
-     (hoy `img`-only; los SVG token-driven necesitan plomería del consumidor).
-  4. Qty stepper extraíble (`mui-input-group--stepper`) — hoy vive solo en cart-line.
-  5. `mui-tabs` variante pill/filtro (con su patrón ARIA de panel único documentado).
-  6. Pager standalone (hoy `mui-docs__pager` está atado al shell); `mui-stat --lg`; utilidad
-     stack/cluster; drawer variante docked/inline (demos y paneles laterales estáticos);
-     `mui-chart --line` con fila de ticks HTML (el `<text>` del SVG se distorsiona);
+  builders de los proofs, por frecuencia de dolor). **Clusters A, B y E ejecutados en 0.3.0 «la
+  plaza» (ver §2); C y D quedan abiertos para 0.4:**
+  1. ~~**Header de marketing/sitio** compartido (hoy landing, blog, saas y commerce lo
+     re-escriben; `mui-topbar` es del shell admin y `mui-docs__topbar` del shell docs).~~ ✅
+     **Hecho (A) — `mui-header`**, 0.3.0.
+  2. ~~`mui-card__media` (cover edge-to-edge en cards) y `mui-byline` (avatar+nombre+fecha ×3
+     usos).~~ ✅ **Hecho (B)**, 0.3.0.
+  3. ~~Media slots como `:is(img, svg, picture)` en product-card/media-gallery/media-grid/
+     lightbox (hoy `img`-only; los SVG token-driven necesitan plomería del consumidor).~~ ✅
+     **Hecho (B)** en card/product-card/media-gallery/media-grid, 0.3.0 — `mui-hero__media` y
+     `mui-cart-line__media` quedan `img`-only a propósito (ver hallazgo nuevo #10 abajo).
+  4. **C · abierto.** Qty stepper extraíble (`mui-input-group--stepper`) — hoy vive solo en
+     cart-line.
+  5. **C · abierto.** `mui-tabs` variante pill/filtro (con su patrón ARIA de panel único
+     documentado).
+  6. **D · abierto.** Pager standalone (hoy `mui-docs__pager` está atado al shell); `mui-stat
+     --lg`; utilidad stack/cluster; drawer variante docked/inline (demos y paneles laterales
+     estáticos); `mui-chart --line` con fila de ticks HTML (el `<text>` del SVG se distorsiona);
      slot de mantra propio en `mui-footer` para productos de terceros; swap JS de referencia
      para thumbs de `mui-media-gallery` (documentado, sin implementar en el proof).
-  7. Gate: endurecer el check de @layer en governance (hoy es substring — un brace-walk
+  7. ~~Gate: endurecer el check de @layer en governance (hoy es substring — un brace-walk
      cazaría reglas que queden FUERA de la capa); el lightbox del proof gallery cicla piezas
-     filtradas (counter "n / 12") — decidir si el contrato debe prescribir respetar el filtro.
+     filtradas (counter "n / 12") — decidir si el contrato debe prescribir respetar el filtro.~~
+     ✅ **Hecho (E)** — brace-walk en `scripts/layer-guard.mjs` (+ test propio en `npm test`) y el
+     lightbox del gallery ya respeta el filtro activo, 0.3.0.
+  8. **Nuevo (descubierto en 0.3, para 0.4) — overflow horizontal del off-canvas también afecta al
+     shell de docs.** El panel `position:fixed` fuera de pantalla (16rem) del off-canvas extiende
+     el scroll horizontal del documento; el fix de `mui-header` (`overflow-x: clip` en la raíz de
+     la página, aplicado en los proofs migrados) **no cubre `docs.html`** — su shell tiene el mismo
+     patrón de off-canvas y mide ~208px de overflow @móvil sin el clip. Arreglar el shell de docs
+     Y evaluar reemplazar el patrón por un `<dialog>` (top layer nativo, no extiende el scroll del
+     documento) para que el consumidor no tenga que acordarse del `overflow-x:clip`.
+  9. **Nuevo (descubierto en 0.3, para 0.4) — `mui-header` no tiene patrón para acciones que no
+     caben en móvil.** El proof de commerce, al colapsar a off-canvas ≤880px, oculta el buscador
+     junto con el badge del carrito y **pierde la búsqueda en móvil sin sustituto** (queda
+     documentado como "honesto" en el proof, no resuelto). Evaluar un toggle de ícono de búsqueda
+     (expande un input inline) o mover el buscador adentro del panel off-canvas como slot propio
+     del contrato.
+  10. **Nuevo (descubierto en 0.3, para 0.4) — combinador descendiente en los media slots compone
+      hover scale con `<picture>`.** `:is(img, svg, picture)` usa combinador **descendiente**: si
+      el consumidor arma `<picture><img></picture>`, el selector matchea AMBOS elementos y el
+      hover-scale se aplica dos veces (≈1.061 en vez de ≈1.03). Bug **latente** — ningún proof usa
+      `<picture>` hoy, así que no se disparó en 0.3. Fix futuro: combinador **hijo** (`>`) donde el
+      slot pueda envolver un `<picture>`.
 - ~~**T6 · Publish `@milpa/design@0.1.0`**~~ ✅ **PUBLICADO** (2026-07-02T05:00Z, por
   `teamx-devkit`): `npm i @milpa/design` — 59 archivos, 88 kB, los 8 exports verificados con
   install real. Flujo de release: `npm run release` (token en `.env` gitignoreado +

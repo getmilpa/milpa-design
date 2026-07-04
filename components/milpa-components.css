@@ -564,6 +564,22 @@
 /* panel enfocable (tabindex=0 cuando no tiene contenido focusable) */
 .mui-tabs__panel:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
+/* variante pill — sin línea base; el fill de la seleccionada ES el indicador (no el
+   subrayado). Sirve para tabs de contenido o para filtros (patrón de panel único: ver
+   a11y.behavior del contrato). */
+.mui-tabs--pill { border-bottom: 0; }
+.mui-tabs--pill .mui-tabs__tab {
+  border-bottom: 0; margin-bottom: 0;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+}
+.mui-tabs--pill .mui-tabs__tab:hover { background: var(--surface); color: var(--text); }
+.mui-tabs--pill .mui-tabs__tab[aria-selected="true"] {
+  background: var(--accent-subtle); color: var(--accent-text);
+  border-bottom-color: transparent;
+}
+.mui-tabs--pill .mui-tabs__tab:focus-visible { outline-offset: 2px; }
+
 /* ---------- Breadcrumbs · .mui-breadcrumbs ----------
    <nav aria-label="breadcrumb"> + <ol>. El separador "/" es CSS puro
    (mono, muted, alt vacío): decorativo, invisible para lectores de

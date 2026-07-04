@@ -9,6 +9,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { LAYER_ORDER } from './contrast-pairs.mjs';
+import { firstUnlayeredRule } from './layer-guard.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CSS_FILES = ['primitives/milpa-primitives.css', 'components/milpa-components.css', 'artifacts/milpa-artifacts.css', 'layouts/milpa-layouts.css'];
@@ -73,7 +74,9 @@ console.log('\n@layer');
 for (const [file, layer] of Object.entries(LAYERED)) {
   const raw = readFileSync(join(root, file), 'utf8');
   raw.includes(LAYER_ORDER) ? pass(`${file}: declara el orden canónico`) : fail(`${file}: falta la declaración @layer canónica`);
-  raw.includes(`@layer ${layer} {`) ? pass(`${file}: envuelto en @layer ${layer}`) : fail(`${file}: no envuelve sus reglas en @layer ${layer}`);
+  const leftover = firstUnlayeredRule(raw, layer);
+  leftover === '' ? pass(`${file}: toda regla vive dentro de @layer ${layer}`)
+                  : fail(`${file}: regla FUERA de @layer ${layer} → ${leftover.slice(0, 80)}…`);
 }
 
 // contratos: JSON válido + campos requeridos + tokens declarados existentes

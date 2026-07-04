@@ -1,0 +1,28 @@
+{
+  "name": "header",
+  "layer": "layout",
+  "version": "0.3.0",
+  "class": "mui-header",
+  "summary": "Public/marketing site header: sticky bar with brand, primary nav and actions; collapses to an off-canvas panel on mobile; optional overlay variant that sits over a hero and solidifies on scroll. The third header of the system, distinct from mui-topbar (admin) and mui-docs__topbar (docs).",
+  "slots": {
+    "brand": ".mui-header__brand — wordmark/logo link (left)",
+    "nav": ".mui-header__nav — <nav aria-label=\"primary\"> of links; becomes the off-canvas panel on mobile",
+    "actions": ".mui-header__actions — buttons, theme toggle, CTA (right)",
+    "toggle": ".mui-header__toggle — hamburger button; aria-expanded + aria-controls point to the nav id",
+    "scrim": ".mui-header__scrim — drawer veil, visible only under [data-nav-open]"
+  },
+  "variants": {
+    "overlay": ".mui-header--overlay — transparent over a hero; gains solid bg + border via [data-scrolled]"
+  },
+  "states": {
+    "nav-open": "[data-nav-open] on .mui-header — off-canvas panel + scrim shown (consumer JS; the toggle carries aria-expanded)",
+    "scrolled": "[data-scrolled] on .mui-header--overlay — solidified after a scroll threshold (consumer JS)"
+  },
+  "tokens": ["--bg", "--border-subtle", "--text", "--space-4", "--z-sticky", "--z-drawer", "--z-backdrop", "--shadow-md", "--dur-moderate", "--ease-grano"],
+  "a11y": {
+    "contrast": "brand/nav text is --text on a translucent --bg (gated text/bg). The overlay variant does NOT auto-guarantee AA over arbitrary hero art — see invariant.",
+    "keyboard": "Tab order brand → nav → actions; the toggle opens the panel; Esc closes it. Focus moves to the first nav link on open and returns to the toggle on close.",
+    "behavior": "Consumer JS toggles [data-nav-open] on .mui-header and the toggle's aria-expanded together; clicking the scrim closes; the panel gets [inert] while closed. The overlay's JS sets [data-scrolled] past a scroll threshold. Reduced-motion: transform/opacity collapse to one frame via the global contract.",
+    "invariant": "The overlay variant assumes a hero dark/solid enough to keep text AA; over photographic heroes the consumer must add a scrim."
+  }
+}

@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "stat",
   "layer": "component",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "status": "stable",
   "class": "mui-stat",
   "summary": "KPI de dashboard: label mono uppercase (la máquina), valor display grande (la cosecha), delta direccional y meta. Pensado para componer dentro de .mui-card__body sobre --surface o --bg — NO dentro de .mui-card--raised en dark (muted/success/danger no alcanzan AA sobre surface-raised; medido 3.88/4.11/3.63).",
@@ -22,6 +22,10 @@
       "direccion": "--up / --down — SOLO orientan la flecha ▲/▼ (::before, clip-path, currentColor); no ponen color",
       "valencia": "--positive (var(--success)) / --negative (var(--danger)) — el color es un juicio, no una dirección: 'tiempo de build a la baja' = --down --positive",
       "nota": "dirección y valencia van desacopladas a propósito (T8.1); combiná una de cada eje. El significado nunca viaja solo en el color: signo en el texto + .mui-sr-only si hace falta ('a la baja, mejora')."
+    },
+    "size": {
+      "default": "value en var(--text-3xl) — el KPI estándar",
+      "lg": ".mui-stat--lg — valor a mayor escala para hero-stats/KPIs destacados: solo .mui-stat__value sube a var(--text-4xl); label, delta y meta no cambian"
     }
   },
   "states": {
@@ -38,6 +42,7 @@
     "--text-2xs",
     "--text-xs",
     "--text-3xl",
+    "--text-4xl",
     "--weight-regular",
     "--weight-medium",
     "--leading-tight",
@@ -68,6 +73,10 @@
     {
       "title": "KPI a la baja que ES mejora (--down --positive), dentro de una card",
       "html": "<div class=\"mui-card mui-card--compact\"><div class=\"mui-card__body\"><div class=\"mui-stat\"><span class=\"mui-stat__label\">Errores de build</span><span class=\"mui-stat__value\">3</span><span class=\"mui-stat__delta mui-stat__delta--down mui-stat__delta--positive\">−40%<span class=\"mui-sr-only\"> a la baja, mejora</span></span></div></div></div>"
+    },
+    {
+      "title": "Hero-stat destacado (--lg)",
+      "html": "<div class=\"mui-stat mui-stat--lg\"><span class=\"mui-stat__label\">Restore-verified uptime</span><span class=\"mui-stat__value\">99.99%</span><span class=\"mui-stat__delta mui-stat__delta--up mui-stat__delta--positive\">+0.02%<span class=\"mui-sr-only\"> al alza</span></span><span class=\"mui-stat__meta\">last 90 days</span></div>"
     }
   ]
 }

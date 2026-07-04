@@ -28,6 +28,11 @@ html, body { overflow-x: clip; }
 .troje-logos { margin-block-start: var(--space-6); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted); }
 .troje-dash { width: 100%; }
 .troje-dash .mui-card__body { display: grid; gap: var(--space-5); }
+/* preview: main card + docked aside — persistent 2-column region, no toggle */
+.troje-preview { display: grid; grid-template-columns: 1fr; gap: var(--space-5); margin-block-start: var(--space-8); }
+@media (min-width: 60rem) { .troje-preview { grid-template-columns: 1fr 20rem; } }
+.troje-preview__main { width: 100%; }
+.troje-preview__log { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-secondary); }
 /* standalone testimonial (no mui-quote/mui-testimonial — just a quote + mui-byline) */
 .troje-review { max-width: 42rem; margin-block-start: var(--space-8); }
 .troje-review__quote { margin: 0 0 var(--space-3); font-size: var(--text-lg); line-height: var(--leading-relaxed); color: var(--text-secondary); }
@@ -228,7 +233,7 @@ html, body { overflow-x: clip; }
       <p class="mui-section__lede">Live numbers from every field Troje protects — drilled, verified, and better every quarter.</p>
 
       <div class="troje-grid troje-stats">
-        <div class="mui-stat">
+        <div class="mui-stat mui-stat--lg">
           <span class="mui-stat__label">Restore-verified uptime</span>
           <span class="mui-stat__value">99.99%</span>
           <span class="mui-stat__delta mui-stat__delta--up mui-stat__delta--positive">+0.02%<span class="mui-sr-only"> up, improving</span></span>
@@ -246,6 +251,46 @@ html, body { overflow-x: clip; }
           <span class="mui-stat__delta mui-stat__delta--down mui-stat__delta--positive">−12s<span class="mui-sr-only"> down, improving</span></span>
           <span class="mui-stat__meta">p50 · full app restore</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PREVIEW (docked panel, persistent — not a modal) ============ -->
+  <section class="mui-section mui-section--tight" aria-labelledby="h-preview">
+    <div class="mui-container">
+      <p class="mui-section__kicker">inside your dashboard</p>
+      <h2 class="mui-section__title" id="h-preview">The drill log rides along, not on top.</h2>
+      <p class="mui-section__lede">The restore-drill panel is a permanent part of the layout — a docked region, never a dialog you have to dismiss.</p>
+
+      <div class="troje-preview">
+        <div class="mui-card troje-preview__main">
+          <header class="mui-card__header">
+            <p class="mui-card__title">Granary — production</p>
+            <span class="mui-badge mui-badge--success mui-badge--dot">protected</span>
+          </header>
+          <div class="mui-card__body">
+            <p>Every module, event stream and artifact — harvested continuously, restored on command.</p>
+            <div class="mui-cluster mui-cluster--sm">
+              <span class="mui-badge mui-badge--accent">SOC 2 Type II</span>
+              <span class="mui-badge">AES-256</span>
+              <span class="mui-badge">Per-module keys</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="mui-drawer mui-drawer--docked" aria-label="Restore drill log">
+          <header class="mui-drawer__header">
+            <h3 class="mui-drawer__title">Restore drills</h3>
+          </header>
+          <div class="mui-drawer__body">
+            <p class="mui-stat__meta">nightly · every field</p>
+            <ul class="troje-preview__log">
+              <li>04:02 — kiosko-prod restored in 34s ✓</li>
+              <li>04:01 — cafetal-prod restored in 41s ✓</li>
+              <li>04:00 — nixtamal-prod restored in 29s ✓</li>
+            </ul>
+          </div>
+        </aside>
       </div>
     </div>
   </section>

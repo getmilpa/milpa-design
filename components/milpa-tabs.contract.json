@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "tabs",
   "layer": "component",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "status": "stable",
   "class": "mui-tabs",
   "summary": "Navegación entre vistas hermanas dentro de una página. Tablist definido por una línea base (border-subtle); la pestaña activa la marca el subrayado oro vía aria-selected — sin fill, sin clase de estado. El indicador de 2px pisa la línea del tablist (margin-bottom -1px). Pensado para bg/surface.",
@@ -22,7 +22,8 @@
   "variants": {
     "size": {
       "md": "default (única en v0) — 2.5rem / text-sm / weight-medium (prop privada --_h, alturas del molde)"
-    }
+    },
+    "pill": ".mui-tabs--pill — pestañas con forma de pill en vez del subrayado; seleccionada = fondo accent-subtle + texto accent-text (el fill es el indicador). Aplica a tabs de contenido o a filtros."
   },
   "states": {
     "hover": ":hover — color var(--text); el indicador no aparece en hover (solo la selección lo enciende)",
@@ -63,7 +64,7 @@
       "ArrowLeft/ArrowRight mueven el foco entre tabs (con wrap); Home/End van a los extremos",
       "Enter/Space activan el tab enfocado (activación manual, recomendada si el panel carga datos)"
     ],
-    "behavior": "JS del consumidor: (1) roving tabindex — el tab seleccionado lleva tabindex=0 y el resto tabindex=-1; (2) listeners de ArrowLeft/ArrowRight/Home/End que mueven el foco (saltando disabled, con wrap); (3) al activar: aria-selected=true en el tab nuevo / false en el anterior, hidden fuera del panel nuevo / puesto en los demás, y actualizar el roving tabindex. Activación automática al enfocar es válida solo si el cambio de panel es instantáneo. Tabs verticales: aria-orientation=\"vertical\" + ArrowUp/ArrowDown (el CSS v0 es horizontal).",
+    "behavior": "JS del consumidor: (1) roving tabindex — el tab seleccionado lleva tabindex=0 y el resto tabindex=-1; (2) listeners de ArrowLeft/ArrowRight/Home/End que mueven el foco (saltando disabled, con wrap); (3) al activar: aria-selected=true en el tab nuevo / false en el anterior, hidden fuera del panel nuevo / puesto en los demás, y actualizar el roving tabindex. Activación automática al enfocar es válida solo si el cambio de panel es instantáneo. Tabs verticales: aria-orientation=\"vertical\" + ArrowUp/ArrowDown (el CSS v0 es horizontal). Patrón de filtro (panel único): todas las role=tab de un role=tablist apuntan a UNA región role=tabpanel vía aria-controls; seleccionar una tab FILTRA los ítems de esa región vía [hidden] (no cambia de panel); el contador/región se actualiza. Teclado: roving tabindex (solo la activa tabbable), ←/→ mueven selección, Home/End al extremo; el JS del consumidor sincroniza aria-selected + el filtro. Caveat: role=tab implica cambiar de panel — para un filtro (elegir uno de N que filtra en su lugar) es un estiramiento aceptado del patrón, elegido por familiaridad sobre un toolbar de aria-pressed.",
     "contrast": "accent-text y accent (indicador, boundary ≥3) verificados sobre bg y surface en ambos temas; par accent/surface en el gate de scripts/verify-contrast.mjs (6.77 dark / 3.92 light)"
   },
   "motion": {

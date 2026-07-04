@@ -194,15 +194,14 @@
 }
 .mui-docs__toc-inline > .mui-toc { padding: var(--space-2) var(--space-3) var(--space-3); }
 
-/* pager — prev/next al pie del artículo. Cards silenciosas (borde
-   sutil, regla 1); el hover afirma el boundary (border-strong ≥3 sobre
-   --bg). Sin prev, --next se ancla solo a la columna 2. */
-.mui-docs__pager {
+/* pager — navegación prev/next entre páginas hermanas (docs, blog, cualquier
+   secuencia). Grid de 2: sin prev, --next se ancla solo a la columna 2. Card
+   silenciosa (idioma de la casa: la definición la da el borde). */
+.mui-pager {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
-  margin-block-start: var(--space-10);
 }
-.mui-docs__pager-link {
+.mui-pager__link {
   display: block;
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--border-subtle);
@@ -210,21 +209,23 @@
   text-decoration: none;
   transition: border-color var(--dur-fast) var(--ease-standard);
 }
-.mui-docs__pager-link:hover { border-color: var(--border-strong); }
-.mui-docs__pager-link:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-.mui-docs__pager-link--next { grid-column: 2; text-align: end; }
-.mui-docs__pager-dir {
+.mui-pager__link:hover { border-color: var(--border-strong); }
+.mui-pager__link:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-pager__link--next { grid-column: 2; text-align: end; }
+.mui-pager__dir {
   display: block; margin-block-end: var(--space-1);
   font-family: var(--font-mono); font-size: var(--text-2xs);
   text-transform: uppercase; letter-spacing: var(--tracking-wide);
   color: var(--text-muted);
 }
-.mui-docs__pager-title {
+.mui-pager__title {
   display: block;
   font-family: var(--font-display); font-size: var(--text-sm);
   font-weight: var(--weight-medium); line-height: var(--leading-snug);
   color: var(--accent-text);
 }
+/* el shell docs mantiene su separación del artículo */
+.mui-docs .mui-pager { margin-block-start: var(--space-10); }
 
 /* scrim — velo del drawer móvil; existe solo con [data-nav-open] ≤880px */
 .mui-docs__scrim { display: none; }
@@ -435,7 +436,7 @@
    El __item habla el idioma de .mui-card pero es pieza propia — sin
    fill, sin sombra: borde border-subtle + radius-lg sobre var(--bg).
    Interactivo SOLO como <a> completo (hover afirma el boundary,
-   precedente .mui-docs__pager-link). */
+   precedente .mui-pager__link). */
 .mui-feature-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
@@ -526,7 +527,7 @@ a.mui-feature-grid__item:focus-visible {
 
 /* ---------- Pricing · .mui-pricing ----------
    La feria de planes: grilla equal-height donde cada plan es una card
-   silenciosa (precedente .mui-docs__pager-link — idioma de card sin
+   silenciosa (precedente .mui-pager__link — idioma de card sin
    redeclarar .mui-card) y el CTA ancla al fondo con margin auto. El
    plan destacado se marca con [data-featured] (hook de layout
    documentado): borde var(--accent) — la semántica "recomendado" la

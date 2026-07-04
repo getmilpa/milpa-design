@@ -1,0 +1,70 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "pager",
+  "layer": "layout",
+  "version": "0.5.0",
+  "status": "stable",
+  "class": "mui-pager",
+  "summary": "Navegación prev/next entre páginas hermanas — docs, blog, cualquier secuencia. Grid de 2 columnas: cards silenciosas (borde border-subtle, regla 1: la definición la da el borde) que el hover afirma con border-strong. Sin prev, --next se ancla solo a la columna 2 (el hueco queda a la izquierda). Pieza extraída del shell docs (mui-docs__pager) para reuso — el consumidor aporta su propio margin-block-start (ver .mui-docs .mui-pager).",
+  "element": [
+    "nav (.mui-pager — <nav aria-label> envolviendo los dos <a>.mui-pager__link)"
+  ],
+  "anatomy": {
+    "root": ".mui-pager — <nav aria-label>: display grid, grid-template-columns 1fr 1fr, gap space-3. Sin margin propio — el consumidor decide su separación (p.ej. .mui-docs .mui-pager: margin-block-start space-10)",
+    "link": "a.mui-pager__link — card silenciosa: display block, padding space-3/space-4, border 1px border-subtle, radius-md, sin text-decoration; hover → border-strong",
+    "link-next": ".mui-pager__link--next — grid-column 2 + text-align end: con prev ocupa su mitad natural; sin prev queda anclado a la derecha y el hueco a la izquierda",
+    "dir": ".mui-pager__dir — rótulo mono 2xs uppercase tracking-wide var(--text-muted): \"← Anterior\" / \"Siguiente →\"",
+    "title": ".mui-pager__title — text-sm weight-medium var(--accent-text), font-display, leading-snug"
+  },
+  "variants": {
+    "link": {
+      "prev": ".mui-pager__link (sin modificador) — ocupa la columna 1 cuando está presente",
+      "next": ".mui-pager__link--next — text-align end + grid-column 2"
+    }
+  },
+  "states": {
+    "hover": ".mui-pager__link:hover — borde border-strong",
+    "focus": ".mui-pager__link:focus-visible — outline 2px var(--focus) offset 2px"
+  },
+  "tokens": [
+    "--space-1",
+    "--space-3",
+    "--space-4",
+    "--border-subtle",
+    "--border-strong",
+    "--radius-md",
+    "--dur-fast",
+    "--ease-standard",
+    "--focus",
+    "--font-mono",
+    "--text-2xs",
+    "--tracking-wide",
+    "--text-muted",
+    "--font-display",
+    "--text-sm",
+    "--weight-medium",
+    "--leading-snug",
+    "--accent-text"
+  ],
+  "a11y": {
+    "element": "envolver los dos .mui-pager__link en <nav aria-label> (p.ej. \"Paginación\") — landmark distinguible de otros nav de la página",
+    "keyboard": [
+      "cada .mui-pager__link es foco nativo (es un <a>); :focus-visible outline 2px var(--focus) offset 2px"
+    ],
+    "contrast": "pares del gate: __title var(--accent-text) ≥4.5 sobre el fondo del consumidor y __dir var(--text-muted) ≥4.5 sobre el mismo fondo; el borde border-subtle en reposo es decorativo (exento de 1.4.11) y el hover border-strong ≥3 sobre el fondo"
+  },
+  "motion": {
+    "transitions": "border-color var(--dur-fast) var(--ease-standard) en __link:hover",
+    "reducedMotion": "contrato global de milpa-motion.css: la transición de color no produce movimiento — no requiere excepción"
+  },
+  "examples": [
+    {
+      "title": "Prev + next",
+      "html": "<nav class=\"mui-pager\" aria-label=\"Paginación\"><a class=\"mui-pager__link\" href=\"/docs/0.2/introduccion\"><span class=\"mui-pager__dir\">← Anterior</span><span class=\"mui-pager__title\">Introducción</span></a><a class=\"mui-pager__link mui-pager__link--next\" href=\"/docs/0.2/tokens\"><span class=\"mui-pager__dir\">Siguiente →</span><span class=\"mui-pager__title\">Tokens</span></a></nav>"
+    },
+    {
+      "title": "Solo next (primera página de la secuencia — sin prev, --next se ancla a la derecha)",
+      "html": "<nav class=\"mui-pager\" aria-label=\"Paginación\"><a class=\"mui-pager__link mui-pager__link--next\" href=\"/docs/0.2/tokens\"><span class=\"mui-pager__dir\">Siguiente →</span><span class=\"mui-pager__title\">Tokens</span></a></nav>"
+    }
+  ]
+}

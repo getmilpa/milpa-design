@@ -17,7 +17,7 @@ converger:** el framework y el DS avanzan en paralelo y se reencuentran en una *
 El framework *consume* `@milpa/design@x.y.z`. **Nadie edita los internals del otro**; se cambian
 cosas vía bump semver + nota de compat. (Esto es Milpa aplicado a sí mismo: contract-first.)
 
-## 2. Estado actual (v0.4)
+## 2. Estado actual (v0.5)
 
 ✅ **Paleta cerrada y verificada.** `oro` (primario/marca) + `olivo` (secundario / la milpa viva,
 OKLCH ~124°) + `tierra` (neutro); `cielo` = `info`. Dark-first. Tokens DTCG + salida CSS + preset
@@ -66,14 +66,29 @@ categorías. Ambas piezas son **variantes**, no piezas nuevas: contratos siguen 
 **193/193 AA** — audit de cierre: **0 pares nuevos** (el stepper reusa `text`/`text-secondary`
 sobre `bg`/`surface`; la pill seleccionada reusa `accent-text`/`accent-subtle`).
 
-⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.4). Backlog abajo (§4): cluster D y los
-hallazgos F (#8/#9/#10) siguen abiertos.
+✅ **0.5.0 — la mano (T9 cluster D cumplido, los 7 items):** `mui-pager` standalone (extraído de
+`mui-docs__pager` — grid de 2 columnas, cards silenciosas `border-subtle`→`border-strong`);
+`mui-stack`/`mui-cluster` (piezas nuevas: ritmo vertical y agrupación que envuelve, sin color
+propio, gap `space-2`/`space-4`/`space-6` por `--sm`/default/`--lg`); `mui-stat --lg` (solo el
+valor sube a `text-4xl`); `mui-drawer --docked` (misma piel sobre `<aside>` estático — panel
+persistente, NO modal: sin backdrop/foco-trap/Esc/`[open]`, contrato documenta `docked ≠ dialog`);
+`mui-chart --line` + fila de ticks en HTML (`__ticks`/`__tick`, el `<text>` SVG se distorsiona
+bajo el viewBox); `mui-footer` documenta `__mantra` como slot GENÉRICO de tagline de producto (no
+hardcodeado a Milpa); `mui-media-gallery` documenta el swap de thumbs (click → cambia `__main` +
+mueve `aria-current`, nombre accesible por tag) con el JS de referencia cableado en
+`proof/commerce.html`. Contratos **65 → 68** (nuevos `mui-pager`/`mui-stack`/`mui-cluster`; el
+resto — stat/drawer/chart/footer/media-gallery — son variantes/behaviors). Gate: **193/193 AA** —
+audit de cierre: **0 pares nuevos** (todo reusa pares ya cubiertos: `accent-text`/`text-muted`
+sobre `bg`/`surface`, `text`/`surface`, `--viz-*`).
+
+⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.5). Backlog abajo (§4): los hallazgos F
+(#8/#9/#10) y los 2 Minors diferidos de 0.3.0 siguen abiertos — nada de cluster D queda pendiente.
 
 ## 3. Cómo correr
 
 ```bash
 npm install
-npm test               # 193 AA + governance (molde + @layer brace-walk + 65 contratos) + drift
+npm test               # 193 AA + governance (molde + @layer brace-walk + 68 contratos) + drift
 npm run proof          # sirve el repo en http://localhost:4321 (proof/*.html, landing/)
 npm run build          # genera dist/ + theme.contract.json desde tokens/milpa-tokens.json
 npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.json
@@ -102,7 +117,8 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
   seis proofs de 0.2.0 ya battle-testean la composición completa por caso de uso.
 - **T9 · Backlog — lo que los battle-tests destaparon** (gaps reales reportados por los
   builders de los proofs, por frecuencia de dolor). **Clusters A, B y E ejecutados en 0.3.0 «la
-  plaza»; C ejecutado en 0.4.0 «el trato» (ver §2); D queda abierto:**
+  plaza»; C ejecutado en 0.4.0 «el trato»; D ejecutado en 0.5.0 «la mano» (ver §2) — los cinco
+  clusters cerrados; quedan los hallazgos F y los 2 Minors de 0.3 (abajo):**
   1. ~~**Header de marketing/sitio** compartido (hoy landing, blog, saas y commerce lo
      re-escriben; `mui-topbar` es del shell admin y `mui-docs__topbar` del shell docs).~~ ✅
      **Hecho (A) — `mui-header`**, 0.3.0.
@@ -124,11 +140,17 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
      fill es el indicador) + el patrón de filtro de panel único en `a11y.behavior` del contrato
      (todas las tabs de un tablist → una región `tabpanel` vía `aria-controls`, filtro vía
      `[hidden]`, roving tabindex); el gallery lo estrena.
-  6. **D · abierto.** Pager standalone (hoy `mui-docs__pager` está atado al shell); `mui-stat
-     --lg`; utilidad stack/cluster; drawer variante docked/inline (demos y paneles laterales
-     estáticos); `mui-chart --line` con fila de ticks HTML (el `<text>` del SVG se distorsiona);
-     slot de mantra propio en `mui-footer` para productos de terceros; swap JS de referencia
-     para thumbs de `mui-media-gallery` (documentado, sin implementar en el proof).
+  6. ~~**D · Pager standalone** (hoy `mui-docs__pager` está atado al shell); `mui-stat --lg`;
+     utilidad stack/cluster; drawer variante docked/inline (demos y paneles laterales estáticos);
+     `mui-chart --line` con fila de ticks HTML (el `<text>` del SVG se distorsiona); slot de
+     mantra propio en `mui-footer` para productos de terceros; swap JS de referencia para thumbs
+     de `mui-media-gallery` (documentado, sin implementar en el proof).~~ ✅ **Hecho (D)**,
+     0.5.0 — los 7 items: `mui-pager` extraído del shell docs; `mui-stack`/`mui-cluster` (piezas
+     nuevas, sin color); `mui-stat --lg`; `mui-drawer --docked` (sobre `<aside>`, NO modal,
+     `docked ≠ dialog` documentado en el contrato); `mui-chart --line` + `__ticks`/`__tick` HTML;
+     `mui-footer__mantra` como slot genérico de tagline; swap de thumbs de `mui-media-gallery`
+     con JS de referencia cableado en `proof/commerce.html`. Contratos **65 → 68** (nuevos
+     `mui-pager`/`mui-stack`/`mui-cluster`). AA-pairs audit de cierre: **0 pares nuevos**.
   7. ~~Gate: endurecer el check de @layer en governance (hoy es substring — un brace-walk
      cazaría reglas que queden FUERA de la capa); el lightbox del proof gallery cicla piezas
      filtradas (counter "n / 12") — decidir si el contrato debe prescribir respetar el filtro.~~

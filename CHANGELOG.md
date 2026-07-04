@@ -4,6 +4,56 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-07-04
+
+> **La mano:** el cluster D del battle-test 0.3 — siete piezas de pulido reportadas por los
+> proofs, sin gaps nuevos. Tres piezas nuevas (`mui-pager`, `mui-stack`, `mui-cluster`) y el
+> resto variantes/behaviors sobre contratos existentes: **68 piezas** con contrato · **193 pares
+> AA** — audit de cierre: **0 pares nuevos**.
+
+### Added
+- **`mui-pager`** — navegación prev/next entre páginas hermanas (docs, blog, cualquier
+  secuencia), extraída como pieza standalone del shell docs (`mui-docs__pager`) para que
+  cualquier consumidor la reuse: grid de 2 columnas, cards silenciosas (`border-subtle` →
+  `border-strong` al hover), sin `prev` el `--next` se ancla solo a la columna 2.
+- **`mui-stack`** / **`mui-cluster`** — utilidades de ritmo y agrupación, puro layout (sin fondo,
+  sin borde, sin semántica propia): `mui-stack` apila en columna con gap consistente (reemplazo
+  del `margin-block` ad-hoc entre piezas de un grupo chico); `mui-cluster` arma una fila que
+  ENVUELVE (badges, botones, tags) con gap + alineación centrada. Mismo patrón de tamaño en
+  ambas: `--sm`/`--lg` mueven el gap a `space-2`/`space-6` (default `space-4`).
+- **`mui-stat --lg`** — variante hero-stat: solo el valor sube de escala (`text-4xl`), para KPIs
+  destacados fuera de una grilla densa.
+- **`mui-drawer --docked`** — la misma piel del drawer (borde inline-start, header/body/footer)
+  montada sobre un `<aside>` estático en vez de un `<dialog>`: panel lateral **persistente**, NO
+  modal — sin backdrop, sin foco-trap, sin Esc, sin `[open]`. El contrato documenta la línea
+  dura `docked ≠ dialog` para que nadie intente cerrarlo/abrirlo dinámicamente (eso vuelve a ser
+  el patrón modal).
+- **`mui-chart --line`** + fila de ticks en HTML — trazo de serie temporal vía `<polyline>`/`<path>`
+  con `--viz-1..6`; los ticks del eje X se resuelven como `.mui-chart__ticks`/`__tick` en HTML
+  (mono, `text-muted`) en vez de `<text>` SVG, porque el `<text>` se distorsiona al escalar bajo
+  el `viewBox`.
+
+### Changed
+- **El shell docs compone `mui-pager`** en vez de tener su propio idiom (`mui-docs__pager`
+  queda como el wrapper de margen; el pager en sí es la pieza compartida).
+- **El contrato de `mui-footer` documenta `__mantra` como slot GENÉRICO de tagline de producto**
+  (no hardcodeado a Milpa): cualquier consumidor lo llena con el suyo, en su propio idioma —
+  Milpa pone "Siembra módulos, cosecha aplicaciones."; un tercero (ej. `proof/saas.html`, Troje)
+  pone el suyo en inglés.
+- **El contrato de `mui-media-gallery` documenta el swap de thumbs**: click en un `.mui-media-gallery__thumb`
+  reemplaza el contenido y `src`/`srcset` de `__main`, mueve `aria-current="true"` al thumb
+  elegido y actualiza el nombre accesible de `__main` por tag (`alt` en `<img>`/`<picture>`,
+  `role="img"` + `aria-label` en `<svg>`); re-seleccionar el thumb activo es un no-op. JS de
+  referencia cableado en `proof/commerce.html`.
+- Contratos: **65 → 68** (nuevos `mui-pager`/`mui-stack`/`mui-cluster`; el resto — `mui-stat`,
+  `mui-drawer`, `mui-chart`, `mui-footer`, `mui-media-gallery` — son variantes/behaviors sobre
+  contratos existentes).
+- AA-pairs audit de cierre: **0 pares nuevos** — el pager reusa `accent-text`/`text-muted` sobre
+  `bg`/`surface`; stack/cluster no cargan color; `stat --lg` reusa `text`/`surface`|`bg`;
+  `drawer --docked` reusa `text`/`surface` del drawer; `chart --line` reusa `--viz-*` (3:1) +
+  `text-muted`; el mantra del footer reusa `text-muted`/`bg` — todos pares ya cubiertos por
+  `scripts/contrast-pairs.mjs`.
+
 ## [0.4.0] — 2026-07-04
 
 > **El trato:** dos variantes que cierran el cluster C del battle-test 0.3 — el stepper de

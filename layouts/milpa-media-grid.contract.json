@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "media-grid",
   "layer": "layout",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "status": "stable",
   "class": "mui-media-grid",
   "summary": "La parcela de imágenes — grid de media uniforme (auto-fill minmax(14rem,1fr), celdas 4/3 o 1/1 con --square) o masonry por columnas (--masonry: proporción natural, 3→2→1 columnas). Cada item es un <a> (navega — figure/figcaption conformes) o <button> (abre el lightbox — puente span.mui-media-grid__figure: el content model de <button> solo admite phrasing, ver a11y) con reset idioma .mui-card--interactive. La caption es un velo inferior color-mix + blur SIEMPRE visible — nada de opacity 0→1 en hover: touch y reduced-motion ven lo mismo; el hover solo intensifica el velo y el zoom de la imagen es decorativo.",
@@ -16,7 +16,7 @@
     "root": ".mui-media-grid — grid repeat(auto-fill, minmax(14rem,1fr)), gap space-3; guard [hidden] (display none, precedente .mui-alert)",
     "item": "a.mui-media-grid__item | button.mui-media-grid__item — envolvente con reset de <a>/<button> (idioma .mui-card--interactive): position relative, aspect-ratio 4/3, fondo var(--surface) como suelo mientras carga la imagen, borde 1px border-subtle + radius-md, overflow hidden Guard [hidden] propio: display none le gana al display block del item (filtros por atributo, cross-browser).",
     "figure": "figure bare (camino <a>) | span.mui-media-grid__figure (camino <button>) — display block, margin 0, height 100%: puente para que la imagen llene la celda. <figure> dentro de <button> es HTML no conforme (el content model de <button> es solo phrasing content): en el camino <button> el puente y la caption son <span>",
-    "img": "img — display block, 100%×100%, object-fit cover; zoom decorativo scale(1.03) en hover del item (--dur-moderate --ease-settle)",
+    "img": ":is(img, svg, picture) — display block, 100%×100%, object-fit cover; zoom decorativo scale(1.03) en hover del item (--dur-moderate --ease-settle). El slot acepta img, un svg inline token-driven o un picture; un svg debe portar su propio viewBox/dimensioning (el object-fit cover del scope no sustituye al viewBox faltante)",
     "caption": "figcaption.mui-media-grid__caption (camino <a>) | span.mui-media-grid__caption (camino <button>) — velo inferior: absolute inset-inline 0 + inset-block-end 0, padding space-3, text-sm var(--text) sobre color-mix(in srgb, var(--bg) 78%, transparent) + blur(4px). SIEMPRE visible; en hover el velo sube a 88% — nunca aparece/desaparece"
   },
   "variants": {

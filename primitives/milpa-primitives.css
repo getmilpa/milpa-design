@@ -183,6 +183,41 @@
 .mui-input-group--prefix > .mui-input { padding-inline-start: var(--space-8); }
 .mui-input-group--suffix > .mui-input { padding-inline-end: var(--space-8); }
 
+/* stepper — número flanqueado por −/+ en un solo box segmentado. El grupo lleva
+   el borde/radio/foco; el input adentro va borderless. Los botones se deshabilitan
+   en los límites vía [disabled] (JS del consumidor); el teclado nativo ↑/↓ del
+   number input ya funciona — los botones son afordancia redundante. */
+.mui-input-group--stepper {
+  display: inline-flex; align-items: stretch;
+  background: var(--bg);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  overflow: hidden; /* recorta las esquinas de los botones al radio del grupo */
+}
+.mui-input-group--stepper:focus-within { border-color: var(--focus); }
+.mui-input-group--stepper > .mui-input {
+  border: 0; border-radius: 0; background: transparent;
+  width: 3rem; text-align: center; padding-inline: 0;
+}
+.mui-input-group--stepper > .mui-input:focus-visible { outline: 0; } /* el grupo es el control */
+.mui-input-group__step {
+  flex: none; width: 2.5rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--text-secondary);
+  border: 0; cursor: pointer;
+  font-family: var(--font-display); font-size: var(--text-base); line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color            var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard);
+}
+.mui-input-group__step:hover { color: var(--text); background: var(--surface); }
+.mui-input-group__step:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.mui-input-group__step[disabled] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+/* tamaño sm (cart-line) — scopeado a --stepper para no tocar otros input-group --sm */
+.mui-input-group--stepper.mui-input-group--sm { border-radius: var(--radius-sm); }
+.mui-input-group--stepper.mui-input-group--sm > .mui-input { width: 2.5rem; }
+.mui-input-group--stepper.mui-input-group--sm .mui-input-group__step { width: 2rem; }
+
 
 /* ════════════════════════════════════════════════════════════════════
    cluster · form-extras

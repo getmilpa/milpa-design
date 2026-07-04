@@ -15,15 +15,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 - **`mui-header` — la plaza, el header público de marketing.** Barra sólida sticky (brand + nav +
   actions) que colapsa a off-canvas ≤880px (mismo mecanismo que el shell docs: `[data-nav-open]`
   en el root, `aria-expanded` en el toggle, scrim `aria-hidden`) y variante `--overlay` transparente
-  sobre un hero que se solidifica con `[data-scrolled]`. Landing, blog, saas, gallery y commerce
-  migran a esta pieza compartida y retiran sus headers bespoke.
+  sobre un hero que se solidifica con `[data-scrolled]`. Cinco proofs migran a esta pieza
+  compartida: el landing adopta la variante `--overlay`; blog, saas y gallery retiran sus headers
+  bespoke (`blog-header*` / `troje-header*` / `gal-header*`); y commerce deja de **usar mal** el
+  `mui-topbar` del shell admin (que no es un header de sitio público).
 - **`mui-card__media`** — slot de cover edge-to-edge (16/9 default, `--media-ratio` configurable)
-  para `.mui-card`, mismo tratamiento que ya tenía product-card.
+  para `.mui-card`, mismo tratamiento que ya tenía product-card. Pieza nueva: su slot acepta
+  `:is(img, svg, picture)` de fábrica (no es un `img`-only que se haya "ensanchado").
 - **`mui-byline`** — línea de autoría (avatar + nombre + meta: fecha · tiempo de lectura · rol);
   reusa `mui-avatar` tal cual, no reimplementa el círculo ni las iniciales. Variante `--sm` para
   filas densas/testimonios.
-- **Media slots aceptan `:is(img, svg, picture)`** en card, product-card, media-gallery y
-  media-grid (antes `img`-only): los SVG token-driven ya pueden ocupar esos huecos sin plomería
+- **Media slots aceptan `:is(img, svg, picture)`** en product-card, media-gallery, media-grid y
+  lightbox (antes `img`-only): los SVG token-driven ya pueden ocupar esos huecos sin plomería
   extra del consumidor. (`mui-hero__media` y `mui-cart-line__media` quedan `img`-only a propósito,
   ver backlog.)
 

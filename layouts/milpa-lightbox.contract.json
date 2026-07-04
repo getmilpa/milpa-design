@@ -70,7 +70,8 @@
       "al cerrar, el foco vuelve solo al disparador (contrato del dialog nativo) — el .mui-media-grid__item que lo abrió",
       "al navegar (flechas o botones) se actualizan img+alt, caption y counter EN el mismo dialog — no cerrar/reabrir: el trap y el foco no se pierden",
       "light-dismiss opcional del consumidor: click en el ::backdrop cierra — la banda __nav deja pasar el click (pointer-events none) y los prev/next [disabled] también (el guard :not() les conserva el none de primitives); la vía accesible sigue siendo Esc y el close",
-      "en los extremos, deshabilitar prev/next con [disabled] (o loopear la colección — documentarlo al usuario)"
+      "en los extremos, deshabilitar prev/next con [disabled] (o loopear la colección — documentarlo al usuario)",
+      "cuando el visor es disparado desde una grilla filtrada (mui-media-grid + tabs de filtro, ver proof/gallery.html): prev/next recorren SOLO los items visibles (no [hidden]) — la colección se recalcula en cada apertura/navegación, nunca se cachea contra el total — y el counter lee \"n / <cantidad visible>\", no el total del grid. El filtro activo se respeta: al resetear a \"todos\" el visor vuelve a recorrer la colección completa"
     ],
     "contrast": "todo texto/control lleva fondo sólido var(--overlay) — el scrim traslúcido del modal no es par gateable: caption y counter text-secondary ≥4.5 sobre overlay (par del gate); botones text-secondary reposo / text hover ≥4.5 sobre overlay (pares del gate). El anillo de foco de nav/close usa outline-offset -2px para dibujarse sobre el fill overlay (focus/overlay ≥3 en ambos temas, par del gate) y no sobre el scrim compuesto (ver notes del cluster). El borde var(--border) de los chips es decorativo — la definición la dan fill + sombra (estatus del borde del toast, exento de 1.4.11); el scrim hereda el estatus decorativo del contrato modal"
   },

@@ -465,9 +465,14 @@ html, body { overflow-x: clip; }
      caption and counter update in the SAME dialog, never close/reopen) ---------- */
   const lb = $('#gal-lightbox'), media = $('.mui-lightbox__media', lb),
         cap = $('.mui-lightbox__caption', lb), counter = $('.mui-lightbox__counter', lb),
-        items = $$('#gal-grid .mui-media-grid__item');
+        grid = $('#gal-grid');
+  // Task 8: the collection the lightbox cycles is whatever the ACTIVE FILTER shows —
+  // recomputed on every open/prev/next (never cached) so it always matches the current
+  // [hidden] state of the grid; counter reads n / <this length>, not n / 12.
+  const visibleItems = () => $$('.mui-media-grid__item', grid).filter((el) => !el.hidden);
   let idx = 0;
   const show = i => {
+    const items = visibleItems();
     idx = (i + items.length) % items.length;
     const item  = items[idx];
     const title = $('.mui-media-grid__caption', item).childNodes[0].textContent.trim();
@@ -482,7 +487,15 @@ html, body { overflow-x: clip; }
     cap.textContent = title + ' — ' + meta;
     counter.textContent = (idx + 1) + ' / ' + items.length;
   };
-  items.forEach((item, i) => item.addEventListener('click', () => { show(i); lb.showModal(); }));
+  // bind once on all items (identities are stable — filtering only toggles [hidden]);
+  // the opened index is resolved against visibleItems() AT CLICK TIME, not bind time,
+  // so it stays correct under whatever filter is active
+  $$('.mui-media-grid__item', grid).forEach((item) => item.addEventListener('click', () => {
+    const i = visibleItems().indexOf(item);
+    if (i === -1) return; // hidden items aren't clickable/visible; guards a stray call
+    show(i);
+    lb.showModal();
+  }));
   $('#lb-prev').addEventListener('click', () => show(idx - 1));
   $('#lb-next').addEventListener('click', () => show(idx + 1));
   $('#lb-close').addEventListener('click', () => lb.close());

@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "status": "stable",
   "class": "mui-pricing",
-  "summary": "La feria de planes — grilla equal-height de commerce: cada plan es una card silenciosa (idioma de card sin redeclarar .mui-card, precedente .mui-docs__pager-link) en flex column, con el CTA anclado al fondo por margin auto. El plan destacado se marca con [data-featured] (hook de layout documentado): borde var(--accent) + flag que compone .mui-badge--accent a caballo del borde superior — la semántica 'recomendado' la lleva el TEXTO del flag, nunca solo el borde. Las features son una checklist con glifos ✓/— de alt vacío: incluido/no-incluido también viaja en texto (.mui-sr-only).",
+  "summary": "La feria de planes — grilla equal-height de commerce: cada plan es una card silenciosa (idioma de card sin redeclarar .mui-card, precedente .mui-pager__link) en flex column, con el CTA anclado al fondo por margin auto. El plan destacado se marca con [data-featured] (hook de layout documentado): borde var(--accent) + flag que compone .mui-badge--accent a caballo del borde superior — la semántica 'recomendado' la lleva el TEXTO del flag, nunca solo el borde. Las features son una checklist con glifos ✓/— de alt vacío: incluido/no-incluido también viaja en texto (.mui-sr-only).",
   "element": [
     "section|div (la grilla .mui-pricing; recomendado <section aria-label=\"Planes\">); cada __plan un <article aria-labelledby={id del __name}>"
   ],

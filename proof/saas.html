@@ -28,6 +28,9 @@ html, body { overflow-x: clip; }
 .troje-logos { margin-block-start: var(--space-6); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted); }
 .troje-dash { width: 100%; }
 .troje-dash .mui-card__body { display: grid; gap: var(--space-5); }
+/* standalone testimonial (no mui-quote/mui-testimonial — just a quote + mui-byline) */
+.troje-review { max-width: 42rem; margin-block-start: var(--space-8); }
+.troje-review__quote { margin: 0 0 var(--space-3); font-size: var(--text-lg); line-height: var(--leading-relaxed); color: var(--text-secondary); }
 </style>
 </head>
 <body>
@@ -317,6 +320,17 @@ html, body { overflow-x: clip; }
               <span class="mui-quote__role">SRE, Nixtamal Co.</span>
             </footer>
           </blockquote>
+        </div>
+      </div>
+
+      <div class="troje-review">
+        <p class="troje-review__quote">“We evaluated four backup tools before picking Troje — it was the only one that treated the module contract as the unit of backup, not the whole database.”</p>
+        <div class="mui-byline mui-byline--sm">
+          <span class="mui-byline__avatar mui-avatar mui-avatar--sm" aria-hidden="true">jc</span>
+          <span class="mui-byline__text">
+            <span class="mui-byline__name">Jacinta Colque</span>
+            <span class="mui-byline__meta">Head of Platform, Milpa Labs · verified review</span>
+          </span>
         </div>
       </div>
     </div>

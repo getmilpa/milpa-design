@@ -1,0 +1,60 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "byline",
+  "layer": "component",
+  "version": "0.3.0",
+  "status": "stable",
+  "class": "mui-byline",
+  "summary": "Línea de autoría: avatar + nombre + meta (fecha · tiempo de lectura · rol). Reusa la primitiva mui-avatar tal cual (no reimplementa el círculo ni las iniciales); compone en blog cards, testimonios y cualquier byline de contenido.",
+  "element": [
+    "div",
+    "span"
+  ],
+  "anatomy": {
+    "root": ".mui-byline — inline-flex, align-items:center, gap var(--space-3); envuelve un .mui-avatar existente (cualquier tamaño/forma) + __text",
+    "avatar": ".mui-byline__avatar — flex:none sobre el .mui-avatar envuelto; solo evita que el círculo se encoja en filas angostas, no aporta estilo propio al avatar",
+    "text": ".mui-byline__text — columna: flex column, gap 0.1rem, min-width:0 (habilita ellipsis en __name/__meta si el consumidor lo agrega)",
+    "name": ".mui-byline__name — nombre del autor: var(--text), weight-medium, leading-snug",
+    "meta": ".mui-byline__meta — línea secundaria muted: var(--text-muted), text-sm, leading-snug; el contenido (fecha · tiempo de lectura · rol) y su separador los decide el consumidor, no hay slots internos"
+  },
+  "variants": {
+    "size": {
+      "default": "tipografía base; el tamaño del avatar lo decide la variante de mui-avatar envuelta (byline no lo fuerza)",
+      "sm": ".mui-byline--sm — gap var(--space-2); __name baja a text-sm, __meta baja a text-xs. Combinar con mui-avatar--sm para el conjunto compacto (testimonios, filas densas)"
+    }
+  },
+  "states": {},
+  "composes": [
+    "avatar (.mui-byline__avatar envuelve un .mui-avatar existente, cualquier tamaño/forma — byline consume la primitiva, nunca la redeclara)"
+  ],
+  "tokens": [
+    "--text",
+    "--text-muted",
+    "--text-sm",
+    "--text-xs",
+    "--weight-medium",
+    "--leading-snug",
+    "--space-2",
+    "--space-3"
+  ],
+  "a11y": {
+    "element": "presentacional: <span>/<div> según el contexto (inline en una línea de texto, o bloque dentro de una card). El nombre real vive como texto en __name — no depende de aria-label",
+    "keyboard": "sin interactivos propios; si __name envuelve un <a> al perfil del autor, ese link hereda el ring de foco estándar (--focus) del resto del sistema",
+    "behavior": "estático — byline no tiene estados propios ni afecta el fallback imagen→iniciales del mui-avatar que envuelve (eso lo resuelve el contrato de avatar)",
+    "contrast": "__name (--text) y __meta (--text-muted) sobre --bg y --surface — pares ya verificados AA en el gate (contrast-pairs.mjs); byline no introduce pares nuevos, solo los reutiliza"
+  },
+  "motion": {
+    "transitions": "ninguna — pieza estática",
+    "reducedMotion": "n/a (contrato global de milpa-motion.css vigente; no aplica porque no hay transición propia)"
+  },
+  "examples": [
+    {
+      "title": "Byline base (artículo)",
+      "html": "<div class=\"mui-byline\"><span class=\"mui-avatar mui-avatar--lg\" aria-hidden=\"true\">bc</span><span class=\"mui-byline__text\"><span class=\"mui-byline__name\">Bruno Cadenas</span><span class=\"mui-byline__meta\">Milpa core team · Jul 1, 2026 · 6 min read</span></span></div>"
+    },
+    {
+      "title": "Compacta (--sm, testimonio)",
+      "html": "<div class=\"mui-byline mui-byline--sm\"><span class=\"mui-avatar mui-avatar--sm\" aria-hidden=\"true\">jc</span><span class=\"mui-byline__text\"><span class=\"mui-byline__name\">Jacinta Colque</span><span class=\"mui-byline__meta\">Head of Platform, Milpa Labs</span></span></div>"
+    }
+  ]
+}

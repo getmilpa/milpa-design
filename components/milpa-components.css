@@ -576,7 +576,6 @@
 .mui-tabs--pill .mui-tabs__tab:hover { background: var(--surface); color: var(--text); }
 .mui-tabs--pill .mui-tabs__tab[aria-selected="true"] {
   background: var(--accent-subtle); color: var(--accent-text);
-  border-bottom-color: transparent;
 }
 .mui-tabs--pill .mui-tabs__tab:focus-visible { outline-offset: 2px; }
 
@@ -1287,9 +1286,9 @@ a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-off
 
 /* ---------- CartLine · .mui-cart-line ----------
    Línea de carrito: media | info | cantidad | precio | quitar. Todo lo
-   interactivo es composición — el qty compone .mui-input-group +
-   .mui-input--sm + .mui-btn--sm --icon (acá SOLO ancho y fila), el
-   precio es un .mui-price hijo directo y el quitar un .mui-btn--ghost
+   interactivo es composición — el qty es un .mui-input-group--stepper
+   --sm (input borderless flanqueado por dos .mui-input-group__step −/+),
+   el precio es un .mui-price hijo directo y el quitar un .mui-btn--ghost
    --icon --sm. Hermanas separadas por borde (regla 1). */
 .mui-cart-line {
   display: grid;

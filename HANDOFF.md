@@ -92,9 +92,10 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
 - ~~**T2 · Primitivas (el par de referencia).**~~ ✅ **Hecho y extendido** — 29 componentes con
   contrato (ver §2). El molde vive en el header de `primitives/milpa-primitives.css`; los nuevos
   componentes siguen ese patrón + contrato + pares nuevos al gate.
-- ~~**T3 · CI.**~~ ✅ **Hecho** — `.github/workflows/ci.yml` corre `npm test` en cada push/PR:
-  contraste (135 AA) + `scripts/verify-governance.mjs` (token-purity, sin rampas/!important/z-index
-  crudo/duraciones hardcodeadas, var() existentes, 32 contratos válidos y coherentes). El paso de
+- ~~**T3 · CI.**~~ ✅ **Hecho** — `.github/workflows/ci.yml` corre `npm test` en cada push/PR: el
+  gate completo (contraste AA + `scripts/verify-governance.mjs` token-purity — sin
+  rampas/!important/z-index crudo/duraciones hardcodeadas, var() existentes, contratos válidos y
+  coherentes — + `@layer` brace-walk + drift de `dist/` y `theme.contract.json`). El paso de
   build queda anotado para cuando T1 se decida.
 - ~~**T4 · Logo kit.**~~ ✅ **Hecho** — en `logo/` (símbolo, wordmark, lockups, app icon; mono-oro).
 - **T5 · Storybook** (o seguir extendiendo `proof/`) para estados exhaustivos por pieza. Los

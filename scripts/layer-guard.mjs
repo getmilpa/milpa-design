@@ -11,7 +11,15 @@ const stripInert = (css) =>
     .replace(/\/\*[\s\S]*?\*\//g, '')                 // comments
     .replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, '""'); // string contents
 
-/** Returns leftover CSS containing an unlayered rule, or '' if all rules are layered. */
+/**
+ * Returns leftover CSS containing an unlayered rule, or '' if all rules are layered.
+ * On a malformed wrapper whose braces don't balance (a `@layer <name> {` with no
+ * matching close), returns the sentinel string `'<<unbalanced @layer block>>'` — a
+ * non-empty value, so the gate fails rather than silently reporting clean.
+ * Assumes the house nesting convention `@layer X { @media (…) { … } }` (the layer
+ * wraps the at-rules), NOT the inverse `@media (…) { @layer X { … } }` — the only
+ * convention used across the published bundles.
+ */
 export function firstUnlayeredRule(rawCss, layerName) {
   let css = stripInert(rawCss);
   const marker = `@layer ${layerName} {`;

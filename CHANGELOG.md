@@ -4,6 +4,40 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-07-03
+
+> **La plaza:** el header público (barra + off-canvas + overlay) — el tercer header del sistema,
+> junto a `mui-topbar` (admin) y `mui-docs__topbar` (docs) — más contenido/media (`mui-card__media`,
+> `mui-byline`) y un gate más estricto. **65 piezas** con contrato · **193 pares AA** · el check
+> de `@layer` pasa de substring a brace-walk.
+
+### Added
+- **`mui-header` — la plaza, el header público de marketing.** Barra sólida sticky (brand + nav +
+  actions) que colapsa a off-canvas ≤880px (mismo mecanismo que el shell docs: `[data-nav-open]`
+  en el root, `aria-expanded` en el toggle, scrim `aria-hidden`) y variante `--overlay` transparente
+  sobre un hero que se solidifica con `[data-scrolled]`. Landing, blog, saas, gallery y commerce
+  migran a esta pieza compartida y retiran sus headers bespoke.
+- **`mui-card__media`** — slot de cover edge-to-edge (16/9 default, `--media-ratio` configurable)
+  para `.mui-card`, mismo tratamiento que ya tenía product-card.
+- **`mui-byline`** — línea de autoría (avatar + nombre + meta: fecha · tiempo de lectura · rol);
+  reusa `mui-avatar` tal cual, no reimplementa el círculo ni las iniciales. Variante `--sm` para
+  filas densas/testimonios.
+- **Media slots aceptan `:is(img, svg, picture)`** en card, product-card, media-gallery y
+  media-grid (antes `img`-only): los SVG token-driven ya pueden ocupar esos huecos sin plomería
+  extra del consumidor. (`mui-hero__media` y `mui-cart-line__media` quedan `img`-only a propósito,
+  ver backlog.)
+
+### Changed
+- **Gate de `@layer` endurecido: de substring a brace-walk.** `scripts/layer-guard.mjs` camina las
+  llaves del CSS publicado para cazar reglas que queden FUERA de su `@layer` — el check anterior
+  (buscar el string `@layer` una vez) no detectaba una regla escapada. Test propio
+  (`layer-guard.test.mjs`) cableado a `npm test`.
+- **El lightbox del gallery respeta el filtro activo.** El contador ahora lee "n / filtrados" y la
+  navegación (flechas/teclado) cicla solo entre los ítems visibles, no los 12 totales — el
+  contrato de `media-grid`/`lightbox` documenta el guard `[hidden]` que hace el filtro.
+- Contratos: **63 → 65** (nuevos: `mui-header`, `mui-byline`; actualizados: card, product-card,
+  media-gallery, media-grid, lightbox).
+
 ## [0.2.0] — 2026-07-03
 
 > **La segunda cosecha:** documentación versionada, artefactos de contenido, vocabulario de

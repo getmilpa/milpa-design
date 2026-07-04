@@ -676,20 +676,27 @@ html, body { overflow-x: clip; }
     const main = gal.querySelector('.mui-media-gallery__main');
     const thumbs = [...gal.querySelectorAll('.mui-media-gallery__thumb')];
     const select = (thumb) => {
+      if (thumb.getAttribute('aria-current') === 'true') return;   // already active — no-op (don't downgrade the main's label)
       thumbs.forEach((t) => t.removeAttribute('aria-current'));
       thumb.setAttribute('aria-current', 'true');
       const src = thumb.querySelector(':is(img, svg, picture)');
       const dst = main.querySelector(':is(img, svg, picture)');
-      if (src && dst) {
-        // swap the visual, but the main must stay accessible: the thumb's
-        // visual is decorative (aria-hidden) — the main image is NOT. Derive
-        // the main's accessible name from the selected thumb's label.
-        const clone = src.cloneNode(true);
-        clone.removeAttribute('aria-hidden');
+      if (!src || !dst) return;
+      // swap the visual, but the main must stay accessible: the thumb's visual
+      // is decorative (aria-hidden) — the main image is NOT. Set the main's
+      // accessible name from the selected thumb, the correct way per tag.
+      const clone = src.cloneNode(true);
+      clone.removeAttribute('aria-hidden');
+      const label = thumb.getAttribute('aria-label') || '';
+      if (clone.tagName === 'IMG') {
+        clone.alt = label;                                  // native img: alt IS the name
+      } else if (clone.tagName === 'PICTURE') {
+        const img = clone.querySelector('img'); if (img) img.alt = label;  // picture delegates to its <img>
+      } else {                                              // svg
         clone.setAttribute('role', 'img');
-        clone.setAttribute('aria-label', thumb.getAttribute('aria-label') || '');
-        dst.replaceWith(clone);
+        clone.setAttribute('aria-label', label);
       }
+      dst.replaceWith(clone);
     };
     thumbs.forEach((t) => t.addEventListener('click', () => select(t)));
   });

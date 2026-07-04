@@ -14,17 +14,20 @@ ambos avanzan en paralelo sin pisarse. La costura entre los dos es un **contrato
 
 ## Estado
 
-**v0.2 — docs versionadas, artefactos, layouts y theming inyectable.** Paleta cerrada: `oro`
-(primario) + `olivo` (secundario / la milpa viva) + `tierra` (neutro); `cielo` = `info`; y ahora
+**v0.3 — la plaza: header público, contenido/media y un gate más estricto.** Paleta cerrada: `oro`
+(primario) + `olivo` (secundario / la milpa viva) + `tierra` (neutro); `cielo` = `info`; y
 `--syntax-*` (highlighting AA-verificado) y `--viz-*` (charts, colorblind-safe) — semánticos de
-las mismas rampas. **193/193 pares WCAG AA** (dark + light, `npm test`). **63 piezas** con
-contrato en cuatro capas: primitivas (*el grano*), componentes admin + commerce (*el frijol*),
-artefactos de contenido (*el elote*: code, terminal, chart, prose, api, search, kit de
-versionado…) y layouts (*la parcela*: el shell de docs versionadas, hero, pricing, faq, footer,
-media-grid, lightbox…). Todo el CSS publicado vive en **`@layer milpa.*`**: el CSS de un
-plugin/consumidor gana sin `!important` — el theming es contrato ([`THEMING.md`](./THEMING.md) +
-`theme.contract.json` generado). Seis battle-tests en `proof/` (docs, blog, commerce, gallery,
-saas y `themed` — el blog vistiendo un skin que pasa el mismo gate).
+las mismas rampas. **193/193 pares WCAG AA** (dark + light, `npm test`). **65 piezas** con
+contrato en cuatro capas: primitivas (*el grano*), componentes admin + commerce (*el frijol*,
+ahora con `mui-byline`), artefactos de contenido (*el elote*: code, terminal, chart, prose, api,
+search, kit de versionado…) y layouts (*la parcela*: el shell de docs versionadas, hero, pricing,
+faq, footer, media-grid, lightbox, y el nuevo `mui-header`…). **Tres headers, tres contextos:**
+`mui-topbar` (shell admin) / `mui-docs__topbar` (shell docs) / `mui-header` (sitio público —
+marketing, con off-canvas y variante overlay). Todo el CSS publicado vive en **`@layer
+milpa.*`**: el CSS de un plugin/consumidor gana sin `!important` — el theming es contrato
+([`THEMING.md`](./THEMING.md) + `theme.contract.json` generado). Seis battle-tests en `proof/`
+(docs, blog, commerce, gallery, saas y `themed` — el blog vistiendo un skin que pasa el mismo
+gate).
 
 ## Estructura
 

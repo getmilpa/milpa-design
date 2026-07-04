@@ -200,6 +200,27 @@
   border-top: 1px solid var(--border-subtle);
 }
 
+/* media — cover edge-to-edge; el root de la card no tiene padding (vive en
+   header/body/footer), así que el slot sangra solo. Redondea las esquinas
+   superiores al radio de la card y recorta el medio. Ratio 16/9 por
+   defecto: --media-ratio se declara aquí (no es un token de dist, es una
+   propiedad inyectable) para que el consumidor la sobreescriba inline
+   (style="--media-ratio: 4 / 3") — el inline gana la cascada por
+   especificidad, igual que --_pad en .mui-card. */
+.mui-card__media {
+  --media-ratio: 16 / 9;
+  overflow: hidden;
+  border-start-start-radius: var(--radius-lg);
+  border-start-end-radius: var(--radius-lg);
+  aspect-ratio: var(--media-ratio);
+}
+.mui-card__media > :is(img, svg, picture) {
+  width: 100%; height: 100%; display: block; object-fit: cover;
+}
+/* si el media NO es el primer hijo (card con header arriba), no redondear */
+.mui-card__header + .mui-card__media,
+.mui-card__body + .mui-card__media { border-start-start-radius: 0; border-start-end-radius: 0; }
+
 /* compact — densidad para dashboards */
 .mui-card--compact { --_pad: var(--space-4); }
 

@@ -17,7 +17,7 @@ converger:** el framework y el DS avanzan en paralelo y se reencuentran en una *
 El framework *consume* `@milpa/design@x.y.z`. **Nadie edita los internals del otro**; se cambian
 cosas vía bump semver + nota de compat. (Esto es Milpa aplicado a sí mismo: contract-first.)
 
-## 2. Estado actual (v0.3)
+## 2. Estado actual (v0.4)
 
 ✅ **Paleta cerrada y verificada.** `oro` (primario/marca) + `olivo` (secundario / la milpa viva,
 OKLCH ~124°) + `tierra` (neutro); `cielo` = `info`. Dark-first. Tokens DTCG + salida CSS + preset
@@ -55,7 +55,19 @@ del gallery **respeta el filtro activo** (contador n/filtrados). Gate: **193/193
 contratos**. AA-pairs audit de cierre: **0 pares nuevos** — mui-header/mui-byline reusan
 `text`/`text-muted` sobre `bg`/`surface`, ya cubiertos.
 
-⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.3). Backlog 0.4 abajo (§4).
+✅ **0.4.0 — el trato (T9 cluster C cumplido):** `mui-input-group--stepper` (número ± segmentado;
+el grupo lleva el borde/foco, el input va borderless, los botones `.mui-input-group__step` se
+deshabilitan `[disabled]` en los límites) — el PDP y el cart-line de commerce lo adoptan, dejando
+de reimplementar su propio control de cantidad. `mui-tabs--pill` (variante visual: seleccionada
+= `accent-subtle`/`accent-text`, el fill es el indicador) más el **patrón de filtro de panel
+único** documentado en el contrato de tabs (todas las tabs de un tablist → una región
+`tabpanel`, filtro vía `[hidden]`, roving tabindex) — el gallery lo estrena para filtrar
+categorías. Ambas piezas son **variantes**, no piezas nuevas: contratos siguen en **65**. Gate:
+**193/193 AA** — audit de cierre: **0 pares nuevos** (el stepper reusa `text`/`text-secondary`
+sobre `bg`/`surface`; la pill seleccionada reusa `accent-text`/`accent-subtle`).
+
+⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.4). Backlog abajo (§4): cluster D y los
+hallazgos F (#8/#9/#10) siguen abiertos.
 
 ## 3. Cómo correr
 
@@ -87,9 +99,9 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
 - ~~**T4 · Logo kit.**~~ ✅ **Hecho** — en `logo/` (símbolo, wordmark, lockups, app icon; mono-oro).
 - **T5 · Storybook** (o seguir extendiendo `proof/`) para estados exhaustivos por pieza. Los
   seis proofs de 0.2.0 ya battle-testean la composición completa por caso de uso.
-- **T9 · Backlog 0.3 — lo que los battle-tests destaparon** (gaps reales reportados por los
+- **T9 · Backlog — lo que los battle-tests destaparon** (gaps reales reportados por los
   builders de los proofs, por frecuencia de dolor). **Clusters A, B y E ejecutados en 0.3.0 «la
-  plaza» (ver §2); C y D quedan abiertos para 0.4:**
+  plaza»; C ejecutado en 0.4.0 «el trato» (ver §2); D queda abierto:**
   1. ~~**Header de marketing/sitio** compartido (hoy landing, blog, saas y commerce lo
      re-escriben; `mui-topbar` es del shell admin y `mui-docs__topbar` del shell docs).~~ ✅
      **Hecho (A) — `mui-header`**, 0.3.0.
@@ -102,10 +114,15 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
      pieza NUEVA de esta versión y nace con `:is()` de fábrica, no es un slot "ensanchado".)
      `mui-hero__media` y `mui-cart-line__media` quedan `img`-only a propósito (ver hallazgo nuevo
      #10 abajo).
-  4. **C · abierto.** Qty stepper extraíble (`mui-input-group--stepper`) — hoy vive solo en
-     cart-line.
-  5. **C · abierto.** `mui-tabs` variante pill/filtro (con su patrón ARIA de panel único
-     documentado).
+  4. ~~**Qty stepper extraíble** (`mui-input-group--stepper`) — hoy vive solo en cart-line.~~ ✅
+     **Hecho (C)**, 0.4.0 — el grupo lleva el borde/foco, el input va borderless, los botones
+     `.mui-input-group__step` se deshabilitan en los límites; el PDP y el cart-line de commerce
+     lo adoptan.
+  5. ~~**`mui-tabs` variante pill/filtro** (con su patrón ARIA de panel único documentado).~~ ✅
+     **Hecho (C)**, 0.4.0 — `mui-tabs--pill` (seleccionada = `accent-subtle`/`accent-text`, el
+     fill es el indicador) + el patrón de filtro de panel único en `a11y.behavior` del contrato
+     (todas las tabs de un tablist → una región `tabpanel` vía `aria-controls`, filtro vía
+     `[hidden]`, roving tabindex); el gallery lo estrena.
   6. **D · abierto.** Pager standalone (hoy `mui-docs__pager` está atado al shell); `mui-stat
      --lg`; utilidad stack/cluster; drawer variante docked/inline (demos y paneles laterales
      estáticos); `mui-chart --line` con fila de ticks HTML (el `<text>` del SVG se distorsiona);
@@ -116,25 +133,32 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
      filtradas (counter "n / 12") — decidir si el contrato debe prescribir respetar el filtro.~~
      ✅ **Hecho (E)** — brace-walk en `scripts/layer-guard.mjs` (+ test propio en `npm test`) y el
      lightbox del gallery ya respeta el filtro activo, 0.3.0.
-  8. **Nuevo (descubierto en 0.3, para 0.4) — overflow horizontal del off-canvas también afecta al
+  8. **Nuevo (descubierto en 0.3, F · abierto) — overflow horizontal del off-canvas también afecta al
      shell de docs.** El panel `position:fixed` fuera de pantalla (16rem) del off-canvas extiende
      el scroll horizontal del documento; el fix de `mui-header` (`overflow-x: clip` en la raíz de
      la página, aplicado en los proofs migrados) **no cubre `docs.html`** — su shell tiene el mismo
      patrón de off-canvas y mide ~208px de overflow @móvil sin el clip. Arreglar el shell de docs
      Y evaluar reemplazar el patrón por un `<dialog>` (top layer nativo, no extiende el scroll del
      documento) para que el consumidor no tenga que acordarse del `overflow-x:clip`.
-  9. **Nuevo (descubierto en 0.3, para 0.4) — `mui-header` no tiene patrón para acciones que no
+  9. **Nuevo (descubierto en 0.3, F · abierto) — `mui-header` no tiene patrón para acciones que no
      caben en móvil.** El proof de commerce, al colapsar a off-canvas ≤880px, oculta el buscador
      junto con el badge del carrito y **pierde la búsqueda en móvil sin sustituto** (queda
      documentado como "honesto" en el proof, no resuelto). Evaluar un toggle de ícono de búsqueda
      (expande un input inline) o mover el buscador adentro del panel off-canvas como slot propio
      del contrato.
-  10. **Nuevo (descubierto en 0.3, para 0.4) — combinador descendiente en los media slots compone
+  10. **Nuevo (descubierto en 0.3, F · abierto) — combinador descendiente en los media slots compone
       hover scale con `<picture>`.** `:is(img, svg, picture)` usa combinador **descendiente**: si
       el consumidor arma `<picture><img></picture>`, el selector matchea AMBOS elementos y el
       hover-scale se aplica dos veces (≈1.061 en vez de ≈1.03). Bug **latente** — ningún proof usa
       `<picture>` hoy, así que no se disparó en 0.3. Fix futuro: combinador **hijo** (`>`) donde el
       slot pueda envolver un `<picture>`.
+  11. **Minors diferidos (triage del review final 0.3.0), abiertos.** (a) `.mui-card__media >
+      :is(img, svg, picture)` no lleva el guard `[hidden]` (`display:block` sin excepción) que
+      viola la regla dura de la casa (precedente ea72ac3: el display del autor no debe pisar al
+      UA) — pendiente decisión de política: guardar TODOS los media inner o solo los que
+      togglean `hidden`. (b) `proof/gallery.html` `show(i)` no guarda contra un set visible
+      vacío (si `visibleItems()` fuera `[]`, `idx=NaN` → `items[NaN]` undefined) — inalcanzable
+      hoy (los 4 tabs tienen ≥3 ítems); fix de una línea (`if (!items.length) return;`).
 - ~~**T6 · Publish `@milpa/design@0.1.0`**~~ ✅ **PUBLICADO** (2026-07-02T05:00Z, por
   `teamx-devkit`): `npm i @milpa/design` — 59 archivos, 88 kB, los 8 exports verificados con
   install real. Flujo de release: `npm run release` (token en `.env` gitignoreado +

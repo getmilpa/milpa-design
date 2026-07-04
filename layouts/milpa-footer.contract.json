@@ -2,10 +2,10 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "footer",
   "layer": "layout",
-  "version": "0.2.0",
+  "version": "0.5.0",
   "status": "stable",
   "class": "mui-footer",
-  "summary": "El mega footer — la línea de tierra que cierra la página: hairline superior, marca con mantra (SIEMPRE en español: 'Siembra módulos, cosecha aplicaciones.') y columnas de links silenciosos sobre var(--bg). margin-block-start auto lo empuja al fondo cuando el wrapper (.mui-page o el body) es flex column con min-height 100dvh. La grilla usa tracks auto-fit de 9rem y la marca ocupa 2 (grid-column: span 2) — el spec de grid no admite fr junto a repeat(auto-fit) en una misma lista de tracks, así que 'brand 2fr' se logra por span: mismo resultado visual. ≤880px cae a una columna con la marca arriba (mismo breakpoint que el drawer de mui-docs).",
+  "summary": "El mega footer — la línea de tierra que cierra la página: hairline superior, marca con mantra (slot __mantra: el tagline PROPIO del producto que consume el layout — opcional, no hardcodeado a Milpa; el propio Milpa lo llena con 'Siembra módulos, cosecha aplicaciones.' en español, pero cualquier otro producto pone el suyo, en su propio idioma) y columnas de links silenciosos sobre var(--bg). margin-block-start auto lo empuja al fondo cuando el wrapper (.mui-page o el body) es flex column con min-height 100dvh. La grilla usa tracks auto-fit de 9rem y la marca ocupa 2 (grid-column: span 2) — el spec de grid no admite fr junto a repeat(auto-fit) en una misma lista de tracks, así que 'brand 2fr' se logra por span: mismo resultado visual. ≤880px cae a una columna con la marca arriba (mismo breakpoint que el drawer de mui-docs).",
   "element": [
     "footer (landmark contentinfo — SIEMPRE <footer> hijo directo del <body> o de .mui-page, nunca anidado en <main>)"
   ],
@@ -13,7 +13,7 @@
     "root": "footer.mui-footer — border-top 1px border-subtle, padding-block space-16/space-10, padding-inline clamp(space-4..space-8) (--_pad-inline, la parcela de mui-docs), background var(--bg), margin-block-start auto, font-display",
     "grid": ".mui-footer__grid — grid repeat(auto-fit, minmax(9rem, 1fr)) gap space-8, max-width 90rem centrado (--_max-w)",
     "brand": ".mui-footer__brand — grid-column span 2 (doble de ancho que cada columna de links); flex column gap space-3: el wordmark (slot svg o texto) + __mantra",
-    "mantra": ".mui-footer__mantra — mono text-2xs var(--text-muted); el texto SIEMPRE en español: 'Siembra módulos, cosecha aplicaciones.'",
+    "mantra": ".mui-footer__mantra — mono text-2xs var(--text-muted); slot GENÉRICO y opcional para el tagline PROPIO del producto que consume el layout (cualquier producto — NO hardcodeado al mantra de Milpa), en el idioma del producto: el proof de Milpa lo llena con su propio mantra en español ('Siembra módulos, cosecha aplicaciones.'), un proof de tercero pone el suyo en el idioma que corresponda (ej. proof/saas.html, Troje, en inglés: 'Keep what the field grows.' — el lang lo hereda del documento)",
     "heading": ".mui-footer__heading — rótulo de columna: mono 2xs uppercase tracking-wide var(--text-muted), margin-block-end space-3 (la voz de .mui-docs__nav-heading)",
     "links": ".mui-footer__links — <ul> list none; li margin-block space-2; a: text-sm var(--text-muted) sin subrayado → hover var(--text) + subrayado (el cambio nunca es solo color)",
     "legal": ".mui-footer__legal — border-top 1px border-subtle, margin-block-start space-10, padding-block-start space-6; flex wrap space-between gap space-2/space-4; text-xs var(--text-muted); centrado a --_max-w como la grilla; sus <a> comparten el idioma de __links"

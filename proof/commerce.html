@@ -670,6 +670,20 @@ html, body { overflow-x: clip; }
     input.addEventListener('input', sync);
     sync();
   });
+
+  /* ---------- media-gallery: thumb → swap main + aria-current ---------- */
+  document.querySelectorAll('.mui-media-gallery').forEach((gal) => {
+    const main = gal.querySelector('.mui-media-gallery__main');
+    const thumbs = [...gal.querySelectorAll('.mui-media-gallery__thumb')];
+    const select = (thumb) => {
+      thumbs.forEach((t) => t.removeAttribute('aria-current'));
+      thumb.setAttribute('aria-current', 'true');
+      const src = thumb.querySelector(':is(img, svg, picture)');
+      const dst = main.querySelector(':is(img, svg, picture)');
+      if (src && dst) dst.replaceWith(src.cloneNode(true));  // swap the visual
+    };
+    thumbs.forEach((t) => t.addEventListener('click', () => select(t)));
+  });
 })();
 </script>
 

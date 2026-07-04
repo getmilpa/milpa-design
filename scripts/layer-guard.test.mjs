@@ -38,4 +38,10 @@ assert.equal(
   'braces in strings/comments are ignored',
 );
 
+// unbalanced layer block (no closing brace) must not report clean
+assert.ok(
+  firstUnlayeredRule(`${ORDER}\n@layer milpa.layouts { .a{color:var(--text)}`, 'milpa.layouts') !== '',
+  'an unbalanced @layer block must not report clean',
+);
+
 console.log('layer-guard: ALL PASS');

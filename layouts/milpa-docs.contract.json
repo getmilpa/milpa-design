@@ -55,7 +55,6 @@
     "--accent-text",
     "--border",
     "--border-subtle",
-    "--border-strong",
     "--focus",
     "--shadow-md",
     "--font-display",

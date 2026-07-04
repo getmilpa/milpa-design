@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "input",
   "layer": "primitive",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "status": "stable",
   "class": "mui-input",
   "summary": "Entrada de texto de una línea. Fondo var(--bg) = un paso hundido respecto a la superficie; la definición la da el borde (regla 1). El estado inválido se declara con aria-invalid, no con una clase.",
@@ -11,14 +11,16 @@
     "root": ".mui-input — el control",
     "group": ".mui-input-group (+ --prefix/--suffix) — envoltura para ícono/unidad superpuesta",
     "group__prefix": ".mui-input-group__prefix — slot inicial (pointer-events none)",
-    "group__suffix": ".mui-input-group__suffix — slot final"
+    "group__suffix": ".mui-input-group__suffix — slot final",
+    "group__step": ".mui-input-group__step — botón −/+ del stepper; [disabled] cuando el valor toca su límite (JS del consumidor)"
   },
   "variants": {
     "size": {
       "sm": ".mui-input--sm — 2rem / text-xs / radius-sm",
       "md": "default — 2.5rem / text-sm / radius-base",
       "lg": ".mui-input--lg — 3rem / text-base"
-    }
+    },
+    "stepper": ".mui-input-group--stepper — número flanqueado por botones −/+ en un box segmentado; el input va borderless, el grupo lleva el borde/foco. Compone con --sm."
   },
   "states": {
     "focus": ":focus-visible — outline 2px var(--focus) offset 1px + borde var(--focus)",
@@ -40,6 +42,7 @@
       "placeholder nunca sustituye al label"
     ],
     "keyboard": ["nativo del input; el focus ring es visible sobre cualquier superficie (par focus/surface verificado)"],
+    "behavior": "stepper: el input es type=number con min/max/step; ↑/↓ nativos incrementan/decrementan. El consumidor cablea click en .mui-input-group__step −/+ → ajusta value respetando min/max/step, deshabilita ([disabled]) el botón del límite alcanzado, y emite input+change. Cada botón lleva aria-label (Decrease/Increase). Sin animación propia (reduced-motion no aplica).",
     "contrast": "placeholder var(--text-muted) sobre var(--bg) verificado AA (npm test)",
     "surfaces": "asentar el control sobre var(--bg) o var(--surface). En dark NO sobre --surface-raised/--overlay (modales, popovers): el boundary no llega a 3:1 (border-strong 2.13:1, fill 2.08:1 — WCAG 1.4.11). En light el borde sí define sobre cualquier superficie (5.58:1)."
   },

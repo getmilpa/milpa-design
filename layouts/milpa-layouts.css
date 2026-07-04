@@ -1046,6 +1046,7 @@ a.mui-feature-grid__item:focus-visible {
   display: inline-flex; align-items: center; gap: var(--space-2);
   color: var(--text); text-decoration: none;
 }
+.mui-header__brand:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .mui-header__nav {
   margin-inline-start: auto;
   display: flex; align-items: center; gap: var(--space-1);
@@ -1053,8 +1054,6 @@ a.mui-feature-grid__item:focus-visible {
 .mui-header__actions {
   display: flex; align-items: center; gap: var(--space-2);
 }
-/* con nav a la derecha, las actions no reclaman el margin-auto */
-.mui-header__nav + .mui-header__actions { margin-inline-start: var(--space-2); }
 .mui-header__toggle { display: none; }
 .mui-header__scrim { display: none; }
 

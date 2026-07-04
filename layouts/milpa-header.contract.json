@@ -1,28 +1,82 @@
 {
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "header",
   "layer": "layout",
   "version": "0.3.0",
+  "status": "stable",
   "class": "mui-header",
-  "summary": "Public/marketing site header: sticky bar with brand, primary nav and actions; collapses to an off-canvas panel on mobile; optional overlay variant that sits over a hero and solidifies on scroll. The third header of the system, distinct from mui-topbar (admin) and mui-docs__topbar (docs).",
-  "slots": {
-    "brand": ".mui-header__brand — wordmark/logo link (left)",
-    "nav": ".mui-header__nav — <nav aria-label=\"primary\"> of links; becomes the off-canvas panel on mobile",
-    "actions": ".mui-header__actions — buttons, theme toggle, CTA (right)",
-    "toggle": ".mui-header__toggle — hamburger button; aria-expanded + aria-controls point to the nav id",
-    "scrim": ".mui-header__scrim — drawer veil, visible only under [data-nav-open]"
+  "summary": "Public/marketing site header: sticky bar with brand, primary nav and actions; collapses to an off-canvas panel on mobile; optional overlay variant that sits over a hero and solidifies on scroll. The third header of the system, distinct from mui-topbar (admin) and mui-docs__topbar (docs). Reuses the docs shell off-canvas language (translucent color-mix + blur veil, [data-nav-open] + scrim, drawer on translateX) but as a MARKETING bar: the nav pushes to the end and, ≤880px, becomes a right-side drawer.",
+  "element": [
+    "<header class=\"mui-header\"> — landmark banner gratis cuando es hijo directo del body (o de .mui-page). Adentro un solo .mui-header__row de contenido; el .mui-header__scrim es hermano aria-hidden del row"
+  ],
+  "composes": [
+    "button (links del __nav y el CTA de __actions: .mui-btn mui-btn--ghost / mui-btn--primary; el toggle: .mui-btn mui-btn--ghost mui-btn--icon)",
+    "wordmark (el símbolo Grano + logotipo dentro de .mui-header__brand — mismo slot que .mui-docs__brand; el header no lo redeclara)"
+  ],
+  "anatomy": {
+    "root": ".mui-header — <header> sticky top 0 (z-sticky), velo color-mix(in srgb, var(--bg) 85%, transparent) + blur(10px), borde inferior border-subtle. Vive sobre var(--bg): el body del consumidor pone background var(--bg) + color var(--text)",
+    "row": ".mui-header__row — flex align-items center, gap var(--space-4), min-height 3.5rem: el envoltorio de brand + nav + actions. El gap del row ES el único espaciado entre items (no sumar márgenes: flexbox reserva el gap independiente del margin-inline-start:auto del nav)",
+    "brand": ".mui-header__brand — <a> wordmark/logo (izquierda): inline-flex, gap var(--space-2), color var(--text), sin subrayado; :focus-visible con anillo estándar (2px var(--focus) offset 2px)",
+    "nav": ".mui-header__nav — <nav aria-label=\"primary\"> de links empujado al final con margin-inline-start auto; ≤880px se vuelve el panel off-canvas (drawer derecho)",
+    "actions": ".mui-header__actions — flex, gap var(--space-2): botones, toggle de tema, CTA (derecha). No reclama el margin-auto: el gap del row lo separa del nav",
+    "toggle": ".mui-header__toggle — <button> hamburguesa; display none, aparece ≤880px (inline-flex). Lleva aria-expanded + aria-controls al id del nav",
+    "scrim": ".mui-header__scrim — <div aria-hidden=\"true\"> velo del drawer; display none salvo ≤880px con [data-nav-open]: fixed inset 0, z-backdrop, velo color-mix(in srgb, var(--bg) 55%, transparent) con milpa-fade"
   },
   "variants": {
-    "overlay": ".mui-header--overlay — transparent over a hero; gains solid bg + border via [data-scrolled]"
+    "overlay": ".mui-header--overlay — transparente sobre un hero (background transparent, sin blur, borde inferior transparente); gana fondo sólido (mismo color-mix + blur) + borde border-subtle al recibir [data-scrolled], con transición de background/border-color en --dur-moderate --ease-standard"
   },
   "states": {
-    "nav-open": "[data-nav-open] on .mui-header — off-canvas panel + scrim shown (consumer JS; the toggle carries aria-expanded)",
-    "scrolled": "[data-scrolled] on .mui-header--overlay — solidified after a scroll threshold (consumer JS)"
+    "nav-open": "[data-nav-open] on .mui-header — SOLO ≤880px: el drawer pasa a translateX(0) + visibility visible + shadow-md y el scrim aparece. Hook de LAYOUT que alterna el JS del consumidor; la semántica de estado la lleva aria-expanded en el toggle. Sobre 880px el atributo no tiene efecto (el nav ya es la barra horizontal)",
+    "drawer-closed": "≤880px default — .mui-header__nav fixed inset-block 0 / inset-inline-end 0, width 16rem, translateX(100%) + visibility hidden (flipa al TERMINAR el slide-out, delay --dur-moderate): fuera del lienzo, del tab order y del árbol de a11y (z-drawer). El JS del consumidor refuerza con inert",
+    "scrolled": "[data-scrolled] on .mui-header--overlay — solidificado tras pasar un umbral de scroll (JS del consumidor): background + blur + borde border-subtle",
+    "focus": "interactivos (brand, links del nav, toggle, CTA) → :focus-visible con anillo 2px var(--focus) offset 2px (brand explícito acá; los que componen .mui-btn lo heredan de su primitivo)"
   },
-  "tokens": ["--bg", "--border-subtle", "--text", "--space-4", "--z-sticky", "--z-drawer", "--z-backdrop", "--shadow-md", "--dur-moderate", "--ease-grano"],
+  "tokens": [
+    "--bg",
+    "--text",
+    "--border-subtle",
+    "--focus",
+    "--shadow-md",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--z-sticky",
+    "--z-backdrop",
+    "--z-drawer",
+    "--dur-instant",
+    "--dur-moderate",
+    "--ease-standard",
+    "--ease-grano",
+    "--ease-linear"
+  ],
   "a11y": {
-    "contrast": "brand/nav text is --text on a translucent --bg (gated text/bg). The overlay variant does NOT auto-guarantee AA over arbitrary hero art — see invariant.",
-    "keyboard": "Tab order brand → nav → actions; the toggle opens the panel; Esc closes it. Focus moves to the first nav link on open and returns to the toggle on close.",
-    "behavior": "Consumer JS toggles [data-nav-open] on .mui-header and the toggle's aria-expanded together; clicking the scrim closes; the panel gets [inert] while closed. The overlay's JS sets [data-scrolled] past a scroll threshold. Reduced-motion: transform/opacity collapse to one frame via the global contract.",
-    "invariant": "The overlay variant assumes a hero dark/solid enough to keep text AA; over photographic heroes the consumer must add a scrim."
-  }
+    "landmarks": "estructura: <header class=\"mui-header\"> (banner) hijo directo del body/.mui-page, con <nav aria-label=\"primary\"> adentro. El scrim SIEMPRE aria-hidden=\"true\": el cierre accesible vive en Escape y el toggle, no en el velo",
+    "contrast": "brand/nav text es --text sobre el velo translúcido de --bg (par text/bg del gate: el velo es color-mix de --bg consigo mismo, lo de encima lee sobre --bg efectivo). El borde border-subtle es decorativo (exento de 1.4.11). La variante --overlay NO auto-garantiza AA sobre arte de hero arbitrario — ver invariant",
+    "keyboard": [
+      "Tab recorre brand → nav → actions en orden de documento; el toggle (≤880px) abre el panel",
+      "Escape cierra el panel y devuelve el foco al toggle; al abrir, el foco pasa al primer link del nav"
+    ],
+    "behavior": [
+      "toggle (≤880px, JS del consumidor): click en .mui-header__toggle alterna [data-nav-open] en .mui-header Y aria-expanded en el botón (aria-controls → id del nav)",
+      "click en el scrim cierra el panel (listener del consumidor; el scrim es aria-hidden — la vía accesible es Escape/toggle)",
+      "mientras el panel está CERRADO ≤880px, el JS del consumidor mantiene inert en el nav y lo quita al abrir — cinturón y tirantes sobre el visibility:hidden del CSS (WCAG 2.4.3/2.4.7)",
+      "la variante --overlay: el JS del consumidor pone [data-scrolled] al pasar un umbral de scroll"
+    ],
+    "invariant": "la variante --overlay asume un hero suficientemente oscuro/sólido para que el texto quede AA; sobre heros fotográficos el consumidor debe añadir su propio velo"
+  },
+  "motion": {
+    "transitions": "drawer: transform --dur-moderate --ease-grano — germina desde el borde y se asienta, nunca rebota; visibility acompaña sin animar (delay --dur-moderate al cerrar, --dur-instant al abrir) — patrón exacto del shell docs. Scrim: milpa-fade --dur-moderate --ease-standard both. Overlay: background + border-color en --dur-moderate --ease-standard al ganar [data-scrolled]",
+    "reducedMotion": "contrato global de milpa-motion.css: transform y fade caen a 1 frame — drawer, scrim y la solidificación del overlay aparecen estáticos; el delay de visibility al cerrar no produce movimiento y el inert del consumidor ya cubre la semántica"
+  },
+  "examples": [
+    {
+      "title": "Barra base: brand + nav + actions (+ toggle móvil + scrim)",
+      "html": "<header class=\"mui-header\"><div class=\"mui-header__row\"><a class=\"mui-header__brand\" href=\"/\"><!-- Grano SVG -->Milpa</a><nav class=\"mui-header__nav\" id=\"site-nav\" aria-label=\"primary\"><a class=\"mui-btn mui-btn--ghost\" href=\"/producto\">Producto</a><a class=\"mui-btn mui-btn--ghost\" href=\"/precios\">Precios</a><a class=\"mui-btn mui-btn--ghost\" href=\"/docs\">Docs</a></nav><div class=\"mui-header__actions\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon\" aria-label=\"Cambiar tema\"><!-- ícono --></button><a class=\"mui-btn mui-btn--primary\" href=\"/signup\">Empezar</a><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-header__toggle\" aria-expanded=\"false\" aria-controls=\"site-nav\" aria-label=\"Abrir menú\"><!-- ícono hamburguesa --></button></div></div><div class=\"mui-header__scrim\" aria-hidden=\"true\"></div></header>"
+    },
+    {
+      "title": "Variante overlay sobre un hero (JS pone [data-scrolled] al bajar)",
+      "html": "<header class=\"mui-header mui-header--overlay\"><div class=\"mui-header__row\"><a class=\"mui-header__brand\" href=\"/\"><!-- Grano SVG -->Milpa</a><nav class=\"mui-header__nav\" id=\"site-nav\" aria-label=\"primary\"><a class=\"mui-btn mui-btn--ghost\" href=\"/producto\">Producto</a></nav><div class=\"mui-header__actions\"><a class=\"mui-btn mui-btn--primary\" href=\"/signup\">Empezar</a></div></div><div class=\"mui-header__scrim\" aria-hidden=\"true\"></div></header>"
+    }
+  ]
 }

@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "docs",
   "layer": "layout",
-  "version": "0.2.0",
+  "version": "0.5.0",
   "status": "stable",
   "class": "mui-docs",
   "summary": "La parcela de lectura — shell de documentación versionada: topbar sticky con velo (color-mix + blur) hermano ANTERIOR al grid, y grid de 3 columnas nav / artículo / toc centrado a 90rem sobre var(--bg). Reusa el idioma del shell admin (off-canvas con scrim, barra-grano en el item actual) pero es un layout de LECTURA: compone los artefactos de contenido (prose, toc, search, breadcrumbs, version-*) sin redeclararlos. <1100px se cae la columna del toc (reaparece como <details> plegado arriba del artículo); ≤880px el nav se vuelve drawer off-canvas.",
@@ -15,7 +15,8 @@
     "search (el .mui-search-trigger vive en __topbar-actions; el dialog compone modal)",
     "version-switcher + version-banner (cluster versioning: slots en __topbar-actions y arriba del artículo)",
     "breadcrumbs (arriba del artículo, bajo el banner)",
-    "button (links del __topbar-nav: .mui-btn mui-btn--ghost mui-btn--sm; toggles de nav y tema: .mui-btn mui-btn--ghost mui-btn--icon)"
+    "button (links del __topbar-nav: .mui-btn mui-btn--ghost mui-btn--sm; toggles de nav y tema: .mui-btn mui-btn--ghost mui-btn--icon)",
+    "pager (0.5.0: extraído a pieza standalone — el shell solo compone .mui-docs .mui-pager al pie del artículo, que aporta el margin-block-start space-10; anatomía, variantes y tokens del pager viven en su propio contrato, milpa-pager.contract.json)"
   ],
   "anatomy": {
     "root": ".mui-docs — grid [minmax(15rem,17rem) minmax(0,1fr) minmax(13rem,15rem)], gap clamp(space-6..space-10), max-width 90rem centrado, padding-inline clamp(space-4..space-8). Vive sobre var(--bg): el body del consumidor pone background var(--bg) + color var(--text)",
@@ -28,28 +29,20 @@
     "nav-group": ".mui-docs__nav-group — grupo; margin-block-start space-5 entre grupos",
     "nav-heading": ".mui-docs__nav-heading — rótulo mono 2xs uppercase tracking-wide var(--text-muted) (la voz de .mui-sidebar__section-label)",
     "nav-item": "a.mui-docs__nav-item — block, text-sm var(--text-secondary), padding space-1_5/space-3, radius-sm; hover → var(--text) sobre var(--surface) (NO var(--bg) como el admin: acá el lienzo ES bg)",
-    "main": ".mui-docs__main — <main id> (col 2): min-width 0 (el código ancho scrollea adentro), padding-block space-8. El consumidor apila: .mui-version-banner → .mui-breadcrumbs → article.mui-prose → .mui-docs__pager",
+    "main": ".mui-docs__main — <main id> (col 2): min-width 0 (el código ancho scrollea adentro), padding-block space-8. El consumidor apila: .mui-version-banner → .mui-breadcrumbs → article.mui-prose → .mui-pager (compuesto, no propio — ver composes)",
     "aside": ".mui-docs__aside — <aside> (col 3): mismo sticky que el nav; adentro vive .mui-toc (scroll-spy y aria-current=\"location\" son de su contrato)",
     "toc-inline": ".mui-docs__toc-inline — <details> arriba del artículo, visible solo <1100px: summary \"En esta página\" (mono 2xs uppercase, marcador nativo) + el MISMO nav .mui-toc adentro. Marco border-subtle + radius-md; abierto ([open]) el summary gana borde inferior",
-    "pager": ".mui-docs__pager — <nav aria-label> grid 2 col gap space-3, margin-block-start space-10",
-    "pager-link": "a.mui-docs__pager-link — card silenciosa: borde border-subtle, radius-md, padding space-3/space-4; hover → border-strong",
-    "pager-dir": ".mui-docs__pager-dir — rótulo mono 2xs uppercase var(--text-muted): \"← Anterior\" / \"Siguiente →\"",
-    "pager-title": ".mui-docs__pager-title — text-sm weight-medium var(--accent-text)",
+    "pager": "0.5.0: ya NO es anatomía propia — el nav prev/next al pie del artículo es el contrato standalone .mui-pager (ver milpa-pager.contract.json: __link, --prev/--next, __dir, __title). El shell solo aporta el modificador .mui-docs .mui-pager { margin-block-start: space-10 } para conservar el mismo respiro de siempre",
     "scrim": ".mui-docs__scrim — <div aria-hidden=\"true\"> hijo del grid; display none salvo ≤880px con [data-nav-open]: fixed inset 0, z-backdrop, velo color-mix(in srgb, var(--bg) 55%, transparent) con milpa-fade"
   },
-  "variants": {
-    "pager": {
-      "next": ".mui-docs__pager-link--next — text-align end + grid-column 2: con prev ocupa su mitad natural; sin prev queda anclado a la derecha y el hueco a la izquierda"
-    }
-  },
+  "variants": {},
   "states": {
     "nav-current": "a.mui-docs__nav-item[aria-current=\"page\"] — fondo var(--accent-subtle), texto var(--accent-text) weight-medium + barra-grano ::before de 3px var(--accent) radius-full en el arranque (lenguaje exacto de .mui-sidebar__item); nunca una clase",
     "nav-hover": ".mui-docs__nav-item:hover — var(--text) sobre var(--surface)",
     "nav-open": ".mui-docs[data-nav-open] — SOLO ≤880px: drawer en translateX(0) + visibility visible + shadow-md, y scrim visible. Hook de LAYOUT que alterna el JS del consumidor (mismo estatus que .mui-shell--nav-open del admin); la semántica de estado la lleva aria-expanded en el toggle",
     "drawer-closed": "≤880px default — nav fixed, translateX(-100%) + visibility hidden (flipa al TERMINAR el slide-out, delay --dur-moderate): fuera del lienzo, del tab order y del árbol de a11y (z-drawer). El JS del consumidor refuerza con `inert`",
     "toc-open": ".mui-docs__toc-inline[open] — atributo nativo del <details>: el summary gana borde inferior y sube a text-secondary",
-    "hover-pager": ".mui-docs__pager-link:hover — borde border-strong",
-    "focus": "todos los interactivos (brand, nav-item, pager-link) → :focus-visible outline 2px var(--focus) offset 2px; el summary del toc-inline usa offset -2 (anillo interior: es edge-to-edge del marco redondeado, precedente .mui-search__input)"
+    "focus": "todos los interactivos propios (brand, nav-item) → :focus-visible outline 2px var(--focus) offset 2px; el summary del toc-inline usa offset -2 (anillo interior: es edge-to-edge del marco redondeado, precedente .mui-search__input). El .mui-pager compuesto trae su propio hover/focus (ver su contrato)"
   },
   "tokens": [
     "--bg",
@@ -111,7 +104,7 @@
       "<1100px el consumidor renderiza el índice como .mui-docs__toc-inline (<details> arriba del artículo) con el MISMO .mui-toc adentro — el toc no tiene variante inline propia; el scroll-spy sigue moviendo aria-current=\"location\"",
       "≤880px los links del __topbar-nav se ocultan: duplicarlos como primer .mui-docs__nav-group del drawer"
     ],
-    "contrast": "todos pares del gate: nav-item reposo text-secondary ≥4.5 sobre --bg y hover text ≥4.5 sobre --surface (el hover-bg ES --surface — el composite queda verificado, a diferencia del tinte color-mix que NO está gateado); actual accent-text ≥4.5 + barra accent ≥3 sobre --accent-subtle; headings, pager-dir y summary text-muted ≥4.5 sobre --bg; summary hover/open y brand: text-secondary y text ≥4.5 sobre --bg; pager-title accent-text ≥4.5 sobre --bg; hover del pager border-strong ≥3 sobre --bg; drawer sobre var(--bg) → mismos pares. El velo del topbar es color-mix de --bg consigo mismo: lo de encima lee sobre --bg efectivo. Bordes border-subtle (topbar, pager en reposo, toc-inline, drawer) decorativos — exentos de 1.4.11; el scrim es velo decorativo y el thumb del scrollbar (var(--border)) también"
+    "contrast": "todos pares del gate: nav-item reposo text-secondary ≥4.5 sobre --bg y hover text ≥4.5 sobre --surface (el hover-bg ES --surface — el composite queda verificado, a diferencia del tinte color-mix que NO está gateado); actual accent-text ≥4.5 + barra accent ≥3 sobre --accent-subtle; headings y summary text-muted ≥4.5 sobre --bg; summary hover/open y brand: text-secondary y text ≥4.5 sobre --bg; drawer sobre var(--bg) → mismos pares. El velo del topbar es color-mix de --bg consigo mismo: lo de encima lee sobre --bg efectivo. Bordes border-subtle (topbar, toc-inline, drawer) decorativos — exentos de 1.4.11; el scrim es velo decorativo y el thumb del scrollbar (var(--border)) también. El .mui-pager compuesto trae sus propios pares (pager-dir/pager-title sobre --bg) verificados en su propio contrato"
   },
   "motion": {
     "transitions": "drawer: transform --dur-moderate --ease-grano — germina desde el borde y se asienta, nunca rebota; visibility acompaña sin animar (delay --dur-moderate al cerrar, --dur-instant al abrir) — patrón exacto del shell admin. Scrim: milpa-fade --dur-moderate --ease-standard both. Hovers (nav-item, pager, summary) en --dur-fast --ease-standard",
@@ -120,7 +113,7 @@
   "examples": [
     {
       "title": "Parcela completa: topbar + nav + artículo + toc",
-      "html": "<header class=\"mui-docs__topbar\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-docs__nav-toggle\" aria-expanded=\"false\" aria-controls=\"docs-nav\" aria-label=\"Abrir navegación\"><!-- ícono hamburguesa --></button><a class=\"mui-docs__brand\" href=\"/docs\"><!-- Grano SVG -->Milpa</a><nav class=\"mui-docs__topbar-nav\" aria-label=\"secciones\"><a class=\"mui-btn mui-btn--ghost mui-btn--sm\" href=\"/docs/0.2/guia\">Guía</a><a class=\"mui-btn mui-btn--ghost mui-btn--sm\" href=\"/docs/0.2/api\">API</a></nav><div class=\"mui-docs__topbar-actions\"><button type=\"button\" class=\"mui-search-trigger\"><!-- ver contrato search --></button><!-- .mui-version-switcher: ver contrato version-switcher --><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon\" aria-label=\"Cambiar tema\"><!-- ícono --></button></div></header><div class=\"mui-docs\"><nav class=\"mui-docs__nav\" id=\"docs-nav\" aria-label=\"Documentación\"><div class=\"mui-docs__nav-group\"><p class=\"mui-docs__nav-heading\">Empezar</p><a class=\"mui-docs__nav-item\" href=\"/docs/0.2/instalacion\" aria-current=\"page\">Instalación</a><a class=\"mui-docs__nav-item\" href=\"/docs/0.2/tokens\">Tokens</a></div></nav><main class=\"mui-docs__main\" id=\"main\"><!-- .mui-version-banner + .mui-breadcrumbs --><article class=\"mui-prose\"><h1>Instalación</h1><p>…</p></article><nav class=\"mui-docs__pager\" aria-label=\"Paginación\"><a class=\"mui-docs__pager-link\" href=\"/docs/0.2/introduccion\"><span class=\"mui-docs__pager-dir\">← Anterior</span><span class=\"mui-docs__pager-title\">Introducción</span></a><a class=\"mui-docs__pager-link mui-docs__pager-link--next\" href=\"/docs/0.2/tokens\"><span class=\"mui-docs__pager-dir\">Siguiente →</span><span class=\"mui-docs__pager-title\">Tokens</span></a></nav></main><aside class=\"mui-docs__aside\"><nav class=\"mui-toc\" aria-label=\"En esta página\"><!-- ver contrato toc --></nav></aside><div class=\"mui-docs__scrim\" aria-hidden=\"true\"></div></div>"
+      "html": "<header class=\"mui-docs__topbar\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-docs__nav-toggle\" aria-expanded=\"false\" aria-controls=\"docs-nav\" aria-label=\"Abrir navegación\"><!-- ícono hamburguesa --></button><a class=\"mui-docs__brand\" href=\"/docs\"><!-- Grano SVG -->Milpa</a><nav class=\"mui-docs__topbar-nav\" aria-label=\"secciones\"><a class=\"mui-btn mui-btn--ghost mui-btn--sm\" href=\"/docs/0.2/guia\">Guía</a><a class=\"mui-btn mui-btn--ghost mui-btn--sm\" href=\"/docs/0.2/api\">API</a></nav><div class=\"mui-docs__topbar-actions\"><button type=\"button\" class=\"mui-search-trigger\"><!-- ver contrato search --></button><!-- .mui-version-switcher: ver contrato version-switcher --><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon\" aria-label=\"Cambiar tema\"><!-- ícono --></button></div></header><div class=\"mui-docs\"><nav class=\"mui-docs__nav\" id=\"docs-nav\" aria-label=\"Documentación\"><div class=\"mui-docs__nav-group\"><p class=\"mui-docs__nav-heading\">Empezar</p><a class=\"mui-docs__nav-item\" href=\"/docs/0.2/instalacion\" aria-current=\"page\">Instalación</a><a class=\"mui-docs__nav-item\" href=\"/docs/0.2/tokens\">Tokens</a></div></nav><main class=\"mui-docs__main\" id=\"main\"><!-- .mui-version-banner + .mui-breadcrumbs --><article class=\"mui-prose\"><h1>Instalación</h1><p>…</p></article><nav class=\"mui-pager\" aria-label=\"Paginación\"><a class=\"mui-pager__link\" href=\"/docs/0.2/introduccion\"><span class=\"mui-pager__dir\">← Anterior</span><span class=\"mui-pager__title\">Introducción</span></a><a class=\"mui-pager__link mui-pager__link--next\" href=\"/docs/0.2/tokens\"><span class=\"mui-pager__dir\">Siguiente →</span><span class=\"mui-pager__title\">Tokens</span></a></nav></main><aside class=\"mui-docs__aside\"><nav class=\"mui-toc\" aria-label=\"En esta página\"><!-- ver contrato toc --></nav></aside><div class=\"mui-docs__scrim\" aria-hidden=\"true\"></div></div>"
     },
     {
       "title": "TOC inline (<1100px) plegado arriba del artículo",

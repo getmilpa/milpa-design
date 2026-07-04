@@ -1024,4 +1024,90 @@ a.mui-feature-grid__item:focus-visible {
   }
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   cluster · header  (la plaza — el header público / marketing)
+   Tercer header del sistema, distinto de mui-topbar (admin) y
+   mui-docs__topbar (docs). Barra sólida sticky + off-canvas móvil
+   (patrón EXACTO del shell docs: [data-nav-open] en el root, aria-expanded
+   en el toggle) + variante overlay sobre hero.
+   ════════════════════════════════════════════════════════════════════ */
+.mui-header {
+  position: sticky; top: 0; z-index: var(--z-sticky);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-block-end: 1px solid var(--border-subtle);
+}
+.mui-header__row {
+  display: flex; align-items: center; gap: var(--space-4);
+  min-height: 3.5rem;
+}
+.mui-header__brand {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  color: var(--text); text-decoration: none;
+}
+.mui-header__nav {
+  margin-inline-start: auto;
+  display: flex; align-items: center; gap: var(--space-1);
+}
+.mui-header__actions {
+  display: flex; align-items: center; gap: var(--space-2);
+}
+/* con nav a la derecha, las actions no reclaman el margin-auto */
+.mui-header__nav + .mui-header__actions { margin-inline-start: var(--space-2); }
+.mui-header__toggle { display: none; }
+.mui-header__scrim { display: none; }
+
+/* overlay — transparente sobre el hero; se solidifica con [data-scrolled] */
+.mui-header--overlay {
+  background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none;
+  border-block-end-color: transparent;
+  transition:
+    background var(--dur-moderate) var(--ease-standard),
+    border-color var(--dur-moderate) var(--ease-standard);
+  /* reduce → dur colapsa a 1 frame por el contrato global */
+}
+.mui-header--overlay[data-scrolled] {
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-block-end-color: var(--border-subtle);
+}
+
+/* ---------- responsive ≤880px: nav → drawer off-canvas ----------
+   Mismo mecanismo que mui-docs: cerrado = fuera del lienzo y fuera del
+   árbol de a11y (visibility flipa al terminar el slide-out). El hook de
+   layout es [data-nav-open] en .mui-header; la semántica la lleva
+   aria-expanded en el toggle. El JS del consumidor alterna inert. */
+@media (max-width: 880px) {
+  .mui-header__toggle { display: inline-flex; }
+  .mui-header__nav {
+    position: fixed; inset-block: 0; inset-inline-end: 0;
+    width: 16rem; margin-inline-start: 0;
+    flex-direction: column; align-items: stretch; gap: var(--space-1);
+    padding: calc(3.5rem + var(--space-3)) var(--space-3) var(--space-4);
+    background: var(--bg);
+    border-inline-start: 1px solid var(--border-subtle);
+    z-index: var(--z-drawer);
+    transform: translateX(100%);
+    visibility: hidden;
+    transition:
+      transform  var(--dur-moderate) var(--ease-grano),
+      visibility var(--dur-instant) var(--ease-linear) var(--dur-moderate);
+  }
+  .mui-header[data-nav-open] .mui-header__nav {
+    transform: none; visibility: visible; box-shadow: var(--shadow-md);
+    transition:
+      transform  var(--dur-moderate) var(--ease-grano),
+      visibility var(--dur-instant);
+  }
+  .mui-header[data-nav-open] .mui-header__scrim {
+    display: block;
+    position: fixed; inset: 0;
+    z-index: var(--z-backdrop);
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    animation: milpa-fade var(--dur-moderate) var(--ease-standard) both;
+  }
+}
+
 } /* @layer milpa.layouts */

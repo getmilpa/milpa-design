@@ -1301,8 +1301,10 @@ a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-off
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .mui-cart-line__variant { margin: 0; font-size: var(--text-xs); color: var(--text-muted); }
-/* qty — compone .mui-input-group: acá solo la fila */
-.mui-cart-line__qty { display: inline-flex; align-items: center; gap: var(--space-1); }
+/* qty — el control es .mui-input-group--stepper: él define el box (inline-flex,
+   align-items:stretch, botones a ras). Acá no se define layout de flex: hacerlo
+   pisaría el stretch del stepper y los botones no llenarían la altura del grupo.
+   El único anclaje de esta pieza es el grid-area, dentro del @media de abajo. */
 /* remove — slot de composición (.mui-btn--ghost --icon --sm); solo anclaje */
 .mui-cart-line__remove { justify-self: end; }
 

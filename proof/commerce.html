@@ -18,8 +18,19 @@
 <style>
 /* ===== page styles (shop-*) — the system does the rest; all tokens ===== */
 body { margin:0; }
+/* the mui-header off-canvas panel is position:fixed + translateX(100%) off-canvas when
+   closed → it extends the doc's horizontal scroll on mobile; clip on BOTH html+body
+   removes it (clip, not hidden: no scroll container, vertical axis untouched) */
+html, body { overflow-x: clip; }
 .shop-wordmark { display:block; height:1rem; width:auto; }
 .shop-theme-toggle { font-family:var(--font-mono); }
+/* ≤880px: the header actions (search + theme + cart) are wider than a phone; collapse the
+   search into the store body so brand + hamburger + theme + cart fit, and drop the "trueque"
+   brand badge (the wordmark already carries the identity) to keep the cart from clipping */
+@media (max-width: 880px) {
+  .mui-header__actions .mui-input-group { display: none; }
+  .mui-header__brand .mui-badge { display: none; }
+}
 /* SVG placeholders — the media contracts size `img`; the inline SVG mirrors that */
 .shop-ph { display:block; width:100%; height:100%; }
 .mui-product-card[aria-disabled="true"] .shop-ph { opacity:.5; }

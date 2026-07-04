@@ -25,6 +25,7 @@ html, body { overflow-x: clip; }
 .troje-mono { font-family: var(--font-mono); }
 .troje-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr)); gap: var(--space-4); }
 .troje-stats { margin-block-start: var(--space-10); }
+.troje-trend { margin-block-start: var(--space-6); }
 .troje-logos { margin-block-start: var(--space-6); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted); }
 .troje-dash { width: 100%; }
 .troje-dash .mui-card__body { display: grid; gap: var(--space-5); }
@@ -250,6 +251,41 @@ html, body { overflow-x: clip; }
           <span class="mui-stat__value">38s</span>
           <span class="mui-stat__delta mui-stat__delta--down mui-stat__delta--positive">−12s<span class="mui-sr-only"> down, improving</span></span>
           <span class="mui-stat__meta">p50 · full app restore</span>
+        </div>
+      </div>
+
+      <div class="mui-card troje-trend">
+        <div class="mui-card__body">
+          <div class="mui-chart mui-chart--line">
+            <p class="mui-chart__title">Backups harvested · last 6 months</p>
+            <div class="mui-chart__canvas" aria-hidden="true">
+              <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                <polyline points="0,36 20,30 40,32 60,16 80,10 100,4" style="--_c: var(--viz-2)"></polyline>
+              </svg>
+            </div>
+            <div class="mui-chart__ticks" aria-hidden="true">
+              <span class="mui-chart__tick">Feb</span>
+              <span class="mui-chart__tick">Mar</span>
+              <span class="mui-chart__tick">Apr</span>
+              <span class="mui-chart__tick">May</span>
+              <span class="mui-chart__tick">Jun</span>
+              <span class="mui-chart__tick">Jul</span>
+            </div>
+            <table class="mui-sr-only">
+              <caption>Backups harvested per month, last 6 months (thousands)</caption>
+              <thead>
+                <tr><th scope="col">Month</th><th scope="col">Backups (thousands)</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Feb</th><td>32</td></tr>
+                <tr><th scope="row">Mar</th><td>38</td></tr>
+                <tr><th scope="row">Apr</th><td>36</td></tr>
+                <tr><th scope="row">May</th><td>52</td></tr>
+                <tr><th scope="row">Jun</th><td>58</td></tr>
+                <tr><th scope="row">Jul</th><td>64</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

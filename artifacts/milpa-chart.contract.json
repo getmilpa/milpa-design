@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "chart",
   "layer": "artifact",
-  "version": "0.2.0",
+  "version": "0.5.0",
   "status": "stable",
   "class": "mui-chart",
   "summary": "Shell de visualización CSS/SVG — anatomía, color y estados; los datos los inyecta el consumidor con props privadas inline (--_v magnitud, --_c serie) o con su propio <svg> en --line. Series SOLO con --viz-1..6; grilla/ejes con --border-subtle (decorativos); labels con --text-muted. El canvas es imagen para el lector: role=\"img\" + aria-label con el resumen, o tabla accesible .mui-sr-only. El color nunca distingue una serie por sí solo: la leyenda la etiqueta con texto.",
@@ -18,7 +18,8 @@
     "swatch": ".mui-chart__swatch — cuadrado 0.75rem radius-xs; la serie vía .mui-chart__swatch--1..6 (setean --_c: var(--viz-N) y --_ca: var(--viz-N-active)) o --_c/--_ca inline; regla 4: auto-borde 1px var(--_ca)",
     "bar": ".mui-chart__bar — la marca de dato: fill var(--_c, var(--viz-1)); magnitud vía --_v inline (height en --bars, width en --bars-h); min 1px para que el cero exista (con el auto-borde, el cero se ve ~3px: mejor para regla 4). --_c hereda: seteado en el canvas colorea toda la serie Regla 4: auto-borde 1px var(--_ca, var(--viz-1-active)) — los pares viz-N/viz-N-active viajan juntos (setear --_ca junto a --_c).",
     "axis": ".mui-chart__axis — eje X de --bars: espejo del grid del canvas (mismo gap, los ticks caen alineados bajo su barra); línea base var(--border-subtle) pegada a las barras",
-    "tick": ".mui-chart__tick — etiqueta de categoría: mono 2xs var(--text-muted), ellipsis",
+    "tick": ".mui-chart__tick — etiqueta de categoría: mono 2xs var(--text-muted), ellipsis; vive dentro de .mui-chart__axis (grid, --bars) o de .mui-chart__ticks (flex, --line/continuo) — mismo tick, dos contenedores según la forma del eje",
+    "ticks": ".mui-chart__ticks — fila de ticks del eje en HTML para --line (el <text> SVG se distorsiona bajo el viewBox del canvas): flex space-between, categorías equiespaciadas bajo el canvas; mono 2xs var(--text-muted) como __axis; aria-hidden=\"true\" si el eje ya está descrito en el fallback textual del canvas (aria-label o tabla .mui-sr-only)",
     "donut": ".mui-chart__donut — anillo redondo; el background conic-gradient lo arma el consumidor inline SOLO con tokens viz. Agujero vía ::after con var(--_hole, var(--surface)) (sobre --bg setear --_hole: var(--bg)); tamaño --_size (9rem) y grosor --_ring (space-6)",
     "svg": "clases para el <svg> del consumidor en --line: .mui-chart__stroke-1..6 (trazo 2px var(--viz-N), fill none), .mui-chart__area-1..6 (fill color-mix 18% del viz — refuerzo decorativo del trazo, nunca la única marca), .mui-chart__grid-line (stroke var(--border-subtle)), .mui-chart__axis-label (fill var(--text-muted), mono 2xs)"
   },
@@ -26,7 +27,7 @@
     "tipo": {
       "bars": ".mui-chart--bars — columnas iguales ancladas a la base; cada barra lleva style=\"--_v:62%\" (y la serie con el PAR --_c: var(--viz-N); --_ca: var(--viz-N-active) — viajan juntos, regla 4); radius superior sutil",
       "bars-h": ".mui-chart--bars-h — filas apiladas; --_v pasa a ser el ancho",
-      "line": ".mui-chart--line — el canvas contiene un <svg> del consumidor (viewBox propio; nosotros lo estiramos a width 100% × alto --_h)",
+      "line": ".mui-chart--line — el canvas contiene un <svg> del consumidor (viewBox propio; nosotros lo estiramos a width 100% × alto --_h). El trazo del <polyline>/<path> es por --viz/--_c: o la clase por serie .mui-chart__stroke-1..6 (fill/relleno documentados en 'svg' arriba), o más simple, style=\"--_c: var(--viz-N)\" inline (mismo patrón --_c que .mui-chart__bar) — ambos caminos conviven (la clase por serie, más específica, gana si están las dos). El eje va en .mui-chart__ticks/.mui-chart__tick (HTML, no <text> SVG: se distorsiona bajo el viewBox)",
       "donut": ".mui-chart--donut — proporciones de un todo; el conic-gradient no admite borde por segmento (regla 4): separá las series con franjas finas de var(--_hole) entre paradas (patrón de gap ~1%, mejora la lectura y ayuda en CVD): style=\"background: conic-gradient(var(--viz-1) 0 39.5%, var(--_hole, var(--surface)) 39.5% 40.5%, var(--viz-2) 40.5% 74.5%, var(--_hole, var(--surface)) 74.5% 75.5%, var(--viz-3) 75.5% 99%, var(--_hole, var(--surface)) 99% 100%)\"",
       "sparkline": ".mui-chart--sparkline — mini inline (alto 2rem, ancho --_w default 6rem) para .mui-stat y celdas de tabla; compone con --bars o --line; sin título ni leyenda — el aria-label resume"
     },

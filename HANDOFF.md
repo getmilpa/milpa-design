@@ -45,9 +45,11 @@ gallery/saas/themed — el skin "Nopal" pasa el gate sin tocar bundles). Landing
 
 ✅ **0.3.0 — la plaza (T9 cumplido, backlog A/B/E):** el header público **`mui-header`** (barra +
 off-canvas + variante overlay — el tercer header, junto a `mui-topbar` admin y `mui-docs__topbar`
-docs), migrado en landing/blog/saas/gallery/commerce (retiran sus headers bespoke); contenido/media
-(`mui-card__media` cover edge-to-edge, `mui-byline` avatar+nombre+meta reusando `mui-avatar`); media
-slots `:is(img, svg, picture)` en card/product-card/media-gallery/media-grid; el gate `@layer` pasa
+docs), adoptado en landing/blog/saas/gallery/commerce (landing usa `--overlay`; blog/saas/gallery
+retiran sus headers bespoke; commerce deja de usar mal el `mui-topbar` admin); contenido/media
+(`mui-card__media` cover edge-to-edge —pieza nueva, nace con `:is()`—, `mui-byline` avatar+nombre+meta
+reusando `mui-avatar`); los cuatro media slots existentes se ensanchan de `img`-only a
+`:is(img, svg, picture)` (product-card/media-gallery/media-grid/lightbox); el gate `@layer` pasa
 de substring a **brace-walk** (`scripts/layer-guard.mjs` + test propio en `npm test`); el lightbox
 del gallery **respeta el filtro activo** (contador n/filtrados). Gate: **193/193 AA · 65
 contratos**. AA-pairs audit de cierre: **0 pares nuevos** — mui-header/mui-byline reusan
@@ -95,8 +97,11 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
      usos).~~ ✅ **Hecho (B)**, 0.3.0.
   3. ~~Media slots como `:is(img, svg, picture)` en product-card/media-gallery/media-grid/
      lightbox (hoy `img`-only; los SVG token-driven necesitan plomería del consumidor).~~ ✅
-     **Hecho (B)** en card/product-card/media-gallery/media-grid, 0.3.0 — `mui-hero__media` y
-     `mui-cart-line__media` quedan `img`-only a propósito (ver hallazgo nuevo #10 abajo).
+     **Hecho (B)**: ensanchados de `img`-only a `:is(img, svg, picture)` los cuatro slots
+     existentes — product-card/media-gallery/media-grid/lightbox — en 0.3.0. (`mui-card__media` es
+     pieza NUEVA de esta versión y nace con `:is()` de fábrica, no es un slot "ensanchado".)
+     `mui-hero__media` y `mui-cart-line__media` quedan `img`-only a propósito (ver hallazgo nuevo
+     #10 abajo).
   4. **C · abierto.** Qty stepper extraíble (`mui-input-group--stepper`) — hoy vive solo en
      cart-line.
   5. **C · abierto.** `mui-tabs` variante pill/filtro (con su patrón ARIA de panel único

@@ -42,9 +42,11 @@ html, body { overflow-x: clip; }
 .shop-buy > * + * { margin-block-start:var(--space-5); }
 .shop-buy fieldset { border:0; margin:0; padding:0; } /* UA fieldset chrome — .mui-field doesn't reset it */
 .shop-options { display:flex; flex-wrap:wrap; gap:var(--space-3) var(--space-5); }
-/* the cart-line qty idiom, standalone on the PDP — sizing/centering now come
-   from .mui-input-group--stepper; this just keeps the row's baseline gap */
-.shop-qty { display:inline-flex; align-items:center; gap:var(--space-1); }
+/* the qty control is now .mui-input-group--stepper — it defines the box itself
+   (inline-flex, align-items:stretch, flush buttons). No local .shop-qty flex rule:
+   setting align-items:center here would beat the primitive (unlayered > layers) and
+   the ± buttons would float centered instead of stretching to the group height.
+   .shop-qty stays on the element as a harmless hook. */
 .shop-buy-row { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); }
 .shop-badges { margin:0; }
 /* drawer demo stage — the dialog is fixed/full-height by contract; docked here to show the composition */

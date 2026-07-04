@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "media-gallery",
   "layer": "component",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "status": "stable",
   "class": "mui-media-gallery",
   "summary": "Galería de PDP: imagen principal 1:1 enmarcada (regla 1: la definición la da el borde, no la sombra) + tira de thumbs scrolleable en inline. Cada thumb es un <button> nativo con aria-label por imagen; la activa la marca [aria-current=\"true\"] (la mueve el consumidor al intercambiar la principal): borde var(--accent) ≥3:1 + opacity 1 — la selección nunca viaja solo en el borde, la opacidad acompaña.",
@@ -12,9 +12,9 @@
   ],
   "anatomy": {
     "root": ".mui-media-gallery — flex column gap space-3",
-    "main": ".mui-media-gallery__main — aspect-ratio 1/1, radius-lg, overflow hidden, borde 1px var(--border-subtle); img cover (display block, 100%/100%)",
+    "main": ".mui-media-gallery__main — aspect-ratio 1/1, radius-lg, overflow hidden, borde 1px var(--border-subtle); :is(img, svg, picture) cover (display block, 100%/100%). El slot acepta img, svg inline token-driven o picture; un svg debe portar su propio viewBox/dimensioning para llenar el cuadro 1:1 igual que un img",
     "thumbs": ".mui-media-gallery__thumbs — flex gap space-2, overflow-x auto, padding-block space-1 (respiro para que el overflow no recorte el ring de foco en bloque); en el markup: role=\"group\" + aria-label",
-    "thumb": ".mui-media-gallery__thumb — button 4rem cuadrado, radius-md, overflow hidden, borde 1px var(--border-subtle), flex none; img cover; reposa a opacity .75"
+    "thumb": ".mui-media-gallery__thumb — button 4rem cuadrado, radius-md, overflow hidden, borde 1px var(--border-subtle), flex none; :is(img, svg, picture) cover; reposa a opacity .75. Mismo slot ampliado: un svg de thumb debe portar su propio viewBox/dimensioning"
   },
   "variants": {
     "base": {

@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "media-gallery",
   "layer": "component",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "status": "stable",
   "class": "mui-media-gallery",
   "summary": "Galería de PDP: imagen principal 1:1 enmarcada (regla 1: la definición la da el borde, no la sombra) + tira de thumbs scrolleable en inline. Cada thumb es un <button> nativo con aria-label por imagen; la activa la marca [aria-current=\"true\"] (la mueve el consumidor al intercambiar la principal): borde var(--accent) ≥3:1 + opacity 1 — la selección nunca viaja solo en el borde, la opacidad acompaña.",
@@ -50,7 +50,9 @@
       "la tira scrollea sola al enfocar un thumb fuera de vista (overflow-x auto + scroll de foco del navegador)"
     ],
     "behavior": [
-      "el swap de la principal es JS del consumidor: cambiar src/srcset + alt de __main y mover [aria-current] al thumb elegido"
+      "click en un .mui-media-gallery__thumb dispara el swap de la principal: el consumidor reemplaza el contenido (img/svg/picture) y src/srcset del .mui-media-gallery__main por los del thumb elegido, y actualiza el alt de __main para describir la nueva vista — el alt SIEMPRE coincide con lo que se ve, nunca queda desincronizado tras el swap",
+      "aria-current=\"true\" viaja con la selección: el consumidor lo quita del thumb previamente activo y lo pone en el recién elegido — solo un thumb activo a la vez (ver estado 'current')",
+      "los thumbs son <button> nativos: ya focusables por Tab y activables con click, Enter o Space sin JS adicional para el teclado — el mismo handler de selección corre para click y para la activación por teclado, vía el evento click nativo del button"
     ],
     "contrast": "borde activo var(--accent) ≥3:1 sobre --bg y --surface (gate) — y la opacidad 1 vs .75 refuerza: la selección no viaja solo en el borde. El borde subtle en reposo es decorativo. Los ratios sobre fotografía no se pueden garantizar: por eso la selección se marca FUERA del bitmap (borde + opacidad del thumb completo)"
   },

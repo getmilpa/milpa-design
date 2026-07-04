@@ -18,6 +18,10 @@
 <style>
 /* ===== page styles (gal-*) — the system does the rest; all tokens ===== */
 body { margin:0; background:var(--bg); }
+/* the mui-header off-canvas panel is position:fixed + translateX(100%) off-canvas when
+   closed → it extends the doc's horizontal scroll on mobile; clip on BOTH html+body
+   removes it (clip, not hidden: no scroll container, vertical axis untouched) */
+html, body { overflow-x: clip; }
 .gal-wordmark { height:1rem; width:auto; display:block; }
 .gal-theme-toggle { font-family:var(--font-mono); }
 /* token-driven SVG placeholders — the contract styles img; inline <svg> needs the same plumbing.

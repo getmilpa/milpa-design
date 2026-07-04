@@ -17,6 +17,10 @@
 <style>
 /* ===== page styles (troje-*) — the system does the rest; all tokens ===== */
 body { margin: 0; }
+/* the mui-header off-canvas panel is position:fixed + translateX(100%) off-canvas when
+   closed → it extends the doc's horizontal scroll on mobile; clip on BOTH html+body
+   removes it (clip, not hidden: no scroll container, vertical axis untouched) */
+html, body { overflow-x: clip; }
 .troje-brand { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--text); text-decoration: none; }
 .troje-mono { font-family: var(--font-mono); }
 .troje-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr)); gap: var(--space-4); }

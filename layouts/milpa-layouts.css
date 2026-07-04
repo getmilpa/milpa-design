@@ -354,6 +354,21 @@
   max-width: 62ch;
 }
 
+/* ---------- Rhythm & grouping · .mui-stack / .mui-cluster ----------
+   Dos utilidades de layout puro (sin fondo, sin borde — no son piezas
+   visuales, son ritmo): .mui-stack apila en columna con gap consistente
+   (el ritmo vertical de un grupo pequeño — texto + acciones, campos de
+   un form); .mui-cluster arma una fila que ENVUELVE con gap + alineación
+   (badges, botones, tags). El gap por defecto es space-4; --sm/--lg lo
+   mueven a space-2/space-6 (mismo patrón de tamaño que .mui-section). */
+.mui-stack { display: flex; flex-direction: column; gap: var(--space-4); }
+.mui-stack--sm { gap: var(--space-2); }
+.mui-stack--lg { gap: var(--space-6); }
+/* cluster — fila que envuelve con gap + alineación (badges, botones, tags). */
+.mui-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+.mui-cluster--sm { gap: var(--space-2); }
+.mui-cluster--lg { gap: var(--space-6); }
+
 /* ---------- Hero · .mui-hero ----------
    El momento firma: dos columnas asimétricas (el texto manda, el media
    acompaña) que se apilan ≤880px. Compone .mui-btn en __cta y .mui-badge

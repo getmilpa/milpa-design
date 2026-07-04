@@ -1,0 +1,45 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "stack",
+  "layer": "layout",
+  "version": "0.5.0",
+  "status": "stable",
+  "class": "mui-stack",
+  "summary": "Ritmo vertical: apila sus hijos en columna con un gap consistente — el reemplazo del margin-block ad-hoc entre piezas de un grupo pequeño (texto + acciones, badges + botones, campos de un form). Sin fondo, sin borde, sin semántica propia: es puro layout, mapeado a los tokens de spacing de la casa. El gap por defecto es space-4; --sm/--lg lo mueven a space-2/space-6 (mismo patrón de tamaño que .mui-section/.mui-container).",
+  "element": [
+    "div (.mui-stack — envoltorio neutral; también aplica a <ul>/<ol> con list-style:none del consumidor, o a cualquier contenedor de flujo)"
+  ],
+  "variants": {
+    "size": {
+      "sm": ".mui-stack--sm — gap var(--space-2): grupos densos (campos de un form, filas de metadata)",
+      "lg": ".mui-stack--lg — gap var(--space-6): grupos con más aire (bloques de contenido separados)"
+    }
+  },
+  "states": {},
+  "tokens": [
+    "--space-2",
+    "--space-4",
+    "--space-6"
+  ],
+  "a11y": {
+    "element": "presentacional — no aporta rol ni semántica propia; el elemento real (div, ul, section…) y su rol los decide el consumidor",
+    "aria": [
+      "ningún atributo propio — el orden visual (columna) coincide siempre con el orden del documento, así que no hay nada que reordenar para lectores"
+    ],
+    "contrast": "n/a — no pinta fondo ni texto; el contraste lo llevan los hijos"
+  },
+  "motion": {
+    "transitions": "ninguna — es layout estático, sin estados que animar",
+    "reducedMotion": "n/a"
+  },
+  "examples": [
+    {
+      "title": "Grupo vertical por defecto (gap space-4)",
+      "html": "<div class=\"mui-stack\"><p class=\"mui-section__lede\">Cada backup verificado, cada restore ensayado.</p><div class=\"mui-cluster\"><a class=\"mui-btn mui-btn--sm\" href=\"/security\">Leer el whitepaper</a></div></div>"
+    },
+    {
+      "title": "Variante --sm — grupo denso",
+      "html": "<div class=\"mui-stack mui-stack--sm\"><span class=\"mui-badge\">v1.2</span><span class=\"mui-badge mui-badge--secondary\">SOC 2 Type II</span></div>"
+    }
+  ]
+}

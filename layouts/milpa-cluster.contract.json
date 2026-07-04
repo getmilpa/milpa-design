@@ -1,0 +1,45 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "cluster",
+  "layer": "layout",
+  "version": "0.5.0",
+  "status": "stable",
+  "class": "mui-cluster",
+  "summary": "Grupo horizontal que ENVUELVE: fila con gap + alineación centrada que pasa a varias líneas cuando el contenido no entra (badges, botones, tags). Es la contraparte de .mui-stack — mismo patrón de tamaño de gap (space-2/4/6 por --sm/--lg/por defecto), pero en el eje inline en vez del de bloque. Sin fondo, sin borde, sin semántica propia: es puro layout.",
+  "element": [
+    "div (.mui-cluster — envoltorio neutral alrededor de badges, botones o tags; también aplica a <ul>/<ol> con list-style:none del consumidor)"
+  ],
+  "variants": {
+    "size": {
+      "sm": ".mui-cluster--sm — gap var(--space-2): filas densas (tags, chips de filtro)",
+      "lg": ".mui-cluster--lg — gap var(--space-6): filas con más aire (acciones destacadas)"
+    }
+  },
+  "states": {},
+  "tokens": [
+    "--space-2",
+    "--space-4",
+    "--space-6"
+  ],
+  "a11y": {
+    "element": "presentacional — no aporta rol ni semántica propia; el elemento real (div, ul, nav…) y su rol los decide el consumidor",
+    "aria": [
+      "ningún atributo propio — el wrap es puramente visual: el orden de tabulación sigue el orden del documento en cualquier ancho"
+    ],
+    "contrast": "n/a — no pinta fondo ni texto; el contraste lo llevan los hijos (badges/botones componen sus propios pares del gate)"
+  },
+  "motion": {
+    "transitions": "ninguna — es layout estático, sin estados que animar",
+    "reducedMotion": "n/a"
+  },
+  "examples": [
+    {
+      "title": "Fila de badges que envuelve (gap space-4)",
+      "html": "<div class=\"mui-cluster\"><span class=\"mui-badge mui-badge--accent\">SOC 2 Type II</span><span class=\"mui-badge\">GDPR ready</span><span class=\"mui-badge\">AES-256</span></div>"
+    },
+    {
+      "title": "Variante --sm — fila de botones densa",
+      "html": "<div class=\"mui-cluster mui-cluster--sm\"><a class=\"mui-btn mui-btn--sm\" href=\"/security\">Whitepaper</a><a class=\"mui-btn mui-btn--ghost mui-btn--sm\" href=\"/trust\">Trust center</a></div>"
+    }
+  ]
+}

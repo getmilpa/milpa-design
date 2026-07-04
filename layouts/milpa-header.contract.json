@@ -61,7 +61,7 @@
       "toggle (≤880px, JS del consumidor): click en .mui-header__toggle alterna [data-nav-open] en .mui-header Y aria-expanded en el botón (aria-controls → id del nav)",
       "click en el scrim cierra el panel (listener del consumidor; el scrim es aria-hidden — la vía accesible es Escape/toggle)",
       "mientras el panel está CERRADO ≤880px, el JS del consumidor mantiene inert en el nav y lo quita al abrir — cinturón y tirantes sobre el visibility:hidden del CSS (WCAG 2.4.3/2.4.7)",
-      "el panel off-canvas es position:fixed y, cerrado ≤880px, queda fuera del lienzo con translateX(100%) (16rem de ancho): eso extiende el scroll horizontal del documento, así que el consumidor que use el off-canvas DEBE recortar el desborde en la raíz de la página (html, body { overflow-x: clip }) para evitar un scroll horizontal en móvil — clip, no hidden: no crea contenedor de scroll ni fuerza el eje vertical",
+      "el panel off-canvas es position:fixed y, cerrado ≤880px, queda fuera del lienzo con translateX(100%) (16rem de ancho): eso extiende el scroll horizontal del documento, así que el consumidor que use el off-canvas debe evitar el scroll horizontal que introduce el panel — típicamente con html, body { overflow-x: clip } en la raíz de la página (clip, no hidden: no crea contenedor de scroll ni fuerza el eje vertical); un consumidor que ya recorte ese eje por otra vía cumple igual (p. ej. el landing lo hace con su pin de GSAP)",
       "la variante --overlay: el JS del consumidor pone [data-scrolled] al pasar un umbral de scroll"
     ],
     "invariant": "la variante --overlay asume un hero suficientemente oscuro/sólido para que el texto quede AA; sobre heros fotográficos el consumidor debe añadir su propio velo"

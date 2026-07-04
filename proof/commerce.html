@@ -24,9 +24,10 @@ body { margin:0; }
 html, body { overflow-x: clip; }
 .shop-wordmark { display:block; height:1rem; width:auto; }
 .shop-theme-toggle { font-family:var(--font-mono); }
-/* ≤880px: the header actions (search + theme + cart) are wider than a phone; collapse the
-   search into the store body so brand + hamburger + theme + cart fit, and drop the "trueque"
-   brand badge (the wordmark already carries the identity) to keep the cart from clipping */
+/* ≤880px: the header actions (search + theme + cart) are wider than a phone. The header
+   search is hidden to fit the bar; this proof has no mobile search affordance (known
+   mui-header gap — actions don't yet collapse gracefully). The "trueque" brand badge is
+   also dropped (the wordmark already carries the identity). Cart stays. */
 @media (max-width: 880px) {
   .mui-header__actions .mui-input-group { display: none; }
   .mui-header__brand .mui-badge { display: none; }

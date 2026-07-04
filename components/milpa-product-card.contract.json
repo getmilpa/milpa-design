@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "product-card",
   "layer": "component",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "status": "stable",
   "class": "mui-product-card",
   "summary": "El puesto del mercado: card de producto para grillas de catálogo. Marco de card (var(--surface) + borde sutil + radius-lg, overflow hidden), media retrato 4/5 edge-to-edge y cuerpo compacto que compone badge, precio y rating. La interactividad la trae el <a> del __title como stretched link (::after inset 0); el afford de hover (borde strong + sombra) SOLO existe cuando ese link existe (:has) — una card sin link no finge ser clickeable. Las acciones germinan al hover únicamente en desktop con puntero fino; en touch y bajo reduced-motion viven SIEMPRE visibles.",
@@ -17,7 +17,7 @@
   ],
   "anatomy": {
     "root": ".mui-product-card — position:relative (ancla del stretched link); card: var(--surface), borde 1px var(--border-subtle), radius-lg, overflow hidden (la media respeta el radio)",
-    "media": ".mui-product-card__media — position:relative, aspect-ratio 4/5; img cover edge-to-edge (display block, 100%/100%)",
+    "media": ".mui-product-card__media — position:relative, aspect-ratio 4/5; :is(img, svg, picture) cover edge-to-edge (display block, 100%/100%). El slot acepta img, svg inline token-driven o picture; un svg debe portar su propio viewBox/dimensioning para llenar la celda 4/5 igual que un img",
     "badge": ".mui-product-card__badge — SOLO posicionamiento: absolute, top var(--space-2), inset-inline-start var(--space-2); la pieza es un .mui-badge con su propia semántica de color",
     "body": ".mui-product-card__body — padding var(--space-4); flex column gap var(--space-1): título, meta, precio/rating",
     "title": ".mui-product-card__title — display sm/medium var(--text); si es <a> (o contiene un <a> hijo directo): sin subrayado + ::after inset 0 = stretched link, toda la card navega",

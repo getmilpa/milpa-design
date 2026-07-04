@@ -24,7 +24,12 @@ body { margin:0; background:var(--bg); }
 html, body { overflow-x: clip; }
 .gal-wordmark { height:1rem; width:auto; display:block; }
 .gal-theme-toggle { font-family:var(--font-mono); }
-/* token-driven SVG placeholders — the contract styles img; inline <svg> needs the same plumbing.
+/* token-driven SVG placeholders. As of 0.3.0 the media-grid/lightbox contracts size
+   :is(img, svg, picture) directly (Task 7 — milpa-layouts.css); .gal-ph is legacy
+   plumbing kept for the remaining items, now redundant with (shadowed by) the more
+   specific contract rule wherever they overlap. Piece No. 01 below carries NO .gal-ph
+   class — its sizing/radius come entirely from the widened contract, proving the
+   svg fills the item slot on its own, same as a raster img would.
    Aspect comes from each viewBox (intrinsic ratio), never hardcoded here. */
 .gal-ph { display:block; width:100%; height:auto; border-radius:var(--radius-md); }
 /* caption meta line — the mono voice under the piece title, always-visible velo (contract) */
@@ -115,7 +120,12 @@ html, body { overflow-x: clip; }
 
             <button type="button" class="mui-media-grid__item" data-tag="seed" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
-                <svg class="gal-ph" viewBox="0 0 300 400" aria-hidden="true" focusable="false">
+                <!-- Task 7 demo: no .gal-ph — this svg is sized SOLELY by the widened
+                     .mui-media-grid__item :is(img, svg, picture) contract (display:block,
+                     width/height, object-fit:cover base + masonry's height:auto), exactly
+                     like the other items' raster img would be. Its own viewBox supplies the
+                     intrinsic aspect ratio the contract's sizing relies on. -->
+                <svg viewBox="0 0 300 400" aria-hidden="true" focusable="false">
                   <rect width="300" height="400" fill="var(--surface-raised)"/>
                   <circle cx="150" cy="96" r="40" fill="var(--viz-1)"/>
                   <path d="M0 180 H300" stroke="var(--border-strong)" stroke-width="2"/>

@@ -50,10 +50,10 @@ body { margin:0; }
 
 <div class="mui-page">
 
-<!-- ============ TOPBAR ============ -->
-<header class="mui-topbar">
-  <div class="mui-topbar__start">
-    <a class="mui-btn mui-btn--ghost" href="/">
+<!-- ============ HEADER ============ -->
+<header class="mui-header" id="siteHeader">
+  <div class="mui-container mui-header__row">
+    <a class="mui-header__brand" href="/">
       <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
         <g fill="var(--oro-300)">
           <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
@@ -66,22 +66,26 @@ body { margin:0; }
       <svg class="shop-wordmark" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
       <span class="mui-badge">trueque</span>
     </a>
-  </div>
-
-  <div class="mui-topbar__search">
-    <div class="mui-input-group mui-input-group--prefix">
-      <input class="mui-input mui-input--sm" type="search" aria-label="Search the store" placeholder="Search apparel, prints, kits…">
-      <span class="mui-input-group__prefix" aria-hidden="true">⌕</span>
+    <button class="mui-btn mui-btn--ghost mui-btn--icon mui-header__toggle" id="navToggle"
+            type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav">☰</button>
+    <nav class="mui-header__nav" id="siteNav" aria-label="Site">
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/shop/apparel">Apparel</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/shop/prints">Prints</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/shop/kits">Kits</a>
+    </nav>
+    <div class="mui-header__actions">
+      <div class="mui-input-group mui-input-group--prefix" style="max-width:14rem">
+        <input class="mui-input mui-input--sm" type="search" aria-label="Search the store" placeholder="Search apparel, prints, kits…">
+        <span class="mui-input-group__prefix" aria-hidden="true">⌕</span>
+      </div>
+      <button type="button" class="mui-btn mui-btn--sm shop-theme-toggle" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
+      <button type="button" class="mui-btn mui-btn--ghost" aria-label="Open cart, 3 items">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12l-1.2 11H5.2L4 6z"/><path d="M7 6a3 3 0 0 1 6 0"/></svg>
+        <span class="mui-badge mui-badge--accent">3</span>
+      </button>
     </div>
   </div>
-
-  <div class="mui-topbar__end">
-    <button type="button" class="mui-btn mui-btn--sm shop-theme-toggle" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
-    <button type="button" class="mui-btn mui-btn--ghost" aria-label="Open cart, 3 items">
-      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12l-1.2 11H5.2L4 6z"/><path d="M7 6a3 3 0 0 1 6 0"/></svg>
-      <span class="mui-badge mui-badge--accent">3</span>
-    </button>
-  </div>
+  <div class="mui-header__scrim" id="navScrim" aria-hidden="true"></div>
 </header>
 
 <main id="main" tabindex="-1">
@@ -611,6 +615,23 @@ body { margin:0; }
   let saved = null; try { saved = localStorage.getItem('milpa-theme'); } catch {}
   applyTheme(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
   themeBtn.addEventListener('click', () => applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+  /* ---------- header: off-canvas nav (base bar — no overlay/data-scrolled) ---------- */
+  const header = document.getElementById('siteHeader');
+  const navToggle = document.getElementById('navToggle');
+  const siteNav = document.getElementById('siteNav');
+  const navScrim = document.getElementById('navScrim');
+  const setNav = (open) => {
+    header.toggleAttribute('data-nav-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    siteNav.toggleAttribute('inert', !open && matchMedia('(max-width: 880px)').matches);
+    if (open) siteNav.querySelector('a')?.focus();
+    else navToggle.focus();
+  };
+  navToggle.addEventListener('click', () => setNav(!header.hasAttribute('data-nav-open')));
+  navScrim.addEventListener('click', () => setNav(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && header.hasAttribute('data-nav-open')) setNav(false); });
+  if (matchMedia('(max-width: 880px)').matches) siteNav.setAttribute('inert', '');
 })();
 </script>
 

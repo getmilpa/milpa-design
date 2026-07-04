@@ -19,9 +19,6 @@
 /* ===== page styles (gal-*) — the system does the rest; all tokens ===== */
 body { margin:0; background:var(--bg); }
 .gal-wordmark { height:1rem; width:auto; display:block; }
-/* minimal header — brand + theme toggle; the shell/topbar stays home */
-.gal-header { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-4) clamp(var(--space-5),4vw,var(--space-8)); border-block-end:1px solid var(--border-subtle); }
-.gal-push { margin-inline-start:auto; }
 .gal-theme-toggle { font-family:var(--font-mono); }
 /* token-driven SVG placeholders — the contract styles img; inline <svg> needs the same plumbing.
    Aspect comes from each viewBox (intrinsic ratio), never hardcoded here. */
@@ -47,20 +44,34 @@ body { margin:0; background:var(--bg); }
 
 <div class="mui-page">
 
-  <!-- ============ HEADER (minimal — a portfolio built on the system) ============ -->
-  <header class="gal-header">
-    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
-      <g fill="var(--oro-300)">
-        <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
-        <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
-        <rect x="0" y="25" width="10" height="10" rx="2.5"/><rect x="25" y="25" width="10" height="10" rx="2.5"/><rect x="50" y="25" width="10" height="10" rx="2.5"/>
-        <rect x="0" y="37.5" width="10" height="10" rx="2.5"/><rect x="50" y="37.5" width="10" height="10" rx="2.5"/>
-        <rect x="0" y="50" width="10" height="10" rx="2.5"/><rect x="50" y="50" width="10" height="10" rx="2.5"/>
-      </g>
-    </svg>
-    <svg class="gal-wordmark" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
-    <span class="mui-badge">gallery</span>
-    <button type="button" class="mui-btn mui-btn--sm gal-theme-toggle gal-push" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
+  <!-- ============ HEADER (a portfolio built on the system) ============ -->
+  <header class="mui-header" id="siteHeader">
+    <div class="mui-container mui-header__row">
+      <a class="mui-header__brand" href="/">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
+          <g fill="var(--oro-300)">
+            <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="25" width="10" height="10" rx="2.5"/><rect x="25" y="25" width="10" height="10" rx="2.5"/><rect x="50" y="25" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="37.5" width="10" height="10" rx="2.5"/><rect x="50" y="37.5" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="50" width="10" height="10" rx="2.5"/><rect x="50" y="50" width="10" height="10" rx="2.5"/>
+          </g>
+        </svg>
+        <svg class="gal-wordmark" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+        <span class="mui-badge">gallery</span>
+      </a>
+      <button class="mui-btn mui-btn--ghost mui-btn--icon mui-header__toggle" id="navToggle"
+              type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav">☰</button>
+      <nav class="mui-header__nav" id="siteNav" aria-label="Site">
+        <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#gal-grid-panel">The survey</a>
+        <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#piece-title">Pieces</a>
+        <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#viewer-title">Prints</a>
+      </nav>
+      <div class="mui-header__actions">
+        <button type="button" class="mui-btn mui-btn--sm gal-theme-toggle" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
+      </div>
+    </div>
+    <div class="mui-header__scrim" id="navScrim" aria-hidden="true"></div>
   </header>
 
   <main id="main" tabindex="-1">
@@ -414,6 +425,23 @@ body { margin:0; background:var(--bg); }
   let saved = null; try { saved = localStorage.getItem('milpa-theme'); } catch {}
   applyTheme(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
   themeBtn.addEventListener('click', () => applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+  /* ---------- header: off-canvas nav (base bar — no overlay/data-scrolled) ---------- */
+  const header = document.getElementById('siteHeader');
+  const navToggle = document.getElementById('navToggle');
+  const siteNav = document.getElementById('siteNav');
+  const navScrim = document.getElementById('navScrim');
+  const setNav = (open) => {
+    header.toggleAttribute('data-nav-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    siteNav.toggleAttribute('inert', !open && matchMedia('(max-width: 880px)').matches);
+    if (open) siteNav.querySelector('a')?.focus();
+    else navToggle.focus();
+  };
+  navToggle.addEventListener('click', () => setNav(!header.hasAttribute('data-nav-open')));
+  navScrim.addEventListener('click', () => setNav(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && header.hasAttribute('data-nav-open')) setNav(false); });
+  if (matchMedia('(max-width: 880px)').matches) siteNav.setAttribute('inert', '');
 
   /* ---------- lightbox: real viewer over the grid (contract: showModal gives top
      layer/trap/Esc; ←/→ navigate; prev/next LOOP the collection — documented; media,

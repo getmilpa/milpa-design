@@ -42,9 +42,9 @@ html, body { overflow-x: clip; }
 .shop-buy > * + * { margin-block-start:var(--space-5); }
 .shop-buy fieldset { border:0; margin:0; padding:0; } /* UA fieldset chrome — .mui-field doesn't reset it */
 .shop-options { display:flex; flex-wrap:wrap; gap:var(--space-3) var(--space-5); }
-/* the cart-line qty idiom, standalone on the PDP */
+/* the cart-line qty idiom, standalone on the PDP — sizing/centering now come
+   from .mui-input-group--stepper; this just keeps the row's baseline gap */
 .shop-qty { display:inline-flex; align-items:center; gap:var(--space-1); }
-.shop-qty .mui-input { width:3rem; text-align:center; }
 .shop-buy-row { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); }
 .shop-badges { margin:0; }
 /* drawer demo stage — the dialog is fixed/full-height by contract; docked here to show the composition */
@@ -407,10 +407,10 @@ html, body { overflow-x: clip; }
           </fieldset>
 
           <div class="shop-buy-row">
-            <div class="mui-input-group shop-qty">
-              <button type="button" class="mui-btn mui-btn--icon" aria-label="Decrease quantity, Kernel Hoodie">−</button>
-              <input class="mui-input" inputmode="numeric" value="1" aria-label="Quantity, Kernel Hoodie">
-              <button type="button" class="mui-btn mui-btn--icon" aria-label="Increase quantity, Kernel Hoodie">+</button>
+            <div class="mui-input-group mui-input-group--stepper shop-qty">
+              <button type="button" class="mui-input-group__step" aria-label="Decrease quantity, Kernel Hoodie">−</button>
+              <input class="mui-input" type="number" value="1" min="1" max="10" step="1" aria-label="Quantity, Kernel Hoodie">
+              <button type="button" class="mui-input-group__step" aria-label="Increase quantity, Kernel Hoodie">+</button>
             </div>
             <button type="button" class="mui-btn mui-btn--primary">Add to cart</button>
             <button type="button" class="mui-btn">Save for later</button>
@@ -471,10 +471,10 @@ html, body { overflow-x: clip; }
                   <p class="mui-cart-line__title">Kernel Hoodie</p>
                   <p class="mui-cart-line__variant">M · Ash</p>
                 </div>
-                <div class="mui-input-group mui-cart-line__qty">
-                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Decrease quantity, Kernel Hoodie">−</button>
-                  <input class="mui-input mui-input--sm" inputmode="numeric" value="1" aria-label="Quantity, Kernel Hoodie">
-                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Increase quantity, Kernel Hoodie">+</button>
+                <div class="mui-input-group mui-input-group--stepper mui-input-group--sm mui-cart-line__qty">
+                  <button type="button" class="mui-input-group__step" aria-label="Decrease quantity, Kernel Hoodie">−</button>
+                  <input class="mui-input mui-input--sm" type="number" value="1" min="1" max="99" step="1" aria-label="Quantity, Kernel Hoodie">
+                  <button type="button" class="mui-input-group__step" aria-label="Increase quantity, Kernel Hoodie">+</button>
                 </div>
                 <span class="mui-price"><span class="mui-price__amount">$54</span></span>
                 <button type="button" class="mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-cart-line__remove" aria-label="Remove Kernel Hoodie">✕</button>
@@ -487,10 +487,10 @@ html, body { overflow-x: clip; }
                   <p class="mui-cart-line__title">Milpa Tee</p>
                   <p class="mui-cart-line__variant">L · Olive</p>
                 </div>
-                <div class="mui-input-group mui-cart-line__qty">
-                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Decrease quantity, Milpa Tee">−</button>
-                  <input class="mui-input mui-input--sm" inputmode="numeric" value="2" aria-label="Quantity, Milpa Tee">
-                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Increase quantity, Milpa Tee">+</button>
+                <div class="mui-input-group mui-input-group--stepper mui-input-group--sm mui-cart-line__qty">
+                  <button type="button" class="mui-input-group__step" aria-label="Decrease quantity, Milpa Tee">−</button>
+                  <input class="mui-input mui-input--sm" type="number" value="2" min="1" max="99" step="1" aria-label="Quantity, Milpa Tee">
+                  <button type="button" class="mui-input-group__step" aria-label="Increase quantity, Milpa Tee">+</button>
                 </div>
                 <span class="mui-price"><span class="mui-price__amount">$58</span></span>
                 <button type="button" class="mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-cart-line__remove" aria-label="Remove Milpa Tee">✕</button>
@@ -502,10 +502,10 @@ html, body { overflow-x: clip; }
                 <div class="mui-cart-line__info">
                   <p class="mui-cart-line__title">Grano Sticker Pack</p>
                 </div>
-                <div class="mui-input-group mui-cart-line__qty">
-                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Decrease quantity, Grano Sticker Pack" disabled>−</button>
-                  <input class="mui-input mui-input--sm" inputmode="numeric" value="1" aria-label="Quantity, Grano Sticker Pack">
-                  <button type="button" class="mui-btn mui-btn--sm mui-btn--icon" aria-label="Increase quantity, Grano Sticker Pack">+</button>
+                <div class="mui-input-group mui-input-group--stepper mui-input-group--sm mui-cart-line__qty">
+                  <button type="button" class="mui-input-group__step" aria-label="Decrease quantity, Grano Sticker Pack">−</button>
+                  <input class="mui-input mui-input--sm" type="number" value="1" min="1" max="99" step="1" aria-label="Quantity, Grano Sticker Pack">
+                  <button type="button" class="mui-input-group__step" aria-label="Increase quantity, Grano Sticker Pack">+</button>
                 </div>
                 <span class="mui-price"><span class="mui-price__amount">$8</span></span>
                 <button type="button" class="mui-btn mui-btn--ghost mui-btn--icon mui-btn--sm mui-cart-line__remove" aria-label="Remove Grano Sticker Pack">✕</button>
@@ -646,6 +646,28 @@ html, body { overflow-x: clip; }
   navScrim.addEventListener('click', () => setNav(false));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && header.hasAttribute('data-nav-open')) setNav(false); });
   if (matchMedia('(max-width: 880px)').matches) siteNav.setAttribute('inert', '');
+
+  /* ---------- stepper (mui-input-group--stepper): clamp + disable en límites ---------- */
+  document.querySelectorAll('.mui-input-group--stepper').forEach((grp) => {
+    const input = grp.querySelector('.mui-input');
+    const steps = grp.querySelectorAll('.mui-input-group__step');
+    const dec = steps[0], inc = steps[1];
+    const min = input.min !== '' ? Number(input.min) : -Infinity;
+    const max = input.max !== '' ? Number(input.max) : Infinity;
+    const step = Number(input.step) || 1;
+    const sync = () => { const v = Number(input.value) || 0; dec.disabled = v <= min; inc.disabled = v >= max; };
+    const bump = (dir) => {
+      const v = Math.max(min, Math.min(max, (Number(input.value) || 0) + dir * step));
+      input.value = String(v);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      sync();
+    };
+    dec.addEventListener('click', () => bump(-1));
+    inc.addEventListener('click', () => bump(1));
+    input.addEventListener('input', sync);
+    sync();
+  });
 })();
 </script>
 

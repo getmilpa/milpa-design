@@ -289,6 +289,9 @@
 .mui-stat__delta--down::before { clip-path: polygon(0 0, 100% 0, 50% 100%); }
 .mui-stat__meta { font-size: var(--text-xs); color: var(--text-muted); }
 
+/* --lg: hero-stat / KPI destacado — solo el valor sube de tamaño */
+.mui-stat--lg .mui-stat__value { font-size: var(--text-4xl); }
+
 /* ---------- EmptyState · .mui-empty ----------
    El terreno antes de sembrar: columna centrada, sobria, la acción
    como protagonista. */
@@ -842,6 +845,22 @@
 .mui-modal__footer .mui-btn:not(.mui-btn--primary, .mui-btn--secondary, .mui-btn--subtle, .mui-btn--danger, .mui-btn--ghost),
 .mui-drawer__footer .mui-btn:not(.mui-btn--primary, .mui-btn--secondary, .mui-btn--subtle, .mui-btn--danger, .mui-btn--ghost) {
   border-color: var(--border-strong);
+}
+
+/* docked — panel lateral PERSISTENTE, no modal. Se usa sobre un <aside>
+   estático (region/landmark), NO un <dialog>: reusa la piel del drawer pero
+   fluye en el layout — sin fixed, sin backdrop, sin [open], sin animación.
+   docked ≠ dialog (no atrapa foco ni cierra con Esc; ver contrato). */
+.mui-drawer--docked {
+  position: static;
+  inset: auto;
+  height: 100%; max-height: none;
+  width: auto; max-width: none;
+  margin: 0;
+  display: flex; flex-direction: column;
+  border-inline-start: 1px solid var(--border);
+  box-shadow: none;
+  animation: none;
 }
 
 

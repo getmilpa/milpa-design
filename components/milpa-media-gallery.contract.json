@@ -18,7 +18,7 @@
   },
   "variants": {
     "base": {
-      "default": "sin variantes de clase en 0.2.0 — el tamaño del thumb (4rem) y el aspecto de la principal (1:1) son fijos del molde"
+      "default": "sin variantes de clase — el tamaño del thumb (4rem) y el aspecto de la principal (1:1) son fijos del molde"
     }
   },
   "states": {

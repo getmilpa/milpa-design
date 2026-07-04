@@ -25,11 +25,13 @@ html, body { overflow-x: clip; }
 .gal-wordmark { height:1rem; width:auto; display:block; }
 .gal-theme-toggle { font-family:var(--font-mono); }
 /* token-driven SVG placeholders. As of 0.3.0 the media-grid/lightbox contracts size
-   :is(img, svg, picture) directly (Task 7 — milpa-layouts.css); .gal-ph is legacy
-   plumbing kept for the remaining items, now redundant with (shadowed by) the more
-   specific contract rule wherever they overlap. Piece No. 01 below carries NO .gal-ph
-   class — its sizing/radius come entirely from the widened contract, proving the
-   svg fills the item slot on its own, same as a raster img would.
+   :is(img, svg, picture) directly (Task 7 — milpa-layouts.css). .gal-ph is legacy PAGE
+   CSS kept on the remaining items; being unlayered it still WINS over the layered
+   contract rule (cascade LAYER origin beats specificity — the theming mechanism of this
+   system), but its values now merely duplicate what the contract provides, so it's
+   redundant. Piece No. 01 below carries NO .gal-ph — nothing unlayered overrides it, so
+   its sizing comes entirely from the widened layered contract, proving the svg fills the
+   item slot on its own (the item's own overflow:hidden + radius do the clipping).
    Aspect comes from each viewBox (intrinsic ratio), never hardcoded here. */
 .gal-ph { display:block; width:100%; height:auto; border-radius:var(--radius-md); }
 /* caption meta line — the mono voice under the piece title, always-visible velo (contract) */
@@ -120,8 +122,9 @@ html, body { overflow-x: clip; }
 
             <button type="button" class="mui-media-grid__item" data-tag="seed" aria-haspopup="dialog">
               <span class="mui-media-grid__figure">
-                <!-- Task 7 demo: no .gal-ph — this svg is sized SOLELY by the widened
-                     .mui-media-grid__item :is(img, svg, picture) contract (display:block,
+                <!-- Task 7 demo: no .gal-ph — with no unlayered page CSS competing, this
+                     svg is sized SOLELY by the widened layered contract rule
+                     .mui-media-grid__item :is(img, svg, picture) (display:block,
                      width/height, object-fit:cover base + masonry's height:auto), exactly
                      like the other items' raster img would be. Its own viewBox supplies the
                      intrinsic aspect ratio the contract's sizing relies on. -->

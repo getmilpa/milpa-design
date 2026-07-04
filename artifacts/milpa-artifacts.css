@@ -393,6 +393,31 @@
   gap: var(--space-0_5);
 }
 
+/* --line (default genérico): el consumidor siembra un <svg> con
+   <polyline>/<path> en el canvas; el trazo usa la paleta viz (--_c
+   hereda la serie, como --_v/--_c en .mui-chart__bar). fill:none.
+   El ancestro va en :where() (especificidad plana 0,0,1 — mismo molde
+   que .mui-prose): así este default convive con .mui-chart__stroke-1..6
+   (una clase, 0,1,0) sin pelea de especificidad — el consumidor puede
+   seguir sembrando la clase por serie o, más simple, solo --_c inline. */
+.mui-chart--line .mui-chart__canvas { height: var(--_h); }
+:where(.mui-chart--line .mui-chart__canvas) :is(svg) { width: 100%; height: 100%; display: block; overflow: visible; }
+:where(.mui-chart--line .mui-chart__canvas) :is(polyline, path) {
+  fill: none;
+  stroke: var(--_c, var(--viz-1));
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+/* ticks del eje x en HTML (el <text> SVG se distorsiona bajo el viewBox
+   del canvas): fila equiespaciada, categorías. mono/muted como los ejes
+   y como __axis/__tick de --bars. aria-hidden si el eje ya está en el
+   fallback textual del canvas (T8.1: no duplicar la lectura). */
+.mui-chart__ticks {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  color: var(--text-muted);
+}
+.mui-chart__tick { flex: none; }
+
 /* ════════════════════════════════════════════════════════════════════
    cluster · content
    ════════════════════════════════════════════════════════════════════ */

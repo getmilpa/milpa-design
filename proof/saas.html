@@ -17,10 +17,7 @@
 <style>
 /* ===== page styles (troje-*) — the system does the rest; all tokens ===== */
 body { margin: 0; }
-.troje-header { position: sticky; top: 0; z-index: var(--z-sticky); background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(10px); border-block-end: 1px solid var(--border-subtle); }
-.troje-header__row { display: flex; align-items: center; gap: var(--space-4); height: 3.5rem; }
 .troje-brand { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--text); text-decoration: none; }
-.troje-nav { display: flex; gap: var(--space-1); margin-inline-start: auto; }
 .troje-mono { font-family: var(--font-mono); }
 .troje-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr)); gap: var(--space-4); }
 .troje-stats { margin-block-start: var(--space-10); }
@@ -36,20 +33,25 @@ body { margin: 0; }
 <div class="mui-page">
 
 <!-- ============ HEADER ============ -->
-<header class="troje-header">
-  <div class="mui-container troje-header__row">
-    <a class="troje-brand troje-mono" href="#">
+<header class="mui-header" id="siteHeader">
+  <div class="mui-container mui-header__row">
+    <a class="mui-header__brand troje-brand troje-mono" href="#">
       <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" rx="3" fill="var(--accent)"/></svg>
       troje
     </a>
-    <nav class="troje-nav" aria-label="Primary">
+    <button class="mui-btn mui-btn--ghost mui-btn--icon mui-header__toggle" id="navToggle"
+            type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav">☰</button>
+    <nav class="mui-header__nav" id="siteNav" aria-label="Primary">
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#features">Features</a>
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#pricing">Pricing</a>
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="#faq">FAQ</a>
+    </nav>
+    <div class="mui-header__actions">
       <button type="button" class="mui-btn mui-btn--sm troje-mono" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
       <a class="mui-btn mui-btn--secondary mui-btn--sm" href="#pricing">Start free</a>
-    </nav>
+    </div>
   </div>
+  <div class="mui-header__scrim" id="navScrim" aria-hidden="true"></div>
 </header>
 
 <main id="main" tabindex="-1">
@@ -425,6 +427,23 @@ body { margin: 0; }
   let saved = null; try { saved = localStorage.getItem('troje-theme'); } catch {}
   apply(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
   btn.addEventListener('click', () => apply(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+  /* header: off-canvas nav (base bar — no overlay/data-scrolled) */
+  const header = document.getElementById('siteHeader');
+  const navToggle = document.getElementById('navToggle');
+  const siteNav = document.getElementById('siteNav');
+  const navScrim = document.getElementById('navScrim');
+  const setNav = (open) => {
+    header.toggleAttribute('data-nav-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    siteNav.toggleAttribute('inert', !open && matchMedia('(max-width: 880px)').matches);
+    if (open) siteNav.querySelector('a')?.focus();
+    else navToggle.focus();
+  };
+  navToggle.addEventListener('click', () => setNav(!header.hasAttribute('data-nav-open')));
+  navScrim.addEventListener('click', () => setNav(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && header.hasAttribute('data-nav-open')) setNav(false); });
+  if (matchMedia('(max-width: 880px)').matches) siteNav.setAttribute('inert', '');
 })();
 </script>
 

@@ -4,6 +4,38 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-07-04
+
+> **El trato:** dos variantes que cierran el cluster C del battle-test 0.3 — el stepper de
+> cantidad extraído a primitiva compartida y las tabs con variante pill que estrena el patrón de
+> filtro de panel único. Sin piezas nuevas (son variantes): **65 piezas** con contrato · **193
+> pares AA** — audit de cierre: **0 pares nuevos**.
+
+### Added
+- **`mui-input-group--stepper`** — número ± segmentado: el grupo (`.mui-input-group--stepper`)
+  lleva el borde/radio/foco, el `.mui-input` interior va borderless, y los botones
+  `.mui-input-group__step` se deshabilitan (`[disabled]`) en los límites (el consumidor cablea
+  click → ajusta `value` respetando min/max/step y emite `input`+`change`; cada botón lleva
+  `aria-label` Decrease/Increase). Compone con `--sm`. El PDP y el cart-line de commerce lo
+  adoptan — antes cada uno re-implementaba su propio control de cantidad.
+- **`mui-tabs--pill`** — variante visual de `mui-tabs`: pestañas con forma de pill en vez del
+  subrayado; la seleccionada = fondo `accent-subtle` + texto `accent-text` (el fill ES el
+  indicador, sin `border-bottom`). El gallery la estrena para su filtro de categorías.
+
+### Changed
+- **El contrato de `mui-tabs` documenta el patrón de filtro de panel único:** todas las tabs de
+  un `role="tablist"` apuntan a UNA región `role="tabpanel"` (vía `aria-controls`); seleccionar
+  una tab filtra los ítems de esa región vía `[hidden]` en vez de cambiar de panel, con roving
+  tabindex y `aria-selected` sincronizados por el JS del consumidor. Caveat documentado:
+  `role="tab"` implica nativamente cambio de panel — usarlo para un filtro es un estiramiento
+  aceptado del patrón (elegido por familiaridad sobre un toolbar `aria-pressed`).
+- Contratos: **65 → 65** (sin cambio — ambas piezas son variantes, no piezas nuevas): actualizados
+  `mui-input` (variante `stepper` + `group__step` en la anatomía) y `mui-tabs` (variante `pill`
+  + el patrón de filtro en `a11y.behavior`).
+- AA-pairs audit de cierre: **0 pares nuevos** — el stepper reusa `text`/`text-secondary` sobre
+  `bg`/`surface` y la pill seleccionada reusa `accent-text`/`accent-subtle`, pares ya cubiertos
+  por `scripts/contrast-pairs.mjs`.
+
 ## [0.3.0] — 2026-07-03
 
 > **La plaza:** el header público (barra + off-canvas + overlay) — el tercer header del sistema,

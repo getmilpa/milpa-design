@@ -14,14 +14,17 @@ ambos avanzan en paralelo sin pisarse. La costura entre los dos es un **contrato
 
 ## Estado
 
-**v0.3 — la plaza: header público, contenido/media y un gate más estricto.** Paleta cerrada: `oro`
+**v0.4 — el trato: dos variantes que cierran el gap del battle-test 0.3.** Paleta cerrada: `oro`
 (primario) + `olivo` (secundario / la milpa viva) + `tierra` (neutro); `cielo` = `info`; y
 `--syntax-*` (highlighting AA-verificado) y `--viz-*` (charts, colorblind-safe) — semánticos de
 las mismas rampas. **193/193 pares WCAG AA** (dark + light, `npm test`). **65 piezas** con
-contrato en cuatro capas: primitivas (*el grano*), componentes admin + commerce (*el frijol*,
-ahora con `mui-byline`), artefactos de contenido (*el elote*: code, terminal, chart, prose, api,
-search, kit de versionado…) y layouts (*la parcela*: el shell de docs versionadas, hero, pricing,
-faq, footer, media-grid, lightbox, y el nuevo `mui-header`…). **Tres headers, tres contextos:**
+contrato en cuatro capas (variantes, no piezas nuevas, así que el conteo no se mueve): primitivas
+(*el grano*, `mui-input-group` suma la variante `--stepper` — número ± segmentado que el PDP y el
+cart-line de commerce ya comparten), componentes admin + commerce (*el frijol*, `mui-byline` y
+`mui-tabs` suma la variante `--pill` que el gallery estrena para filtrar), artefactos de
+contenido (*el elote*: code, terminal, chart, prose, api, search, kit de versionado…) y layouts
+(*la parcela*: el shell de docs versionadas, hero, pricing, faq, footer, media-grid, lightbox,
+`mui-header`…). **Tres headers, tres contextos:**
 `mui-topbar` (shell admin) / `mui-docs__topbar` (shell docs) / `mui-header` (sitio público —
 marketing, con off-canvas y variante overlay). Todo el CSS publicado vive en **`@layer
 milpa.*`**: el CSS de un plugin/consumidor gana sin `!important` — el theming es contrato

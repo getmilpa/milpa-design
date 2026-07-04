@@ -1079,7 +1079,7 @@ a.mui-feature-grid__item:focus-visible {
    layout es [data-nav-open] en .mui-header; la semántica la lleva
    aria-expanded en el toggle. El JS del consumidor alterna inert. */
 @media (max-width: 880px) {
-  .mui-header__toggle { display: inline-flex; }
+  .mui-header__toggle { display: inline-flex; margin-inline-start: auto; }
   .mui-header__nav {
     position: fixed; inset-block: 0; inset-inline-end: 0;
     width: 16rem; margin-inline-start: 0;

@@ -32,7 +32,9 @@ html, body { overflow-x: clip; }
   .mui-header__actions .mui-input-group { display: none; }
   .mui-header__brand .mui-badge { display: none; }
 }
-/* SVG placeholders — the media contracts size `img`; the inline SVG mirrors that */
+/* token-driven SVG placeholders. As of 0.3.0 the product-card media contract sizes
+   :is(img, svg, picture) directly — .shop-ph is unlayered page CSS, so it still wins by
+   cascade layer origin, but its values now just duplicate what the contract provides. */
 .shop-ph { display:block; width:100%; height:100%; }
 .mui-product-card[aria-disabled="true"] .shop-ph { opacity:.5; }
 .shop-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(14rem,1fr)); gap:var(--space-5); margin-block-start:var(--space-8); }

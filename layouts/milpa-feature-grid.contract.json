@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "status": "stable",
   "class": "mui-feature-grid",
-  "summary": "Las tres hermanas de la landing formalizadas: grid fluido (auto-fit, minmax 16rem) de cards silenciosas para features/pilares. El __item habla el idioma de .mui-card pero es pieza propia — sin fill, sin sombra: borde 1px border-subtle + radius-lg, fondo transparente, vive SOBRE var(--bg). Icono de 2.25rem (olivo; --oro para la pieza núcleo), rol mono uppercase ('maíz · el núcleo'), título text-lg y body en voz baja. Interactivo SOLO como <a> completo: el hover afirma el boundary a border-strong (precedente .mui-docs__pager-link).",
+  "summary": "Las tres hermanas de la landing formalizadas: grid fluido (auto-fit, minmax 16rem) de cards silenciosas para features/pilares. El __item habla el idioma de .mui-card pero es pieza propia — sin fill, sin sombra: borde 1px border-subtle + radius-lg, fondo transparente, vive SOBRE var(--bg). Icono de 2.25rem (olivo; --oro para la pieza núcleo), rol mono uppercase ('maíz · el núcleo'), título text-lg y body en voz baja. Interactivo SOLO como <a> completo: el hover afirma el boundary a border-strong (precedente .mui-pager__link).",
   "element": [
     "div (.mui-feature-grid — el grid; va tras kicker/título/lede de la sección)",
     "article | div (.mui-feature-grid__item — item estático)",

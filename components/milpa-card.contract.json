@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "card",
   "layer": "component",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "status": "stable",
   "class": "mui-card",
   "summary": "Superficie contenida (regla 1): fill var(--surface), definición por borde sutil + sombra sm — nunca sombras dramáticas. El padding vive en los elementos, no en el root, para permitir contenido edge-to-edge (tablas, listas). Interactiva SOLO como <a> o <button> envolvente con --interactive.",
@@ -18,7 +18,8 @@
     "header": ".mui-card__header — flex space-between + align-center + gap; título a la izquierda, slot de acciones a la derecha (botones sm/ghost, menús)",
     "title": ".mui-card__title — display base/medium; no impone nivel de heading, usar el <h*> correcto para el outline",
     "body": ".mui-card__body — padding --_pad, flex:1 (iguala alturas en grids); si sigue a un __header pierde el padding-top (selector adyacente)",
-    "footer": ".mui-card__footer — border-top var(--border-subtle); flex row con gap para acciones/meta"
+    "footer": ".mui-card__footer — border-top var(--border-subtle); flex row con gap para acciones/meta",
+    "media": ".mui-card__media — full-bleed cover slot (first child, before __body); clips to the card radius; inner :is(img,svg,picture) is object-fit:cover; aspect-ratio 16/9 default, override --media-ratio"
   },
   "variants": {
     "density": {

@@ -59,7 +59,8 @@
     ],
     "behavior": [
       "al cerrar el lightbox el foco vuelve solo al item disparador (contrato del dialog nativo)",
-      "la caption es contenido, no cromo: SIEMPRE visible — regla dura para touch y reduced-motion; prohibido esconderla tras el hover"
+      "la caption es contenido, no cromo: SIEMPRE visible — regla dura para touch y reduced-motion; prohibido esconderla tras el hover",
+      "si un filtro del consumidor (p. ej. tabs) alterna [hidden] sobre los items de este grid, el lightbox que dispararon debe respetarlo: prev/next recorren solo los items visibles y el counter lee n / <visibles> — ver a11y.behavior del contrato lightbox"
     ],
     "contrast": "caption var(--text) sobre el velo color-mix 78% de --bg + blur(4px): lee sobre --bg efectivo (par text/bg ≥4.5 del gate); sobre fotografía el composite exacto no es gateable — 78% + blur es el piso del contrato y el hover solo sube la densidad (88%), nunca la baja (ver notes del cluster). Borde border-subtle decorativo (estatus card); el hover a var(--border) ≥3 sobre --bg (par del gate) pero el boundary no porta semántica: lo acompañan zoom y velo. Focus var(--focus) ≥3 sobre --bg (par del gate)"
   },

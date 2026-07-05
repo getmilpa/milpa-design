@@ -54,8 +54,8 @@
   height: var(--_topbar-h);
   padding-inline: max(var(--_pad-inline), calc((100% - var(--_max-w)) / 2 + var(--_pad-inline)));
   background: color-mix(in srgb, var(--bg) 85%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(var(--blur-lg));
+  backdrop-filter: blur(var(--blur-lg));
   border-bottom: var(--border-width) var(--border-style) var(--border-subtle);
 }
 
@@ -860,8 +860,8 @@ a.mui-feature-grid__item:focus-visible {
   line-height: var(--leading-snug);
   color: var(--text);
   background: color-mix(in srgb, var(--bg) 78%, transparent);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(var(--blur-base));
+  backdrop-filter: blur(var(--blur-base));
   transition: background-color var(--dur-fast) var(--ease-standard);
 }
 .mui-media-grid__item:hover .mui-media-grid__caption {
@@ -1030,8 +1030,8 @@ a.mui-feature-grid__item:focus-visible {
 .mui-header {
   position: sticky; top: 0; z-index: var(--z-sticky);
   background: color-mix(in srgb, var(--bg) 85%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(var(--blur-lg));
+  backdrop-filter: blur(var(--blur-lg));
   border-block-end: var(--border-width) var(--border-style) var(--border-subtle);
 }
 .mui-header__row {
@@ -1063,8 +1063,8 @@ a.mui-feature-grid__item:focus-visible {
 }
 .mui-header--overlay[data-scrolled] {
   background: color-mix(in srgb, var(--bg) 85%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(var(--blur-lg));
+  backdrop-filter: blur(var(--blur-lg));
   border-block-end-color: var(--border-subtle);
 }
 

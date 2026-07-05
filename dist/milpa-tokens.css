@@ -23,10 +23,11 @@
   --danger-50:#FFF3F1; --danger-100:#FFE4E0; --danger-200:#FFCBC4; --danger-300:#FFA79B; --danger-400:#FF7F71; --danger-500:#EA6356; --danger-600:#CB4C41; --danger-700:#A8372F; --danger-800:#82241E; --danger-900:#5A1410; --danger-950:#310504;
 
   /* ===== type ===== */
-  --font-display:'Space Grotesk', system-ui, sans-serif; --font-mono:'Space Mono', ui-monospace, monospace;
+  --font-heading:'Space Grotesk', system-ui, sans-serif; --font-body:'Space Grotesk', system-ui, sans-serif; --font-serif:'Space Grotesk', system-ui, sans-serif; --font-mono:'Space Mono', ui-monospace, monospace;
+  --font-display:var(--font-heading);
   --text-2xs:0.6875rem; --text-xs:0.75rem; --text-sm:0.875rem; --text-base:1rem; --text-lg:1.125rem; --text-xl:1.25rem; --text-2xl:1.5rem; --text-3xl:1.875rem; --text-4xl:2.375rem; --text-5xl:3rem; --text-6xl:3.75rem;
   --leading-tight:1.1; --leading-snug:1.25; --leading-normal:1.5; --leading-relaxed:1.7;
-  --weight-regular:400; --weight-medium:500; --weight-bold:700;
+  --weight-regular:400; --weight-medium:500; --weight-semibold:600; --weight-bold:700;
   --tracking-tight:-0.02em; --tracking-normal:0em; --tracking-wide:0.02em; --tracking-display:-0.03em;
 
   /* ===== spacing ===== */
@@ -43,6 +44,9 @@
   --ease-standard:cubic-bezier(0.4,0,0.2,1); --ease-settle:cubic-bezier(0.2,0.8,0.2,1); --ease-grano:cubic-bezier(0.16,1,0.3,1); --ease-in:cubic-bezier(0.4,0,1,1); --ease-linear:linear;
   --stagger-tight:40ms; --stagger-base:70ms; --stagger-loose:120ms;
   --rise-sm:8px; --rise-base:16px; --rise-lg:32px;
+
+  /* ===== size ===== */
+  --focus-width:2px; --focus-offset:2px; --border-width:1px; --container-max:72rem; --container-narrow:48rem; --container-wide:90rem; --header-h:3.5rem; --sidebar-w:16rem; --drawer-width:26rem; --measure:65ch;
 }
 
 /* ===== color: semantic — DARK (default) =====

@@ -78,4 +78,5 @@ export const INVARIANTS = [
   'focus-visible: interactive elements show a visible :focus-visible outline (--focus) >= 3:1 against its background',
   'data-theme: <html> always carries data-theme="dark" | "light", never absent',
   'gold is never a solid fill in light theme (light primary = ghost)',
+  '--bg debe ser opaco (es la referencia de composición para superficies translúcidas / glass).',
 ];

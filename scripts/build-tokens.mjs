@@ -96,6 +96,11 @@ css += `
   /* ===== size ===== */
 `;
 css += '  ' + entries(tok.size).map(([k, n]) => `--${k}:${val(n)};`).join(' ') + '\n';
+
+css += `
+  /* ===== effect ===== */
+`;
+css += '  ' + entries(tok.effect).map(([k, n]) => `--${k}:${val(n)};`).join(' ') + '\n';
 css += '}\n';
 
 const themeBlock = (theme, selector, intro) => {
@@ -218,6 +223,7 @@ const themeContract = JSON.stringify({
     ],
     elevation: entries(tok.elevation.dark).map(([k]) => `--shadow-${k}`),
     size: entries(tok.size).map(([k]) => `--${k}`),
+    effect: entries(tok.effect).map(([k]) => `--${k}`),
   },
   validation: {
     hard: { contrast: 'WCAG AA pairs (contrast.pairs), gated by threshold in dark+light' },
@@ -228,6 +234,7 @@ const themeContract = JSON.stringify({
         space: '<length>', radius: '<length>', zIndex: '<integer>',
         motion: 'dur-*/stagger-* = <time>; ease-* = <timing-function>; rise-* = <length>',
         elevation: 'non-empty <shadow>', size: '<length> (or <ratio> where applicable)',
+        effect: 'border-style = keyword (solid|dashed|dotted|double|none|groove|ridge|inset|outset); blur-* = <length>; surface-backdrop = none | filter-function list',
       },
     },
   },

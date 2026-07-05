@@ -354,6 +354,13 @@
     "drawer-width":    { "$type": "dimension", "$value": "26rem" },
     "measure":         { "$type": "dimension", "$value": "65ch" }
   },
+  "effect": {
+    "border-style":     { "$type": "other", "$value": "solid" },
+    "surface-backdrop": { "$type": "other", "$value": "none" },
+    "blur-sm":          { "$type": "dimension", "$value": "2px" },
+    "blur-base":        { "$type": "dimension", "$value": "4px" },
+    "blur-lg":          { "$type": "dimension", "$value": "10px" }
+  },
   "textStyle": {
     "display": { "$type": "typography", "$value": { "fontFamily": "{fontFamily.heading}", "fontSize": "{fontSize.5xl}", "fontWeight": "{fontWeight.medium}", "lineHeight": "{lineHeight.tight}", "letterSpacing": "{letterSpacing.display}" } },
     "heading": { "$type": "typography", "$value": { "fontFamily": "{fontFamily.heading}", "fontSize": "{fontSize.2xl}", "fontWeight": "{fontWeight.medium}", "lineHeight": "{lineHeight.snug}", "letterSpacing": "{letterSpacing.tight}" } },

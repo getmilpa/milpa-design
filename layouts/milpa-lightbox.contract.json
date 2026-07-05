@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "lightbox",
   "layer": "layout",
-  "version": "0.3.0",
+  "version": "0.6.0",
   "status": "stable",
   "class": "mui-lightbox",
   "summary": "Visor de media a pantalla — se aplica JUNTO a .mui-modal (<dialog class=\"mui-modal mui-lightbox\">): hereda top layer, focus trap del UA, Esc y ::backdrop sin redeclararlos (la capa layouts gana la cascada). Desnuda el marco del modal: fondo transparente, sin borde ni sombra — la media ES la superficie y lleva radio + shadow-lg. La entrada milpa-scale-in se MUDA del dialog a la media: el dialog nunca se transforma, así que los controles fixed nacen clavados al viewport (sin salto de containing block al asentar el keyframe) y acompañan con el fade del backdrop. Caption, counter y controles flotan sobre el scrim traslúcido (debajo puede haber cualquier cosa), por eso todos llevan chip SÓLIDO var(--overlay): pares del gate, no composites. Prev/next y close componen .mui-btn mui-btn--icon.",
@@ -15,7 +15,7 @@
   ],
   "anatomy": {
     "root": "dialog.mui-lightbox — junto a .mui-modal: width fit-content, max-width min(92vw, 70rem), max-height 92vh, padding 0, fondo transparente, sin borde ni sombra; en [open] neutraliza la animación del dialog (animation: none — la entrada vive en __media, ver motion)",
-    "media": "figure.mui-lightbox__media — margin 0, min-height 0; porta la entrada milpa-scale-in en [open]; adentro :is(img, svg, picture)|video: display block, max-width 100%, max-height 80vh, centrados con margin-inline auto, radius-md + shadow-lg (el marco vive en la media). El slot acepta img, svg inline token-driven o picture; un svg debe portar su propio viewBox/dimensioning para llenar el marco como lo haría un img",
+    "media": "figure.mui-lightbox__media — margin 0, min-height 0; porta la entrada milpa-scale-in en [open]; adentro :is(img, svg, picture)|video: display block, max-width 100%, max-height 80vh, centrados con margin-inline auto, radius-md + shadow-lg (el marco vive en la media). El slot acepta img, svg inline token-driven o picture; un svg debe portar su propio viewBox/dimensioning para llenar el marco como lo haría un img. Combinador (0.6.0): la media es HIJA DIRECTA de __media — `.mui-lightbox__media > :is(img, svg, picture)` — un <picture> slotea como esa hija directa, así su <img> interno no vuelve a matchear la misma regla",
     "caption": "figcaption.mui-lightbox__caption — chip centrado fit-content bajo la media: text-sm var(--text-secondary) sobre fondo SÓLIDO var(--overlay) (el scrim traslúcido no es par gateable), padding space-1_5/space-3, radius-sm, text-align center",
     "counter": ".mui-lightbox__counter — \"3 / 12\": mono 2xs tracking-wide var(--text-secondary), mismo chip overlay, fixed arriba al inline-start; con aria-live=\"polite\" anuncia el avance",
     "nav": ".mui-lightbox__nav — banda fixed full-viewport: flex space-between centrado en el eje de bloque (sin transform: el hover del .mui-btn ya usa translateY), pointer-events none (el click pasa al backdrop); adentro prev/next componen .mui-btn mui-btn--icon — pointer-events auto SOLO vía :not([disabled], [aria-disabled=\"true\"], [aria-busy=\"true\"]): los botones muertos conservan el pointer-events:none de primitives (esta capa gana la cascada; sin el guard lo pisaría) y el click sobre ellos cae al backdrop. ≤560px la banda se vuelve estática: fila centrada bajo la media",

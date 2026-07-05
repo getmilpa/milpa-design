@@ -1152,7 +1152,7 @@
 
 /* media — retrato 4/5 edge-to-edge; el badge se ancla acá */
 .mui-product-card__media { position: relative; aspect-ratio: 4 / 5; }
-.mui-product-card__media :is(img, svg, picture) {
+.mui-product-card__media > :is(img, svg, picture) {
   display: block; width: 100%; height: 100%; object-fit: cover;
 }
 
@@ -1215,7 +1215,7 @@ a.mui-product-card__title:focus-visible,
 /* agotado — [aria-disabled] en el article atenúa la IMAGEN (no el
    contenedor: el __badge encima sigue AA); los botones internos van
    [disabled] de verdad y el hover del marco no aplica (:not de arriba) */
-.mui-product-card[aria-disabled="true"] .mui-product-card__media :is(img, svg, picture) { opacity: 0.5; }
+.mui-product-card[aria-disabled="true"] .mui-product-card__media > :is(img, svg, picture) { opacity: 0.5; }
 
 /* ---------- Price · .mui-price ----------
    El número del puesto: mono, monto protagonista, moneda/unidad como
@@ -1283,7 +1283,7 @@ a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-off
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
-.mui-media-gallery__main :is(img, svg, picture) {
+.mui-media-gallery__main > :is(img, svg, picture) {
   display: block; width: 100%; height: 100%; object-fit: cover;
 }
 /* tira — scrollea en inline; el padding-block deja respirar el ring de foco */
@@ -1305,7 +1305,7 @@ a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-off
     opacity      var(--dur-fast) var(--ease-standard),
     border-color var(--dur-fast) var(--ease-standard);
 }
-.mui-media-gallery__thumb :is(img, svg, picture) {
+.mui-media-gallery__thumb > :is(img, svg, picture) {
   display: block; width: 100%; height: 100%; object-fit: cover;
 }
 .mui-media-gallery__thumb:hover { opacity: 1; }

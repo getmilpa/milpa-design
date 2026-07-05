@@ -14,19 +14,20 @@ ambos avanzan en paralelo sin pisarse. La costura entre los dos es un **contrato
 
 ## Estado
 
-**v0.5 — la mano: el cluster D del battle-test 0.3, siete piezas de pulido.** Paleta cerrada: `oro`
-(primario) + `olivo` (secundario / la milpa viva) + `tierra` (neutro); `cielo` = `info`; y
-`--syntax-*` (highlighting AA-verificado) y `--viz-*` (charts, colorblind-safe) — semánticos de
-las mismas rampas. **193/193 pares WCAG AA** (dark + light, `npm test`). **68 piezas** con
-contrato en cuatro capas: primitivas (*el grano*), componentes admin + commerce (*el frijol*,
-`mui-stat` suma `--lg` y `mui-drawer` suma `--docked` — panel lateral persistente, no modal),
-artefactos de contenido (*el elote*: code, terminal, `mui-chart` suma `--line` + ticks HTML,
-prose, api, search, kit de versionado…) y layouts (*la parcela*: el shell de docs versionadas,
-el nuevo `mui-pager` standalone, `mui-stack`/`mui-cluster` de ritmo y agrupación, hero, pricing,
-faq, footer —con `__mantra` como slot de tagline de producto—, media-grid, lightbox,
-`mui-header`…). **Tres headers, tres contextos:**
+**v0.6 — el deshierbe: cierre del backlog T9 (hallazgos F #8/#9/#10 + los Minors del review de
+0.3.0).** Paleta cerrada: `oro` (primario) + `olivo` (secundario / la milpa viva) + `tierra`
+(neutro); `cielo` = `info`; y `--syntax-*` (highlighting AA-verificado) y `--viz-*` (charts,
+colorblind-safe) — semánticos de las mismas rampas. **193/193 pares WCAG AA** (dark + light,
+`npm test`). **68 piezas** con contrato en cuatro capas (sin piezas nuevas de peso — `mui-drawer`
+suma `--start`, anclado a la izquierda, variante): primitivas (*el grano*), componentes admin +
+commerce (*el frijol*), artefactos de contenido (*el elote*: code, terminal, chart, prose, api,
+search, kit de versionado…) y layouts (*la parcela*: el shell de docs versionadas, hero, pricing,
+faq, footer, media-grid, lightbox, `mui-header`…). **Tres headers, tres contextos:**
 `mui-topbar` (shell admin) / `mui-docs__topbar` (shell docs) / `mui-header` (sitio público —
-marketing, con off-canvas y variante overlay). Todo el CSS publicado vive en **`@layer
+marketing, con variante overlay); el off-canvas móvil de `mui-header` y del shell docs es ahora un
+**`<dialog class="mui-drawer">` nativo** abierto con `showModal()` (top layer: focus trap/Esc/
+backdrop gratis, sin `overflow-x:clip` en la raíz de la página — ver nota de compat en
+[`CHANGELOG.md`](./CHANGELOG.md)). Todo el CSS publicado vive en **`@layer
 milpa.*`**: el CSS de un plugin/consumidor gana sin `!important` — el theming es contrato
 ([`THEMING.md`](./THEMING.md) + `theme.contract.json` generado). Seis battle-tests en `proof/`
 (docs, blog, commerce, gallery, saas y `themed` — el blog vistiendo un skin que pasa el mismo

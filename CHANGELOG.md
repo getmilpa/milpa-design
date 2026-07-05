@@ -4,6 +4,64 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-07-04
+
+> **El deshierbe:** cierre del backlog T9 abierto desde 0.3 — los tres hallazgos F (#8/#9/#10) y
+> los Minors diferidos del review final de 0.3.0. El off-canvas móvil de `mui-header` y `mui-docs`
+> cambia de mecanismo (panel `position:fixed` → `<dialog class="mui-drawer">` nativo, top layer) —
+> el único cambio de comportamiento del release, con nota de compat destacada abajo. Sin piezas
+> nuevas de peso (`mui-drawer--start` es variante): **68 piezas** con contrato · **193 pares AA** —
+> audit de cierre: **0 pares nuevos**.
+
+### Added
+- **`mui-drawer--start`** — variante de `mui-drawer` anclada al inline-start (izquierda): mismo
+  contrato de foco/teclado que el default (`--end`), ancla/borde/animación de entrada espejados.
+  La usa el shell `mui-docs` para su menú móvil ≤880px.
+
+### Changed
+- **El off-canvas móvil de `mui-header` y `mui-docs` pasa de un panel `position:fixed` +
+  `[data-nav-open]` (+ scrim) a un `<dialog class="mui-drawer">` (`--start` en docs) abierto con
+  `.showModal()`** — top layer nativo: focus trap, Esc y `::backdrop` los da el navegador, ya no
+  hay que reimplementarlos a mano. Consecuencias:
+  1. **Ya NO hace falta `html,body { overflow-x: clip }`** en la raíz de la página — se removió de
+     los seis proofs. Arregla el overflow horizontal de `docs.html` (el panel fuera de pantalla que
+     el clip de `mui-header` nunca cubrió — F#8).
+  2. **El menú móvil es un elemento APARTE:** un `<dialog>` hermano del header/shell (no una
+     transformación del nav inline) con el mismo árbol de links duplicado — el patrón estándar de
+     "mobile menu".
+  3. **COMPAT — quien consumía el off-canvas viejo migra así:** el toggle deja de alternar
+     `[data-nav-open]` en el root y pasa a llamar `dialog.showModal()` / `dialog.close()` sobre un
+     `mui-drawer`; el scrim y el atributo `[data-nav-open]` se borran — ya no existen, el backdrop
+     nativo del `<dialog>` los reemplaza.
+- **El buscador de commerce vuelve a estar disponible en móvil (F#9):** antes se ocultaba junto al
+  nav ≤880px sin sustituto (documentado como "honesto" pero sin resolver); ahora vive duplicado
+  dentro del `<dialog>` del menú móvil, junto a los links — lo que no cabe en la barra se muda, no
+  se pierde.
+- Badge SOC 2 de `saas.html` unificado a `--accent` (antes `--secondary` en un ejemplo) —
+  consistencia visual, mismo par ya gateado. Contratos de `mui-stack`/`mui-cluster` documentan su
+  `anatomy` (root).
+- **DESIGN §6 fija la política del guard `[hidden]`:** aplica al contenedor que un filtro
+  oculta/muestra (p.ej. `.mui-media-grid__item[hidden]`), NO a los medios internos
+  (`mui-card__media`, slots `:is(img, svg, picture)`) — resuelve la pregunta de política abierta
+  del review de 0.3.0, sin cambio de código.
+- Contratos: **68 → 68** (sin cambio — `mui-drawer--start` es variante, no pieza nueva).
+- AA-pairs audit de cierre: **0 pares nuevos** — el drawer reusa sus propios pares desde 0.1.0; los
+  links del menú móvil son `mui-btn`/`mui-stack` ya gateados; los cambios de media-slot son solo de
+  combinador (sin color); el badge SOC 2 reusa `accent-text`/`accent-subtle`. `scripts/contrast-pairs.mjs`
+  queda **sin tocar**.
+
+### Fixed
+- **Media slots usan combinador HIJO** (`> :is(img, svg, picture)`) en vez de descendiente: un
+  `<picture><img></picture>` ya no matchea ambos elementos y compone el hover-scale dos veces
+  (≈1.061 en vez de ≈1.03) — F#10. En `mui-media-grid` el guard queda al nivel del `figure`/
+  `__figure` puente (hijo directo del bridge), no del `__item`.
+- **Guard de set vacío en el lightbox del gallery** (`proof/gallery.html`): `show(i)` corta si
+  `visibleItems()` devuelve `[]` en vez de indexar `items[NaN]` (Minor diferido de 0.3.0).
+
+Backlog T9 **cerrado**: los cinco clusters (A–E, 0.3.0–0.5.0) más los hallazgos F (#8/#9/#10) y los
+dos Minors del review de 0.3.0 quedan resueltos. Solo queda lo genuinamente futuro (§4 del HANDOFF:
+Storybook T5, salidas multiplataforma).
+
 ## [0.5.0] — 2026-07-04
 
 > **La mano:** el cluster D del battle-test 0.3 — siete piezas de pulido reportadas por los

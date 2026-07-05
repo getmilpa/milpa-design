@@ -34,7 +34,7 @@
     "--text",
     "--border-strong",
     "--focus",
-    "--font-display",
+    "--font-body",
     "--text-sm",
     "--weight-medium",
     "--space-2",

@@ -38,7 +38,7 @@
     "--text-secondary",
     "--text-muted",
     "--success",
-    "--font-display",
+    "--font-heading",
     "--font-mono",
     "--text-lg",
     "--text-sm",

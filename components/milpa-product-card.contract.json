@@ -44,7 +44,7 @@
     "--focus",
     "--shadow-base",
     "--radius-lg",
-    "--font-display",
+    "--font-heading",
     "--text-sm",
     "--text-xs",
     "--weight-medium",

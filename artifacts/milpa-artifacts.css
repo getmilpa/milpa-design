@@ -1246,8 +1246,8 @@
 .mui-version-switcher::after {
   content: ""; flex: none;
   inline-size: 0.4em; block-size: 0.4em;
-  border-inline-end: var(--border-width) solid currentColor;
-  border-block-end: var(--border-width) solid currentColor;
+  border-inline-end: 1px solid currentColor;
+  border-block-end: 1px solid currentColor;
   transform: translateY(-25%) rotate(45deg);
   transition: transform var(--dur-fast) var(--ease-settle);
 }

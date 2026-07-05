@@ -28,7 +28,7 @@
     "--accent-text",
     "--border-subtle",
     "--focus",
-    "--font-display",
+    "--font-body",
     "--text-base",
     "--weight-medium",
     "--leading-snug",

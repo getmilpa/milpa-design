@@ -10,7 +10,7 @@
     "nav[aria-label] > ol > li"
   ],
   "anatomy": {
-    "root": ".mui-breadcrumbs — el <nav aria-label=\"breadcrumb\">; fija font-display y text-xs",
+    "root": ".mui-breadcrumbs — el <nav aria-label=\"breadcrumb\">; fija font-body y text-xs",
     "list": ".mui-breadcrumbs__list — el <ol>: flex wrap, gap var(--space-2), sin list-style ni margin/padding",
     "item": ".mui-breadcrumbs__item — cada <li>; a partir del segundo genera el separador \"/\" vía ::before (mono, var(--text-muted), alt vacío)",
     "link": ".mui-breadcrumbs__link — <a> de las migas ancestro: var(--text-muted), sin subrayado en reposo"
@@ -30,7 +30,7 @@
     "--text-secondary",
     "--text-muted",
     "--focus",
-    "--font-display",
+    "--font-body",
     "--font-mono",
     "--text-xs",
     "--weight-medium",

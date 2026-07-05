@@ -42,7 +42,7 @@
     "--text-secondary",
     "--focus",
     "--shadow-lg",
-    "--font-display",
+    "--font-heading",
     "--text-lg",
     "--text-sm",
     "--weight-medium",

@@ -49,7 +49,7 @@
     "--accent",
     "--accent-subtle",
     "--accent-text",
-    "--font-display",
+    "--font-body",
     "--text-sm",
     "--weight-medium",
     "--leading-normal",

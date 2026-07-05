@@ -14,7 +14,7 @@
     "link": "a.mui-pager__link — card silenciosa: display block, padding space-3/space-4, border 1px border-subtle, radius-md, sin text-decoration; hover → border-strong",
     "link-next": ".mui-pager__link--next — grid-column 2 + text-align end: con prev ocupa su mitad natural; sin prev queda anclado a la derecha y el hueco a la izquierda",
     "dir": ".mui-pager__dir — rótulo mono 2xs uppercase tracking-wide var(--text-muted): \"← Anterior\" / \"Siguiente →\"",
-    "title": ".mui-pager__title — text-sm weight-medium var(--accent-text), font-display, leading-snug"
+    "title": ".mui-pager__title — text-sm weight-medium var(--accent-text), font-heading, leading-snug"
   },
   "variants": {
     "link": {
@@ -40,7 +40,7 @@
     "--text-2xs",
     "--tracking-wide",
     "--text-muted",
-    "--font-display",
+    "--font-heading",
     "--text-sm",
     "--weight-medium",
     "--leading-snug",

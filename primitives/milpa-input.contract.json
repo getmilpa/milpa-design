@@ -30,7 +30,7 @@
   },
   "tokens": [
     "--bg", "--surface", "--text", "--text-secondary", "--text-muted", "--border-strong", "--danger", "--focus",
-    "--font-display", "--text-xs", "--text-sm", "--text-base",
+    "--font-body", "--text-xs", "--text-sm", "--text-base",
     "--space-3", "--space-8", "--radius-sm", "--radius-base",
     "--dur-fast", "--ease-standard"
   ],

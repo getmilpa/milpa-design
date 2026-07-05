@@ -34,7 +34,7 @@
     "--success",
     "--text",
     "--text-secondary",
-    "--font-display",
+    "--font-body",
     "--font-mono",
     "--text-base",
     "--text-sm",

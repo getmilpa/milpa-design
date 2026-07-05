@@ -13,7 +13,7 @@
     "badge (slot __badges: .mui-badge--accent 'latest', --since, --deprecated, --experimental)"
   ],
   "anatomy": {
-    "root": ".mui-changelog — <section>: voz display, var(--text)",
+    "root": ".mui-changelog — <section>: voz body, var(--text)",
     "release": ".mui-changelog__release — una por versión (<article>); padding-block generoso (space-10) y borde superior border-subtle SOLO entre releases (el riel vive entre, no alrededor)",
     "header": ".mui-changelog__header — flex a baseline con wrap: __version + __date + __badges",
     "version": ".mui-changelog__version — heading real (h2/h3): mono text-xl weight-bold, 'v0.2.0'",
@@ -48,7 +48,7 @@
     "--danger",
     "--surface",
     "--border-subtle",
-    "--font-display",
+    "--font-body",
     "--font-mono",
     "--text-xl",
     "--text-sm",

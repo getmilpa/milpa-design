@@ -24,7 +24,7 @@
   "tokens": [
     "--text",
     "--text-muted",
-    "--font-display",
+    "--font-heading",
     "--text-base",
     "--text-sm",
     "--weight-medium",

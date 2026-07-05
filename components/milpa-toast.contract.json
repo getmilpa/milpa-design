@@ -42,7 +42,7 @@
     "--info",
     "--shadow-lg",
     "--z-toast",
-    "--font-display",
+    "--font-body",
     "--text-xs",
     "--text-sm",
     "--weight-medium",

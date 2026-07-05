@@ -176,6 +176,8 @@
   display: flex; flex-direction: column;
   color: var(--text);
   background: var(--surface);
+  -webkit-backdrop-filter: var(--surface-backdrop);
+  backdrop-filter: var(--surface-backdrop);
   border: var(--border-width) var(--border-style) var(--border-subtle);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
@@ -744,12 +746,14 @@
   max-height: calc(100dvh - var(--space-16));
   margin: auto; padding: 0;
   color: var(--text); background: var(--surface);
+  -webkit-backdrop-filter: var(--surface-backdrop);
+  backdrop-filter: var(--surface-backdrop);
   border: var(--border-width) var(--border-style) var(--border); border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
 }
 .mui-modal::backdrop {
   background: color-mix(in srgb, var(--bg) 55%, transparent);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(var(--blur-sm));
 }
 .mui-modal[open] {
   display: flex; flex-direction: column;
@@ -799,13 +803,15 @@
   width: min(92vw, var(--drawer-width)); max-width: none;
   margin: 0; margin-inline-start: auto; padding: 0;
   color: var(--text); background: var(--surface);
+  -webkit-backdrop-filter: var(--surface-backdrop);
+  backdrop-filter: var(--surface-backdrop);
   border: none; border-inline-start: var(--border-width) var(--border-style) var(--border);
   border-radius: var(--radius-none);
   box-shadow: var(--shadow-lg);
 }
 .mui-drawer::backdrop {
   background: color-mix(in srgb, var(--bg) 55%, transparent);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(var(--blur-sm));
 }
 .mui-drawer[open] {
   display: flex; flex-direction: column;
@@ -1048,8 +1054,8 @@
   display: flex; align-items: center; gap: var(--space-4);
   height: var(--header-h); padding-inline: var(--space-5);
   background: color-mix(in srgb, var(--bg) 85%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(var(--blur-lg));
+  backdrop-filter: blur(var(--blur-lg));
   border-bottom: var(--border-width) var(--border-style) var(--border-subtle);
 }
 .mui-topbar__start  { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }

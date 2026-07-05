@@ -47,6 +47,9 @@
 
   /* ===== size ===== */
   --focus-width:2px; --focus-offset:2px; --border-width:1px; --container-max:72rem; --container-narrow:48rem; --container-wide:90rem; --header-h:3.5rem; --sidebar-w:16rem; --drawer-width:26rem; --measure:65ch;
+
+  /* ===== effect ===== */
+  --border-style:solid; --surface-backdrop:none; --blur-sm:2px; --blur-base:4px; --blur-lg:10px;
 }
 
 /* ===== color: semantic — DARK (default) =====

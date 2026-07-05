@@ -108,3 +108,40 @@ experimento/demostración (queda como proof, como los demás).
 el reskin por tokens es **suficiente** — este proof lo demuestra con el caso extremo, honrando el quality
 floor. Los límites restantes son de nicho (border-style, iconos) o ya conocidos y agendados como futuro
 (3er eje de tema / forced-colors, breakpoints, densidad, RTL).
+
+### Glass (3er flavor, post-0.8): los 3 huecos, cerrados
+
+El 3er flavor (`proof/skins/glass-skin.css`, glassmorphism) fue elegido a propósito porque **ejercita
+exactamente los 3 límites que 0.7/0.8 vinieron a cerrar** — no son límites nuevos, son los mismos de arriba
+más el gap de `verify-theme` con superficies translúcidas:
+
+1. **`--border-style` ahora SÍ es token** (era límite #1 de arriba). Glass lo fija a `solid` explícito junto
+   a `--border-width: 1px` — el rim fino del vidrio es tan tokenizable como el borde grueso brutalista.
+2. **`--surface-backdrop` + `--blur-*`** (0.8): Glass fija `--surface-backdrop: blur(14px) saturate(1.4)` y lo
+   consume `.mui-card`/`.mui-modal`/`.mui-drawer` del bundle SIN CSS estructural del skin — más el `.panel`/
+   `.swapbar` editoriales del proof, que también lo leen. Sin este token, un `backdrop-filter` real habría
+   requerido L2.
+3. **La composición alpha-sobre-`--bg` de `verify-theme`** (0.8): Glass fija `--surface`/`--surface-raised`/
+   `--overlay` TRANSLÚCIDOS (`#FFFFFFB3` en light, `#FFFFFF1F` en dark) mientras `--bg` permanece OPACO — el
+   gate compone la superficie sobre `--bg` antes de medir contraste efectivo, tal como exige el invariante
+   `--bg debe ser opaco`. La fixture negativa `glass-broken-skin.css` (Task 4) prueba el caso en que esto
+   falla; `glass-skin.css` es la contraparte positiva.
+
+**Iteración del gate (2 rondas, igual que Brutalist):** la 1ª pasada de `verify-theme` reportó 9 FAILs —
+`--border`/`--bg` en ambos modos (el rim translúcido quedaba demasiado cerca en luminancia del `--bg`
+vívido), `--success`/`--warning` contra `--bg`/su propio `-bg` en light (insuficientemente oscuros para el
+`--bg` pastel elegido), y `--text-on-accent`/`--accent-active` en dark (oscurecer el "active" bajaba el
+contraste en vez de subirlo, porque el texto ya era oscuro — el fix fue aclarar `--accent-active`, no
+oscurecerlo). Tras ajustar esos 8 tokens de color, la 2ª pasada dio **ALL PASS (193 checks, 0
+malformados)** en ambos modos.
+
+**Nuance `--bg`-opaco + gradiente editorial:** el invariante exige `--bg` opaco (es la referencia de
+composición), así que el "vidrio" no puede pintarse a sí mismo transparente sobre la página — necesita algo
+detrás para desenfocar. Esa "cosa detrás" es un `linear-gradient` en `html[data-skin="glass"] body` del
+`<style>` del proof: CSS **editorial de página**, no del sistema (Milpa/Brutalist se quedan con
+`var(--bg)` plano). El `--bg` del skin (`#DCE8FF` light / `#0B1226` dark) sigue siendo el valor de
+referencia opaco que ve `verify-theme` — el gradiente es puramente visual, vive fuera del contrato.
+
+Con Glass, el proof llega a **6 estados** (Milpa/Brutalist/Glass × light/dark) y las 3 marcas siguen
+honrando el mismo contrato — el caso extremo original (Brutalist) y el caso translúcido (Glass) cierran el
+espacio de diseño que un reskin L1 puede cubrir sin CSS estructural.

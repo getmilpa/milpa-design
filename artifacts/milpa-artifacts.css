@@ -34,14 +34,14 @@
   font-family: var(--font-mono); font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
   color: var(--syntax-text); background: var(--syntax-bg);
-  border: var(--border-width) solid var(--border-subtle);
+  border: var(--border-width) var(--border-style) var(--border-subtle);
   border-radius: var(--radius-lg);
 }
 .mui-code__header {
   display: flex; align-items: center; gap: var(--space-3);
   padding: var(--space-2);
   padding-inline-start: var(--space-4);
-  border-bottom: var(--border-width) solid var(--border-subtle);
+  border-bottom: var(--border-width) var(--border-style) var(--border-subtle);
 }
 /* filename — trunca con ellipsis; empuja lang y acciones al final */
 .mui-code__file {
@@ -56,7 +56,7 @@
   font-size: var(--text-2xs); line-height: var(--leading-snug);
   text-transform: uppercase; letter-spacing: var(--tracking-wide);
   color: var(--text-muted);
-  border: var(--border-width) solid var(--border-strong);
+  border: var(--border-width) var(--border-style) var(--border-strong);
   border-radius: var(--radius-full);
 }
 /* slot de acciones — compone .mui-btn mui-btn--ghost mui-btn--sm (copiar) */
@@ -157,13 +157,13 @@
   font-family: var(--font-mono); font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
   color: var(--syntax-text); background: var(--syntax-bg);
-  border: var(--border-width) solid var(--border-subtle);
+  border: var(--border-width) var(--border-style) var(--border-subtle);
   border-radius: var(--radius-lg);
 }
 .mui-terminal__bar {
   display: flex; align-items: center; gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
-  border-bottom: var(--border-width) solid var(--border-subtle);
+  border-bottom: var(--border-width) var(--border-style) var(--border-subtle);
 }
 /* tres dots con un solo pseudo: el box-shadow pinta los otros dos y el
    margen reserva su espacio en el flex */
@@ -270,7 +270,7 @@
   width: 0.75rem; height: 0.75rem; flex: none;
   border-radius: var(--radius-xs);
   background: var(--_c, var(--viz-1));
-  border: var(--border-width) solid var(--_ca, var(--viz-1-active)); /* regla 4: auto-borde -active */
+  border: var(--border-width) var(--border-style) var(--_ca, var(--viz-1-active)); /* regla 4: auto-borde -active */
 }
 .mui-chart__swatch--1 { --_c: var(--viz-1); --_ca: var(--viz-1-active); }
 .mui-chart__swatch--2 { --_c: var(--viz-2); --_ca: var(--viz-2-active); }
@@ -286,7 +286,7 @@
   background: var(--_c, var(--viz-1));
   /* regla 4: auto-borde -active; el consumidor setea --_ca junto a --_c
      (los pares viz-N / viz-N-active viajan juntos) */
-  border: var(--border-width) solid var(--_ca, var(--viz-1-active));
+  border: var(--border-width) var(--border-style) var(--_ca, var(--viz-1-active));
   min-height: 1px;                   /* el cero también se ve */
 }
 
@@ -321,7 +321,7 @@
   gap: var(--space-2);
   margin-top: calc(-1 * var(--space-3));
   padding-top: var(--space-1_5);
-  border-top: var(--border-width) solid var(--border-subtle);
+  border-top: var(--border-width) var(--border-style) var(--border-subtle);
 }
 .mui-chart__tick {
   min-width: 0; overflow: hidden;
@@ -472,7 +472,7 @@
   font-family: var(--font-body); font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text); background: var(--surface);
-  border: var(--border-width) solid var(--border); border-radius: var(--radius-base);
+  border: var(--border-width) var(--border-style) var(--border); border-radius: var(--radius-base);
 }
 /* guard: el display:flex de arriba pisaría el [hidden] del UA */
 .mui-callout[hidden] { display: none; }
@@ -549,7 +549,7 @@
   font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1;
   color: var(--text-secondary);
   background: var(--surface-raised);
-  border: var(--border-width) solid var(--border-strong);
+  border: var(--border-width) var(--border-style) var(--border-strong);
   border-radius: var(--radius-full);
   transition:
     color        var(--dur-fast) var(--ease-standard),
@@ -610,7 +610,7 @@
 .mui-file-tree__dir > ul {
   margin-inline-start: var(--space-3);
   padding-inline-start: var(--space-2);
-  border-inline-start: var(--border-width) solid var(--border-subtle);
+  border-inline-start: var(--border-width) var(--border-style) var(--border-subtle);
 }
 
 /* filas — summary de directorio y archivo comparten métrica */
@@ -730,7 +730,7 @@
     .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
   font-size: var(--text-2xl); letter-spacing: var(--tracking-tight);
   padding-block-end: var(--space-2);
-  border-block-end: var(--border-width) solid var(--border-subtle); /* divisor de sección, decorativo */
+  border-block-end: var(--border-width) var(--border-style) var(--border-subtle); /* divisor de sección, decorativo */
 }
 .mui-prose :where(h3):not(:where(
     :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
@@ -797,7 +797,7 @@
   padding: 0.1em 0.35em;
   font-family: var(--font-mono); font-size: var(--text-sm);
   background: var(--surface);
-  border: var(--border-width) solid var(--border-subtle);
+  border: var(--border-width) var(--border-style) var(--border-subtle);
   border-radius: var(--radius-xs);
 }
 
@@ -815,7 +815,7 @@
   font-family: var(--font-mono); font-size: var(--text-sm);
   line-height: var(--leading-normal);
   background: var(--syntax-bg); color: var(--syntax-text);
-  border: var(--border-width) solid var(--border-strong);
+  border: var(--border-width) var(--border-style) var(--border-strong);
   border-radius: var(--radius-md);
 }
 
@@ -874,13 +874,13 @@
   font-weight: var(--weight-regular);
   text-transform: uppercase; letter-spacing: var(--tracking-wide);
   color: var(--text-secondary);
-  border-block-end: var(--border-width) solid var(--border-strong);
+  border-block-end: var(--border-width) var(--border-style) var(--border-strong);
 }
 .mui-prose :where(td):not(:where(
     :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
     .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
   padding: var(--space-2) var(--space-3);
-  border-block-end: var(--border-width) solid var(--border-subtle);
+  border-block-end: var(--border-width) var(--border-style) var(--border-subtle);
 }
 
 /* pausa de sección — decorativa */
@@ -888,7 +888,7 @@
     :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose),
     .mui-prose :is([class^="mui-"], [class*=" mui-"]):not(.mui-prose) *)) {
   margin-block: var(--space-10);
-  border: 0; border-block-start: var(--border-width) solid var(--border-subtle);
+  border: 0; border-block-start: var(--border-width) var(--border-style) var(--border-subtle);
 }
 
 /* medios — nunca desbordan la medida; el radio los asienta en el sistema */
@@ -922,7 +922,7 @@
   line-height: var(--leading-snug);
   color: var(--text);
   background: var(--surface-raised);
-  border: var(--border-width) solid var(--border); border-block-end-width: 2px;
+  border: var(--border-width) var(--border-style) var(--border); border-block-end-width: 2px;
   border-radius: var(--radius-xs);
   vertical-align: middle;
 }
@@ -952,7 +952,7 @@
 /* el riel — decorativo: la señal AA la llevan color y peso del texto */
 .mui-toc__list {
   margin: 0; padding: 0; list-style: none;
-  border-inline-start: var(--border-width) solid var(--border-subtle);
+  border-inline-start: var(--border-width) var(--border-style) var(--border-subtle);
 }
 .mui-toc__link {
   position: relative;
@@ -1000,7 +1000,7 @@
 .mui-api + .mui-api {
   margin-block-start: var(--space-6);
   padding-block-start: var(--space-6);
-  border-block-start: var(--border-width) solid var(--border-subtle);
+  border-block-start: var(--border-width) var(--border-style) var(--border-subtle);
 }
 
 .mui-api__header {
@@ -1036,7 +1036,7 @@
   white-space: pre;
   color: var(--syntax-text);
   background: var(--syntax-bg);
-  border: var(--border-width) solid var(--border-subtle);
+  border: var(--border-width) var(--border-style) var(--border-subtle);
   border-radius: var(--radius-md);
 }
 
@@ -1099,7 +1099,7 @@
   line-height: 1; white-space: nowrap;
   color: var(--text-muted);
   background: var(--bg);
-  border: var(--border-width) solid var(--border); border-radius: var(--radius-md);
+  border: var(--border-width) var(--border-style) var(--border); border-radius: var(--radius-md);
   cursor: pointer; user-select: none;
   -webkit-tap-highlight-color: transparent;
   transition:
@@ -1133,7 +1133,7 @@
   line-height: var(--leading-snug);
   color: var(--text);
   background: transparent;
-  border: 0; border-block-end: var(--border-width) solid var(--border-subtle);
+  border: 0; border-block-end: var(--border-width) var(--border-style) var(--border-subtle);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0; /* = radio del Modal */
 }
 .mui-search__input::placeholder { color: var(--text-muted); }
@@ -1207,7 +1207,7 @@
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-2xs);
   color: var(--text-muted);
-  border-block-start: var(--border-width) solid var(--border-subtle);
+  border-block-start: var(--border-width) var(--border-style) var(--border-subtle);
 }
 .mui-search__hint { display: inline-flex; align-items: center; gap: var(--space-1_5); }
 
@@ -1232,7 +1232,7 @@
   font-weight: var(--weight-regular); line-height: 1;
   white-space: nowrap; user-select: none; cursor: pointer;
   color: var(--text-secondary); background: transparent;
-  border: var(--border-width) solid var(--border); border-radius: var(--radius-md);
+  border: var(--border-width) var(--border-style) var(--border); border-radius: var(--radius-md);
   -webkit-tap-highlight-color: transparent;
   transition:
     color        var(--dur-fast) var(--ease-standard),
@@ -1290,7 +1290,7 @@
   line-height: var(--leading-normal);
   color: var(--text);
   background: var(--warning-bg);
-  border-block: var(--border-width) solid var(--warning-border);
+  border-block: var(--border-width) var(--border-style) var(--warning-border);
 }
 /* guard: el display:flex de arriba pisaría el [hidden] del UA */
 .mui-version-banner[hidden] { display: none; }
@@ -1329,7 +1329,7 @@
 .mui-changelog__release:first-child { padding-block-start: 0; }
 /* el riel vive ENTRE releases, no alrededor */
 .mui-changelog__release + .mui-changelog__release {
-  border-block-start: var(--border-width) solid var(--border-subtle);
+  border-block-start: var(--border-width) var(--border-style) var(--border-subtle);
 }
 
 /* header de release — flex a baseline: versión + fecha + slot de badges */
@@ -1377,7 +1377,7 @@
   padding: 0.1em 0.35em;
   font-family: var(--font-mono); font-size: var(--text-xs);
   background: var(--surface);
-  border: var(--border-width) solid var(--border-subtle);
+  border: var(--border-width) var(--border-style) var(--border-subtle);
   border-radius: var(--radius-xs);
 }
 /* breaking — prefijo TEXTUAL en danger + bold: dice BREAKING, el color

@@ -18,12 +18,14 @@
 /* ---------- Docs · .mui-docs ----------
    La parcela de lectura: topbar sticky (hermano ANTERIOR al grid) +
    grid de 3 columnas nav / artículo / toc. REUSA el idioma del shell
-   admin — off-canvas con scrim en móvil, barra-grano en el item
-   actual — pero acá todo vive SOBRE var(--bg): la elevación la siguen
-   definiendo los bordes (regla 1). Compone los artefactos de contenido
-   (mui-prose, mui-toc, mui-search-trigger, mui-breadcrumbs,
-   mui-version-*) — no los redeclara. El body del consumidor pone el
-   lienzo: background var(--bg) + color var(--text). */
+   admin — barra-grano en el item actual — pero acá todo vive SOBRE
+   var(--bg): la elevación la siguen definiendo los bordes (regla 1).
+   ≤880px el nav inline se oculta y el toggle abre un
+   <dialog class="mui-drawer mui-drawer--start"> hermano (top layer,
+   sin overflow-x:clip) con el árbol duplicado. Compone los artefactos
+   de contenido (mui-prose, mui-toc, mui-search-trigger,
+   mui-breadcrumbs, mui-version-*) — no los redeclara. El body del
+   consumidor pone el lienzo: background var(--bg) + color var(--text). */
 .mui-docs,
 .mui-docs__topbar {
   --_topbar-h: 3.5rem;
@@ -227,9 +229,6 @@
 /* el shell docs mantiene su separación del artículo */
 .mui-docs .mui-pager { margin-block-start: var(--space-10); }
 
-/* scrim — velo del drawer móvil; existe solo con [data-nav-open] ≤880px */
-.mui-docs__scrim { display: none; }
-
 /* ---------- responsive ≤1100px ----------
    Dos columnas: la del toc se cae y el índice reaparece plegado arriba
    del artículo (.mui-docs__toc-inline). */
@@ -240,48 +239,12 @@
 }
 
 /* ---------- responsive ≤880px ----------
-   Una columna; el nav se vuelve drawer off-canvas — patrón EXACTO del
-   shell admin: cerrado = fuera del lienzo Y fuera del teclado/árbol de
-   a11y. visibility flipa al TERMINAR el slide-out (delay
-   --dur-moderate); al abrir flipa al instante para que el slide-in sea
-   visible. El JS del consumidor además alterna `inert` (cinturón y
-   tirantes). El hook de layout es [data-nav-open] en .mui-docs; la
-   semántica la lleva aria-expanded en el toggle. */
+   Una columna; ver mui-drawer.contract.json para el menú móvil. */
 @media (max-width: 880px) {
   .mui-docs { grid-template-columns: 1fr; }
-
-  .mui-docs__nav {
-    position: fixed; inset-block: 0; inset-inline-start: 0;
-    width: 17rem; max-height: none;
-    padding: var(--space-4) var(--space-3);
-    background: var(--bg);
-    border-inline-end: 1px solid var(--border-subtle);
-    z-index: var(--z-drawer);
-    transform: translateX(-100%);
-    visibility: hidden;
-    transition:
-      transform  var(--dur-moderate) var(--ease-grano),
-      visibility var(--dur-instant) var(--ease-linear) var(--dur-moderate);
-    /* reduce → transform a 1ms (contrato global): 1 frame estático */
-  }
-  .mui-docs[data-nav-open] .mui-docs__nav {
-    transform: none; visibility: visible; box-shadow: var(--shadow-md);
-    transition:
-      transform  var(--dur-moderate) var(--ease-grano),
-      visibility var(--dur-instant);
-  }
-
-  /* scrim — cubre el topbar (z-backdrop > z-sticky) y queda bajo el
-     drawer; clickearlo cierra (JS del consumidor) */
-  .mui-docs[data-nav-open] .mui-docs__scrim {
-    display: block;
-    position: fixed; inset: 0;
-    z-index: var(--z-backdrop);
-    background: color-mix(in srgb, var(--bg) 55%, transparent);
-    animation: milpa-fade var(--dur-moderate) var(--ease-standard) both;
-  }
-
-  /* los links del topbar migran al drawer (los duplica el consumidor) */
+  /* el menú móvil es un <dialog class="mui-drawer mui-drawer--start"> aparte;
+     la sidebar inline se oculta ≤880px. */
+  .mui-docs__nav { display: none; }
   .mui-docs__topbar-nav { display: none; }
   .mui-docs__nav-toggle { display: inline-flex; }
 }

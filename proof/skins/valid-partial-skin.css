@@ -1,0 +1,8 @@
+/* ════════════════════════════════════════════════════════════════════
+   Fixture POSITIVA para verify-theme.mjs (THEMING.md §6). Un skin
+   PARCIAL — solo fija tres tokens no-color (bien formados) más el
+   trío de acento en light — y aun así pasa el gate completo: los
+   tokens que no fija se heredan de Milpa (skin parcial = skin válido).
+   ════════════════════════════════════════════════════════════════════ */
+:root, [data-theme="dark"] { --font-body: 'Georgia', serif; --border-width: 2px; --dur-base: 150ms; }
+[data-theme="light"] { --accent: #14603F; --accent-text: #14603F; --focus: #14603F; }

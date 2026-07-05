@@ -2,13 +2,16 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "stack",
   "layer": "layout",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "status": "stable",
   "class": "mui-stack",
   "summary": "Ritmo vertical: apila sus hijos en columna con un gap consistente — el reemplazo del margin-block ad-hoc entre piezas de un grupo pequeño (texto + acciones, badges + botones, campos de un form). Sin fondo, sin borde, sin semántica propia: es puro layout, mapeado a los tokens de spacing de la casa. El gap por defecto es space-4; --sm/--lg lo mueven a space-2/space-6 (mismo patrón de tamaño que .mui-section/.mui-container).",
   "element": [
     "div (.mui-stack — envoltorio neutral; también aplica a <ul>/<ol> con list-style:none del consumidor, o a cualquier contenedor de flujo)"
   ],
+  "anatomy": {
+    "root": ".mui-stack — columna flex con gap por variante de tamaño"
+  },
   "variants": {
     "size": {
       "sm": ".mui-stack--sm — gap var(--space-2): grupos densos (campos de un form, filas de metadata)",
@@ -39,7 +42,7 @@
     },
     {
       "title": "Variante --sm — grupo denso",
-      "html": "<div class=\"mui-stack mui-stack--sm\"><span class=\"mui-badge\">v1.2</span><span class=\"mui-badge mui-badge--secondary\">SOC 2 Type II</span></div>"
+      "html": "<div class=\"mui-stack mui-stack--sm\"><span class=\"mui-badge\">v1.2</span><span class=\"mui-badge mui-badge--accent\">SOC 2 Type II</span></div>"
     }
   ]
 }

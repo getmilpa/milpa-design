@@ -18,20 +18,8 @@
 <style>
 /* ===== page styles (shop-*) — the system does the rest; all tokens ===== */
 body { margin:0; }
-/* the mui-header off-canvas panel is position:fixed + translateX(100%) off-canvas when
-   closed → it extends the doc's horizontal scroll on mobile; clip on BOTH html+body
-   removes it (clip, not hidden: no scroll container, vertical axis untouched) */
-html, body { overflow-x: clip; }
 .shop-wordmark { display:block; height:1rem; width:auto; }
 .shop-theme-toggle { font-family:var(--font-mono); }
-/* ≤880px: the header actions (search + theme + cart) are wider than a phone. The header
-   search is hidden to fit the bar; this proof has no mobile search affordance (known
-   mui-header gap — actions don't yet collapse gracefully). The "trueque" brand badge is
-   also dropped (the wordmark already carries the identity). Cart stays. */
-@media (max-width: 880px) {
-  .mui-header__actions .mui-input-group { display: none; }
-  .mui-header__brand .mui-badge { display: none; }
-}
 /* token-driven SVG placeholders. As of 0.3.0 the product-card media contract sizes
    :is(img, svg, picture) directly — .shop-ph is unlayered page CSS, so it still wins by
    cascade layer origin, but its values now just duplicate what the contract provides. */
@@ -83,17 +71,13 @@ html, body { overflow-x: clip; }
       <span class="mui-badge">trueque</span>
     </a>
     <button class="mui-btn mui-btn--ghost mui-btn--icon mui-header__toggle" id="navToggle"
-            type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav">☰</button>
+            type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">☰</button>
     <nav class="mui-header__nav" id="siteNav" aria-label="Site">
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/shop/apparel">Apparel</a>
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/shop/prints">Prints</a>
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/shop/kits">Kits</a>
     </nav>
     <div class="mui-header__actions">
-      <div class="mui-input-group mui-input-group--prefix" style="max-width:14rem">
-        <input class="mui-input mui-input--sm" type="search" aria-label="Search the store" placeholder="Search apparel, prints, kits…">
-        <span class="mui-input-group__prefix" aria-hidden="true">⌕</span>
-      </div>
       <button type="button" class="mui-btn mui-btn--sm shop-theme-toggle" id="theme-toggle" aria-label="Toggle theme">◐ dark</button>
       <button type="button" class="mui-btn mui-btn--ghost" aria-label="Open cart, 3 items">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12l-1.2 11H5.2L4 6z"/><path d="M7 6a3 3 0 0 1 6 0"/></svg>
@@ -101,8 +85,29 @@ html, body { overflow-x: clip; }
       </button>
     </div>
   </div>
-  <div class="mui-header__scrim" id="navScrim" aria-hidden="true"></div>
 </header>
+
+<dialog class="mui-drawer" id="mobileMenu" aria-labelledby="mobileMenu-title">
+  <header class="mui-drawer__header">
+    <h2 class="mui-drawer__title" id="mobileMenu-title">Menu</h2>
+    <button class="mui-btn mui-btn--ghost mui-btn--icon" id="menuClose" type="button" aria-label="Close menu">✕</button>
+  </header>
+  <div class="mui-drawer__body">
+    <!-- F#9: the store search used to be display:none ≤880px in .mui-header__actions — a
+         text input can't collapse gracefully into that bar (flex min-content width), so
+         mobile lost it outright. It now lives here instead: the drawer is its only home,
+         reachable from the toggle at any width the toggle shows (≤880px). -->
+    <div class="mui-input-group mui-input-group--prefix">
+      <input class="mui-input" type="search" aria-label="Search the store" placeholder="Search apparel, prints, kits…">
+      <span class="mui-input-group__prefix" aria-hidden="true">⌕</span>
+    </div>
+    <nav class="mui-stack" aria-label="Menu">
+      <a class="mui-btn mui-btn--ghost" href="/shop/apparel">Apparel</a>
+      <a class="mui-btn mui-btn--ghost" href="/shop/prints">Prints</a>
+      <a class="mui-btn mui-btn--ghost" href="/shop/kits">Kits</a>
+    </nav>
+  </div>
+</dialog>
 
 <main id="main" tabindex="-1">
 
@@ -632,22 +637,13 @@ html, body { overflow-x: clip; }
   applyTheme(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
   themeBtn.addEventListener('click', () => applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
 
-  /* ---------- header: off-canvas nav (base bar — no overlay/data-scrolled) ---------- */
-  const header = document.getElementById('siteHeader');
+  /* ---------- mobile menu: <dialog class="mui-drawer"> (top layer, no overflow) ---------- */
   const navToggle = document.getElementById('navToggle');
-  const siteNav = document.getElementById('siteNav');
-  const navScrim = document.getElementById('navScrim');
-  const setNav = (open) => {
-    header.toggleAttribute('data-nav-open', open);
-    navToggle.setAttribute('aria-expanded', String(open));
-    siteNav.toggleAttribute('inert', !open && matchMedia('(max-width: 880px)').matches);
-    if (open) siteNav.querySelector('a')?.focus();
-    else navToggle.focus();
-  };
-  navToggle.addEventListener('click', () => setNav(!header.hasAttribute('data-nav-open')));
-  navScrim.addEventListener('click', () => setNav(false));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && header.hasAttribute('data-nav-open')) setNav(false); });
-  if (matchMedia('(max-width: 880px)').matches) siteNav.setAttribute('inert', '');
+  const mobileMenu = document.getElementById('mobileMenu');
+  navToggle.addEventListener('click', () => { mobileMenu.showModal(); navToggle.setAttribute('aria-expanded', 'true'); });
+  mobileMenu.addEventListener('close', () => navToggle.setAttribute('aria-expanded', 'false'));
+  mobileMenu.querySelector('#menuClose').addEventListener('click', () => mobileMenu.close());
+  mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) mobileMenu.close(); }); // backdrop light-dismiss
 
   /* ---------- stepper (mui-input-group--stepper): clamp + disable en límites ---------- */
   document.querySelectorAll('.mui-input-group--stepper').forEach((grp) => {

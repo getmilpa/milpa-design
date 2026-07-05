@@ -80,8 +80,11 @@ module.exports = {
         'viz-6-active': 'var(--viz-6-active)',
       },
       fontFamily: {
-        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
-        mono: ['Space Mono', 'ui-monospace', 'monospace'],
+        heading: ['var(--font-heading)'],
+        body: ['var(--font-body)'],
+        serif: ['var(--font-serif)'],
+        mono: ['var(--font-mono)'],
+        display: ['var(--font-heading)'],
       },
       fontSize: {
         '2xs': '0.6875rem',

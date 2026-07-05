@@ -63,6 +63,7 @@ css += `
   /* ===== type ===== */
 `;
 css += '  ' + entries(tok.fontFamily).map(([k, n]) => `--font-${k}:${val(n)};`).join(' ') + '\n';
+css += '  --font-display:var(--font-heading);\n';
 css += '  ' + entries(tok.fontSize).map(([k, n]) => `--text-${k}:${val(n)};`).join(' ') + '\n';
 css += '  ' + entries(tok.lineHeight).map(([k, n]) => `--leading-${k}:${val(n)};`).join(' ') + '\n';
 css += '  ' + entries(tok.fontWeight).map(([k, n]) => `--weight-${k}:${val(n)};`).join(' ') + '\n';
@@ -90,6 +91,11 @@ css += '  ' + entries(tok.duration).map(([k, n]) => `--dur-${k}:${val(n)};`).joi
 css += '  ' + entries(tok.easing).map(([k, n]) => `--ease-${k}:${bezier(val(n))};`).join(' ') + '\n';
 css += '  ' + entries(tok.stagger).map(([k, n]) => `--stagger-${k}:${val(n)};`).join(' ') + '\n';
 css += '  ' + entries(tok.rise).map(([k, n]) => `--rise-${k}:${val(n)};`).join(' ') + '\n';
+
+css += `
+  /* ===== size ===== */
+`;
+css += '  ' + entries(tok.size).map(([k, n]) => `--${k}:${val(n)};`).join(' ') + '\n';
 css += '}\n';
 
 const themeBlock = (theme, selector, intro) => {
@@ -146,8 +152,11 @@ ${rampLines}
 ${aliasLines}
       },
       fontFamily: {
-        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
-        mono: ['Space Mono', 'ui-monospace', 'monospace'],
+        heading: ['var(--font-heading)'],
+        body: ['var(--font-body)'],
+        serif: ['var(--font-serif)'],
+        mono: ['var(--font-mono)'],
+        display: ['var(--font-heading)'],
       },
       fontSize: {
 ${kv(tok.fontSize)}
@@ -208,6 +217,19 @@ const themeContract = JSON.stringify({
       ...entries(tok.rise).map(([k]) => `--rise-${k}`),
     ],
     elevation: entries(tok.elevation.dark).map(([k]) => `--shadow-${k}`),
+    size: entries(tok.size).map(([k]) => `--${k}`),
+  },
+  validation: {
+    hard: { contrast: 'WCAG AA pairs (contrast.pairs), gated by threshold in dark+light' },
+    form: {
+      note: 'Non-color tokens the skin sets are validated by FORM (type + non-empty), not by taste. Partial skins are valid.',
+      types: {
+        type: 'font-* = non-empty family list; text-*/tracking-* = <length>; leading-* = <number>; weight-* = <number 1-1000>',
+        space: '<length>', radius: '<length>', zIndex: '<integer>',
+        motion: 'dur-*/stagger-* = <time>; ease-* = <timing-function>; rise-* = <length>',
+        elevation: 'non-empty <shadow>', size: '<length> (or <ratio> where applicable)',
+      },
+    },
   },
   contrast: {
     algorithm: 'WCAG 2.1 relative luminance',

@@ -27,7 +27,7 @@
   },
   "states": {
     "scrolled": "[data-scrolled] on .mui-header--overlay — solidificado tras pasar un umbral de scroll (JS del consumidor): background + blur + borde border-subtle",
-    "mobile-menu": "el abierto/cerrado del menú móvil vive en el propio <dialog class=\"mui-drawer\"> hermano del header (ver mui-drawer.contract.json: states.open/closed) — el header YA NO declara [data-nav-open]; el toggle solo sincroniza aria-expanded con el evento close del dialog (JS del consumidor)",
+    "mobile-menu": "el abierto/cerrado del menú móvil vive en el propio <dialog class=\"mui-drawer\"> hermano del header (ver mui-drawer.contract.json: states.open/closed) — el header YA NO declara [data-nav-open]; el toggle sincroniza aria-expanded con el open (click del toggle) y el close (evento del dialog) (JS del consumidor)",
     "focus": "interactivos (brand, links del nav, toggle, CTA) → :focus-visible con anillo 2px var(--focus) offset 2px (brand explícito acá; los que componen .mui-btn lo heredan de su primitivo)"
   },
   "tokens": [

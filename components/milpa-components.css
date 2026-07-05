@@ -1105,7 +1105,7 @@
      del consumidor además alterna `inert` (cinturón y tirantes). */
   .mui-shell .mui-sidebar {
     position: fixed; inset-block: 0; inset-inline-start: 0;
-    width: 16rem; z-index: var(--z-drawer);
+    width: var(--sidebar-w); z-index: var(--z-drawer);
     transform: translateX(-100%);
     visibility: hidden;
     transition:

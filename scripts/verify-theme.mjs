@@ -114,17 +114,17 @@ console.log(`skin: ${file}`);
 console.log(`tokens de color: ${provided.length}/${required.length} provistos por el skin, ${required.length - provided.length} heredados de Milpa\n`);
 
 // --- pares ---
-let fails = 0, n = 0;
+let fails = 0, n = 0, invFails = 0;
 for (const theme of ['dark', 'light']) {
   // invariante del contrato: --bg es la referencia de composición y debe ser opaco.
   const bgRaw = resolve(theme, 'bg');
   const baseBg = parseColor(bgRaw);
   if (!baseBg) {
     console.log(`  [${theme[0].toUpperCase()}] ERROR --bg no es un color parseable: ${bgRaw}`);
-    fails++;
+    invFails++;
   } else if (baseBg.a < 1) {
     console.log(`  [${theme[0].toUpperCase()}] FAIL invariante: --bg debe ser opaco — alpha=${baseBg.a} (${bgRaw})`);
-    fails++;
+    invFails++;
   }
   for (const p of contract.contrast.pairs) {
     if (p.themes && !p.themes.includes(theme)) continue;
@@ -176,6 +176,11 @@ const wellFormed = (g, name, v) => {
     return isLen(v);                                                  // rise-*
   }
   if (g === 'elevation') return v.length > 0;
+  if (g === 'effect') {
+    if (name === 'border-style') return /^(solid|dashed|dotted|double|none|groove|ridge|inset|outset|hidden)$/.test(v);
+    if (name.startsWith('blur-')) return isLen(v);
+    if (name === 'surface-backdrop') return v === 'none' || v.trim().split(/\s+/).every((p) => /^[a-z-]+\(.*\)$/.test(p));
+  }
   return true;
 };
 let formFails = 0;
@@ -185,7 +190,7 @@ for (const [name, v] of Object.entries(setTokens)) {
   if (!wellFormed(g, name, v.trim())) { formFails++; console.log(`  FORM FAIL  --${name}: ${v.trim()}  (grupo ${g})`); }
 }
 
-console.log(`\n${fails === 0 && formFails === 0 ? `ALL PASS ✓  (${n} checks de contraste, ${formFails} malformados — el skin honra el contrato)` : `${fails} FAILURES / ${n} de contraste, ${formFails} malformados — el skin NO honra el contrato`}`);
+console.log(`\n${fails === 0 && formFails === 0 && invFails === 0 ? `ALL PASS ✓  (${n} checks de contraste, ${formFails} malformados — el skin honra el contrato)` : `${fails} FAILURES / ${n} de contraste + ${formFails} malformados + ${invFails} de invariante — el skin NO honra el contrato`}`);
 console.log('invariantes (no verificables acá — leé THEMING.md §5):');
 for (const inv of contract.invariants) console.log(`  · ${inv}`);
-process.exit(fails === 0 && formFails === 0 ? 0 : 1);
+process.exit(fails === 0 && formFails === 0 && invFails === 0 ? 0 : 1);

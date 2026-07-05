@@ -1,0 +1,14 @@
+/* ════════════════════════════════════════════════════════════════════
+   Fixture NEGATIVA para verify-theme.mjs (THEMING.md §6 / contrato
+   validation.form.types.effect). Fija SOLO tokens del grupo `effect`,
+   los tres mal formados a propósito, para que el gate falle ÚNICAMENTE
+   por el form-check de `effect` (no por contraste):
+     --border-style: soild        (typo — no es un keyword válido)
+     --blur-sm: red                (no es un <length>)
+     --surface-backdrop: notafilter (ni "none" ni una filter-function)
+   El trío de acento en light se fija a un color con contraste AA real
+   para que el gate de contraste pase limpio y el único FAIL visible
+   sea el de `effect`.
+   ════════════════════════════════════════════════════════════════════ */
+:root, [data-theme="dark"] { --border-style: soild; --blur-sm: red; --surface-backdrop: notafilter; }
+[data-theme="light"] { --accent: #14603F; --accent-text: #14603F; --focus: #14603F; }

@@ -42,7 +42,7 @@
     "--accent-subtle",
     "--surface",
     "--focus",
-    "--font-display",
+    "--font-body",
     "--text-sm",
     "--weight-medium",
     "--tracking-normal",

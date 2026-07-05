@@ -23,7 +23,7 @@
   "tokens": [
     "--text",
     "--text-muted",
-    "--font-display",
+    "--font-heading",
     "--text-2xl",
     "--text-sm",
     "--weight-medium",

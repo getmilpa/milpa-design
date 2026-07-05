@@ -52,7 +52,7 @@
     "--text",
     "--text-secondary",
     "--text-muted",
-    "--font-display",
+    "--font-body",
     "--font-mono",
     "--text-sm",
     "--text-xs",

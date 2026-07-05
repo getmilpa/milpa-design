@@ -39,7 +39,7 @@
     "--shadow-base",
     "--radius-md",
     "--radius-sm",
-    "--font-display",
+    "--font-body",
     "--font-mono",
     "--text-sm",
     "--text-2xs",

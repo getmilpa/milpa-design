@@ -43,7 +43,7 @@
   },
   "scripts": {
     "build": "node scripts/build-tokens.mjs",
-    "test": "node scripts/verify-contrast.mjs && node scripts/verify-governance.mjs && node scripts/build-tokens.mjs --check && node scripts/layer-guard.test.mjs",
+    "test": "node scripts/verify-contrast.mjs && node scripts/verify-governance.mjs && node scripts/build-tokens.mjs --check && node scripts/layer-guard.test.mjs && node scripts/verify-theme.test.mjs",
     "proof": "python3 -m http.server 4321",
     "verify:theme": "node scripts/verify-theme.mjs",
     "prepublishOnly": "npm test",

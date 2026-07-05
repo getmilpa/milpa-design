@@ -10,7 +10,7 @@
     "footer (landmark contentinfo — SIEMPRE <footer> hijo directo del <body> o de .mui-page, nunca anidado en <main>)"
   ],
   "anatomy": {
-    "root": "footer.mui-footer — border-top 1px border-subtle, padding-block space-16/space-10, padding-inline clamp(space-4..space-8) (--_pad-inline, la parcela de mui-docs), background var(--bg), margin-block-start auto, font-display",
+    "root": "footer.mui-footer — border-top 1px border-subtle, padding-block space-16/space-10, padding-inline clamp(space-4..space-8) (--_pad-inline, la parcela de mui-docs), background var(--bg), margin-block-start auto, font-body",
     "grid": ".mui-footer__grid — grid repeat(auto-fit, minmax(9rem, 1fr)) gap space-8, max-width 90rem centrado (--_max-w)",
     "brand": ".mui-footer__brand — grid-column span 2 (doble de ancho que cada columna de links); flex column gap space-3: el wordmark (slot svg o texto) + __mantra",
     "mantra": ".mui-footer__mantra — mono text-2xs var(--text-muted); slot GENÉRICO y opcional para el tagline PROPIO del producto que consume el layout (cualquier producto — NO hardcodeado al mantra de Milpa), en el idioma del producto: el proof de Milpa lo llena con su propio mantra en español ('Siembra módulos, cosecha aplicaciones.'), un proof de tercero pone el suyo en el idioma que corresponda (ej. proof/saas.html, Troje, en inglés: 'Keep what the field grows.' — el lang lo hereda del documento)",
@@ -29,7 +29,7 @@
     "--text-muted",
     "--border-subtle",
     "--focus",
-    "--font-display",
+    "--font-body",
     "--font-mono",
     "--text-2xs",
     "--text-xs",

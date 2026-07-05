@@ -36,7 +36,7 @@
     "--syntax-bg",
     "--syntax-text",
     "--border-subtle",
-    "--font-display",
+    "--font-body",
     "--font-mono",
     "--text-2xs",
     "--text-xs",

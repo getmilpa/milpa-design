@@ -18,7 +18,7 @@
     "layout": { "row": ".mui-field--row — label y control en línea (checkbox/switch)" }
   },
   "states": {},
-  "tokens": ["--space-1_5", "--space-2", "--text-secondary", "--text-muted", "--danger", "--font-display", "--font-mono", "--text-sm", "--text-xs", "--weight-medium"],
+  "tokens": ["--space-1_5", "--space-2", "--text-secondary", "--text-muted", "--danger", "--font-body", "--font-mono", "--text-sm", "--text-xs", "--weight-medium"],
   "a11y": {
     "label": "el <label> lleva for= hacia el id del control; nunca label vacío",
     "aria": [

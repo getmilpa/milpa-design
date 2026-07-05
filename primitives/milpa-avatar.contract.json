@@ -35,7 +35,7 @@
     "--secondary-text",
     "--surface",
     "--border",
-    "--font-display",
+    "--font-body",
     "--weight-medium",
     "--tracking-normal",
     "--radius-full",

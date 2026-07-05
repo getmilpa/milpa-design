@@ -79,3 +79,32 @@ resuelven a los valores del skin (radios 0, borde 3px, sombra offset, fuente mon
 
 No es una pieza del sistema; no toca el bundle, los contratos ni el gate de release. No se publica. Es un
 experimento/demostración (queda como proof, como los demás).
+
+## 10. Hallazgos (post-build, 2026-07-05)
+
+**Resultado: SÍ — el reskin solo-tokens (L1) alcanza para un cambio de marca dramático.**
+
+- El skin Brutalist (`proof/skins/brutalist-skin.css`) es **100% overrides de token, cero CSS
+  estructural**, y **PASA el contrato**: `verify-theme` → **ALL PASS (193 checks AA, 0 malformados)** en
+  light + dark (tras 4 ajustes de color en la 1ª iteración — la iteración que el gate está para forzar).
+- El swap en vivo da vuelta, en las MISMAS piezas y el MISMO markup: **forma** (radius 0.5rem→0, border
+  1px→3px, esquinas duras), **color** (bg/surface/accent/estados), **tipografía** (Space Grotesk→Space
+  Mono), **elevación** (`0 2px 8px` blur suave → `4px 4px 0 var(--border)` offset duro) y **motion**
+  (200ms→0ms). Verificado por `getComputedStyle` en botones/cards reales + 4 screenshots.
+- **Lo que lo hizo posible (mérito de 0.7):** `--shadow-*` son tokens de **valor completo** (box-shadow
+  entero) → se puede cambiar la **forma** de la sombra (blur→offset), no solo la intensidad; `--border-width`
+  y `--focus-width` se tokenizaron en 0.7; radius/font/motion ya lo eran. El `var(--border)` dentro de la
+  sombra resuelve por modo (blanco en dark, negro en light).
+
+**Límites honestos (no bloquearon el brutalismo, pero son reales):**
+1. **`border-style` NO es token** (solo `--border-width` + el color). Los componentes hardcodean `solid`;
+   un brutalismo que quisiera bordes `dashed`/`double` necesitaría L2. (El neo-brutalismo usa solid → no molestó.)
+2. **Los íconos SVG inline** no son tematizables por token (su forma/trazo vive en el markup); heredan
+   `currentColor`, así que el color sí sigue el tema, pero el estilo del trazo no.
+3. **Cargar la fuente** es responsabilidad del consumidor — acá se reusó Space Mono (ya en el bundle); una
+   display brutalista custom habría que cargarla (ya documentado en 0.7 / THEMING.md).
+
+**Veredicto:** para theming de **marca** (color, tipografía, forma, elevación, motion, grosor de borde),
+el reskin por tokens es **suficiente** — este proof lo demuestra con el caso extremo, honrando el quality
+floor. Los límites restantes son de nicho (border-style, iconos) o ya conocidos y agendados como futuro
+(3er eje de tema / forced-colors, breakpoints, densidad, RTL).

@@ -14,31 +14,31 @@ ambos avanzan en paralelo sin pisarse. La costura entre los dos es un **contrato
 
 ## Estado
 
-**v0.7 — la piel: theming release-grade para tipografía y dimensiones estructurales.** Split
-`--font-heading`/`--font-body` (+ `--font-serif` para prose/quotes, `--weight-semibold`) —
-`--font-display` sigue vivo como alias, y una regla base pone TODO heading (`h1..h6`) en
-`--font-heading` aunque no tenga clase `.mui-*` propia. Un grupo `size` de diez tokens públicos
-(`--focus-width`/`--focus-offset`, `--border-width`, `--container-max/narrow/wide`,
-`--header-h`/`--sidebar-w`/`--drawer-width`, `--measure`) reemplaza literales que antes vivían
-fuera del alcance de un skin. `npm run verify:theme` ya no gatea solo color: valida los 7 grupos
-del contrato **por forma** (tipo + no-vacío), distinguiendo el hard-gate de contraste del
-form-gate del resto. Todo aditivo — cero cambio visual por defecto salvo un ajuste de 5ch en el
-measure de dos bloques de prose (ver [`CHANGELOG.md`](./CHANGELOG.md)). Paleta cerrada sin
-cambios: `oro` (primario) + `olivo` (secundario / la milpa viva) + `tierra` (neutro); `cielo` =
-`info`; y `--syntax-*` (highlighting AA-verificado) y `--viz-*` (charts, colorblind-safe) —
-semánticos de las mismas rampas. **193/193 pares WCAG AA** (dark + light, `npm test`). **68
-piezas** con contrato en cuatro capas (sin cambio de conteo — este release es tokens + gate, no
-piezas nuevas): primitivas (*el grano*), componentes admin + commerce (*el frijol*), artefactos
-de contenido (*el elote*: code, terminal, chart, prose, api, search, kit de versionado…) y
-layouts (*la parcela*: el shell de docs versionadas, hero, pricing, faq, footer, media-grid,
-lightbox, `mui-header`…). **Tres headers, tres contextos:** `mui-topbar` (shell admin) /
-`mui-docs__topbar` (shell docs) / `mui-header` (sitio público — marketing, con variante overlay);
-el off-canvas móvil de `mui-header` y del shell docs es un **`<dialog class="mui-drawer">`
-nativo** abierto con `showModal()` (top layer: focus trap/Esc/backdrop gratis). Todo el CSS
-publicado vive en **`@layer milpa.*`**: el CSS de un plugin/consumidor gana sin `!important` — el
-theming es contrato ([`THEMING.md`](./THEMING.md) + `theme.contract.json` generado). Seis
-battle-tests en `proof/` (docs, blog, commerce, gallery, saas y `themed` — el blog vistiendo un
-skin que pasa el mismo gate).
+**v0.8 — el rocío: cierra los huecos de theming de marca (bordes, superficies, blur) + glass.**
+Grupo `effect` nuevo: `--border-style` (default `solid` — los ~83 bordes del bundle lo usan,
+dashed/double/none por token), `--surface-backdrop` (default `none`, expuesto en `.mui-card`/
+`.mui-modal`/`.mui-drawer` — un skin glass activa `backdrop-filter` sin CSS propio) y
+`--blur-sm/base/lg` (tokenizan los blurs frosted que ya existían en header/topbar/drawer).
+Invariante nueva: **`--bg` debe ser opaco** (referencia de composición). `npm run verify:theme`
+ahora parsea color con alpha (`#RRGGBBAA`/`rgba`) y compone superficies translúcidas sobre
+`--bg` antes de medir contraste AA — el gate valida glassmorphism de verdad, no solo lo deja
+pasar. Glass se suma como **3er flavor** del proof de theme-swap (junto a Nopal y Brutalist). Todo
+aditivo — cero cambio visual por defecto (solid/none/mismos blurs). Paleta cerrada sin cambios:
+`oro` (primario) + `olivo` (secundario / la milpa viva) + `tierra` (neutro); `cielo` = `info`; y
+`--syntax-*` (highlighting AA-verificado) y `--viz-*` (charts, colorblind-safe) — semánticos de
+las mismas rampas. **193/193 pares WCAG AA** (dark + light, `npm test`) — audit de cierre: **0
+pares nuevos** (release sin color). **68 piezas** con contrato en cuatro capas (sin cambio de
+conteo): primitivas (*el grano*), componentes admin + commerce (*el frijol*), artefactos de
+contenido (*el elote*: code, terminal, chart, prose, api, search, kit de versionado…) y layouts
+(*la parcela*: el shell de docs versionadas, hero, pricing, faq, footer, media-grid, lightbox,
+`mui-header`…). **Tres headers, tres contextos:** `mui-topbar` (shell admin) / `mui-docs__topbar`
+(shell docs) / `mui-header` (sitio público — marketing, con variante overlay); el off-canvas
+móvil de `mui-header` y del shell docs es un **`<dialog class="mui-drawer">` nativo** abierto con
+`showModal()` (top layer: focus trap/Esc/backdrop gratis). Todo el CSS publicado vive en
+**`@layer milpa.*`**: el CSS de un plugin/consumidor gana sin `!important` — el theming es
+contrato, **theming-capable hasta glass** ([`THEMING.md`](./THEMING.md) + `theme.contract.json`
+generado). Battle-tests en `proof/`: docs, blog, commerce, gallery, saas, `themed` (skin Nopal) y
+`theme-swap` (Milpa⇄Brutalist⇄Glass, los tres flavors contra el mismo gate).
 
 ## Estructura
 
@@ -83,9 +83,13 @@ Todo el CSS publicado vive en `@layer milpa.*` — **tu CSS sin layer siempre ga
 `!important`. Tres niveles: **retokenizar** (override de custom properties), **reskin** (tu CSS
 reemplaza la piel de cualquier `mui-*`) o **reemplazo total** (traés tu design system y honrás
 `theme.contract.json`). Validá tu skin: `npm run verify:theme -- mi-skin.css` — corre los mismos
-193 pares AA del gate (hard-gate) **y** valida por forma (tipo + no-vacío) cualquier otro token
-no-color que tu skin setee, de los 7 grupos del contrato (form-gate). Ejemplo vivo:
-`proof/themed.html`. Leé [`THEMING.md`](./THEMING.md).
+193 pares AA del gate (hard-gate, ahora con **soporte de alpha**: parsea `#RRGGBBAA`/`rgba` y
+compone superficies translúcidas sobre `--bg` antes de medir contraste, así que un skin glass se
+valida de verdad) **y** valida por forma (tipo + no-vacío) cualquier otro token no-color que tu
+skin setee, de los 8 grupos del contrato (form-gate) — incluido el grupo `effect`
+(`--border-style`/`--surface-backdrop`/`--blur-*`) que hace tu skin **glass-capable** sin CSS
+propio. Ejemplos vivos: `proof/themed.html` (Nopal) y `proof/theme-swap.html` (Milpa⇄Brutalist⇄
+Glass). Leé [`THEMING.md`](./THEMING.md).
 
 ## Desarrollo
 

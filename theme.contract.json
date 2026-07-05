@@ -77,7 +77,9 @@
       "--viz-6-active"
     ],
     "type": [
-      "--font-display",
+      "--font-heading",
+      "--font-body",
+      "--font-serif",
       "--font-mono",
       "--text-2xs",
       "--text-xs",
@@ -96,6 +98,7 @@
       "--leading-relaxed",
       "--weight-regular",
       "--weight-medium",
+      "--weight-semibold",
       "--weight-bold",
       "--tracking-tight",
       "--tracking-normal",
@@ -167,7 +170,36 @@
       "--shadow-base",
       "--shadow-md",
       "--shadow-lg"
+    ],
+    "size": [
+      "--focus-width",
+      "--focus-offset",
+      "--border-width",
+      "--container-max",
+      "--container-narrow",
+      "--container-wide",
+      "--header-h",
+      "--sidebar-w",
+      "--drawer-width",
+      "--measure"
     ]
+  },
+  "validation": {
+    "hard": {
+      "contrast": "WCAG AA pairs (contrast.pairs), gated by threshold in dark+light"
+    },
+    "form": {
+      "note": "Non-color tokens the skin sets are validated by FORM (type + non-empty), not by taste. Partial skins are valid.",
+      "types": {
+        "type": "font-* = non-empty family list; text-*/tracking-* = <length>; leading-* = <number>; weight-* = <number 1-1000>",
+        "space": "<length>",
+        "radius": "<length>",
+        "zIndex": "<integer>",
+        "motion": "dur-*/stagger-* = <time>; ease-* = <timing-function>; rise-* = <length>",
+        "elevation": "non-empty <shadow>",
+        "size": "<length> (or <ratio> where applicable)"
+      }
+    }
   },
   "contrast": {
     "algorithm": "WCAG 2.1 relative luminance",

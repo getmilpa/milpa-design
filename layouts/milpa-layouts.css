@@ -275,12 +275,12 @@
 /* container — la parcela centrada: 72rem, padding-inline fluido */
 .mui-container {
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--container-max);
   margin-inline: auto;
   padding-inline: clamp(var(--space-5), 4vw, var(--space-8));
 }
-.mui-container--narrow { max-width: 48rem; } /* prosa: ~65ch a text-base */
-.mui-container--wide   { max-width: 90rem; } /* la parcela ancha de mui-docs */
+.mui-container--narrow { max-width: var(--container-narrow); } /* prosa: ~65ch a text-base */
+.mui-container--wide   { max-width: var(--container-wide); } /* la parcela ancha de mui-docs */
 
 /* section — respiro fluido; la costura entre hermanas es un borde sutil */
 .mui-section { padding-block: clamp(var(--space-16), 10vw, var(--space-24)); }
@@ -795,14 +795,19 @@ a.mui-feature-grid__item:focus-visible {
 .mui-media-grid[hidden] { display: none; }
 .mui-media-grid__item[hidden] { display: none; } /* mismo guard para la pieza (filtros) */
 
-/* item — <a> o <button> envolvente; el reset sigue a .mui-card--interactive */
+/* item — <a> o <button> envolvente; el reset sigue a .mui-card--interactive.
+   --media-ratio se declara acá (no es un token de dist, es una propiedad
+   inyectable) para que el consumidor la sobreescriba inline — mismo
+   contrato que .mui-card__media; se declara local (no solo fallback)
+   porque este archivo no tiene otro anclaje de --media-ratio. */
 .mui-media-grid__item {
+  --media-ratio: 4 / 3;
   position: relative; display: block;
   width: 100%; padding: 0;                /* reset de <button> */
   font: inherit; text-align: start;
   text-decoration: none; cursor: pointer; /* reset de <a> */
   -webkit-tap-highlight-color: transparent;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: var(--media-ratio);
   color: var(--text);
   background: var(--surface);             /* suelo mientras carga la imagen */
   border: var(--border-width) solid var(--border-subtle);

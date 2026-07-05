@@ -692,7 +692,7 @@
    reserva para strong), links siempre subrayados. El código real de la
    doc compone .mui-code; el <pre> de acá es el fallback sano. */
 .mui-prose {
-  max-width: 65ch;
+  max-width: var(--measure);
   font-family: var(--font-serif); font-size: var(--text-base);
   font-weight: var(--weight-regular); line-height: var(--leading-relaxed);
   color: var(--text);
@@ -1042,7 +1042,7 @@
 
 .mui-api__desc {
   margin: 0;
-  max-width: 70ch;
+  max-width: var(--measure);
   font-size: var(--text-sm); line-height: var(--leading-normal);
   color: var(--text-secondary);
 }
@@ -1073,7 +1073,7 @@
    badge del __meta */
 .mui-api__deprecated-note {
   margin: 0;
-  max-width: 70ch;
+  max-width: var(--measure);
   font-size: var(--text-sm); line-height: var(--leading-normal);
   color: var(--text-secondary);
 }

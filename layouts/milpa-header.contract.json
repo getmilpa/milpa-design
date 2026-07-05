@@ -2,33 +2,32 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "header",
   "layer": "layout",
-  "version": "0.3.0",
+  "version": "0.6.0",
   "status": "stable",
   "class": "mui-header",
-  "summary": "Public/marketing site header: sticky bar with brand, primary nav and actions; collapses to an off-canvas panel on mobile; optional overlay variant that sits over a hero and solidifies on scroll. The third header of the system, distinct from mui-topbar (admin) and mui-docs__topbar (docs). Reuses the docs shell off-canvas language (translucent color-mix + blur veil, [data-nav-open] + scrim, drawer on translateX) but as a MARKETING bar: the nav pushes to the end and, ≤880px, becomes a right-side drawer.",
+  "summary": "Public/marketing site header: sticky bar with brand, primary nav and actions. ≤880px the inline nav hides and the toggle opens a sibling <dialog class=\"mui-drawer\"> (showModal — top layer, native focus trap/Esc/backdrop) holding the duplicated links plus whatever bar actions don't fit (e.g. search); optional overlay variant that sits over a hero and solidifies on scroll. The third header of the system, distinct from mui-topbar (admin) and mui-docs__topbar (docs).",
   "element": [
-    "<header class=\"mui-header\"> — landmark banner gratis cuando es hijo directo del body (o de .mui-page). Adentro un solo .mui-header__row de contenido; el .mui-header__scrim es hermano aria-hidden del row"
+    "<header class=\"mui-header\"> — landmark banner gratis cuando es hijo directo del body (o de .mui-page). Adentro un solo .mui-header__row de contenido; el menú móvil ≤880px NO vive dentro del header — es un <dialog class=\"mui-drawer\"> HERMANO, justo después de </header> (ver mui-drawer.contract.json)"
   ],
   "composes": [
     "button (links del __nav y el CTA de __actions: .mui-btn mui-btn--ghost / mui-btn--primary; el toggle: .mui-btn mui-btn--ghost mui-btn--icon)",
-    "wordmark (el símbolo Grano + logotipo dentro de .mui-header__brand — mismo slot que .mui-docs__brand; el header no lo redeclara)"
+    "wordmark (el símbolo Grano + logotipo dentro de .mui-header__brand — mismo slot que .mui-docs__brand; el header no lo redeclara)",
+    "drawer (el menú móvil ≤880px: <dialog class=\"mui-drawer\"> hermano del header con los links del nav duplicados + las acciones de barra que no caben — ver mui-drawer.contract.json; el header no redeclara su CSS ni su JS)"
   ],
   "anatomy": {
     "root": ".mui-header — <header> sticky top 0 (z-sticky), velo color-mix(in srgb, var(--bg) 85%, transparent) + blur(10px), borde inferior border-subtle. Vive sobre var(--bg): el body del consumidor pone background var(--bg) + color var(--text)",
     "row": ".mui-header__row — flex align-items center, gap var(--space-4), min-height 3.5rem: el envoltorio de brand + nav + actions. El gap del row ES el único espaciado entre items (no sumar márgenes: flexbox reserva el gap independiente del margin-inline-start:auto del nav)",
     "brand": ".mui-header__brand — <a> wordmark/logo (izquierda): inline-flex, gap var(--space-2), color var(--text), sin subrayado; :focus-visible con anillo estándar (2px var(--focus) offset 2px)",
-    "nav": ".mui-header__nav — <nav aria-label=\"primary\"> de links empujado al final con margin-inline-start auto; ≤880px se vuelve el panel off-canvas (drawer derecho)",
-    "actions": ".mui-header__actions — flex, gap var(--space-2): botones, toggle de tema, CTA (derecha). No reclama el margin-auto: el gap del row lo separa del nav",
-    "toggle": ".mui-header__toggle — <button> hamburguesa; display none, aparece ≤880px (inline-flex). Lleva aria-expanded + aria-controls al id del nav",
-    "scrim": ".mui-header__scrim — <div aria-hidden=\"true\"> velo del drawer; display none salvo ≤880px con [data-nav-open]: fixed inset 0, z-backdrop, velo color-mix(in srgb, var(--bg) 55%, transparent) con milpa-fade"
+    "nav": ".mui-header__nav — <nav aria-label=\"primary\"> de links empujado al final con margin-inline-start auto; ≤880px se oculta (display: none) — los mismos links viven duplicados en el <dialog class=\"mui-drawer\"> que abre el toggle",
+    "actions": ".mui-header__actions — flex, gap var(--space-2): botones, toggle de tema, CTA (derecha). No reclama el margin-auto: el gap del row lo separa del nav. Lo que no cabe ≤880px (ej. un buscador) se duplica también en el body del <dialog class=\"mui-drawer\">, junto a los links — no se pierde, se muda",
+    "toggle": ".mui-header__toggle — <button> hamburguesa; display none, aparece ≤880px (inline-flex). Lleva aria-expanded + aria-controls apuntando al id del <dialog class=\"mui-drawer\"> del menú móvil (no al nav — el nav ≤880px está oculto, no es el panel)"
   },
   "variants": {
     "overlay": ".mui-header--overlay — transparente sobre un hero (background transparent, sin blur, borde inferior transparente); gana fondo sólido (mismo color-mix + blur) + borde border-subtle al recibir [data-scrolled], con transición de background/border-color en --dur-moderate --ease-standard"
   },
   "states": {
-    "nav-open": "[data-nav-open] on .mui-header — SOLO ≤880px: el drawer pasa a translateX(0) + visibility visible + shadow-md y el scrim aparece. Hook de LAYOUT que alterna el JS del consumidor; la semántica de estado la lleva aria-expanded en el toggle. Sobre 880px el atributo no tiene efecto (el nav ya es la barra horizontal)",
-    "drawer-closed": "≤880px default — .mui-header__nav fixed inset-block 0 / inset-inline-end 0, width 16rem, translateX(100%) + visibility hidden (flipa al TERMINAR el slide-out, delay --dur-moderate): fuera del lienzo, del tab order y del árbol de a11y (z-drawer). El JS del consumidor refuerza con inert",
     "scrolled": "[data-scrolled] on .mui-header--overlay — solidificado tras pasar un umbral de scroll (JS del consumidor): background + blur + borde border-subtle",
+    "mobile-menu": "el abierto/cerrado del menú móvil vive en el propio <dialog class=\"mui-drawer\"> hermano del header (ver mui-drawer.contract.json: states.open/closed) — el header YA NO declara [data-nav-open]; el toggle solo sincroniza aria-expanded con el evento close del dialog (JS del consumidor)",
     "focus": "interactivos (brand, links del nav, toggle, CTA) → :focus-visible con anillo 2px var(--focus) offset 2px (brand explícito acá; los que componen .mui-btn lo heredan de su primitivo)"
   },
   "tokens": [
@@ -36,48 +35,38 @@
     "--text",
     "--border-subtle",
     "--focus",
-    "--shadow-md",
     "--space-1",
     "--space-2",
-    "--space-3",
     "--space-4",
     "--z-sticky",
-    "--z-backdrop",
-    "--z-drawer",
-    "--dur-instant",
     "--dur-moderate",
-    "--ease-standard",
-    "--ease-grano",
-    "--ease-linear"
+    "--ease-standard"
   ],
   "a11y": {
-    "landmarks": "estructura: <header class=\"mui-header\"> (banner) hijo directo del body/.mui-page, con <nav aria-label=\"primary\"> adentro. El scrim SIEMPRE aria-hidden=\"true\": el cierre accesible vive en Escape y el toggle, no en el velo",
+    "landmarks": "estructura: <header class=\"mui-header\"> (banner) hijo directo del body/.mui-page, con <nav aria-label=\"primary\"> adentro; el menú móvil ≤880px vive en un <dialog class=\"mui-drawer\"> HERMANO del header (fuera, no dentro — ver mui-drawer.contract.json). El cierre accesible del panel vive en Esc, el backdrop nativo y el botón de cierre del drawer, no en el header",
     "contrast": "brand/nav text es --text sobre el velo translúcido de --bg (par text/bg del gate: el velo es color-mix de --bg consigo mismo, lo de encima lee sobre --bg efectivo). El borde border-subtle es decorativo (exento de 1.4.11). La variante --overlay NO auto-garantiza AA sobre arte de hero arbitrario — ver invariant",
     "keyboard": [
-      "Tab recorre brand → nav → actions en orden de documento; el toggle (≤880px) abre el panel",
-      "Escape cierra el panel y devuelve el foco al toggle; al abrir, el foco pasa al primer link del nav"
+      "Tab recorre brand → nav → actions en orden de documento; el toggle (≤880px) abre el <dialog> del menú móvil",
+      "Esc, el click en el ::backdrop y el botón de cierre cierran el <dialog> (nativos + JS mínimo del consumidor) y devuelven el foco al toggle; al abrir, showModal() atrapa el foco dentro del dialog (top layer)"
     ],
     "behavior": [
-      "toggle (≤880px, JS del consumidor): click en .mui-header__toggle alterna [data-nav-open] en .mui-header Y aria-expanded en el botón (aria-controls → id del nav)",
-      "click en el scrim cierra el panel (listener del consumidor; el scrim es aria-hidden — la vía accesible es Escape/toggle)",
-      "mientras el panel está CERRADO ≤880px, el JS del consumidor mantiene inert en el nav y lo quita al abrir — cinturón y tirantes sobre el visibility:hidden del CSS (WCAG 2.4.3/2.4.7)",
-      "el panel off-canvas es position:fixed y, cerrado ≤880px, queda fuera del lienzo con translateX(100%) (16rem de ancho): eso extiende el scroll horizontal del documento, así que el consumidor que use el off-canvas debe evitar el scroll horizontal que introduce el panel — típicamente con html, body { overflow-x: clip } en la raíz de la página (clip, no hidden: no crea contenedor de scroll ni fuerza el eje vertical); un consumidor que ya recorte ese eje por otra vía cumple igual (p. ej. el landing lo hace con su pin de GSAP)",
+      "≤880px el .mui-header__nav inline se oculta y el .mui-header__toggle abre (showModal()) un <dialog class=\"mui-drawer\"> con los links duplicados + las acciones de barra que no caben (ej. search); el drawer da top layer/focus-trap/Esc/::backdrop, así que NO hace falta overflow-x:clip en la raíz. El toggle sincroniza aria-expanded con el open/close del dialog.",
       "la variante --overlay: el JS del consumidor pone [data-scrolled] al pasar un umbral de scroll"
     ],
     "invariant": "la variante --overlay asume un hero suficientemente oscuro/sólido para que el texto quede AA; sobre heros fotográficos el consumidor debe añadir su propio velo"
   },
   "motion": {
-    "transitions": "drawer: transform --dur-moderate --ease-grano — germina desde el borde y se asienta, nunca rebota; visibility acompaña sin animar (delay --dur-moderate al cerrar, --dur-instant al abrir) — patrón exacto del shell docs. Scrim: milpa-fade --dur-moderate --ease-standard both. Overlay: background + border-color en --dur-moderate --ease-standard al ganar [data-scrolled]",
-    "reducedMotion": "contrato global de milpa-motion.css: transform y fade caen a 1 frame — drawer, scrim y la solidificación del overlay aparecen estáticos; el delay de visibility al cerrar no produce movimiento y el inert del consumidor ya cubre la semántica"
+    "transitions": "Overlay: background + border-color en --dur-moderate --ease-standard al ganar [data-scrolled] — la única animación que declara el propio mui-header. El menú móvil (<dialog class=\"mui-drawer\">) trae su propia entrada — ver mui-drawer.contract.json (motion.enter)",
+    "reducedMotion": "contrato global de milpa-motion.css: la solidificación del overlay cae a 1 frame estático. El <dialog class=\"mui-drawer\"> reduce por su propio contrato"
   },
   "examples": [
     {
-      "title": "Barra base: brand + nav + actions (+ toggle móvil + scrim)",
-      "html": "<header class=\"mui-header\"><div class=\"mui-header__row\"><a class=\"mui-header__brand\" href=\"/\"><!-- Grano SVG -->Milpa</a><nav class=\"mui-header__nav\" id=\"site-nav\" aria-label=\"primary\"><a class=\"mui-btn mui-btn--ghost\" href=\"/producto\">Producto</a><a class=\"mui-btn mui-btn--ghost\" href=\"/precios\">Precios</a><a class=\"mui-btn mui-btn--ghost\" href=\"/docs\">Docs</a></nav><div class=\"mui-header__actions\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon\" aria-label=\"Cambiar tema\"><!-- ícono --></button><a class=\"mui-btn mui-btn--primary\" href=\"/signup\">Empezar</a><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-header__toggle\" aria-expanded=\"false\" aria-controls=\"site-nav\" aria-label=\"Abrir menú\"><!-- ícono hamburguesa --></button></div></div><div class=\"mui-header__scrim\" aria-hidden=\"true\"></div></header>"
+      "title": "Barra base: brand + nav + actions (+ toggle móvil → dialog hermano)",
+      "html": "<header class=\"mui-header\"><div class=\"mui-header__row\"><a class=\"mui-header__brand\" href=\"/\"><!-- Grano SVG -->Milpa</a><nav class=\"mui-header__nav\" id=\"site-nav\" aria-label=\"primary\"><a class=\"mui-btn mui-btn--ghost\" href=\"/producto\">Producto</a><a class=\"mui-btn mui-btn--ghost\" href=\"/precios\">Precios</a><a class=\"mui-btn mui-btn--ghost\" href=\"/docs\">Docs</a></nav><div class=\"mui-header__actions\"><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon\" aria-label=\"Cambiar tema\"><!-- ícono --></button><a class=\"mui-btn mui-btn--primary\" href=\"/signup\">Empezar</a><button type=\"button\" class=\"mui-btn mui-btn--ghost mui-btn--icon mui-header__toggle\" aria-expanded=\"false\" aria-controls=\"mobile-menu\" aria-label=\"Abrir menú\"><!-- ícono hamburguesa --></button></div></div></header><dialog class=\"mui-drawer\" id=\"mobile-menu\" aria-labelledby=\"mobile-menu-title\"><header class=\"mui-drawer__header\"><h2 class=\"mui-drawer__title\" id=\"mobile-menu-title\">Menu</h2><button class=\"mui-btn mui-btn--ghost mui-btn--icon\" type=\"button\" aria-label=\"Cerrar menú\">✕</button></header><div class=\"mui-drawer__body\"><nav class=\"mui-stack\" aria-label=\"Menu\"><a class=\"mui-btn mui-btn--ghost\" href=\"/producto\">Producto</a><a class=\"mui-btn mui-btn--ghost\" href=\"/precios\">Precios</a><a class=\"mui-btn mui-btn--ghost\" href=\"/docs\">Docs</a></nav></div></dialog><!-- JS consumidor: toggle.onclick = () => { dlg.showModal(); toggle.setAttribute('aria-expanded','true'); }; dlg.addEventListener('close', () => toggle.setAttribute('aria-expanded','false')) -->"
     },
     {
       "title": "Variante overlay sobre un hero (JS pone [data-scrolled] al bajar)",
-      "html": "<header class=\"mui-header mui-header--overlay\"><div class=\"mui-header__row\"><a class=\"mui-header__brand\" href=\"/\"><!-- Grano SVG -->Milpa</a><nav class=\"mui-header__nav\" id=\"site-nav\" aria-label=\"primary\"><a class=\"mui-btn mui-btn--ghost\" href=\"/producto\">Producto</a></nav><div class=\"mui-header__actions\"><a class=\"mui-btn mui-btn--primary\" href=\"/signup\">Empezar</a></div></div><div class=\"mui-header__scrim\" aria-hidden=\"true\"></div></header>"
+      "html": "<header class=\"mui-header mui-header--overlay\"><div class=\"mui-header__row\"><a class=\"mui-header__brand\" href=\"/\"><!-- Grano SVG -->Milpa</a><nav class=\"mui-header__nav\" id=\"site-nav\" aria-label=\"primary\"><a class=\"mui-btn mui-btn--ghost\" href=\"/producto\">Producto</a></nav><div class=\"mui-header__actions\"><a class=\"mui-btn mui-btn--primary\" href=\"/signup\">Empezar</a></div></div></header>"
     }
   ]
 }

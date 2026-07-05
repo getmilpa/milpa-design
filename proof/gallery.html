@@ -21,7 +21,10 @@ body { margin:0; background:var(--bg); }
 .gal-wordmark { height:1rem; width:auto; display:block; }
 .gal-theme-toggle { font-family:var(--font-mono); }
 /* token-driven SVG placeholders. As of 0.3.0 the media-grid/lightbox contracts size
-   :is(img, svg, picture) directly (Task 7 — milpa-layouts.css). .gal-ph is legacy PAGE
+   the media (Task 7 — milpa-layouts.css): media-grid sizes it as the DIRECT CHILD of
+   the figure/.mui-media-grid__figure bridge (.mui-media-grid__item :is(figure,
+   .mui-media-grid__figure) > :is(img, svg, picture)); the lightbox sizes it as a direct
+   child of .mui-lightbox__media. .gal-ph is legacy PAGE
    CSS kept on the remaining items; being unlayered it still WINS over the layered
    contract rule (cascade LAYER origin beats specificity — the theming mechanism of this
    system), but its values now merely duplicate what the contract provides, so it's
@@ -133,8 +136,9 @@ body { margin:0; background:var(--bg); }
               <span class="mui-media-grid__figure">
                 <!-- Task 7 demo: no .gal-ph — with no unlayered page CSS competing, this
                      svg is sized SOLELY by the widened layered contract rule
-                     .mui-media-grid__item :is(img, svg, picture) (display:block,
-                     width/height, object-fit:cover base + masonry's height:auto), exactly
+                     .mui-media-grid__item :is(figure, .mui-media-grid__figure) > :is(img,
+                     svg, picture) (display:block, width/height, object-fit:cover base +
+                     masonry's height:auto), exactly
                      like the other items' raster img would be. Its own viewBox supplies the
                      intrinsic aspect ratio the contract's sizing relies on. -->
                 <svg viewBox="0 0 300 400" aria-hidden="true" focusable="false">

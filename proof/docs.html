@@ -21,15 +21,12 @@ body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font
 .docs-wordmark { height:1rem; width:auto; display:block; flex:none; }
 .docs-theme-toggle { font-family:var(--font-mono); }
 .docs-gap { margin-block-end:var(--space-6); }
-/* topbar-nav links duplicated as first drawer group — visible only ≤880px (contract behavior) */
-.docs-nav-dup { display:none; }
 /* changelog: second stacked "page" below the article */
 .docs-changelog { margin-block-start:var(--space-20); padding-block-start:var(--space-10); border-block-start:1px solid var(--border-subtle); }
 .docs-changelog > .mui-prose { margin-block-end:var(--space-6); }
 .docs-footer { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2) var(--space-3); max-width:90rem; margin-inline:auto; padding:var(--space-6) clamp(var(--space-4),3vw,var(--space-8)); border-block-start:1px solid var(--border-subtle); color:var(--text-muted); font-size:var(--text-sm); }
 .docs-footer__tagline { margin:0; font-family:var(--font-mono); font-size:var(--text-xs); }
 .docs-footer__legal { margin:0; margin-inline-start:auto; font-size:var(--text-xs); }
-@media (max-width:880px){ .docs-nav-dup { display:block; } }
 </style>
 </head>
 <body>
@@ -41,7 +38,7 @@ body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font
 
 <!-- ============ TOPBAR ============ -->
 <header class="mui-docs__topbar">
-  <button type="button" class="mui-btn mui-btn--ghost mui-btn--icon mui-docs__nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="docs-nav">
+  <button type="button" class="mui-btn mui-btn--ghost mui-btn--icon mui-docs__nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="docsMenu">
     <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 5h14"/><path d="M3 10h14"/><path d="M3 15h14"/></svg>
   </button>
 
@@ -89,18 +86,50 @@ body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font
   </div>
 </header>
 
+<!-- ============ MOBILE MENU: <dialog class="mui-drawer mui-drawer--start"> ============ -->
+<dialog class="mui-drawer mui-drawer--start" id="docsMenu" aria-labelledby="docsMenu-title">
+  <header class="mui-drawer__header">
+    <h2 class="mui-drawer__title" id="docsMenu-title">Docs</h2>
+    <button class="mui-btn mui-btn--ghost mui-btn--icon" id="docsMenuClose" type="button" aria-label="Close menu">✕</button>
+  </header>
+  <div class="mui-drawer__body">
+    <nav aria-label="Documentation">
+      <div class="mui-docs__nav-group">
+        <p class="mui-docs__nav-heading">Sections</p>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/installation">Guide</a>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/api/module">API</a>
+        <a class="mui-docs__nav-item" href="#changelog">Changelog</a>
+      </div>
+
+      <div class="mui-docs__nav-group">
+        <p class="mui-docs__nav-heading">Getting started</p>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/installation">Installation</a>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/quick-start">Quick start</a>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/project-structure">Project structure</a>
+      </div>
+
+      <div class="mui-docs__nav-group">
+        <p class="mui-docs__nav-heading">Core concepts</p>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/modules">Modules</a>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/module-contracts" aria-current="page">Module contracts</a>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/events">Events</a>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/kernel">The kernel</a>
+      </div>
+
+      <div class="mui-docs__nav-group">
+        <p class="mui-docs__nav-heading">API reference</p>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/api/module">Module</a>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/api/contract">Contract</a>
+        <a class="mui-docs__nav-item" href="/docs/0.1.0/api/event-bus">EventBus</a>
+      </div>
+    </nav>
+  </div>
+</dialog>
+
 <!-- ============ THE PLOT: nav / article / toc ============ -->
 <div class="mui-docs">
 
   <nav class="mui-docs__nav" id="docs-nav" aria-label="Documentation">
-    <!-- topbar links migrate here ≤880px (contract: first group of the drawer) -->
-    <div class="mui-docs__nav-group docs-nav-dup">
-      <p class="mui-docs__nav-heading">Sections</p>
-      <a class="mui-docs__nav-item" href="/docs/0.1.0/installation">Guide</a>
-      <a class="mui-docs__nav-item" href="/docs/0.1.0/api/module">API</a>
-      <a class="mui-docs__nav-item" href="#changelog">Changelog</a>
-    </div>
-
     <div class="mui-docs__nav-group">
       <p class="mui-docs__nav-heading">Getting started</p>
       <a class="mui-docs__nav-item" href="/docs/0.1.0/installation">Installation</a>
@@ -467,7 +496,6 @@ body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font
     </nav>
   </aside>
 
-  <div class="mui-docs__scrim" aria-hidden="true"></div>
 </div>
 
 <!-- ============ FOOTER ============ -->
@@ -527,36 +555,13 @@ body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font
   applyTheme(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
   themeBtn.addEventListener('click', () => applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
 
-  /* ---------- off-canvas drawer ≤880px: [data-nav-open] + aria-expanded + inert ---------- */
-  const docs = $('.mui-docs'), nav = $('#docs-nav'), navToggle = $('#nav-toggle'), scrim = $('.mui-docs__scrim');
-  const mq = matchMedia('(max-width: 880px)');
-  const navOpen = () => docs.hasAttribute('data-nav-open');
-  const syncInert = () => {
-    if (mq.matches && !navOpen()) nav.setAttribute('inert', '');
-    else nav.removeAttribute('inert');
-  };
-  function openNav() {
-    docs.setAttribute('data-nav-open', '');
-    navToggle.setAttribute('aria-expanded', 'true');
-    syncInert();
-    const target = $('.mui-docs__nav-item[aria-current="page"]', nav) || $('.mui-docs__nav-item', nav);
-    if (target) target.focus();
-  }
-  function closeNav(returnFocus = false) {
-    if (!navOpen()) return;
-    docs.removeAttribute('data-nav-open');
-    navToggle.setAttribute('aria-expanded', 'false');
-    syncInert();
-    if (returnFocus) navToggle.focus();
-  }
-  navToggle.addEventListener('click', () => navOpen() ? closeNav() : openNav());
-  scrim.addEventListener('click', () => closeNav());
-  nav.addEventListener('click', e => { if (e.target.closest('.mui-docs__nav-item')) closeNav(); });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && navOpen()) { e.preventDefault(); closeNav(true); }
-  });
-  mq.addEventListener('change', syncInert);
-  syncInert();
+  /* ---------- mobile menu: <dialog class="mui-drawer mui-drawer--start"> (top layer, no overflow) ---------- */
+  const docsToggle = document.querySelector('.mui-docs__nav-toggle');
+  const docsMenu = document.getElementById('docsMenu');
+  docsToggle.addEventListener('click', () => { docsMenu.showModal(); docsToggle.setAttribute('aria-expanded', 'true'); });
+  docsMenu.addEventListener('close', () => docsToggle.setAttribute('aria-expanded', 'false'));
+  docsMenu.querySelector('#docsMenuClose').addEventListener('click', () => docsMenu.close());
+  docsMenu.addEventListener('click', (e) => { if (e.target === docsMenu) docsMenu.close(); }); // backdrop light-dismiss
 
   /* ---------- TOC scroll-spy: aria-current="location" (aside + inline, one per nav) ---------- */
   const tocLinks = $$('.mui-toc__link');

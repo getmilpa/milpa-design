@@ -4,6 +4,85 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-07-04
+
+> **La piel:** el theming pasa de release-grade en color/spacing/radios/motion/dark-light a
+> release-grade también en tipografía y dimensiones estructurales — la brecha que dejó la
+> auditoría de personalización (32 hallazgos). Split `--font-heading`/`--font-body` (+
+> `--font-serif`), `--weight-semibold`, y un grupo `size` de diez tokens públicos (focus-ring,
+> borde, container, app-shell, measure) reemplazan literales hardcodeados en los cuatro bundles.
+> `verify-theme` deja de gatear solo color y valida los 7 grupos del contrato por FORMA. Todo
+> aditivo — cada token nuevo defaultea a su valor actual, así que el build por defecto es
+> pixel-idéntico salvo un ajuste deliberado de 70ch→65ch en dos bloques de prose (ver Fixed).
+> Sin piezas nuevas: **68 piezas** con contrato · **193 pares AA** — audit de cierre: **0 pares
+> nuevos** (release sin color).
+
+### Added
+- **`--font-heading` / `--font-body`** — el split 2-tier que reemplaza el `--font-display`
+  único: ambos defaultean al mismo stack que tenía `--font-display` (`'Space Grotesk',
+  system-ui, sans-serif`), así que nada cambia visualmente hasta que un consumidor los diverja.
+  **`--font-display` queda vivo como alias** (`var(--font-heading)`) — nadie que lo consuma hoy
+  se rompe. Se agrega además una **regla base `:is(h1, h2, h3, h4, h5, h6) { font-family:
+  var(--font-heading) }`**, así que CUALQUIER heading —incluidos los que nunca tuvieron una
+  regla `.mui-*` propia— hereda la fuente de títulos por default, no solo los `.mui-*__title`
+  explícitos.
+- **`--font-serif`** — fuente de prose/quotes (`.mui-prose`, `.mui-quote`, `blockquote`);
+  defaultea a `var(--font-body)` (hereda cuerpo → cero cambio hasta que el consumidor lo setee
+  aparte, p.ej. un serif editorial para long-form).
+- **`--weight-semibold`** (600) — completa la escala 400/500/**600**/700; superficie nueva, no
+  hardcodeada por ningún selector todavía.
+- **Grupo `size` de tokens públicos** (diez, todos defaulteando al literal que reemplazan):
+  `--focus-width` (2px) / `--focus-offset` (2px) para el anillo de foco; `--border-width` (1px);
+  `--container-max` (72rem) / `--container-narrow` (48rem) / `--container-wide` (90rem);
+  `--header-h` (3.5rem) / `--sidebar-w` (16rem) / `--drawer-width` (26rem) del app-shell; y
+  `--measure` (65ch) para el ancho de lectura de prose.
+- **Doc de carga de fuentes en `THEMING.md`** (nueva sección): snippet self-host `@font-face`
+  para Space Grotesk/Space Mono + alternativa `<link>` a un servicio, y nota explícita de que la
+  degradación a `system-ui` es **intencional** — el paquete no envía archivos de fuente ni
+  depende de un CDN. También documenta el split heading/body/serif con ejemplo de override.
+
+### Changed
+- **`verify-theme` ahora valida los 7 grupos del contrato por FORMA** (tipo + no-vacío) para
+  cualquier token no-color que un skin setee — no solo color como hasta 0.6.0. El contrato pasa a
+  distinguir **hard-gate** (contraste AA, sigue siendo el único que bloquea sobre color) de
+  **form-gate** (longitud/número/tiempo/timing-function/box-shadow válidos para el resto de los
+  grupos) y deja de sobre-declarar tokens que nunca gateaba de verdad.
+- **`dist/tailwind.config.js` (generado): `fontFamily` pasa a var-based** —
+  `heading`/`body`/`serif`/`mono` (+ `display` como alias de `heading`) en vez de los literales
+  `display`/`mono` de antes — themeable desde Tailwind también, no solo desde CSS puro.
+- **Los cuatro bundles (`primitives`/`components`/`artifacts`/`layouts`) repuntan sus literales**
+  a los tokens nuevos: los ~45 sitios que usaban `var(--font-display)` se reclasifican a
+  `--font-heading` (títulos: `.mui-*__title`, `mui-card__title`, `mui-stat__value`, wordmark…) o
+  `--font-body` (todo el resto de chrome de UI: botones, inputs, nav, tabs, tabla, tooltips…),
+  más `.mui-prose`/`.mui-quote`/`blockquote` directo a `--font-serif`; el anillo de foco
+  (`outline: 2px solid var(--focus)` → `var(--focus-width)`, `outline-offset` → `var(--focus-offset)`
+  con signo preservado en los offsets negativos) en 42 sitios; ~86 sitios de `border: 1px` →
+  `var(--border-width)`; `.mui-container`/`--narrow`/`--wide` y `.mui-shell__main` →
+  `var(--container-max/narrow/wide)`; el app-shell (`--_sidebar-w`/`--_topbar-h`, incluida la
+  sidebar off-canvas ≤960px) → `var(--sidebar-w)`/`var(--header-h)`, y `.mui-drawer` →
+  `var(--drawer-width)`; `aspect-ratio` de product-card/media-grid reusa `--media-ratio`
+  (fallback-local, no promovido a token JSON) con su valor default intacto (4/5, 4/3).
+
+### Fixed
+- **Ancho de lectura de prose unificado a `--measure` (65ch)**: `.mui-api__desc` y
+  `.mui-api__deprecated-note` usaban `70ch`, inconsistente con `.mui-prose` (`65ch`) pese a ser el
+  mismo tipo de bloque de prose (mismo `text-sm`/`leading-normal`/`text-secondary`). Los tres
+  ahora leen `var(--measure)` — **el único cambio visual del release**, un angostamiento de 5ch en
+  esos dos sitios.
+
+### Nota
+- Todo aditivo, **cero cambio visual por defecto**: cada token nuevo defaultea a su valor
+  hardcodeado actual y `--font-display` sigue resolviendo vía el alias — salvo el ajuste de 5ch
+  del measure de prose arriba. Contratos siguen en **68** (esto es tokens + gate, no piezas
+  nuevas). AA-pairs audit de cierre: **0 pares nuevos** — release sin color;
+  `scripts/contrast-pairs.mjs` queda sin tocar.
+
+### Compat
+- **Ninguna ruptura.** `--font-display` sigue resolviendo (alias vivo a `--font-heading`) —
+  cualquier skin/consumidor que lo seteaba directo sigue funcionando igual. Quien quiera títulos
+  distintos del cuerpo ahora setea `--font-heading`/`--font-body` por separado. El paquete **no**
+  envía archivos de fuente — degrada a `system-ui` a propósito (ver `THEMING.md`).
+
 ## [0.6.0] — 2026-07-04
 
 > **El deshierbe:** cierre del backlog T9 abierto desde 0.3 — los tres hallazgos F (#8/#9/#10) y

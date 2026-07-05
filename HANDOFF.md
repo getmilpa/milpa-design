@@ -17,7 +17,7 @@ converger:** el framework y el DS avanzan en paralelo y se reencuentran en una *
 El framework *consume* `@milpa/design@x.y.z`. **Nadie edita los internals del otro**; se cambian
 cosas vía bump semver + nota de compat. (Esto es Milpa aplicado a sí mismo: contract-first.)
 
-## 2. Estado actual (v0.6)
+## 2. Estado actual (v0.7)
 
 ✅ **Paleta cerrada y verificada.** `oro` (primario/marca) + `olivo` (secundario / la milpa viva,
 OKLCH ~124°) + `tierra` (neutro); `cielo` = `info`. Dark-first. Tokens DTCG + salida CSS + preset
@@ -101,8 +101,45 @@ unificado a `--accent`; `anatomy` documentada en `mui-stack`/`mui-cluster`. Vari
 consumía el off-canvas viejo migra el toggle de `[data-nav-open]` a `showModal()`/`close()` sobre
 un `mui-drawer` y borra el scrim — ver nota destacada en `CHANGELOG.md`.
 
-⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.6). Backlog T9 **cerrado** — no queda
-nada pendiente salvo lo genuinamente futuro (§4): Storybook y salidas multiplataforma.
+✅ **0.7.0 — la piel (theming release-grade para tipografía y dimensiones estructurales):** la
+auditoría de personalización (32 hallazgos) había marcado que el theming era release-grade para
+color/spacing/radios/motion/dark-light pero NO para tipografía ni para varias dimensiones
+definitorias. Este release cierra esa brecha:
+- **Split de fuentes** (`--font-heading`/`--font-body`, default = mismo stack que tenía
+  `--font-display`) + **`--font-serif`** (prose/quotes, hereda body por default) +
+  **`--weight-semibold`** (600). `--font-display` sobrevive como **alias vivo**
+  (`var(--font-heading)`) — cero ruptura. Regla base `:is(h1..h6) → --font-heading` para que todo
+  heading, tenga o no clase `.mui-*` propia, siga la fuente de títulos. ~45 sitios re-apuntados en
+  los 4 bundles (títulos → heading, chrome de UI → body, prose/quotes → serif directo).
+- **Carga de fuentes documentada** en `THEMING.md` (self-host `@font-face` + alternativa `<link>`;
+  la degradación a `system-ui` es intencional, el paquete no envía archivos de fuente).
+- **`verify-theme` gatea por FORMA los 7 grupos** del contrato (tipo + no-vacío), no solo color —
+  el contrato distingue hard-gate (contraste AA) de form-gate y deja de sobre-declarar tokens que
+  nunca verificaba de verdad. `dist/tailwind.config.js` (`fontFamily`) pasa a var-based.
+- **Dimensiones estructurales → tokens públicos** (grupo `size`, 10 tokens, default = literal
+  actual): `--focus-width`/`--focus-offset` (anillo de foco, 42 sitios), `--border-width` (~86
+  sitios), `--container-max/narrow/wide` + `.mui-shell__main`, `--header-h`/`--sidebar-w`
+  (incluida la sidebar off-canvas móvil) /`--drawer-width` del app-shell, `--measure` (ancho de
+  lectura de prose).
+- **Único cambio visual:** `.mui-api__desc`/`__deprecated-note` unifican su `70ch` a
+  `var(--measure)` (65ch) — inconsistencia previa con `.mui-prose`, corregida.
+- Contratos: **68 → 68** (sin cambio — release de tokens + gate, no piezas nuevas). Gate:
+  **193/193 AA** — audit de cierre: **0 pares nuevos** (release sin color,
+  `scripts/contrast-pairs.mjs` sin tocar).
+
+Con esto, los huecos de theming que dejó la auditoría de personalización quedan **CERRADOS**:
+split de fuentes (heading/body/serif), doc de carga de fuentes, gate por forma en `verify-theme`,
+y las dimensiones estructurales (focus-ring, borde, container, app-shell, measure).
+
+⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.7). Backlog T9 **cerrado** desde 0.6.0.
+Del alcance de la auditoría de personalización quedan, a propósito, como **futuro conocido** (no
+son deuda de este release — son ejes arquitectónicos aparte, nunca prometidos para 0.7):
+- **3er eje de tema** (high-contrast / brand-alt / `forced-colors` / `prefers-contrast`) — hoy
+  vedado por la regla dura #3 (§5); necesitaría rework de contrato + verificador.
+- **Single-source de breakpoints** (`@custom-media` o migrar a `@container`) — hoy cada archivo
+  repite sus propios `@media` literales.
+- **Eje de densidad** (`[data-density]` sobre `--space-*`).
+- **RTL** como concern de contrato (hoy no se verifica dirección de escritura).
 
 ## 3. Cómo correr
 

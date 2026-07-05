@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theme swap · Milpa ⇄ Brutalist</title>
+<meta name="description" content="Proof: ¿alcanza el reskin solo-tokens (L1) para un cambio de marca dramático? Milpa ⇄ Brutalist, light + dark, en vivo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../logo/symbol/milpa-symbol-color.svg">
+
+<!-- el sistema: tokens + bundles (todo en @layer milpa.*) -->
+<link rel="stylesheet" href="../dist/milpa-tokens.css">
+<link rel="stylesheet" href="../motion/milpa-motion.css">
+<link rel="stylesheet" href="../primitives/milpa-primitives.css">
+<link rel="stylesheet" href="../components/milpa-components.css">
+<link rel="stylesheet" href="../artifacts/milpa-artifacts.css">
+<link rel="stylesheet" href="../layouts/milpa-layouts.css">
+
+<!-- la piel Brutalist: SIN @layer → gana por origen de capa. Solo se activa con [data-skin="brutalist"] -->
+<link rel="stylesheet" href="skins/brutalist-skin.css">
+
+<style>
+/* ===== page-only (editorial): layout del kitchen-sink + barra de control. Todo con tokens. ===== */
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); }
+
+/* barra de control fija */
+.swapbar {
+  position: sticky; top: 0; z-index: var(--z-sticky);
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  background: var(--surface); color: var(--text);
+  border-block-end: var(--border-width) solid var(--border);
+}
+.swapbar__brand { font-family: var(--font-heading); font-weight: var(--weight-bold); font-size: var(--text-lg); }
+.swapbar__brand b { color: var(--accent-text); }
+.swapbar__seg { display: inline-flex; gap: 0; border: var(--border-width) solid var(--border); border-radius: var(--radius-base); overflow: hidden; }
+.swapbar__seg button {
+  appearance: none; cursor: pointer; margin: 0;
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: var(--weight-medium);
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface); color: var(--text-muted); border: 0;
+  border-inline-start: var(--border-width) solid var(--border);
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+.swapbar__seg button:first-child { border-inline-start: 0; }
+.swapbar__seg button[aria-pressed="true"] { background: var(--accent); color: var(--text-on-accent); }
+.swapbar__seg button:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
+.swapbar__label { margin-inline-start: auto; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted); }
+
+.wrap { max-width: 68rem; margin: 0 auto; padding: var(--space-8) var(--space-5) var(--space-16); }
+.sink { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: var(--space-6); align-items: start; }
+.panel {
+  background: var(--surface); color: var(--text);
+  border: var(--border-width) solid var(--border); border-radius: var(--radius-lg);
+  padding: var(--space-5); box-shadow: var(--shadow-md);
+}
+.panel > h2 { margin: 0 0 var(--space-4); font-family: var(--font-heading); font-size: var(--text-sm); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--text-muted); }
+.row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.stack > * + * { margin-block-start: var(--space-3); }
+.intro h1 { font-family: var(--font-heading); font-size: var(--text-4xl); margin: 0 0 var(--space-2); line-height: var(--leading-tight); }
+.intro p { color: var(--text-secondary); max-width: var(--measure); margin: 0; }
+.swatches { display: flex; gap: 0; border: var(--border-width) solid var(--border); border-radius: var(--radius-base); overflow: hidden; }
+.swatches i { flex: 1; height: 2.5rem; }
+</style>
+</head>
+
+<body>
+<div class="swapbar" role="region" aria-label="Control de tema">
+  <span class="swapbar__brand" id="brandName">Milpa <b>Design</b></span>
+  <div class="swapbar__seg" role="group" aria-label="Marca">
+    <button type="button" data-skin="milpa" aria-pressed="true">Milpa</button>
+    <button type="button" data-skin="brutalist" aria-pressed="false">Brutalist</button>
+  </div>
+  <div class="swapbar__seg" role="group" aria-label="Modo">
+    <button type="button" data-mode="light" aria-pressed="false">Light</button>
+    <button type="button" data-mode="dark" aria-pressed="true">Dark</button>
+  </div>
+  <span class="swapbar__label" id="stateLabel">milpa · dark</span>
+</div>
+
+<main class="wrap">
+  <header class="intro" style="margin-block-end: var(--space-8)">
+    <h1>Una piel, dos marcas.</h1>
+    <p>La MISMA estructura y las MISMAS piezas. Lo único que cambia entre Milpa y Brutalist son tokens —
+      cero CSS estructural. Dale a los toggles de arriba y mirá cómo forma, color, tipografía, sombras y
+      motion se dan vuelta enteros. Ambas marcas honran el contrato (contraste AA + forma).</p>
+  </header>
+
+  <div class="sink">
+
+    <!-- tipografía -->
+    <section class="panel">
+      <h2>Tipografía</h2>
+      <div class="stack">
+        <div style="font-family: var(--font-heading); font-size: var(--text-3xl); line-height: var(--leading-tight)">Título display</div>
+        <div style="font-family: var(--font-heading); font-size: var(--text-xl)">Encabezado de sección</div>
+        <p style="margin:0; color: var(--text-secondary)">Cuerpo de lectura en <code>--font-body</code>. Milpa lo pone en Space Grotesk suave; Brutalist en mono de máquina de escribir.</p>
+        <p style="margin:0; color: var(--text-muted); font-size: var(--text-sm)">Texto muted secundario · <code style="color: var(--accent-text)">--accent-text</code></p>
+      </div>
+    </section>
+
+    <!-- botones -->
+    <section class="panel">
+      <h2>Botones</h2>
+      <div class="row">
+        <button class="mui-btn">Primario</button>
+        <button class="mui-btn mui-btn--secondary">Secundario</button>
+        <button class="mui-btn mui-btn--ghost">Ghost</button>
+      </div>
+      <div class="row" style="margin-block-start: var(--space-3)">
+        <button class="mui-btn mui-btn--danger">Peligro</button>
+        <button class="mui-btn mui-btn--sm">Chico</button>
+        <button class="mui-btn" disabled>Disabled</button>
+      </div>
+    </section>
+
+    <!-- formulario -->
+    <section class="panel">
+      <h2>Formulario</h2>
+      <div class="stack">
+        <div class="mui-field">
+          <label class="mui-field__label" for="ts-name">Nombre del módulo <span class="mui-field__required">*</span></label>
+          <input class="mui-input" id="ts-name" placeholder="mail-module" value="cosecha-nocturna">
+        </div>
+        <div class="mui-field">
+          <label class="mui-field__label" for="ts-sel">Región</label>
+          <select class="mui-input" id="ts-sel"><option>us-central</option><option>eu-west</option></select>
+        </div>
+        <fieldset class="mui-field" style="border:0; padding:0; margin:0">
+          <legend class="mui-field__label">Tamaño</legend>
+          <div class="row">
+            <label class="mui-choice"><input type="radio" class="mui-radio" name="ts-size" value="s"><span class="mui-choice__text">S</span></label>
+            <label class="mui-choice"><input type="radio" class="mui-radio" name="ts-size" value="m" checked><span class="mui-choice__text">M</span></label>
+            <label class="mui-choice"><input type="radio" class="mui-radio" name="ts-size" value="l"><span class="mui-choice__text">L</span></label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- badges -->
+    <section class="panel">
+      <h2>Badges</h2>
+      <div class="row">
+        <span class="mui-badge mui-badge--accent">accent</span>
+        <span class="mui-badge mui-badge--secondary">secondary</span>
+        <span class="mui-badge mui-badge--success">success</span>
+        <span class="mui-badge mui-badge--danger">danger</span>
+        <span class="mui-badge mui-badge--info">info</span>
+        <span class="mui-badge mui-badge--dot">dot</span>
+      </div>
+    </section>
+
+    <!-- stat -->
+    <section class="panel">
+      <h2>Stat</h2>
+      <div class="row" style="gap: var(--space-8)">
+        <div class="mui-stat">
+          <span class="mui-stat__label">Cosechas</span>
+          <span class="mui-stat__value">1,440</span>
+          <span class="mui-stat__delta mui-stat__delta--up mui-stat__delta--positive">+36<span class="mui-sr-only"> arriba</span></span>
+          <span class="mui-stat__meta">últimos 30 días</span>
+        </div>
+        <div class="mui-stat">
+          <span class="mui-stat__label">Uptime</span>
+          <span class="mui-stat__value">99.9%</span>
+          <span class="mui-stat__meta">p50 · restore</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- alertas -->
+    <section class="panel">
+      <h2>Alertas</h2>
+      <div class="stack">
+        <div class="mui-alert mui-alert--info" role="status">
+          <span class="mui-alert__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M10 9v4"/><path d="M10 6.5h.01"/></svg></span>
+          <div class="mui-alert__content"><p class="mui-alert__title">Riego programado</p><p class="mui-alert__desc">Mantenimiento el sábado 04:00.</p></div>
+        </div>
+        <div class="mui-alert mui-alert--danger" role="alert">
+          <span class="mui-alert__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5L18 16H2z"/><path d="M10 8.5V12"/><path d="M10 14.2h.01"/></svg></span>
+          <div class="mui-alert__content"><p class="mui-alert__title">Restore falló</p><p class="mui-alert__desc">El snapshot de las 03:00 no verificó.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- card -->
+    <section class="panel">
+      <h2>Card</h2>
+      <div class="mui-card">
+        <div class="mui-card__body">
+          <h3 class="mui-card__title" style="margin:0 0 var(--space-2)">Kernel Hoodie</h3>
+          <p style="margin:0 0 var(--space-3); color: var(--text-secondary); font-size: var(--text-sm)">Fleece ceniza con el grano bordado. SOC 2 del guardarropa.</p>
+          <div class="row"><button class="mui-btn mui-btn--sm">Comprar</button><span class="mui-badge mui-badge--accent">nuevo</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- tabla -->
+    <section class="panel" style="grid-column: 1 / -1">
+      <h2>Tabla</h2>
+      <div class="mui-table-wrap">
+        <table class="mui-table">
+          <caption class="mui-sr-only">Módulos sembrados</caption>
+          <thead><tr><th>Módulo</th><th>Estado</th><th class="mui-table__num">Cosechas</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td class="mui-table__lead">mail-module</td><td><span class="mui-badge mui-badge--success">activo</span></td><td class="mui-table__num">512</td><td><button class="mui-btn mui-btn--ghost mui-btn--sm">Editar</button></td></tr>
+            <tr><td class="mui-table__lead">auth-module</td><td><span class="mui-badge mui-badge--warning">pausado</span></td><td class="mui-table__num">128</td><td><button class="mui-btn mui-btn--ghost mui-btn--sm">Editar</button></td></tr>
+            <tr><td class="mui-table__lead">billing-module</td><td><span class="mui-badge mui-badge--danger">error</span></td><td class="mui-table__num">0</td><td><button class="mui-btn mui-btn--ghost mui-btn--sm">Editar</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- paleta viva -->
+    <section class="panel" style="grid-column: 1 / -1">
+      <h2>Tokens en vivo</h2>
+      <div class="swatches" aria-hidden="true">
+        <i style="background: var(--bg)"></i>
+        <i style="background: var(--surface)"></i>
+        <i style="background: var(--border)"></i>
+        <i style="background: var(--accent)"></i>
+        <i style="background: var(--secondary)"></i>
+        <i style="background: var(--success)"></i>
+        <i style="background: var(--warning)"></i>
+        <i style="background: var(--danger)"></i>
+        <i style="background: var(--info)"></i>
+      </div>
+      <p style="margin: var(--space-3) 0 0; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted)">
+        bg · surface · border · accent · secondary · success · warning · danger · info — los mismos slots, dos marcas.
+      </p>
+    </section>
+
+  </div>
+</main>
+
+<script>
+/* ===== swap: setea data-skin + data-theme en <html>. Cero recarga. ===== */
+const root = document.documentElement;
+const skinBtns = [...document.querySelectorAll('[data-skin]')];
+const modeBtns = [...document.querySelectorAll('[data-mode]')];
+const stateLabel = document.getElementById('stateLabel');
+const brandName = document.getElementById('brandName');
+
+function currentSkin() { return root.getAttribute('data-skin') || 'milpa'; }
+function currentMode() { return root.getAttribute('data-theme') || 'dark'; }
+
+function sync() {
+  const skin = currentSkin(), mode = currentMode();
+  skinBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.skin === skin)));
+  modeBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+  stateLabel.textContent = skin + ' · ' + mode;
+  brandName.innerHTML = skin === 'brutalist' ? 'BRUTAL<b>IST</b>' : 'Milpa <b>Design</b>';
+}
+
+skinBtns.forEach((b) => b.addEventListener('click', () => {
+  if (b.dataset.skin === 'milpa') root.removeAttribute('data-skin');
+  else root.setAttribute('data-skin', b.dataset.skin);
+  sync();
+}));
+modeBtns.forEach((b) => b.addEventListener('click', () => {
+  root.setAttribute('data-theme', b.dataset.mode);
+  sync();
+}));
+
+sync();
+</script>
+</body>
+</html>

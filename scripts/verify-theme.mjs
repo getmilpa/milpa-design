@@ -12,9 +12,17 @@
  * del contrato sobre la paleta resultante, en ambos temas. Sale 1 si algún
  * par falla.
  *
- * Limitación documentada: solo valores HEX planos (--token:#RRGGBB) — es la
- * referencia para `coa`; no resuelve var() anidadas ni color-mix. Cero
- * dependencias, mismas fórmulas WCAG que verify-contrast.mjs.
+ * Además (Task 1 del contrato — `validation.form`): cualquier token NO-color
+ * que el skin fije se valida por FORMA (tipo + no-vacío) contra su grupo de
+ * `requiredTokens` — un `--dur-base: rojo` o un `--font-body:` vacío también
+ * hacen fallar el gate. Solo se chequean los tokens que el skin efectivamente
+ * fija (un skin parcial sigue siendo válido) y que pertenecen a un grupo
+ * conocido; no se verifican magnitudes ni buen gusto.
+ *
+ * Limitación documentada: el contraste solo evalúa valores HEX planos
+ * (--token:#RRGGBB) — es la referencia para `coa`; no resuelve var()
+ * anidadas ni color-mix. Cero dependencias, mismas fórmulas WCAG que
+ * verify-contrast.mjs.
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -59,6 +67,18 @@ for (const m of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
   }
 }
 
+// --- parse del skin (2ª pasada): TODAS las declaraciones --token: valor,
+// no solo hex — para form-validar los tokens no-color que el skin fija ---
+const setTokens = {};
+for (const m of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+  const sel = m[1];
+  const isThemeBlock = /\[data-theme="?(dark|light)"?\]/.test(sel) || /:root/.test(sel);
+  if (!isThemeBlock) continue;
+  for (const d of m[2].matchAll(/--([\w-]+)\s*:\s*([^;]+)/g)) {
+    setTokens[d[1]] = d[2];
+  }
+}
+
 // --- WCAG (idéntico a verify-contrast.mjs) ---
 const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
 const lin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
@@ -87,7 +107,44 @@ for (const theme of ['dark', 'light']) {
     if (!ok || touched) console.log(`  [${theme[0].toUpperCase()}] ${ok ? 'PASS' : 'FAIL'} ${c.toFixed(2)} (>=${p.min})  ${p.fg} / ${p.bg}`);
   }
 }
-console.log(`\n${fails === 0 ? `ALL PASS ✓  (${n} checks — el skin honra el contrato)` : `${fails} FAILURES / ${n} — el skin NO honra el contrato`}`);
+// --- form validators por grupo (Task 1 del contrato: validation.form.types) ---
+const LEN = /^-?(\d*\.?\d+)(px|rem|em|ch|vw|vh|%)$|^0$/;
+const TIME = /^(\d*\.?\d+)(ms|s)$/;
+const NUM = /^-?\d*\.?\d+$/;
+const isLen = (v) => v.split(/\s+/).every((p) => LEN.test(p) || /^(min|max|calc|clamp)\(/.test(v));
+const groupOf = (tokName) => {
+  for (const [g, list] of Object.entries(contract.requiredTokens)) {
+    if (g === 'color') continue;
+    if (list.includes('--' + tokName)) return g;
+  }
+  return null;
+};
+const wellFormed = (g, name, v) => {
+  if (v === '' ) return false;
+  if (g === 'type') {
+    if (name.startsWith('font-')) return v.length > 0;               // familia no-vacía
+    if (name.startsWith('leading-')) return NUM.test(v);
+    if (name.startsWith('weight-')) return NUM.test(v) && +v >= 1 && +v <= 1000;
+    return isLen(v);                                                  // text-*, tracking-*
+  }
+  if (g === 'space' || g === 'radius' || g === 'size') return isLen(v) || v === '9999px';
+  if (g === 'zIndex') return /^-?\d+$/.test(v);
+  if (g === 'motion') {
+    if (name.startsWith('dur-') || name.startsWith('stagger-')) return TIME.test(v);
+    if (name.startsWith('ease-')) return /^(linear|cubic-bezier\(|steps\()/.test(v);
+    return isLen(v);                                                  // rise-*
+  }
+  if (g === 'elevation') return v.length > 0;
+  return true;
+};
+let formFails = 0;
+for (const [name, v] of Object.entries(setTokens)) {
+  const g = groupOf(name);
+  if (!g) continue;                                                   // token desconocido o color → lo maneja el gate de contraste
+  if (!wellFormed(g, name, v.trim())) { formFails++; console.log(`  FORM FAIL  --${name}: ${v.trim()}  (grupo ${g})`); }
+}
+
+console.log(`\n${fails === 0 && formFails === 0 ? `ALL PASS ✓  (${n} checks de contraste, ${formFails} malformados — el skin honra el contrato)` : `${fails} FAILURES / ${n} de contraste, ${formFails} malformados — el skin NO honra el contrato`}`);
 console.log('invariantes (no verificables acá — leé THEMING.md §5):');
 for (const inv of contract.invariants) console.log(`  · ${inv}`);
-process.exit(fails === 0 ? 0 : 1);
+process.exit(fails === 0 && formFails === 0 ? 0 : 1);

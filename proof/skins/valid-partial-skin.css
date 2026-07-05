@@ -4,5 +4,5 @@
    trío de acento en light — y aun así pasa el gate completo: los
    tokens que no fija se heredan de Milpa (skin parcial = skin válido).
    ════════════════════════════════════════════════════════════════════ */
-:root, [data-theme="dark"] { --font-body: 'Georgia', serif; --border-width: 2px; --dur-base: 150ms; }
+:root, [data-theme="dark"] { --font-body: 'Georgia', serif; --border-width: 2px; --dur-base: 150ms; --drawer-width: min(92vw, 20rem); }
 [data-theme="light"] { --accent: #14603F; --accent-text: #14603F; --focus: #14603F; }

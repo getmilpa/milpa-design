@@ -111,7 +111,8 @@ for (const theme of ['dark', 'light']) {
 const LEN = /^-?(\d*\.?\d+)(px|rem|em|ch|vw|vh|%)$|^0$/;
 const TIME = /^(\d*\.?\d+)(ms|s)$/;
 const NUM = /^-?\d*\.?\d+$/;
-const isLen = (v) => v.split(/\s+/).every((p) => LEN.test(p) || /^(min|max|calc|clamp)\(/.test(v));
+const FUNC = /^(calc|min|max|clamp)\(.*\)$/;
+const isLen = (v) => { v = v.trim(); return FUNC.test(v) || v.split(/\s+/).every((p) => LEN.test(p)); };
 const groupOf = (tokName) => {
   for (const [g, list] of Object.entries(contract.requiredTokens)) {
     if (g === 'color') continue;
@@ -127,7 +128,7 @@ const wellFormed = (g, name, v) => {
     if (name.startsWith('weight-')) return NUM.test(v) && +v >= 1 && +v <= 1000;
     return isLen(v);                                                  // text-*, tracking-*
   }
-  if (g === 'space' || g === 'radius' || g === 'size') return isLen(v) || v === '9999px';
+  if (g === 'space' || g === 'radius' || g === 'size') return isLen(v);
   if (g === 'zIndex') return /^-?\d+$/.test(v);
   if (g === 'motion') {
     if (name.startsWith('dur-') || name.startsWith('stagger-')) return TIME.test(v);

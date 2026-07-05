@@ -12,6 +12,11 @@
  *   - glass-broken-skin.css   → --surface translúcido oscuro compuesto
  *                               sobre --bg claro rompe AA en varios pares
  *                               reales del tema light → exit 1 (FAIL)
+ *   - brutalist-skin.css      → 2º flavor de marca (L1, sin translucidez)
+ *                               → exit 0 (PASS)
+ *   - glass-skin.css          → 3er flavor de marca (L1, superficies
+ *                               translúcidas + --surface-backdrop, --bg
+ *                               opaco) → exit 0 (PASS)
  *
  * Cero deps: child_process.spawnSync, mismo estilo que layer-guard.test.mjs.
  */
@@ -33,6 +38,8 @@ const cases = [
   { skin: 'broken-skin.css', expect: 1, why: '3 tokens mal formados debe fallar el gate' },
   { skin: 'valid-partial-skin.css', expect: 0, why: 'skin parcial bien formado debe pasar el gate' },
   { skin: 'glass-broken-skin.css', expect: 1, why: 'superficie translúcida compuesta sobre --bg rompe AA — debe fallar el gate' },
+  { skin: 'brutalist-skin.css', expect: 0, why: '2º flavor de marca (L1) debe pasar el gate' },
+  { skin: 'glass-skin.css', expect: 0, why: '3er flavor de marca (L1, translúcido, --bg opaco) debe pasar el gate' },
 ];
 
 let failures = 0;

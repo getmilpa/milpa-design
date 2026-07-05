@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Theme swap · Milpa ⇄ Brutalist</title>
-<meta name="description" content="Proof: ¿alcanza el reskin solo-tokens (L1) para un cambio de marca dramático? Milpa ⇄ Brutalist, light + dark, en vivo.">
+<title>Theme swap · Milpa ⇄ Brutalist ⇄ Glass</title>
+<meta name="description" content="Proof: ¿alcanza el reskin solo-tokens (L1) para un cambio de marca dramático? Milpa ⇄ Brutalist ⇄ Glass, light + dark, en vivo.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -20,10 +20,20 @@
 
 <!-- la piel Brutalist: SIN @layer → gana por origen de capa. Solo se activa con [data-skin="brutalist"] -->
 <link rel="stylesheet" href="skins/brutalist-skin.css">
+<!-- la piel Glass: idem, solo se activa con [data-skin="glass"] -->
+<link rel="stylesheet" href="skins/glass-skin.css">
 
 <style>
 /* ===== page-only (editorial): layout del kitchen-sink + barra de control. Todo con tokens. ===== */
 body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); }
+
+/* SOLO glass: fondo editorial vívido para que el --surface-backdrop tenga
+   algo detrás para desenfocar. Milpa y Brutalist se quedan con var(--bg)
+   plano — esto es CSS de página, no del sistema (no toca --bg del skin,
+   que sigue opaco para el gate de verify-theme). */
+html[data-skin="glass"] body {
+  background: linear-gradient(135deg, #6EA8FF 0%, #C88BFF 50%, #FF9FD0 100%) fixed;
+}
 
 /* barra de control fija */
 .swapbar {
@@ -32,6 +42,7 @@ body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--
   padding: var(--space-3) var(--space-5);
   background: var(--surface); color: var(--text);
   border-block-end: var(--border-width) solid var(--border);
+  -webkit-backdrop-filter: var(--surface-backdrop); backdrop-filter: var(--surface-backdrop);
 }
 .swapbar__brand { font-family: var(--font-heading); font-weight: var(--weight-bold); font-size: var(--text-lg); }
 .swapbar__brand b { color: var(--accent-text); }
@@ -55,6 +66,7 @@ body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--
   background: var(--surface); color: var(--text);
   border: var(--border-width) solid var(--border); border-radius: var(--radius-lg);
   padding: var(--space-5); box-shadow: var(--shadow-md);
+  -webkit-backdrop-filter: var(--surface-backdrop); backdrop-filter: var(--surface-backdrop);
 }
 .panel > h2 { margin: 0 0 var(--space-4); font-family: var(--font-heading); font-size: var(--text-sm); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--text-muted); }
 .row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
@@ -72,6 +84,7 @@ body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--
   <div class="swapbar__seg" role="group" aria-label="Marca">
     <button type="button" data-skin="milpa" aria-pressed="true">Milpa</button>
     <button type="button" data-skin="brutalist" aria-pressed="false">Brutalist</button>
+    <button type="button" data-skin="glass" aria-pressed="false">Glass</button>
   </div>
   <div class="swapbar__seg" role="group" aria-label="Modo">
     <button type="button" data-mode="light" aria-pressed="false">Light</button>
@@ -82,10 +95,14 @@ body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--
 
 <main class="wrap">
   <header class="intro" style="margin-block-end: var(--space-8)">
-    <h1>Una piel, dos marcas.</h1>
-    <p>La MISMA estructura y las MISMAS piezas. Lo único que cambia entre Milpa y Brutalist son tokens —
-      cero CSS estructural. Dale a los toggles de arriba y mirá cómo forma, color, tipografía, sombras y
-      motion se dan vuelta enteros. Ambas marcas honran el contrato (contraste AA + forma).</p>
+    <h1>Una piel, tres marcas.</h1>
+    <p>La MISMA estructura y las MISMAS piezas. Lo único que cambia entre Milpa, Brutalist y Glass son tokens —
+      cero CSS estructural (el degradé de fondo y el <code>backdrop-filter</code> de los paneles son la única
+      excepción, editorial, para que el vidrio tenga algo detrás para desenfocar). Dale a los toggles de arriba
+      y mirá cómo forma, color, tipografía, sombras y motion se dan vuelta enteros. Las tres marcas honran el
+      contrato (contraste AA + forma) — Glass además ejercita <code>--border-style</code>,
+      <code>--surface-backdrop</code>/<code>--blur-*</code> y la composición alpha-sobre-<code>--bg</code> de
+      <code>verify-theme</code>.</p>
   </header>
 
   <div class="sink">
@@ -251,7 +268,7 @@ function sync() {
   skinBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.skin === skin)));
   modeBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
   stateLabel.textContent = skin + ' · ' + mode;
-  brandName.innerHTML = skin === 'brutalist' ? 'BRUTAL<b>IST</b>' : 'Milpa <b>Design</b>';
+  brandName.innerHTML = skin === 'brutalist' ? 'BRUTAL<b>IST</b>' : skin === 'glass' ? 'GLASS <b>◇</b>' : 'Milpa <b>Design</b>';
 }
 
 skinBtns.forEach((b) => b.addEventListener('click', () => {

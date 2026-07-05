@@ -7,7 +7,7 @@
   "class": "mui-docs",
   "summary": "La parcela de lectura — shell de documentación versionada: topbar sticky con velo (color-mix + blur) hermano ANTERIOR al grid, y grid de 3 columnas nav / artículo / toc centrado a 90rem sobre var(--bg). Reusa el idioma del shell admin (barra-grano en el item actual) pero es un layout de LECTURA: compone los artefactos de contenido (prose, toc, search, breadcrumbs, version-*) sin redeclararlos. <1100px se cae la columna del toc (reaparece como <details> plegado arriba del artículo); ≤880px el nav inline se oculta y el .mui-docs__nav-toggle abre (showModal()) un <dialog class=\"mui-drawer mui-drawer--start\"> hermano (top layer, sin overflow-x:clip) con el árbol de navegación duplicado.",
   "element": [
-    "div (el grid .mui-docs; el topbar es un <header class=\"mui-docs__topbar\"> hermano ANTERIOR al grid — nunca columna; el menú móvil ≤880px tampoco vive en el grid — es un <dialog class=\"mui-drawer mui-drawer--start\"> HERMANO posterior, ver mui-drawer.contract.json)"
+    "div (el grid .mui-docs; el topbar es un <header class=\"mui-docs__topbar\"> hermano ANTERIOR al grid — nunca columna; el menú móvil ≤880px tampoco vive en el grid — es un <dialog class=\"mui-drawer mui-drawer--start\"> hermano del grid (fuera de él), insertado tras el topbar y antes del grid, ver mui-drawer.contract.json)"
   ],
   "composes": [
     "prose (el artículo dentro de __main)",
@@ -39,7 +39,7 @@
   "states": {
     "nav-current": "a.mui-docs__nav-item[aria-current=\"page\"] — fondo var(--accent-subtle), texto var(--accent-text) weight-medium + barra-grano ::before de 3px var(--accent) radius-full en el arranque (lenguaje exacto de .mui-sidebar__item); nunca una clase",
     "nav-hover": ".mui-docs__nav-item:hover — var(--text) sobre var(--surface)",
-    "mobile-menu": "el abierto/cerrado del menú móvil vive en el propio <dialog class=\"mui-drawer mui-drawer--start\"> hermano del grid (ver mui-drawer.contract.json: states.open/closed) — el shell YA NO declara [data-nav-open]; el toggle solo sincroniza aria-expanded con el evento close del dialog (JS del consumidor)",
+    "mobile-menu": "el abierto/cerrado del menú móvil vive en el propio <dialog class=\"mui-drawer mui-drawer--start\"> hermano del grid (ver mui-drawer.contract.json: states.open/closed) — el shell YA NO declara [data-nav-open]; el toggle sincroniza aria-expanded con el open (click del toggle) y el close (evento del dialog) (JS del consumidor)",
     "toc-open": ".mui-docs__toc-inline[open] — atributo nativo del <details>: el summary gana borde inferior y sube a text-secondary",
     "focus": "todos los interactivos propios (brand, nav-item) → :focus-visible outline 2px var(--focus) offset 2px; el summary del toc-inline usa offset -2 (anillo interior: es edge-to-edge del marco redondeado, precedente .mui-search__input). El .mui-pager compuesto trae su propio hover/focus (ver su contrato)"
   },

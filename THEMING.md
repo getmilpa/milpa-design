@@ -118,8 +118,20 @@ npm run verify:theme -- mi-skin.css   # scripts/verify-theme.mjs
 Un PASS garantiza dos cosas, y solo dos (`theme.contract.json.validation`):
 
 1. **`hard` — contraste WCAG AA.** Todos los pares de `contrast.pairs` cumplen su umbral, en
-   dark y en light, sobre la paleta resultante (valores hex planos del skin sobre los defaults
-   de Milpa). Sale con código 1 si algún par falla.
+   dark y en light, sobre la paleta resultante (valores del skin sobre los defaults de Milpa).
+   El parser entiende color con alpha — `#RRGGBB`, `#RRGGBBAA`, `rgb()`/`rgba()` — no solo hex
+   plano. Si un token de la paleta resultante es TRANSLÚCIDO (alpha < 1, típicamente `--surface`
+   o `--surface-raised` en un glass skin), el gate lo COMPONE sobre `--bg` — el fondo efectivo de
+   ese tema — antes de medir el contraste; si el `fg` del par también es translúcido, se compone
+   sobre el `bg` ya compuesto. `--bg` mismo es la referencia de composición y el contrato exige
+   que sea OPACO (`invariants`): si `--bg` resuelve con alpha < 1 en cualquier tema, el gate falla
+   de una — no hay contra qué componer un fondo que a su vez es transparente. Sale con código 1
+   si algún par (compuesto o no) falla, o si `--bg` no es opaco.
+   **Caveat de honestidad:** el gate solo conoce `--bg` como fondo de referencia. Si tu glass
+   flota en producción sobre un backdrop más ocupado que un color sólido (una imagen, un
+   gradiente, contenido que se desplaza detrás), el contraste EFECTIVO ahí puede ser peor que el
+   que reporta el gate — sanity-checkeá manualmente el contraste sobre esos backdrops más ruidosos
+   antes de shipear un glass skin.
 2. **`form` — buena forma de los tokens no-color que el skin fija.** Cualquier `--token` de los
    grupos `type` / `space` / `radius` / `zIndex` / `motion` / `elevation` / `size` que el skin
    declare se valida por TIPO y no-vacío (p. ej. `--dur-base` debe ser un `<time>`, `--font-body`
@@ -142,7 +154,11 @@ propio: **nada se siembra sin contrato — tampoco un theme.**
 cadencia, 193/193 en el gate, 0 malformados) vistiendo el blog completo en `proof/themed.html`
 — nivel 1 por link, nivel 2 en su `<style>` sin layer. Fixtures del gate de forma:
 `proof/skins/broken-skin.css` (3 tokens mal formados → FAIL) y
-`proof/skins/valid-partial-skin.css` (skin parcial bien formado → PASS).
+`proof/skins/valid-partial-skin.css` (skin parcial bien formado → PASS). Fixture de
+translucidez: `proof/skins/glass-broken-skin.css` (`--surface` translúcido oscuro compuesto
+sobre un `--bg` claro rompe AA en 18 pares reales del tema light → FAIL); el contrapunto
+positivo — un glass skin real calibrado para pasar compuesto — llega en el próximo paso del
+plan 0.8.
 
 ## 7. Qué NO hacer
 

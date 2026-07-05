@@ -68,7 +68,7 @@
   letter-spacing: var(--tracking-normal); white-space: nowrap;
   text-decoration: none; user-select: none; cursor: pointer;
   background: transparent; color: var(--text-secondary);
-  border: 1px solid var(--border); border-radius: var(--radius-base);
+  border: var(--border-width) solid var(--border); border-radius: var(--radius-base);
   -webkit-tap-highlight-color: transparent;
   transition:
     background-color var(--dur-fast) var(--ease-standard),
@@ -78,7 +78,7 @@
 }
 .mui-btn:hover  { color: var(--text); border-color: var(--border-strong); transform: translateY(-1px); }
 .mui-btn:active { transform: translateY(0); }
-.mui-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-btn:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 .mui-btn[disabled], .mui-btn[aria-disabled="true"] {
   opacity: 0.5; cursor: not-allowed; pointer-events: none;
 }
@@ -166,14 +166,14 @@
   width: 100%; height: var(--_h); padding: 0 var(--space-3);
   font-family: var(--font-body); font-size: var(--text-sm);
   color: var(--text); background: var(--bg);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-base);
   transition:
     border-color     var(--dur-fast) var(--ease-standard),
     background-color var(--dur-fast) var(--ease-standard);
 }
 .mui-input::placeholder { color: var(--text-muted); opacity: 1; }
 .mui-input:focus-visible {
-  outline: 2px solid var(--focus); outline-offset: 1px;
+  outline: var(--focus-width) solid var(--focus); outline-offset: 1px;
   border-color: var(--focus);
 }
 .mui-input[aria-invalid="true"] { border-color: var(--danger); }
@@ -202,7 +202,7 @@
 .mui-input-group--stepper {
   display: inline-flex; align-items: stretch;
   background: var(--bg);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-base);
   overflow: hidden; /* recorta las esquinas de los botones al radio del grupo */
 }
 .mui-input-group--stepper:focus-within { border-color: var(--focus); }
@@ -223,7 +223,7 @@
     background-color var(--dur-fast) var(--ease-standard);
 }
 .mui-input-group__step:hover { color: var(--text); background: var(--surface); }
-.mui-input-group__step:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.mui-input-group__step:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: calc(-1 * var(--focus-offset)); }
 .mui-input-group__step[disabled] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 /* tamaño sm (cart-line) — scopeado a --stepper para no tocar otros input-group --sm */
 .mui-input-group--stepper.mui-input-group--sm { border-radius: var(--radius-sm); }
@@ -252,7 +252,7 @@
   font-family: var(--font-body); font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text); background: var(--bg);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-base);
   resize: vertical;
   transition:
     border-color     var(--dur-fast) var(--ease-standard),
@@ -260,7 +260,7 @@
 }
 .mui-textarea::placeholder { color: var(--text-muted); opacity: 1; }
 .mui-textarea:focus-visible {
-  outline: 2px solid var(--focus); outline-offset: 1px;
+  outline: var(--focus-width) solid var(--focus); outline-offset: 1px;
   border-color: var(--focus);
 }
 .mui-textarea[aria-invalid="true"] { border-color: var(--danger); }
@@ -293,14 +293,14 @@
   padding-block: 0; padding-inline: var(--space-3) var(--space-8);
   font-family: var(--font-body); font-size: var(--text-sm);
   color: var(--text); background: var(--bg);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-base);
   appearance: none; cursor: pointer;
   transition:
     border-color     var(--dur-fast) var(--ease-standard),
     background-color var(--dur-fast) var(--ease-standard);
 }
 .mui-select:focus-visible {
-  outline: 2px solid var(--focus); outline-offset: 1px;
+  outline: var(--focus-width) solid var(--focus); outline-offset: 1px;
   border-color: var(--focus);
 }
 .mui-select[aria-invalid="true"] { border-color: var(--danger); }
@@ -351,14 +351,14 @@
   cursor: pointer;
   background: var(--bg);
   color: var(--text-on-accent); /* currentColor del glifo (dark: tinta sobre oro) */
-  border: 1px solid var(--border-strong);
+  border: var(--border-width) solid var(--border-strong);
   transition:
     background-color var(--dur-fast) var(--ease-standard),
     border-color     var(--dur-fast) var(--ease-standard);
 }
 .mui-checkbox:hover, .mui-radio:hover { border-color: var(--text-muted); }
 .mui-checkbox:focus-visible, .mui-radio:focus-visible {
-  outline: 2px solid var(--focus); outline-offset: 1px;
+  outline: var(--focus-width) solid var(--focus); outline-offset: 1px;
 }
 .mui-checkbox:checked, .mui-checkbox:indeterminate, .mui-radio:checked {
   background: var(--accent); border-color: var(--accent-active);
@@ -386,7 +386,7 @@
 .mui-checkbox[aria-invalid="true"]:indeterminate,
 .mui-radio[aria-invalid="true"]:checked {
   background: var(--danger);
-  border-width: 1px; border-color: var(--danger-active);
+  border-width: var(--border-width); border-color: var(--danger-active);
   color: var(--on-danger);
 }
 .mui-checkbox[disabled], .mui-radio[disabled] { opacity: 0.5; cursor: not-allowed; }
@@ -432,7 +432,7 @@
   width: var(--_w); height: var(--_h); margin: 0;
   cursor: pointer;
   background: var(--surface-raised);
-  border: 1px solid var(--text-muted); border-radius: var(--radius-full);
+  border: var(--border-width) solid var(--text-muted); border-radius: var(--radius-full);
   transition:
     background-color var(--dur-fast) var(--ease-standard),
     border-color     var(--dur-fast) var(--ease-standard);
@@ -449,7 +449,7 @@
     background-color var(--dur-fast) var(--ease-standard);
 }
 .mui-switch:hover { border-color: var(--text-secondary); }
-.mui-switch:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.mui-switch:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: 1px; }
 .mui-switch:checked { background: var(--accent); border-color: var(--accent-active); }
 .mui-switch:checked::before {
   background: var(--text-on-accent);
@@ -521,7 +521,7 @@
   white-space: nowrap;
   color: var(--text-secondary);
   background: transparent;
-  border: 1px solid var(--border); border-radius: var(--radius-full);
+  border: var(--border-width) solid var(--border); border-radius: var(--radius-full);
 }
 .mui-badge--accent    { color: var(--accent-text);    background: var(--accent-subtle);    border-color: var(--accent-active); }
 .mui-badge--secondary { color: var(--secondary-text); background: var(--secondary-subtle); border-color: var(--secondary-border); }
@@ -547,7 +547,7 @@
   line-height: var(--leading-snug);
   color: var(--text);
   background: var(--surface-raised);
-  border: 1px solid var(--border); border-bottom-width: 2px;
+  border: var(--border-width) solid var(--border); border-bottom-width: 2px;
   border-radius: var(--radius-xs);
   vertical-align: middle;
 }
@@ -607,7 +607,7 @@
 .mui-progress {
   display: block; width: 100%; height: var(--space-2);
   background: var(--surface-raised);
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -627,7 +627,7 @@
    contenido). */
 .mui-divider {
   margin-block: var(--space-4); margin-inline: 0;
-  border: 0; border-top: 1px solid var(--border-subtle);
+  border: 0; border-top: var(--border-width) solid var(--border-subtle);
 }
 /* vertical — el atributo ARIA correcto ES el hook de estilo (una sola
    fuente de verdad); la clase queda como azúcar opcional. En flex se
@@ -637,7 +637,7 @@
   display: inline-block; width: 0; height: auto; min-height: 1em;
   align-self: stretch;
   margin-block: 0; margin-inline: var(--space-2);
-  border-top: 0; border-inline-start: 1px solid var(--border-subtle);
+  border-top: 0; border-inline-start: var(--border-width) solid var(--border-subtle);
   vertical-align: middle;
 }
 /* con label — rótulo mono centrado; las líneas son pseudos decorativos.
@@ -653,7 +653,7 @@
 }
 .mui-divider--label::before,
 .mui-divider--label::after {
-  content: ""; flex: 1; border-top: 1px solid var(--border-subtle);
+  content: ""; flex: 1; border-top: var(--border-width) solid var(--border-subtle);
 }
 
 /* ---------- Badge · variantes de estabilidad (kit de versionado 0.2.0) ----------

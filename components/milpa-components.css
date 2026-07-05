@@ -84,7 +84,7 @@
   min-width: 12rem; margin: 0; padding: var(--space-1);
   list-style: none;                          /* reset por si el consumidor usa <ul>/<menu> */
   background: var(--overlay);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-md);
+  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   transform-origin: top;
   animation: milpa-scale-in var(--dur-fast) var(--ease-grano) both;
@@ -107,7 +107,7 @@
 }
 .mui-menu__item:hover,
 .mui-menu__item:focus-visible { background: var(--accent-subtle); color: var(--text); }
-.mui-menu__item:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-menu__item:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 .mui-menu__item[aria-current],
 .mui-menu__item[aria-checked="true"] {
   background: var(--accent-subtle); color: var(--text);
@@ -127,7 +127,7 @@
    decorativo (exento de 1.4.11): --border alcanza, no necesita el strong */
 .mui-menu__sep {
   margin: var(--space-1) calc(-1 * var(--space-1));
-  border: 0; border-top: 1px solid var(--border);
+  border: 0; border-top: var(--border-width) solid var(--border);
 }
 
 /* label de grupo — mono uppercase; text-secondary (muted mide 3.9:1
@@ -176,7 +176,7 @@
   display: flex; flex-direction: column;
   color: var(--text);
   background: var(--surface);
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
@@ -197,7 +197,7 @@
 .mui-card__footer {
   display: flex; align-items: center; gap: var(--space-2);
   padding: var(--space-4) var(--_pad);
-  border-top: 1px solid var(--border-subtle);
+  border-top: var(--border-width) solid var(--border-subtle);
 }
 
 /* media — cover edge-to-edge; el root de la card no tiene padding (vive en
@@ -250,7 +250,7 @@
   transform: translateY(-1px);
 }
 .mui-card--interactive:active { transform: translateY(0); }
-.mui-card--interactive:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-card--interactive:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 
 /* ---------- Stat · .mui-stat ----------
    KPI de dashboard. Pensado para componer dentro de .mui-card__body
@@ -371,12 +371,12 @@
   --_z-thead: calc(var(--z-base) + 1);
   overflow-x: auto;
   background: var(--surface);
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-lg);
   isolation: isolate; /* el z del thead sticky no compite con la escala global */
 }
 /* scroll por teclado: el wrap lleva tabindex="0" + role="region" (ver contrato) */
-.mui-table-wrap:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-table-wrap:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 
 .mui-table {
   width: 100%;
@@ -397,7 +397,7 @@
   background: var(--surface);
   /* border-strong y no border: el separador del header sostiene 3:1 también
      en dark (3.13; border/surface daba 2.17) — par ya en el gate */
-  border-bottom: 1px solid var(--border-strong);
+  border-bottom: var(--border-width) solid var(--border-strong);
 }
 
 /* ordenable — el estado vive en th[aria-sort]; el botón hereda la voz del th */
@@ -409,7 +409,7 @@
   transition: color var(--dur-fast) var(--ease-standard);
 }
 .mui-table__sort:hover { color: var(--text); }
-.mui-table__sort:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-table__sort:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 /* indicador decorativo (unicode con alt vacío donde se soporta):
    ↕ neutro atenuado en reposo · ▲/▼ en oro cuando la columna ordena.
    El estado real lo anuncia aria-sort, no el glifo. */
@@ -431,7 +431,7 @@
 .mui-table td {
   padding: var(--space-3) var(--space-4);
   color: var(--text-secondary);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: var(--border-width) solid var(--border-subtle);
   transition: background-color var(--dur-fast) var(--ease-standard);
 }
 .mui-table tbody tr:last-child > td { border-bottom: 0; } /* el cierre lo pone el wrap */
@@ -478,7 +478,7 @@
   font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1;
   font-variant-numeric: tabular-nums;
   color: var(--text-secondary); text-decoration: none;
-  background: transparent; border: 1px solid transparent;
+  background: transparent; border: var(--border-width) solid transparent;
   border-radius: var(--radius-sm);
   cursor: pointer; user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -490,7 +490,7 @@
 /* border-strong y no border: border/surface no alcanza 3:1 en dark (2.17) —
    mismo hover-border que .mui-btn en el molde */
 .mui-pagination__item:hover { color: var(--text); border-color: var(--border-strong); }
-.mui-pagination__item:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-pagination__item:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 .mui-pagination__item[aria-current="page"] {
   background: var(--accent-subtle); color: var(--accent-text);
   border-color: var(--accent); font-weight: var(--weight-bold);
@@ -531,7 +531,7 @@
    margin-bottom -1px: el indicador de 2px pisa la línea del tablist. */
 .mui-tabs {
   display: flex; gap: var(--space-1);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: var(--border-width) solid var(--border-subtle);
 }
 .mui-tabs__tab {
   --_h: 2.5rem;
@@ -556,7 +556,7 @@
   border-bottom-color: var(--accent);
 }
 /* ring interior (offset negativo): sobrevive a tablists con overflow */
-.mui-tabs__tab:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.mui-tabs__tab:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: calc(-1 * var(--focus-offset)); }
 .mui-tabs__tab[disabled], .mui-tabs__tab[aria-disabled="true"] {
   opacity: 0.5; cursor: not-allowed; pointer-events: none;
 }
@@ -565,7 +565,7 @@
 .mui-tabs__panel { padding-top: var(--space-5); }
 .mui-tabs__panel[hidden] { display: none; }
 /* panel enfocable (tabindex=0 cuando no tiene contenido focusable) */
-.mui-tabs__panel:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-tabs__panel:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 
 /* variante pill — sin línea base; el fill de la seleccionada ES el indicador (no el
    subrayado). Sirve para tabs de contenido o para filtros (patrón de panel único: ver
@@ -580,7 +580,7 @@
 .mui-tabs--pill .mui-tabs__tab[aria-selected="true"] {
   background: var(--accent-subtle); color: var(--accent-text);
 }
-.mui-tabs--pill .mui-tabs__tab:focus-visible { outline-offset: 2px; }
+.mui-tabs--pill .mui-tabs__tab:focus-visible { outline-offset: var(--focus-offset); }
 
 /* ---------- Breadcrumbs · .mui-breadcrumbs ----------
    <nav aria-label="breadcrumb"> + <ol>. El separador "/" es CSS puro
@@ -608,7 +608,7 @@
   color: var(--text);
   text-decoration: underline; text-underline-offset: 3px;
 }
-.mui-breadcrumbs__link:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-breadcrumbs__link:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 /* la miga actual: texto plano, un peso arriba — no compite con --text */
 .mui-breadcrumbs [aria-current="page"] {
   color: var(--text-secondary); font-weight: var(--weight-medium);
@@ -644,7 +644,7 @@
   font-family: var(--font-body); font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text); background: var(--surface);
-  border: 1px solid var(--border); border-radius: var(--radius-md);
+  border: var(--border-width) solid var(--border); border-radius: var(--radius-md);
 }
 /* guard: el display:flex de arriba pisaría el [hidden] del UA — el
    contrato descarta con hidden (o removiendo el nodo) y debe funcionar */
@@ -713,7 +713,7 @@
   padding-inline-end: var(--space-10); /* aire para __dismiss */
   font-family: var(--font-body);
   color: var(--text); background: var(--overlay);
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-inline-start: 3px solid var(--border); /* la variante la tiñe */
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
@@ -744,7 +744,7 @@
   max-height: calc(100dvh - var(--space-16));
   margin: auto; padding: 0;
   color: var(--text); background: var(--surface);
-  border: 1px solid var(--border); border-radius: var(--radius-xl);
+  border: var(--border-width) solid var(--border); border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
 }
 .mui-modal::backdrop {
@@ -756,7 +756,7 @@
   animation: milpa-scale-in var(--dur-moderate) var(--ease-grano) both;
 }
 .mui-modal[open]::backdrop { animation: milpa-fade var(--dur-moderate) var(--ease-standard) both; }
-.mui-modal:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-modal:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 .mui-modal__header {
   flex: none; display: flex; align-items: center; justify-content: space-between;
   gap: var(--space-3); padding: var(--space-5);
@@ -778,7 +778,7 @@
 .mui-modal__footer {
   flex: none; display: flex; justify-content: flex-end; gap: var(--space-2);
   padding: var(--space-5);
-  border-block-start: 1px solid var(--border-subtle); /* separador decorativo */
+  border-block-start: var(--border-width) solid var(--border-subtle); /* separador decorativo */
 }
 /* destructivo — título (e ícono, que hereda) en danger; la acción
    primaria del footer es .mui-btn--danger */
@@ -799,7 +799,7 @@
   width: min(92vw, 26rem); max-width: none;
   margin: 0; margin-inline-start: auto; padding: 0;
   color: var(--text); background: var(--surface);
-  border: none; border-inline-start: 1px solid var(--border);
+  border: none; border-inline-start: var(--border-width) solid var(--border);
   border-radius: var(--radius-none);
   box-shadow: var(--shadow-lg);
 }
@@ -813,8 +813,8 @@
 }
 .mui-drawer[open]::backdrop { animation: milpa-fade var(--dur-moderate) var(--ease-standard) both; }
 .mui-drawer:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: -2px; /* panel al borde del viewport: el anillo va por dentro */
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: calc(-1 * var(--focus-offset)); /* panel al borde del viewport: el anillo va por dentro */
 }
 /* --start: drawer anclado al inline-start (izquierda) — para navs cuyo toggle
    vive a la izquierda (ej. el shell docs). Espeja el ancla, el borde y el slide. */
@@ -825,7 +825,7 @@
 .mui-drawer--start {
   inset-inline-end: auto; inset-inline-start: 0;
   margin-inline-start: 0; margin-inline-end: auto;
-  border-inline-start: 0; border-inline-end: 1px solid var(--border);
+  border-inline-start: 0; border-inline-end: var(--border-width) solid var(--border);
 }
 .mui-drawer--start[open] { animation-name: mui-drawer-in-start; }
 .mui-drawer__header {
@@ -848,7 +848,7 @@
   flex: none; margin-block-start: auto; /* se ancla al fondo del panel */
   display: flex; justify-content: flex-end; gap: var(--space-2);
   padding: var(--space-5);
-  border-block-start: 1px solid var(--border-subtle); /* separador decorativo */
+  border-block-start: var(--border-width) solid var(--border-subtle); /* separador decorativo */
 }
 
 /* fix de auditoría: el .mui-btn outline default sobre var(--surface) en dark da
@@ -870,7 +870,7 @@
   width: auto; max-width: none;
   margin: 0;
   display: flex; flex-direction: column;
-  border-inline-start: 1px solid var(--border);
+  border-inline-start: var(--border-width) solid var(--border);
   box-shadow: none;
   animation: none;
 }
@@ -925,13 +925,13 @@
   font-family: var(--font-body); font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   color: var(--text); background: var(--surface);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-base);
+  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-base);
   text-decoration: none;
   transform: translateY(calc(-100% - var(--space-4)));
 }
 .mui-shell__skip:focus-visible {
   transform: none;
-  outline: 2px solid var(--focus); outline-offset: 2px;
+  outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset);
 }
 
 /* ---------- Sidebar · .mui-sidebar ----------
@@ -942,7 +942,7 @@
   position: sticky; top: 0; height: 100dvh;
   display: flex; flex-direction: column; min-height: 0;
   background: var(--surface);
-  border-inline-end: 1px solid var(--border-subtle);
+  border-inline-end: var(--border-width) solid var(--border-subtle);
   /* divisor decorativo (<3:1 a propósito): la separación sidebar/main
      la da el salto surface→bg (regla 1) — ver contrato sidebar */
 }
@@ -951,12 +951,12 @@
 .mui-sidebar__brand {
   display: flex; align-items: center; gap: var(--space-2); flex: none;
   height: 3.5rem; padding-inline: var(--space-4);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: var(--border-width) solid var(--border-subtle);
   font-family: var(--font-heading); font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-tight);
   color: var(--text); text-decoration: none;
 }
-.mui-sidebar__brand:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-sidebar__brand:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 
 .mui-sidebar__nav {
   flex: 1; min-height: 0; overflow-y: auto;
@@ -987,7 +987,7 @@
     color            var(--dur-fast) var(--ease-standard);
 }
 .mui-sidebar__item:hover { color: var(--text); background: var(--bg); }
-.mui-sidebar__item:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-sidebar__item:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 .mui-sidebar__item[aria-current="page"] {
   color: var(--accent-text); background: var(--accent-subtle);
   font-weight: var(--weight-medium);
@@ -1017,7 +1017,7 @@
 /* footer — slot para user-card mini */
 .mui-sidebar__footer {
   flex: none; padding: var(--space-3);
-  border-top: 1px solid var(--border-subtle);
+  border-top: var(--border-width) solid var(--border-subtle);
 }
 
 /* ---------- rail (solo desktop) · .mui-shell--rail ----------
@@ -1050,7 +1050,7 @@
   background: color-mix(in srgb, var(--bg) 85%, transparent);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: var(--border-width) solid var(--border-subtle);
 }
 .mui-topbar__start  { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
 .mui-topbar__search { flex: 1; max-width: 24rem; }
@@ -1135,7 +1135,7 @@
   display: flex; flex-direction: column;
   color: var(--text);
   background: var(--surface);
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-lg);
   overflow: hidden;                  /* la media edge-to-edge respeta el radio */
   transition:
@@ -1181,7 +1181,7 @@ a.mui-product-card__title::after,
 .mui-product-card__title > a::after { content: ""; position: absolute; inset: 0; }
 a.mui-product-card__title:focus-visible,
 .mui-product-card__title > a:focus-visible {
-  outline: 2px solid var(--focus); outline-offset: 2px;
+  outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset);
 }
 .mui-product-card__meta { margin: 0; font-size: var(--text-xs); color: var(--text-muted); }
 
@@ -1269,7 +1269,7 @@ a.mui-product-card__title:focus-visible,
 /* si el conteo es link: subrayado = afford (nunca solo color) */
 a.mui-rating__count { color: var(--text-muted); text-decoration: underline; }
 a.mui-rating__count:hover { color: var(--text-secondary); }
-a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+a.mui-rating__count:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 
 /* ---------- MediaGallery · .mui-media-gallery ----------
    Galería de PDP: principal 1:1 enmarcada (regla 1: borde, no sombra) +
@@ -1279,7 +1279,7 @@ a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-off
 .mui-media-gallery { display: flex; flex-direction: column; gap: var(--space-3); }
 .mui-media-gallery__main {
   aspect-ratio: 1 / 1;
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
@@ -1296,7 +1296,7 @@ a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-off
   width: 4rem; height: 4rem; flex: none;
   padding: 0; cursor: pointer;
   background: transparent;
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-md);
   overflow: hidden;
   opacity: 0.75;
@@ -1309,7 +1309,7 @@ a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-off
   display: block; width: 100%; height: 100%; object-fit: cover;
 }
 .mui-media-gallery__thumb:hover { opacity: 1; }
-.mui-media-gallery__thumb:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mui-media-gallery__thumb:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 .mui-media-gallery__thumb[aria-current="true"] {
   border-color: var(--accent);
   opacity: 1;
@@ -1329,10 +1329,10 @@ a.mui-rating__count:focus-visible { outline: 2px solid var(--focus); outline-off
   padding-block: var(--space-4);
   list-style: none;                  /* la línea suele ser un <li> */
 }
-.mui-cart-line + .mui-cart-line { border-top: 1px solid var(--border-subtle); }
+.mui-cart-line + .mui-cart-line { border-top: var(--border-width) solid var(--border-subtle); }
 .mui-cart-line__media {
   width: 4rem; height: 4rem;
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-md);
   overflow: hidden;
 }

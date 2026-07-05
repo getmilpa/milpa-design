@@ -2,13 +2,16 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "cluster",
   "layer": "layout",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "status": "stable",
   "class": "mui-cluster",
   "summary": "Grupo horizontal que ENVUELVE: fila con gap + alineación centrada que pasa a varias líneas cuando el contenido no entra (badges, botones, tags). Es la contraparte de .mui-stack — mismo patrón de tamaño de gap (space-2/4/6 por --sm/--lg/por defecto), pero en el eje inline en vez del de bloque. Sin fondo, sin borde, sin semántica propia: es puro layout.",
   "element": [
     "div (.mui-cluster — envoltorio neutral alrededor de badges, botones o tags; también aplica a <ul>/<ol> con list-style:none del consumidor)"
   ],
+  "anatomy": {
+    "root": ".mui-cluster — fila flex que envuelve, centrada, con gap por variante de tamaño"
+  },
   "variants": {
     "size": {
       "sm": ".mui-cluster--sm — gap var(--space-2): filas densas (tags, chips de filtro)",

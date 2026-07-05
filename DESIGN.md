@@ -181,6 +181,15 @@ ensamblar UI sabiendo exactamente qué expone cada pieza, sin adivinar. Plantill
 - Navegable por **teclado**, con `:focus-visible`.
 - Label / `aria` correctos (`aria-invalid`, `aria-busy`, `aria-describedby`, etc.).
 
+**Guard `[hidden]` (piezas compuestas):** cuando el `display` propio de una pieza (flex/grid) pisaría
+el `display:none` nativo del atributo `[hidden]`, el selector debe excluirlo explícitamente
+(precedente `ea72ac3`: el `display` del autor no debe pisar al UA — ver `mui-callout`, `mui-media-grid__item`).
+El guard aplica al **toggle-target/contenedor** que un filtro oculta o muestra (p.ej.
+`.mui-media-grid__item[hidden]`) — **no** a las reglas de **medios internos** (`mui-card__media`, los
+slots `:is(img, svg, picture)`), que nunca son en sí mismos el objetivo de un toggle de visibilidad;
+por eso sus reglas de `display` intencionalmente no llevan guard `[hidden]`. (Resuelve la pregunta de
+política abierta del review de 0.3.0 — sin cambio de código.)
+
 **Naming:** clases `mui-*`; tokens `--{categoría}-{nombre}`; contratos `{componente}.contract.json`.
 
 **Cascada y theming (0.2.0):** todo CSS publicado declara el orden canónico

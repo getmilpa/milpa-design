@@ -85,8 +85,9 @@ sobre `bg`/`surface`, `text`/`surface`, `--viz-*`).
 off-canvas móvil de `mui-header` y `mui-docs` deja el panel `position:fixed` +
 `[data-nav-open]` + scrim por un **`<dialog class="mui-drawer">`** (`--start` en docs) abierto
 con `showModal()` — top layer nativo (focus trap/Esc/`::backdrop` gratis). Consecuencias: ya NO
-hace falta `overflow-x:clip` en la raíz de la página (se removió de los seis proofs; arregla el
-overflow de `docs.html`, F#8); el menú móvil queda como elemento aparte con los links duplicados;
+hace falta `overflow-x:clip` en la raíz de la página (se removió de los **cuatro** proofs que lo
+tenían —blog, commerce, gallery, saas—; `docs.html` nunca lo tuvo y se arregla vía el `<dialog>`,
+que es el fondo de F#8); el menú móvil queda como elemento aparte con los links duplicados;
 el buscador de commerce vuelve a vivir en móvil, duplicado dentro del drawer (F#9). Los media slots
 pasan de combinador descendiente a **hijo** (`> :is(img, svg, picture)`) para que un `<picture>`
 no dispare el hover-scale doble — en `mui-media-grid` el guard queda al nivel del `figure`/
@@ -94,8 +95,8 @@ no dispare el hover-scale doble — en `mui-media-grid` el guard queda al nivel 
 review de 0.3.0: guard de set vacío en el lightbox del gallery (`show(i)` corta si
 `visibleItems()` es `[]`) y la política del guard `[hidden]` fijada en DESIGN §6 (aplica al
 contenedor que un filtro togglea, no a los medios internos). De paso: badge SOC 2 de `saas.html`
-unificado a `--accent`; `anatomy` documentada en `mui-stack`/`mui-cluster`. Pieza nueva:
-`mui-drawer --start` (variante anclada a la izquierda). Contratos **68 → 68** (sin cambio). Gate:
+unificado a `--accent`; `anatomy` documentada en `mui-stack`/`mui-cluster`. Variante nueva:
+`mui-drawer --start` (anclada a la izquierda). Contratos **68 → 68** (sin cambio). Gate:
 **193/193 AA** — audit de cierre: **0 pares nuevos**. **COMPAT (única de este release):** quien
 consumía el off-canvas viejo migra el toggle de `[data-nav-open]` a `showModal()`/`close()` sobre
 un `mui-drawer` y borra el scrim — ver nota destacada en `CHANGELOG.md`.
@@ -181,8 +182,9 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
      documento; el fix de `mui-header` (`overflow-x: clip` en la raíz) no cubría `docs.html`.~~ ✅
      **Hecho, 0.6.0** — el off-canvas de `mui-header` Y `mui-docs` pasó a un
      `<dialog class="mui-drawer">` (`--start` en docs) abierto con `showModal()`: top layer nativo,
-     ya NO extiende el scroll del documento, así que `overflow-x:clip` se removió de los seis
-     proofs (ya no hace falta).
+     ya NO extiende el scroll del documento, así que `overflow-x:clip` se removió de los **cuatro**
+     proofs que lo tenían (blog, commerce, gallery, saas); `docs.html` nunca lo tuvo (ese ERA F#8)
+     y se arregla estructuralmente vía el `<dialog>`.
   9. ~~**F#9 · `mui-header` no tenía patrón para acciones que no caben en móvil.** El proof de
      commerce, al colapsar a off-canvas ≤880px, ocultaba el buscador junto con el badge del
      carrito y perdía la búsqueda en móvil sin sustituto.~~ ✅ **Hecho, 0.6.0** — el buscador de

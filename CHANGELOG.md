@@ -24,8 +24,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
   `.showModal()`** — top layer nativo: focus trap, Esc y `::backdrop` los da el navegador, ya no
   hay que reimplementarlos a mano. Consecuencias:
   1. **Ya NO hace falta `html,body { overflow-x: clip }`** en la raíz de la página — se removió de
-     los seis proofs. Arregla el overflow horizontal de `docs.html` (el panel fuera de pantalla que
-     el clip de `mui-header` nunca cubrió — F#8).
+     los **cuatro** proofs que lo tenían (blog, commerce, gallery, saas), y `docs.html` —que nunca
+     lo tuvo— deja de overflowear gracias al `<dialog>` (top layer), que es justo el fondo del
+     hallazgo F#8: el clip de `mui-header` nunca cubrió el shell de docs.
   2. **El menú móvil es un elemento APARTE:** un `<dialog>` hermano del header/shell (no una
      transformación del nav inline) con el mismo árbol de links duplicado — el patrón estándar de
      "mobile menu".

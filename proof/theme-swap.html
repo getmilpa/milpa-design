@@ -30,9 +30,19 @@ body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--
 /* SOLO glass: fondo editorial vívido para que el --surface-backdrop tenga
    algo detrás para desenfocar. Milpa y Brutalist se quedan con var(--bg)
    plano — esto es CSS de página, no del sistema (no toca --bg del skin,
-   que sigue opaco para el gate de verify-theme). */
-html[data-skin="glass"] body {
+   que sigue opaco para el gate de verify-theme).
+
+   Mode-aware A PROPÓSITO: el gate compone las superficies translúcidas sobre
+   el --bg OPACO del skin (#DCE8FF claro / #0B1226 oscuro). Para que el
+   contraste RENDERIZADO matchee el que el gate validó, el fondo decorativo
+   tiene que trackear la oscuridad de --bg por modo — un gradiente claro
+   detrás del vidrio oscuro lavaría el texto claro. Así que light = gradiente
+   claro, dark = gradiente indigo→púrpura→ciruela profundo. */
+html[data-skin="glass"][data-theme="light"] body {
   background: linear-gradient(135deg, #6EA8FF 0%, #C88BFF 50%, #FF9FD0 100%) fixed;
+}
+html[data-skin="glass"][data-theme="dark"] body {
+  background: linear-gradient(135deg, #101A3A 0%, #2A1A47 50%, #3A1730 100%) fixed;
 }
 
 /* barra de control fija */

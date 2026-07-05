@@ -140,7 +140,11 @@ composición), así que el "vidrio" no puede pintarse a sí mismo transparente s
 detrás para desenfocar. Esa "cosa detrás" es un `linear-gradient` en `html[data-skin="glass"] body` del
 `<style>` del proof: CSS **editorial de página**, no del sistema (Milpa/Brutalist se quedan con
 `var(--bg)` plano). El `--bg` del skin (`#DCE8FF` light / `#0B1226` dark) sigue siendo el valor de
-referencia opaco que ve `verify-theme` — el gradiente es puramente visual, vive fuera del contrato.
+referencia opaco que ve `verify-theme` — el gradiente es puramente visual, vive fuera del contrato. El demo
+usa un gradiente **match-eado por modo** (claro en light, indigo→púrpura→ciruela profundo en dark) para que
+el fondo RENDERIZADO trackee la oscuridad del `--bg` validado — ilustra en vivo el caveat documentado "el
+gate compone sobre `--bg`; un backdrop más ocupado o desalineado necesita un chequeo de cordura" (acá los
+hacemos coincidir, así el contraste renderizado matchea el que el gate midió).
 
 Con Glass, el proof llega a **6 estados** (Milpa/Brutalist/Glass × light/dark) y las 3 marcas siguen
 honrando el mismo contrato — el caso extremo original (Brutalist) y el caso translúcido (Glass) cierran el

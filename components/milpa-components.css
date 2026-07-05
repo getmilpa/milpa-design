@@ -37,7 +37,7 @@
   bottom: calc(100% + var(--space-1_5)); left: 50%;
   width: max-content; max-width: 16rem;
   padding: var(--space-1_5) var(--space-2);
-  font-family: var(--font-display); font-size: var(--text-2xs);
+  font-family: var(--font-body); font-size: var(--text-2xs);
   font-weight: var(--weight-medium); line-height: var(--leading-snug);
   letter-spacing: var(--tracking-normal); white-space: normal;
   background: var(--text); color: var(--bg);
@@ -95,7 +95,7 @@
 .mui-menu__item {
   display: flex; align-items: center; gap: var(--space-2);
   width: 100%; padding: var(--space-1_5) var(--space-2);
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-body); font-size: var(--text-sm);
   font-weight: var(--weight-regular); line-height: var(--leading-snug);
   text-align: start; text-decoration: none; user-select: none; cursor: pointer;
   color: var(--text-secondary); background: transparent;
@@ -187,7 +187,7 @@
 }
 .mui-card__title {
   margin: 0;
-  font-family: var(--font-display); font-size: var(--text-base);
+  font-family: var(--font-heading); font-size: var(--text-base);
   font-weight: var(--weight-medium); line-height: var(--leading-snug);
   color: var(--text);
 }
@@ -263,7 +263,7 @@
   color: var(--text-muted);
 }
 .mui-stat__value {
-  font-family: var(--font-display); font-size: var(--text-3xl);
+  font-family: var(--font-heading); font-size: var(--text-3xl);
   font-weight: var(--weight-medium); line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: var(--text);
@@ -308,7 +308,7 @@
 }
 .mui-empty__title {
   margin: 0;
-  font-family: var(--font-display); font-size: var(--text-base);
+  font-family: var(--font-heading); font-size: var(--text-base);
   font-weight: var(--weight-medium);
   color: var(--text);
 }
@@ -381,7 +381,7 @@
 .mui-table {
   width: 100%;
   border-collapse: separate; border-spacing: 0; /* el borde viaja con el th sticky */
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-body); font-size: var(--text-sm);
   line-height: var(--leading-snug);
 }
 
@@ -537,7 +537,7 @@
   --_h: 2.5rem;
   display: inline-flex; align-items: center; gap: var(--space-2);
   height: var(--_h); padding: 0 var(--space-3);
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-body); font-size: var(--text-sm);
   font-weight: var(--weight-medium); line-height: 1;
   letter-spacing: var(--tracking-normal); white-space: nowrap;
   user-select: none; cursor: pointer;
@@ -587,7 +587,7 @@
    (mono, muted, alt vacío): decorativo, invisible para lectores de
    pantalla y sin spans extra en el markup. La miga actual se declara
    con aria-current="page" (texto, sin link). */
-.mui-breadcrumbs { font-family: var(--font-display); font-size: var(--text-xs); }
+.mui-breadcrumbs { font-family: var(--font-body); font-size: var(--text-xs); }
 .mui-breadcrumbs__list {
   display: flex; flex-wrap: wrap; align-items: center;
   gap: var(--space-2);
@@ -641,7 +641,7 @@
 .mui-alert {
   display: flex; align-items: flex-start; gap: var(--space-3);
   padding: var(--space-4);
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-body); font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text); background: var(--surface);
   border: 1px solid var(--border); border-radius: var(--radius-md);
@@ -711,7 +711,7 @@
   width: min(22rem, calc(100vw - 2 * var(--space-4)));
   padding: var(--space-4);
   padding-inline-end: var(--space-10); /* aire para __dismiss */
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   color: var(--text); background: var(--overlay);
   border: 1px solid var(--border);
   border-inline-start: 3px solid var(--border); /* la variante la tiñe */
@@ -763,7 +763,7 @@
 }
 .mui-modal__title {
   margin: 0; display: flex; align-items: center; gap: var(--space-2);
-  font-family: var(--font-display); font-size: var(--text-lg);
+  font-family: var(--font-heading); font-size: var(--text-lg);
   font-weight: var(--weight-medium); line-height: var(--leading-snug);
 }
 .mui-modal__icon { flex: none; } /* slot decorativo opcional dentro del título */
@@ -833,7 +833,7 @@
   gap: var(--space-3); padding: var(--space-5);
 }
 .mui-drawer__title {
-  margin: 0; font-family: var(--font-display); font-size: var(--text-lg);
+  margin: 0; font-family: var(--font-heading); font-size: var(--text-lg);
   font-weight: var(--weight-medium); line-height: var(--leading-snug);
 }
 .mui-drawer__body {
@@ -922,7 +922,7 @@
   position: fixed; top: var(--space-3); inset-inline-start: var(--space-3);
   z-index: var(--z-toast);
   padding: var(--space-2) var(--space-3);
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-body); font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   color: var(--text); background: var(--surface);
   border: 1px solid var(--border-strong); border-radius: var(--radius-base);
@@ -952,7 +952,7 @@
   display: flex; align-items: center; gap: var(--space-2); flex: none;
   height: 3.5rem; padding-inline: var(--space-4);
   border-bottom: 1px solid var(--border-subtle);
-  font-family: var(--font-display); font-weight: var(--weight-medium);
+  font-family: var(--font-heading); font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-tight);
   color: var(--text); text-decoration: none;
 }
@@ -979,7 +979,7 @@
   position: relative;
   display: flex; align-items: center; gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-body); font-size: var(--text-sm);
   color: var(--text-secondary); text-decoration: none;
   border-radius: var(--radius-base);
   transition:
@@ -1070,7 +1070,7 @@
 .mui-page-header__text { min-width: 0; }
 .mui-page-header__title {
   margin: 0;
-  font-family: var(--font-display); font-size: var(--text-2xl);
+  font-family: var(--font-heading); font-size: var(--text-2xl);
   font-weight: var(--weight-medium); letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
   color: var(--text);
@@ -1169,7 +1169,7 @@
 }
 .mui-product-card__title {
   margin: 0;
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-heading); font-size: var(--text-sm);
   font-weight: var(--weight-medium); line-height: var(--leading-snug);
   color: var(--text);
 }

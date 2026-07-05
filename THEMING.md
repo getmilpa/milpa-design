@@ -58,7 +58,8 @@ dark/light sigue funcionando.
   --accent-active: #5CB890;   /* recordá: los fills llevan auto-borde = -active */
   --accent-text: #7FD1AE;
   --focus: #7FD1AE;
-  --font-display: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
   --radius-base: 0.25rem; --radius-md: 0.375rem; --radius-lg: 0.5rem;
   --dur-base: 150ms;          /* tu cadencia */
 }
@@ -137,3 +138,83 @@ nivel 2 en su `<style>` sin layer.
   seguir neutralizándolo bajo `prefers-reduced-motion`.
 - **No** estilices estados con clases (`.active`, `.is-open`): el hook de estilo ES el atributo
   ARIA/nativo. Tu theme se integra a un ecosistema que se introspecciona por contratos.
+
+## 8. Tipografía — heading / body / serif / mono
+
+Desde 0.7.0 (**«la piel»**) el bundle ya no referencia un solo token de fuente: hay cuatro,
+uno por rol. Los cuatro **heredan el mismo stack por default**
+(`'Space Grotesk', system-ui, sans-serif` — `'Space Mono', ui-monospace, monospace` para mono),
+así que no tocar nada te deja exactamente donde estabas; overridear uno solo te da una piel
+tipográfica distinta sin tocar CSS estructural.
+
+| Token | Rol | Dónde se usa |
+| --- | --- | --- |
+| `--font-heading` | Títulos | `h1..h6`, `.mui-*__title` (card/drawer/modal/dialog/section), valores display/hero (`.mui-stat__value`), el wordmark de marca (`.mui-sidebar__brand`, `.mui-docs__brand`), eyebrows con voz display |
+| `--font-body` | Cuerpo + UI | botones, inputs, labels, nav, badges, tabs, breadcrumbs, tooltips, celdas de tabla, captions/meta — todo lo que no es un título |
+| `--font-serif` | Prosa · citas | `.mui-prose` (y sus `blockquote`/encabezados anidados) y `.mui-quote`. Por default hereda `var(--font-body)` — es una palanca de override, no un tercer stack por defecto |
+| `--font-mono` | Datos/código | `.mui-code`, `.mui-kbd`, badges de versión, valores tabulares — sin cambios en 0.7.0 |
+
+`--font-display` **sigue existiendo** como alias de compatibilidad hacia atrás
+(`--font-display: var(--font-heading)`, declarado en `dist/milpa-tokens.css`): si tu propio CSS
+(fuera del paquete) todavía lo referencia, sigue resolviendo. El bundle de Milpa en sí (primitives
+/ components / artifacts / layouts) ya NO lo usa en ningún selector — cada regla apunta al tier
+correcto de la tabla de arriba.
+
+### Cómo cargar fuentes
+
+**El paquete no distribuye archivos de fuente.** Los cuatro tokens caen a `system-ui` /
+`ui-monospace` si no cargás nada — a propósito: cero peso de red por default, cero FOIT/FOUT que
+no pediste, y funciona igual de bien detrás de un theme que nunca toca tipografía. Cargar Space
+Grotesk / Space Mono (o lo que elijas) es 100% responsabilidad del consumidor.
+
+**Self-host (recomendado — sin dependencia de terceros en runtime):**
+
+```css
+/* fonts.css — cargado ANTES de referenciar los tokens, en tu app */
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/space-grotesk-latin-400.woff2') format('woff2');
+  font-weight: 400 500;   /* si el woff2 es variable, un solo @font-face cubre el rango */
+  font-style: normal;
+  font-display: swap;     /* texto visible con el fallback mientras carga */
+}
+@font-face {
+  font-family: 'Space Mono';
+  src: url('/fonts/space-mono-latin-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-heading: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Space Grotesk', system-ui, sans-serif;
+  --font-mono:    'Space Mono', ui-monospace, monospace;
+}
+```
+
+**Alternativa `<link>` (más simple, depende de un host externo):**
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono&display=swap" rel="stylesheet">
+```
+
+(el `:root` de arriba con los tres tokens sigue haciendo falta — el `<link>` solo trae los
+archivos, los tokens deciden dónde se usan.)
+
+### Ejemplo — overridear solo `--font-body`
+
+Cambiás la voz de cuerpo/UI/prosa a una serif editorial y dejás los títulos intactos en Space
+Grotesk — cero CSS estructural, un solo token:
+
+```css
+:root, [data-theme="dark"], [data-theme="light"] {
+  --font-body: 'Georgia', 'Times New Roman', serif;
+  /* --font-serif no se toca: por default hereda --font-body, así que
+     .mui-prose y .mui-quote cambian de voz junto con el resto del cuerpo.
+     Si quisieras que SOLO prosa/citas cambien (dejando botones/inputs/nav
+     en el stack original), overrideá --font-serif en vez de --font-body. */
+}
+```

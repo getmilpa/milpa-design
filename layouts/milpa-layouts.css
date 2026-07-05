@@ -28,8 +28,8 @@
    consumidor pone el lienzo: background var(--bg) + color var(--text). */
 .mui-docs,
 .mui-docs__topbar {
-  --_topbar-h: 3.5rem;
-  --_max-w: 90rem;
+  --_topbar-h: var(--header-h);
+  --_max-w: var(--container-wide);
   --_pad-inline: clamp(var(--space-4), 3vw, var(--space-8));
 }
 
@@ -611,7 +611,7 @@ a.mui-feature-grid__item:focus-visible {
    Vive sobre var(--bg) o var(--surface) — mismos pares del gate. */
 .mui-faq {
   width: 100%;
-  max-width: 48rem;
+  max-width: var(--container-narrow);
 }
 .mui-faq__item { border-top: var(--border-width) solid var(--border-subtle); }
 .mui-faq__item:last-child { border-bottom: var(--border-width) solid var(--border-subtle); }
@@ -695,7 +695,7 @@ a.mui-feature-grid__item:focus-visible {
    de tracks, así que "brand 2fr" se logra con grid-column: span 2
    (mismo resultado: la marca = dos columnas de links). */
 .mui-footer {
-  --_max-w: 90rem;
+  --_max-w: var(--container-wide);
   --_pad-inline: clamp(var(--space-4), 3vw, var(--space-8));
   margin-block-start: auto;
   padding-block: var(--space-16) var(--space-10);
@@ -1033,7 +1033,7 @@ a.mui-feature-grid__item:focus-visible {
 }
 .mui-header__row {
   display: flex; align-items: center; gap: var(--space-4);
-  min-height: 3.5rem;
+  min-height: var(--header-h);
 }
 .mui-header__brand {
   display: inline-flex; align-items: center; gap: var(--space-2);

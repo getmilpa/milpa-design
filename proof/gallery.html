@@ -473,6 +473,8 @@ body { margin:0; background:var(--bg); }
   let idx = 0;
   const show = i => {
     const items = visibleItems();
+    if (!items.length) return; // empty visible set (e.g. a future filter matching nothing)
+                                // would make (i + 0) % 0 = NaN → items[NaN] undefined → TypeError
     idx = (i + items.length) % items.length;
     const item  = items[idx];
     const title = $('.mui-media-grid__caption', item).childNodes[0].textContent.trim();

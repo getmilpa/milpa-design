@@ -23,7 +23,7 @@
   --danger-50:#FFF3F1; --danger-100:#FFE4E0; --danger-200:#FFCBC4; --danger-300:#FFA79B; --danger-400:#FF7F71; --danger-500:#EA6356; --danger-600:#CB4C41; --danger-700:#A8372F; --danger-800:#82241E; --danger-900:#5A1410; --danger-950:#310504;
 
   /* ===== type ===== */
-  --font-heading:'Space Grotesk', system-ui, sans-serif; --font-body:'Space Grotesk', system-ui, sans-serif; --font-serif:'Space Grotesk', system-ui, sans-serif; --font-mono:'Space Mono', ui-monospace, monospace;
+  --font-heading:'Space Grotesk', system-ui, sans-serif; --font-body:'Space Grotesk', system-ui, sans-serif; --font-serif:var(--font-body); --font-mono:'Space Mono', ui-monospace, monospace;
   --font-display:var(--font-heading);
   --text-2xs:0.6875rem; --text-xs:0.75rem; --text-sm:0.875rem; --text-base:1rem; --text-lg:1.125rem; --text-xl:1.25rem; --text-2xl:1.5rem; --text-3xl:1.875rem; --text-4xl:2.375rem; --text-5xl:3rem; --text-6xl:3.75rem;
   --leading-tight:1.1; --leading-snug:1.25; --leading-normal:1.5; --leading-relaxed:1.7;

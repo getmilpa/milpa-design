@@ -33,6 +33,18 @@
 [class^="mui-"]::before, [class*=" mui-"]::before,
 [class^="mui-"]::after, [class*=" mui-"]::after { box-sizing: border-box; }
 
+/* base tipográfica de encabezados — TODO h1..h6 (crudo o de componente)
+   habla en la voz de títulos, no en la del cuerpo heredado. Sin esta
+   regla, un heading sin font-family propio hereda --font-body del
+   documento y un consumidor que reskinea --font-body re-tipografiaría
+   los títulos por error. Vive en @layer (el consumidor gana sin
+   !important) y es especificidad de elemento: los slots display que NO
+   son h-elements se pinean aparte con var(--font-heading). Nota: dentro
+   de .mui-prose las reglas :where(h1..h6) NO fijan font-family, así que
+   los encabezados de prosa también caen acá → quedan sans sobre el
+   cuerpo serif (el buen default de long-form). */
+:is(h1, h2, h3, h4, h5, h6) { font-family: var(--font-heading); }
+
 /* screen-reader only — para labels de switches, checkboxes de tabla, etc. */
 .mui-sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;

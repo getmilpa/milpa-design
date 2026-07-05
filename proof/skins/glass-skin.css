@@ -1,0 +1,193 @@
+/* ============================================================================
+   Glass skin — un reskin de MARCA de @milpa/design SOLO con tokens (L1).
+   Cero CSS estructural: únicamente overrides de custom properties bajo el 2º
+   eje [data-skin="glass"], por modo. CSS sin @layer → gana por origen de
+   capa sobre @layer milpa.tokens (THEMING.md).
+
+   Glassmorphism: radios grandes, bordes finos translúcidos, --surface-backdrop
+   con blur real (Tasks 1–4), sombras difusas sin dureza, motion suave (no
+   instantáneo). Ejercita los 3 huecos que este proof vino a cerrar:
+     1. --border-style (rim del vidrio, no solo --border-width)
+     2. --surface-backdrop / --blur-* (el propio backdrop-filter)
+     3. la composición alpha-sobre---bg de verify-theme (superficies
+        TRANSLÚCIDAS — --surface/--surface-raised/--overlay — mientras
+        --bg permanece OPACO, tal como exige el invariante).
+
+   Se valida con:  npm run verify:theme -- proof/skins/glass-skin.css
+   (el parser lee [data-theme=...]; el prefijo [data-skin] no le molesta).
+   ============================================================================ */
+
+/* ---------- no-color: forma, backdrop, motion (comparten ambos modos) ----------
+   :root[...] (no [data-skin] pelado) para que verify-theme —que solo lee
+   bloques :root/[data-theme]— también form-checkee estos tokens no-color. */
+:root[data-skin="glass"] {
+  /* radios grandes — la firma glass, salvo --radius-full que ya es redondo */
+  --radius-none: 0; --radius-xs: 0.375rem; --radius-sm: 0.625rem;
+  --radius-base: 1rem; --radius-md: 1.25rem; --radius-lg: 1.5rem;
+  --radius-xl: 2rem; --radius-2xl: 2.75rem;
+
+  /* borde fino — el "rim" del vidrio, no el peso: el estilo */
+  --border-width: 1px;
+  --border-style: solid;
+
+  /* el propio backdrop: blur real + saturación (Task 2/3) */
+  --surface-backdrop: blur(14px) saturate(1.4);
+  --blur-sm: 6px; --blur-base: 10px; --blur-lg: 14px;
+
+  /* sombras difusas — sin offset duro, con blur amplio (lo opuesto a Brutalist) */
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.10);
+  --shadow-base: 0 8px 32px rgba(15, 23, 42, 0.18);
+  --shadow-md: 0 12px 40px rgba(15, 23, 42, 0.22);
+  --shadow-lg: 0 20px 60px rgba(15, 23, 42, 0.28);
+
+  /* motion suave — gentil, no instantáneo (Brutalist es 0ms; glass respira) */
+  --dur-instant: 80ms; --dur-fast: 140ms; --dur-base: 220ms; --dur-moderate: 320ms;
+  --dur-slow: 440ms; --dur-deliberate: 600ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-grano: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-linear: linear;
+  --stagger-tight: 40ms; --stagger-base: 60ms; --stagger-loose: 100ms;
+  --rise-sm: 4px; --rise-base: 8px; --rise-lg: 16px;
+}
+
+/* ============================ LIGHT ============================ */
+[data-skin="glass"][data-theme="light"] {
+  /* --bg OPACO (invariante) — el vidrio necesita algo vívido detrás para
+     asomar en la composición; el gradiente decorativo va en la página
+     (editorial), esto es solo el color de referencia para el gate. */
+  --bg: #DCE8FF;
+
+  /* superficies TRANSLÚCIDAS — el punto del ejercicio */
+  --surface: #FFFFFFB3;         /* ~70% blanco */
+  --surface-raised: #FFFFFFCC;  /* ~80% blanco, un poco más sólida */
+  --overlay: #FFFFFFE6;         /* ~90%, un modal necesita legibilidad */
+
+  --border-subtle: #FFFFFF66;
+  --border: #2E3A5ECC;          /* navy translúcido — el rim funcional */
+  --border-strong: #3D4A73;
+
+  --text: #0F1729;
+  --text-secondary: #33415E;
+  --text-muted: #56628A;
+  --text-on-accent: #FFFFFF;
+  --on-danger: #FFFFFF;
+  --on-secondary: #FFFFFF;
+
+  --accent: #5B4FE0;
+  --accent-hover: #4A3FD1;
+  --accent-active: #3C32B0;
+  --accent-subtle: #E8E4FF;
+  --accent-text: #4A3FD1;
+
+  --secondary: #0E7C86;
+  --secondary-hover: #0B6169;
+  --secondary-active: #084850;
+  --secondary-subtle: #D8F4F2;
+  --secondary-border: #4FB8BE;
+  --secondary-text: #0B6169;
+
+  --success: #0B6B3A;
+  --success-bg: #D3F6E1;
+  --success-border: #5FCB8C;
+  --warning: #7A3D00;
+  --warning-bg: #FFE7CC;
+  --warning-border: #FFB066;
+  --danger: #C22A3E;
+  --danger-hover: #9E1F30;
+  --danger-active: #7A1523;
+  --danger-bg: #FFE0E4;
+  --danger-border: #FF8FA0;
+  --info: #1D5FC4;
+  --info-bg: #DCEBFF;
+  --info-border: #8FBBFF;
+
+  --focus: #4A3FD1;
+
+  --syntax-bg: #F3F0FF;
+  --syntax-text: #14182B;
+  --syntax-keyword: #4A3FD1;
+  --syntax-string: #0B6169;
+  --syntax-comment: #5C6584;
+  --syntax-function: #A85300;
+  --syntax-number: #1D5FC4;
+  --syntax-punctuation: #33415E;
+  --syntax-variable: #14182B;
+  --syntax-tag: #9E1F30;
+  --syntax-attribute: #0B6B3A;
+
+  --viz-1: #5B4FE0; --viz-2: #1D5FC4; --viz-3: #0E7C86;
+  --viz-4: #C22A3E; --viz-5: #12824A; --viz-6: #A85300;
+  --viz-1-active: #4A3FD1; --viz-2-active: #17509E; --viz-3-active: #0B6169;
+  --viz-4-active: #9E1F30; --viz-5-active: #0C6B3D; --viz-6-active: #8A4400;
+}
+
+/* ============================ DARK ============================ */
+[data-skin="glass"][data-theme="dark"] {
+  /* --bg OPACO (invariante) — navy profundo detrás del vidrio */
+  --bg: #0B1226;
+
+  /* superficies TRANSLÚCIDAS — vidrio claro sobre fondo oscuro */
+  --surface: #FFFFFF1F;         /* ~12% blanco */
+  --surface-raised: #FFFFFF2E;  /* ~18% */
+  --overlay: #FFFFFF24;         /* ~14%, se mantiene oscuro para legibilidad */
+
+  --border-subtle: #FFFFFF14;
+  --border: #B9C6FF99;
+  --border-strong: #C7D2FE;
+
+  --text: #EAF0FF;
+  --text-secondary: #B9C6EA;
+  --text-muted: #8D9AC4;
+  --text-on-accent: #0A0716;
+  --on-danger: #2A050A;
+  --on-secondary: #052420;
+
+  --accent: #8B7CFF;
+  --accent-hover: #A79AFF;
+  --accent-active: #7A6AFF;
+  --accent-subtle: #241C4D;
+  --accent-text: #B3A8FF;
+
+  --secondary: #38D6C0;
+  --secondary-hover: #5EE2CF;
+  --secondary-active: #22B39F;
+  --secondary-subtle: #08312C;
+  --secondary-border: #1F7A6C;
+  --secondary-text: #6EEADA;
+
+  --success: #4ADE80;
+  --success-bg: #052E16;
+  --success-border: #16803D;
+  --warning: #FFA94D;
+  --warning-bg: #3A1D00;
+  --warning-border: #B35900;
+  --danger: #FF6B81;
+  --danger-hover: #FF8FA0;
+  --danger-active: #E1495F;
+  --danger-bg: #3A0A12;
+  --danger-border: #9E1F30;
+  --info: #66A6FF;
+  --info-bg: #071D3D;
+  --info-border: #1D5FC4;
+
+  --focus: #8B7CFF;
+
+  --syntax-bg: #121A33;
+  --syntax-text: #EAF0FF;
+  --syntax-keyword: #8B7CFF;
+  --syntax-string: #38D6C0;
+  --syntax-comment: #8A94BC;
+  --syntax-function: #FFA94D;
+  --syntax-number: #66A6FF;
+  --syntax-punctuation: #B9C6EA;
+  --syntax-variable: #EAF0FF;
+  --syntax-tag: #FF6B81;
+  --syntax-attribute: #4ADE80;
+
+  --viz-1: #8B7CFF; --viz-2: #66A6FF; --viz-3: #38D6C0;
+  --viz-4: #FF6B81; --viz-5: #4ADE80; --viz-6: #FFA94D;
+  --viz-1-active: #6E5EF5; --viz-2-active: #4796F5; --viz-3-active: #22B39F;
+  --viz-4-active: #E1495F; --viz-5-active: #2FBE68; --viz-6-active: #E0872F;
+}

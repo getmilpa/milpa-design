@@ -822,19 +822,23 @@ a.mui-feature-grid__item:focus-visible {
 .mui-media-grid__item .mui-media-grid__figure {
   display: block; margin: 0; height: 100%;
 }
-/* F#10: acá el combinador se QUEDA descendiente a propósito — la media no es
-   hija directa del item, vive detrás del puente figure/span de arriba (item >
-   figure/span > img|svg|picture). Un `>` acá no matchearía nada (selector
-   roto). El combinador hijo SÍ se widened en los otros media slots que sí
-   tienen la media como hija directa (mui-card__media, lightbox, product-card,
-   media-gallery) — ver notas de la 0.6.0 */
-.mui-media-grid__item :is(img, svg, picture) {
+/* F#10: el combinador hijo se ancla al NIVEL DEL FIGURE, no del item — la media
+   no es hija directa del item (vive detrás del puente figure/span: item >
+   figure|span.mui-media-grid__figure > img|svg|picture), pero SÍ es hija directa
+   de ese puente. Apuntando `:is(figure, .mui-media-grid__figure) > :is(...)` un
+   <picture> matchea UNA vez (es la hija directa del figure); su <img> interno —
+   nieto del figure — no vuelve a matchear, así el hover-scale ya no se compone
+   (≈1.061 → 1.03). Para el <svg> actual (hija directa del figure) el
+   comportamiento es idéntico al descendiente previo. Mismo idioma que los otros
+   media slots hija-directa (mui-card__media, lightbox, product-card,
+   media-gallery), acá a un nivel más abajo por el puente. */
+.mui-media-grid__item :is(figure, .mui-media-grid__figure) > :is(img, svg, picture) {
   display: block; width: 100%; height: 100%;
   object-fit: cover;
   transition: transform var(--dur-moderate) var(--ease-settle);
 }
 /* zoom sutil — decorativo: bajo reduced-motion queda congelado en 1 frame */
-.mui-media-grid__item:hover :is(img, svg, picture) { transform: scale(1.03); }
+.mui-media-grid__item:hover :is(figure, .mui-media-grid__figure) > :is(img, svg, picture) { transform: scale(1.03); }
 
 /* caption — velo inferior SIEMPRE visible (color-mix + blur, idioma del
    topbar de docs): el texto lee sobre --bg efectivo (par text/bg del
@@ -873,7 +877,7 @@ a.mui-feature-grid__item:focus-visible {
   break-inside: avoid;
   margin-block-end: var(--space-3);
 }
-.mui-media-grid--masonry .mui-media-grid__item :is(img, svg, picture) { height: auto; }
+.mui-media-grid--masonry .mui-media-grid__item :is(figure, .mui-media-grid__figure) > :is(img, svg, picture) { height: auto; }
 
 @media (max-width: 880px) { .mui-media-grid--masonry { --_cols: 2; } }
 @media (max-width: 560px) { .mui-media-grid--masonry { --_cols: 1; } }

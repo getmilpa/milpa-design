@@ -17,7 +17,7 @@ converger:** el framework y el DS avanzan en paralelo y se reencuentran en una *
 El framework *consume* `@milpa/design@x.y.z`. **Nadie edita los internals del otro**; se cambian
 cosas vía bump semver + nota de compat. (Esto es Milpa aplicado a sí mismo: contract-first.)
 
-## 2. Estado actual (v0.7)
+## 2. Estado actual (v0.8)
 
 ✅ **Paleta cerrada y verificada.** `oro` (primario/marca) + `olivo` (secundario / la milpa viva,
 OKLCH ~124°) + `tierra` (neutro); `cielo` = `info`. Dark-first. Tokens DTCG + salida CSS + preset
@@ -131,9 +131,34 @@ Con esto, los huecos de theming que dejó la auditoría de personalización qued
 split de fuentes (heading/body/serif), doc de carga de fuentes, gate por forma en `verify-theme`,
 y las dimensiones estructurales (focus-ring, borde, container, app-shell, measure).
 
-⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.7). Backlog T9 **cerrado** desde 0.6.0.
-Del alcance de la auditoría de personalización quedan, a propósito, como **futuro conocido** (no
-son deuda de este release — son ejes arquitectónicos aparte, nunca prometidos para 0.7):
+✅ **0.8.0 — el rocío (cierra los 3 huecos de theming de MARCA que reveló el proof
+Milpa⇄Brutalist):** el proof de theme-swap (0.7.0) demostró que el reskin por tokens (L1) alcanza
+para un cambio de marca dramático (color/tipografía/forma/elevación/motion), pero dejó 3 límites
+honestos anotados — no eran deuda de 0.7, eran el temario de 0.8:
+- **`--border-style`** (grupo `effect`, default `solid`): los ~83 bordes del bundle
+  (`border: var(--border-width) solid var(--border-*)`) repuntan su literal a
+  `var(--border-style)` — un skin puede pasar `dashed`/`double`/`none` sin L2.
+- **`--surface-backdrop` + `--blur-sm/base/lg`** (grupo `effect`, default `none` / 2·4·10px):
+  expuestos en `.mui-card`/`.mui-modal`/`.mui-drawer` (`backdrop-filter: var(--surface-backdrop)`)
+  y en los blurs frosted existentes de header/topbar/drawer — un skin glass activa
+  `backdrop-filter` real sin CSS estructural propio.
+- **`verify-theme` compone superficies translúcidas sobre `--bg`:** parsea color con alpha
+  (`#RRGGBBAA`/`rgba`) y hace alpha-blend contra `--bg` antes de medir contraste AA — el gate ya
+  no se cuela con un `--surface` semitransparente, lo compone y mide el contraste *efectivo*.
+  Invariante nueva: **`--bg` debe ser opaco** (referencia de composición).
+- **Glass como 3er flavor** del proof de theme-swap (`proof/skins/glass-skin.css`), elegido a
+  propósito porque ejercita los 3 huecos de arriba: `--surface`/`--surface-raised`/`--overlay`
+  translúcidos + `--bg` opaco + `backdrop-filter` real, pasando `verify:theme` (fixture negativa
+  `glass-broken-skin.css` prueba el caso en que la composición rompe AA y falla el gate).
+- Contratos: **68 → 68** (sin cambio — release de tokens + gate). Gate: **193/193 AA** — audit de
+  cierre: **0 pares nuevos** (release sin color, `scripts/contrast-pairs.mjs` `PAIRS` sin tocar;
+  solo se agrega la invariante `--bg` opaco). Todo aditivo — cero cambio visual por defecto.
+
+⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.8). Backlog T9 **cerrado** desde 0.6.0.
+Los 3 huecos de theming de **marca** que 0.7 había dejado anotados (border-style, backdrop/blur
+tematizable, gate con translucidez) quedan **CERRADOS en 0.8** (ver arriba). Quedan, a propósito,
+como **futuro conocido** los ejes que NO son de marca — nunca prometidos para 0.8, son ejes
+arquitectónicos aparte:
 - **3er eje de tema** (high-contrast / brand-alt / `forced-colors` / `prefers-contrast`) — hoy
   vedado por la regla dura #3 (§5); necesitaría rework de contrato + verificador.
 - **Single-source de breakpoints** (`@custom-media` o migrar a `@container`) — hoy cada archivo

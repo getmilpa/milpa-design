@@ -4,6 +4,57 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
 
+## [0.8.0] — 2026-07-05
+
+> **El rocío:** cierra los tres huecos de theming de marca que reveló el proof Milpa⇄Brutalist
+> (0.7.0) — un skin de marca podía retokenizar color/tipografía/dimensión pero no podía tocar
+> **bordes** (todo `solid` hardcodeado), **superficies** (sin backdrop-filter posible) ni blurs
+> (frosted glass hardcodeado en px), y el gate de contraste no sabía componer una superficie
+> translúcida contra el fondo. Grupo `effect` nuevo — `--border-style` (default `solid`),
+> `--surface-backdrop` (default `none`), `--blur-sm/base/lg` — más la invariante **`--bg` debe
+> ser opaco** (es la referencia de composición). `verify-theme` aprende a parsear alpha
+> (`#RRGGBBAA`/`rgba`) y a componer superficies translúcidas sobre `--bg` antes de medir
+> contraste — el gate valida glassmorphism de verdad, no solo lo deja pasar por descuido. Glass
+> se suma como **3er flavor** del proof de theme-swap, junto a Nopal y Brutalist. Todo aditivo —
+> cada token nuevo defaultea a su valor actual (solid/none/mismos blurs), así que el build por
+> defecto es pixel-idéntico. Sin piezas nuevas: **68 piezas** con contrato · **193 pares AA** —
+> audit de cierre: **0 pares nuevos** (release sin color).
+
+### Added
+- **Grupo `effect`** — tres tokens nuevos que cierran el theming de bordes/superficies/blur:
+  - **`--border-style`** (default `solid`): los ~83 bordes del bundle (`border: var(--border-width)
+    solid var(--border-*))`) repuntan su literal `solid` a `var(--border-style)` — un skin de marca
+    puede pasar `dashed`/`double`/`none` sin tocar una sola regla.
+  - **`--surface-backdrop`** (default `none`): expuesto como `backdrop-filter: var(--surface-backdrop)`
+    en `.mui-card`, `.mui-modal` y `.mui-drawer` — las tres superficies "de panel" del sistema. Un
+    skin glass setea `blur(...)` (u otra función `backdrop-filter`) y listo, sin CSS propio.
+  - **`--blur-sm` / `--blur-base` / `--blur-lg`** (2px / 4px / 10px) — tokenizan los blurs frosted
+    que ya existían hardcodeados en header/topbar/drawer (scrim, `::backdrop`), ahora themeable
+    junto con `--surface-backdrop`.
+  - **Invariante nueva:** **`--bg` debe ser opaco** (es la referencia de composición para
+    cualquier superficie translúcida) — agregada a `INVARIANTS` en `scripts/contrast-pairs.mjs`
+    (no es un par de contraste, `PAIRS` queda sin tocar).
+- **Glass como 3er flavor del proof de theme-swap** (`proof/theme-swap.html` +
+  `proof/skins/glass-skin.css`): junto a Nopal (retoken simple) y Brutalist (2º flavor, sin
+  translucidez, 0.7.0), demuestra el caso que motivó este release — superficies translúcidas +
+  `backdrop-filter` + `--bg` opaco detrás, pasando el mismo gate `verify:theme`.
+
+### Changed
+- **`verify-theme` parsea color con alpha** (`#RRGGBBAA` de 8 dígitos y `rgba(...)`) y **compone
+  las superficies translúcidas sobre `--bg`** (alpha-blend) antes de medir el contraste AA — un
+  skin que declara `--surface` semitransparente ya no se cuela por un parser que solo entendía
+  hex opaco: el gate calcula el color *efectivo* contra el fondo real, igual que lo vería un ojo
+  humano.
+- **El bundle repunta sus literales al grupo `effect`:** los ~83 bordes `solid` → `var(--border-style)`;
+  `.mui-card`/`.mui-modal`/`.mui-drawer` ganan `backdrop-filter: var(--surface-backdrop)`; los
+  blurs frosted existentes → `var(--blur-sm|base|lg)`.
+- **Alcance del release** — contratos siguen en **68** (tokens + gate, no piezas nuevas); auditoría
+  de pares AA de cierre: **0 pares nuevos** (release sin color), `scripts/contrast-pairs.mjs`
+  `PAIRS` sin tocar (solo la invariante `--bg` opaco se agrega a `INVARIANTS`).
+- **COMPAT —** ninguna ruptura: los tres tokens nuevos defaultean al comportamiento actual
+  (`solid`/`none`/los mismos px de blur), así que ningún skin ni bundle existente cambia una sola
+  regla computada. Cero cambio visual por defecto.
+
 ## [0.7.0] — 2026-07-04
 
 > **La piel:** el theming pasa de release-grade en color/spacing/radios/motion/dark-light a

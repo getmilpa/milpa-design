@@ -816,6 +816,18 @@
   outline: 2px solid var(--focus);
   outline-offset: -2px; /* panel al borde del viewport: el anillo va por dentro */
 }
+/* --start: drawer anclado al inline-start (izquierda) — para navs cuyo toggle
+   vive a la izquierda (ej. el shell docs). Espeja el ancla, el borde y el slide. */
+@keyframes mui-drawer-in-start {
+  from { opacity: 0; transform: translateX(-100%); }
+  to   { opacity: 1; transform: none; }
+}
+.mui-drawer--start {
+  inset-inline-end: auto; inset-inline-start: 0;
+  margin-inline-start: 0; margin-inline-end: auto;
+  border-inline-start: 0; border-inline-end: 1px solid var(--border);
+}
+.mui-drawer--start[open] { animation-name: mui-drawer-in-start; }
 .mui-drawer__header {
   flex: none; display: flex; align-items: center; justify-content: space-between;
   gap: var(--space-3); padding: var(--space-5);

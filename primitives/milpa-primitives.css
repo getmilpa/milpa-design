@@ -68,7 +68,7 @@
   letter-spacing: var(--tracking-normal); white-space: nowrap;
   text-decoration: none; user-select: none; cursor: pointer;
   background: transparent; color: var(--text-secondary);
-  border: var(--border-width) solid var(--border); border-radius: var(--radius-base);
+  border: var(--border-width) var(--border-style) var(--border); border-radius: var(--radius-base);
   -webkit-tap-highlight-color: transparent;
   transition:
     background-color var(--dur-fast) var(--ease-standard),
@@ -166,7 +166,7 @@
   width: 100%; height: var(--_h); padding: 0 var(--space-3);
   font-family: var(--font-body); font-size: var(--text-sm);
   color: var(--text); background: var(--bg);
-  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-base);
+  border: var(--border-width) var(--border-style) var(--border-strong); border-radius: var(--radius-base);
   transition:
     border-color     var(--dur-fast) var(--ease-standard),
     background-color var(--dur-fast) var(--ease-standard);
@@ -202,7 +202,7 @@
 .mui-input-group--stepper {
   display: inline-flex; align-items: stretch;
   background: var(--bg);
-  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-base);
+  border: var(--border-width) var(--border-style) var(--border-strong); border-radius: var(--radius-base);
   overflow: hidden; /* recorta las esquinas de los botones al radio del grupo */
 }
 .mui-input-group--stepper:focus-within { border-color: var(--focus); }
@@ -252,7 +252,7 @@
   font-family: var(--font-body); font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text); background: var(--bg);
-  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-base);
+  border: var(--border-width) var(--border-style) var(--border-strong); border-radius: var(--radius-base);
   resize: vertical;
   transition:
     border-color     var(--dur-fast) var(--ease-standard),
@@ -293,7 +293,7 @@
   padding-block: 0; padding-inline: var(--space-3) var(--space-8);
   font-family: var(--font-body); font-size: var(--text-sm);
   color: var(--text); background: var(--bg);
-  border: var(--border-width) solid var(--border-strong); border-radius: var(--radius-base);
+  border: var(--border-width) var(--border-style) var(--border-strong); border-radius: var(--radius-base);
   appearance: none; cursor: pointer;
   transition:
     border-color     var(--dur-fast) var(--ease-standard),
@@ -351,7 +351,7 @@
   cursor: pointer;
   background: var(--bg);
   color: var(--text-on-accent); /* currentColor del glifo (dark: tinta sobre oro) */
-  border: var(--border-width) solid var(--border-strong);
+  border: var(--border-width) var(--border-style) var(--border-strong);
   transition:
     background-color var(--dur-fast) var(--ease-standard),
     border-color     var(--dur-fast) var(--ease-standard);
@@ -432,7 +432,7 @@
   width: var(--_w); height: var(--_h); margin: 0;
   cursor: pointer;
   background: var(--surface-raised);
-  border: var(--border-width) solid var(--text-muted); border-radius: var(--radius-full);
+  border: var(--border-width) var(--border-style) var(--text-muted); border-radius: var(--radius-full);
   transition:
     background-color var(--dur-fast) var(--ease-standard),
     border-color     var(--dur-fast) var(--ease-standard);
@@ -521,7 +521,7 @@
   white-space: nowrap;
   color: var(--text-secondary);
   background: transparent;
-  border: var(--border-width) solid var(--border); border-radius: var(--radius-full);
+  border: var(--border-width) var(--border-style) var(--border); border-radius: var(--radius-full);
 }
 .mui-badge--accent    { color: var(--accent-text);    background: var(--accent-subtle);    border-color: var(--accent-active); }
 .mui-badge--secondary { color: var(--secondary-text); background: var(--secondary-subtle); border-color: var(--secondary-border); }
@@ -547,7 +547,7 @@
   line-height: var(--leading-snug);
   color: var(--text);
   background: var(--surface-raised);
-  border: var(--border-width) solid var(--border); border-bottom-width: 2px;
+  border: var(--border-width) var(--border-style) var(--border); border-bottom-width: 2px;
   border-radius: var(--radius-xs);
   vertical-align: middle;
 }
@@ -607,7 +607,7 @@
 .mui-progress {
   display: block; width: 100%; height: var(--space-2);
   background: var(--surface-raised);
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) var(--border-style) var(--border);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -627,7 +627,7 @@
    contenido). */
 .mui-divider {
   margin-block: var(--space-4); margin-inline: 0;
-  border: 0; border-top: var(--border-width) solid var(--border-subtle);
+  border: 0; border-top: var(--border-width) var(--border-style) var(--border-subtle);
 }
 /* vertical — el atributo ARIA correcto ES el hook de estilo (una sola
    fuente de verdad); la clase queda como azúcar opcional. En flex se
@@ -637,7 +637,7 @@
   display: inline-block; width: 0; height: auto; min-height: 1em;
   align-self: stretch;
   margin-block: 0; margin-inline: var(--space-2);
-  border-top: 0; border-inline-start: var(--border-width) solid var(--border-subtle);
+  border-top: 0; border-inline-start: var(--border-width) var(--border-style) var(--border-subtle);
   vertical-align: middle;
 }
 /* con label — rótulo mono centrado; las líneas son pseudos decorativos.
@@ -653,7 +653,7 @@
 }
 .mui-divider--label::before,
 .mui-divider--label::after {
-  content: ""; flex: 1; border-top: var(--border-width) solid var(--border-subtle);
+  content: ""; flex: 1; border-top: var(--border-width) var(--border-style) var(--border-subtle);
 }
 
 /* ---------- Badge · variantes de estabilidad (kit de versionado 0.2.0) ----------

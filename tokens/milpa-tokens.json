@@ -228,7 +228,7 @@
   "fontFamily": {
     "heading": { "$type": "fontFamily", "$value": "'Space Grotesk', system-ui, sans-serif" },
     "body":    { "$type": "fontFamily", "$value": "'Space Grotesk', system-ui, sans-serif" },
-    "serif":   { "$type": "fontFamily", "$value": "'Space Grotesk', system-ui, sans-serif" },
+    "serif":   { "$type": "fontFamily", "$value": "var(--font-body)" },
     "mono":    { "$type": "fontFamily", "$value": "'Space Mono', ui-monospace, monospace" }
   },
   "fontSize": {

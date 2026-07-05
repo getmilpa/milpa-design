@@ -31,7 +31,7 @@
     "--border-strong",
     "--danger",
     "--focus",
-    "--font-display",
+    "--font-body",
     "--text-sm",
     "--leading-normal",
     "--space-2",

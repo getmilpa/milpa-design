@@ -62,26 +62,22 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
   sidebar off-canvas ≤960px) → `var(--sidebar-w)`/`var(--header-h)`, y `.mui-drawer` →
   `var(--drawer-width)`; `aspect-ratio` de product-card/media-grid reusa `--media-ratio`
   (fallback-local, no promovido a token JSON) con su valor default intacto (4/5, 4/3).
+- **Alcance del release —** contratos siguen en **68** (esto es tokens + gate, no piezas nuevas);
+  auditoría de pares AA de cierre: **0 pares nuevos** (release sin color), `scripts/contrast-pairs.mjs`
+  queda sin tocar.
+- **COMPAT —** ninguna ruptura: `--font-display` sigue resolviendo (alias vivo a
+  `--font-heading`) y cualquier skin/consumidor que lo seteaba directo sigue funcionando igual;
+  quien quiera títulos distintos del cuerpo ahora setea `--font-heading`/`--font-body` por
+  separado. El paquete **no** envía archivos de fuente — degrada a `system-ui` a propósito (ver
+  `THEMING.md`).
 
 ### Fixed
 - **Ancho de lectura de prose unificado a `--measure` (65ch)**: `.mui-api__desc` y
   `.mui-api__deprecated-note` usaban `70ch`, inconsistente con `.mui-prose` (`65ch`) pese a ser el
   mismo tipo de bloque de prose (mismo `text-sm`/`leading-normal`/`text-secondary`). Los tres
   ahora leen `var(--measure)` — **el único cambio visual del release**, un angostamiento de 5ch en
-  esos dos sitios.
-
-### Nota
-- Todo aditivo, **cero cambio visual por defecto**: cada token nuevo defaultea a su valor
-  hardcodeado actual y `--font-display` sigue resolviendo vía el alias — salvo el ajuste de 5ch
-  del measure de prose arriba. Contratos siguen en **68** (esto es tokens + gate, no piezas
-  nuevas). AA-pairs audit de cierre: **0 pares nuevos** — release sin color;
-  `scripts/contrast-pairs.mjs` queda sin tocar.
-
-### Compat
-- **Ninguna ruptura.** `--font-display` sigue resolviendo (alias vivo a `--font-heading`) —
-  cualquier skin/consumidor que lo seteaba directo sigue funcionando igual. Quien quiera títulos
-  distintos del cuerpo ahora setea `--font-heading`/`--font-body` por separado. El paquete **no**
-  envía archivos de fuente — degrada a `system-ui` a propósito (ver `THEMING.md`).
+  esos dos sitios; todo lo demás del release es **cero cambio visual por defecto** (cada token
+  nuevo defaultea a su valor hardcodeado actual).
 
 ## [0.6.0] — 2026-07-04
 

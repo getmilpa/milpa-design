@@ -29,7 +29,7 @@
     "--warning-bg",
     "--warning-border",
     "--focus",
-    "--font-display",
+    "--font-body",
     "--text-sm",
     "--weight-medium",
     "--leading-normal",

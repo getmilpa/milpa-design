@@ -31,7 +31,7 @@
     "--text",
     "--text-secondary",
     "--text-muted",
-    "--font-display",
+    "--font-serif",
     "--text-5xl",
     "--text-lg",
     "--text-sm",

@@ -129,8 +129,11 @@ Un PASS garantiza dos cosas, y solo dos (`theme.contract.json.validation`):
 Lo que un PASS **no** garantiza: **completitud** (un skin parcial que no toca un grupo es válido
 igual — lo que no fijás se hereda de Milpa) ni **magnitudes con buen gusto** (un `--dur-base:
 5000ms` bien formado pasa el gate aunque sea una animación pésima; eso es criterio humano, no
-contrato). El gate reporta qué tokens de `requiredTokens.color` provee el skin (informativo) y
-qué grupos toca; nada de esto sustituye una revisión de diseño.
+contrato). Tampoco parsea los internals de una función CSS: `verify-theme` valida los tokens
+no-color por FORMA (tipo + no-vacío), así que un valor como `calc(...)`/`min(...)` se acepta como
+length-expression bien formada sin chequear su aritmética. El gate reporta qué tokens de
+`requiredTokens.color` provee el skin (informativo) y qué grupos toca; nada de esto sustituye una
+revisión de diseño.
 
 Es la implementación de referencia de lo que `coa` correrá al instalar un plugin con theme
 propio: **nada se siembra sin contrato — tampoco un theme.**

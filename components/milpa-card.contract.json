@@ -49,7 +49,7 @@
     "--shadow-sm",
     "--shadow-base",
     "--radius-lg",
-    "--font-display",
+    "--font-heading",
     "--text-base",
     "--weight-medium",
     "--leading-snug",

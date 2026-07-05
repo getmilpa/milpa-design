@@ -38,7 +38,7 @@
     "--on-danger",
     "--focus",
     "--radius-xs",
-    "--font-display",
+    "--font-body",
     "--text-sm",
     "--text-xs",
     "--leading-normal",

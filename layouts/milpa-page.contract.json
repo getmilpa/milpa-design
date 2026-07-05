@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "status": "stable",
   "class": "mui-page",
-  "summary": "El lienzo de una página de marketing/contenido — los ld-* de la landing formalizados. Tres piezas en un contrato: .mui-page (100svh, flex column, pinta var(--bg)/var(--text) y la voz display — ES el body de la landing), .mui-container (la parcela centrada de 72rem con padding-inline fluido; --narrow para prosa, --wide para la parcela ancha) y .mui-section (respiro vertical clamp + costura border-subtle entre hermanas, con kicker mono uppercase, título clamp con balance y lede de 62ch). Las secciones van full-bleed como hijas de .mui-page; el ancho lo pone el .mui-container ADENTRO de cada una — nunca al revés.",
+  "summary": "El lienzo de una página de marketing/contenido — los ld-* de la landing formalizados. Tres piezas en un contrato: .mui-page (100svh, flex column, pinta var(--bg)/var(--text) y la voz body (font-body) — ES el body de la landing; .mui-section__title/.mui-cta-band__title comparten la voz font-heading, pineada aparte), .mui-container (la parcela centrada de 72rem con padding-inline fluido; --narrow para prosa, --wide para la parcela ancha) y .mui-section (respiro vertical clamp + costura border-subtle entre hermanas, con kicker mono uppercase, título clamp con balance y lede de 62ch). Las secciones van full-bleed como hijas de .mui-page; el ancho lo pone el .mui-container ADENTRO de cada una — nunca al revés.",
   "element": [
     "div o main (.mui-page — como <div> envuelve header+main+footer; como <main> cuando header/footer viven fuera)",
     "section (.mui-section — cada bloque temático, con aria-labelledby a su __title)",
@@ -17,7 +17,7 @@
     "cta-band (hermana full-bleed de las .mui-section — trae su propio respiro, fondo y costuras)"
   ],
   "anatomy": {
-    "root": ".mui-page — min-height 100svh, flex column (un footer con margin-block-start auto cae al pie solo); background var(--bg), color var(--text), font-family var(--font-display), text-base + leading-normal. Fundido de tema: transition background-color/color --dur-moderate --ease-settle",
+    "root": ".mui-page — min-height 100svh, flex column (un footer con margin-block-start auto cae al pie solo); background var(--bg), color var(--text), font-family var(--font-body), text-base + leading-normal. Fundido de tema: transition background-color/color --dur-moderate --ease-settle",
     "container": ".mui-container — width 100%, max-width 72rem, margin-inline auto, padding-inline clamp(space-5, 4vw, space-8)",
     "section": ".mui-section — padding-block clamp(space-16, 10vw, space-24); .mui-section + .mui-section cose con border-block-start 1px var(--border-subtle) (regla 1: estructura por bordes, no sombras)",
     "kicker": ".mui-section__kicker — <p> mono text-2xs uppercase tracking-wide var(--secondary-text): la voz de la máquina que abre cada sección. Selector AGRUPADO con .mui-hero__kicker — misma voz, cero drift",
@@ -43,7 +43,8 @@
     "--text-secondary",
     "--secondary-text",
     "--border-subtle",
-    "--font-display",
+    "--font-body",
+    "--font-heading",
     "--font-mono",
     "--text-base",
     "--text-2xs",

@@ -42,7 +42,7 @@
     "--secondary-subtle", "--secondary-border", "--secondary-text", "--on-secondary",
     "--danger", "--danger-hover", "--danger-active", "--on-danger",
     "--border", "--border-strong", "--surface-raised", "--text", "--text-secondary",
-    "--focus", "--font-display", "--text-xs", "--text-sm", "--text-base",
+    "--focus", "--font-body", "--text-xs", "--text-sm", "--text-base",
     "--weight-medium", "--tracking-normal", "--space-2", "--space-3", "--space-4", "--space-5",
     "--radius-sm", "--radius-base", "--radius-md", "--radius-full",
     "--dur-fast", "--dur-deliberate", "--ease-standard", "--ease-settle"

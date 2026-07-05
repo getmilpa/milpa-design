@@ -37,7 +37,7 @@
     "--border",
     "--border-subtle",
     "--focus",
-    "--font-display",
+    "--font-body",
     "--text-sm",
     "--leading-snug",
     "--space-3",

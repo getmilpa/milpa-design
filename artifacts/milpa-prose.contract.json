@@ -10,9 +10,9 @@
     "article (documento completo; section/div para fragmentos)"
   ],
   "anatomy": {
-    "root": ".mui-prose — el scope: max-width 65ch, font-display, text-base, leading-relaxed, color var(--text); primer y último hijo sin margen hacia afuera",
+    "root": ".mui-prose — el scope: max-width 65ch, font-serif, text-base, leading-relaxed, color var(--text); primer y último hijo sin margen hacia afuera",
     "guard": "toda regla del scope lleva :not(:where(…)) al estilo tailwind-typography: excluye (a) el elemento que ES una pieza mui-* (un <a class=\"mui-btn\"> conserva su contrato) y (b) el subárbol de una pieza mui-* anidada DENTRO del scope (los th de una .mui-table demo, los p de un .mui-alert) — el término (b) se ancla a .mui-prose para que un article dentro de .mui-shell no se auto-excluya. Escape hatch para HTML desnudo: .mui-not-prose (marker sin reglas propias, lo captura el prefijo mui-). Límite conocido: sin re-entrada — un .mui-prose anidado dentro de una pieza no re-activa el scope",
-    "headings": "h1–h6 — escala text-4xl→text-base con weight-medium, leading-snug y text-wrap balance; scroll-margin-top var(--space-20) para que los anchors (#id) aterricen despejados bajo un topbar sticky; h2 lleva divisor inferior border-subtle (decorativo)",
+    "headings": "h1–h6 — font-heading (regla base global, no redeclarada acá), escala text-4xl→text-base con weight-medium, leading-snug y text-wrap balance; scroll-margin-top var(--space-20) para que los anchors (#id) aterricen despejados bajo un topbar sticky; h2 lleva divisor inferior border-subtle (decorativo)",
     "links": "a — var(--accent-text) SIEMPRE subrayado (offset 2px); el hover engrosa el trazo a 2px sin cambiar de color",
     "code-inline": "code fuera de <pre> — mono text-sm sobre var(--surface), borde border-subtle, radius-xs; el code de los <pre> queda fuera vía la guarda (pre *)",
     "pre": "pre — fallback para bloques sin resaltar: lienzo var(--syntax-bg) + tinta var(--syntax-text), borde border-strong (en dark syntax-bg ES bg: el borde define el bloque), overflow-x auto, radius-md. La doc con sintaxis compone .mui-code",
@@ -43,7 +43,8 @@
     "--border",
     "--border-subtle",
     "--border-strong",
-    "--font-display",
+    "--font-heading",
+    "--font-serif",
     "--font-mono",
     "--text-2xs",
     "--text-xs",

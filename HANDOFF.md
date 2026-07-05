@@ -17,7 +17,7 @@ converger:** el framework y el DS avanzan en paralelo y se reencuentran en una *
 El framework *consume* `@milpa/design@x.y.z`. **Nadie edita los internals del otro**; se cambian
 cosas vía bump semver + nota de compat. (Esto es Milpa aplicado a sí mismo: contract-first.)
 
-## 2. Estado actual (v0.5)
+## 2. Estado actual (v0.6)
 
 ✅ **Paleta cerrada y verificada.** `oro` (primario/marca) + `olivo` (secundario / la milpa viva,
 OKLCH ~124°) + `tierra` (neutro); `cielo` = `info`. Dark-first. Tokens DTCG + salida CSS + preset
@@ -81,8 +81,27 @@ resto — stat/drawer/chart/footer/media-gallery — son variantes/behaviors). G
 audit de cierre: **0 pares nuevos** (todo reusa pares ya cubiertos: `accent-text`/`text-muted`
 sobre `bg`/`surface`, `text`/`surface`, `--viz-*`).
 
-⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.5). Backlog abajo (§4): los hallazgos F
-(#8/#9/#10) y los 2 Minors diferidos de 0.3.0 siguen abiertos — nada de cluster D queda pendiente.
+✅ **0.6.0 — el deshierbe (backlog T9 cerrado: hallazgos F #8/#9/#10 + los 2 Minors):** el
+off-canvas móvil de `mui-header` y `mui-docs` deja el panel `position:fixed` +
+`[data-nav-open]` + scrim por un **`<dialog class="mui-drawer">`** (`--start` en docs) abierto
+con `showModal()` — top layer nativo (focus trap/Esc/`::backdrop` gratis). Consecuencias: ya NO
+hace falta `overflow-x:clip` en la raíz de la página (se removió de los seis proofs; arregla el
+overflow de `docs.html`, F#8); el menú móvil queda como elemento aparte con los links duplicados;
+el buscador de commerce vuelve a vivir en móvil, duplicado dentro del drawer (F#9). Los media slots
+pasan de combinador descendiente a **hijo** (`> :is(img, svg, picture)`) para que un `<picture>`
+no dispare el hover-scale doble — en `mui-media-grid` el guard queda al nivel del `figure`/
+`__figure` puente, hijo directo del bridge (F#10). Más los 2 Minors del
+review de 0.3.0: guard de set vacío en el lightbox del gallery (`show(i)` corta si
+`visibleItems()` es `[]`) y la política del guard `[hidden]` fijada en DESIGN §6 (aplica al
+contenedor que un filtro togglea, no a los medios internos). De paso: badge SOC 2 de `saas.html`
+unificado a `--accent`; `anatomy` documentada en `mui-stack`/`mui-cluster`. Pieza nueva:
+`mui-drawer --start` (variante anclada a la izquierda). Contratos **68 → 68** (sin cambio). Gate:
+**193/193 AA** — audit de cierre: **0 pares nuevos**. **COMPAT (única de este release):** quien
+consumía el off-canvas viejo migra el toggle de `[data-nav-open]` a `showModal()`/`close()` sobre
+un `mui-drawer` y borra el scrim — ver nota destacada en `CHANGELOG.md`.
+
+⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.6). Backlog T9 **cerrado** — no queda
+nada pendiente salvo lo genuinamente futuro (§4): Storybook y salidas multiplataforma.
 
 ## 3. Cómo correr
 
@@ -115,10 +134,11 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
 - ~~**T4 · Logo kit.**~~ ✅ **Hecho** — en `logo/` (símbolo, wordmark, lockups, app icon; mono-oro).
 - **T5 · Storybook** (o seguir extendiendo `proof/`) para estados exhaustivos por pieza. Los
   seis proofs de 0.2.0 ya battle-testean la composición completa por caso de uso.
-- **T9 · Backlog — lo que los battle-tests destaparon** (gaps reales reportados por los
-  builders de los proofs, por frecuencia de dolor). **Clusters A, B y E ejecutados en 0.3.0 «la
-  plaza»; C ejecutado en 0.4.0 «el trato»; D ejecutado en 0.5.0 «la mano» (ver §2) — los cinco
-  clusters cerrados; quedan los hallazgos F y los 2 Minors de 0.3 (abajo):**
+- ~~**T9 · Backlog — lo que los battle-tests destaparon**~~ ✅ **CERRADO** (gaps reales reportados
+  por los builders de los proofs, por frecuencia de dolor). Clusters A, B y E ejecutados en 0.3.0
+  «la plaza»; C ejecutado en 0.4.0 «el trato»; D ejecutado en 0.5.0 «la mano»; los hallazgos F
+  (#8/#9/#10) y los 2 Minors de 0.3 ejecutados en 0.6.0 «el deshierbe» (ver §2) — **backlog
+  completo, nada pendiente:**
   1. ~~**Header de marketing/sitio** compartido (hoy landing, blog, saas y commerce lo
      re-escriben; `mui-topbar` es del shell admin y `mui-docs__topbar` del shell docs).~~ ✅
      **Hecho (A) — `mui-header`**, 0.3.0.
@@ -156,32 +176,31 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
      filtradas (counter "n / 12") — decidir si el contrato debe prescribir respetar el filtro.~~
      ✅ **Hecho (E)** — brace-walk en `scripts/layer-guard.mjs` (+ test propio en `npm test`) y el
      lightbox del gallery ya respeta el filtro activo, 0.3.0.
-  8. **Nuevo (descubierto en 0.3, F · abierto) — overflow horizontal del off-canvas también afecta al
-     shell de docs.** El panel `position:fixed` fuera de pantalla (16rem) del off-canvas extiende
-     el scroll horizontal del documento; el fix de `mui-header` (`overflow-x: clip` en la raíz de
-     la página, aplicado en los proofs migrados) **no cubre `docs.html`** — su shell tiene el mismo
-     patrón de off-canvas y mide ~208px de overflow @móvil sin el clip. Arreglar el shell de docs
-     Y evaluar reemplazar el patrón por un `<dialog>` (top layer nativo, no extiende el scroll del
-     documento) para que el consumidor no tenga que acordarse del `overflow-x:clip`.
-  9. **Nuevo (descubierto en 0.3, F · abierto) — `mui-header` no tiene patrón para acciones que no
-     caben en móvil.** El proof de commerce, al colapsar a off-canvas ≤880px, oculta el buscador
-     junto con el badge del carrito y **pierde la búsqueda en móvil sin sustituto** (queda
-     documentado como "honesto" en el proof, no resuelto). Evaluar un toggle de ícono de búsqueda
-     (expande un input inline) o mover el buscador adentro del panel off-canvas como slot propio
-     del contrato.
-  10. **Nuevo (descubierto en 0.3, F · abierto) — combinador descendiente en los media slots compone
-      hover scale con `<picture>`.** `:is(img, svg, picture)` usa combinador **descendiente**: si
-      el consumidor arma `<picture><img></picture>`, el selector matchea AMBOS elementos y el
-      hover-scale se aplica dos veces (≈1.061 en vez de ≈1.03). Bug **latente** — ningún proof usa
-      `<picture>` hoy, así que no se disparó en 0.3. Fix futuro: combinador **hijo** (`>`) donde el
-      slot pueda envolver un `<picture>`.
-  11. **Minors diferidos (triage del review final 0.3.0), abiertos.** (a) `.mui-card__media >
-      :is(img, svg, picture)` no lleva el guard `[hidden]` (`display:block` sin excepción) que
-      viola la regla dura de la casa (precedente ea72ac3: el display del autor no debe pisar al
-      UA) — pendiente decisión de política: guardar TODOS los media inner o solo los que
-      togglean `hidden`. (b) `proof/gallery.html` `show(i)` no guarda contra un set visible
-      vacío (si `visibleItems()` fuera `[]`, `idx=NaN` → `items[NaN]` undefined) — inalcanzable
-      hoy (los 4 tabs tienen ≥3 ítems); fix de una línea (`if (!items.length) return;`).
+  8. ~~**F#8 · overflow horizontal del off-canvas también afecta al shell de docs.** El panel
+     `position:fixed` fuera de pantalla (16rem) del off-canvas extendía el scroll horizontal del
+     documento; el fix de `mui-header` (`overflow-x: clip` en la raíz) no cubría `docs.html`.~~ ✅
+     **Hecho, 0.6.0** — el off-canvas de `mui-header` Y `mui-docs` pasó a un
+     `<dialog class="mui-drawer">` (`--start` en docs) abierto con `showModal()`: top layer nativo,
+     ya NO extiende el scroll del documento, así que `overflow-x:clip` se removió de los seis
+     proofs (ya no hace falta).
+  9. ~~**F#9 · `mui-header` no tenía patrón para acciones que no caben en móvil.** El proof de
+     commerce, al colapsar a off-canvas ≤880px, ocultaba el buscador junto con el badge del
+     carrito y perdía la búsqueda en móvil sin sustituto.~~ ✅ **Hecho, 0.6.0** — el buscador de
+     commerce se duplica dentro del `<dialog>` del menú móvil, junto a los links: lo que no cabe
+     en la barra se muda, no se pierde.
+  10. ~~**F#10 · combinador descendiente en los media slots compone hover scale con `<picture>`.**
+      `:is(img, svg, picture)` usaba combinador descendiente: si el consumidor armaba
+      `<picture><img></picture>`, el selector matchea AMBOS elementos y el hover-scale se aplicaba
+      dos veces (≈1.061 en vez de ≈1.03).~~ ✅ **Hecho, 0.6.0** — combinador **hijo** (`>`) en los
+      cuatro slots; en `mui-media-grid` el guard vive al nivel del `figure`/`__figure` puente
+      (hijo directo del bridge, no del `__item`).
+  11. ~~**Minors diferidos (triage del review final 0.3.0).** (a) `.mui-card__media >
+      :is(img, svg, picture)` sin guard `[hidden]` — pendiente decisión de política. (b)
+      `proof/gallery.html` `show(i)` sin guard contra un set visible vacío.~~ ✅ **Hecho, 0.6.0** —
+      (a) DESIGN §6 fija la política: el guard `[hidden]` aplica al contenedor que un filtro
+      togglea, NO a los medios internos (que nunca son ellos mismos el objetivo del toggle); sin
+      cambio de código. (b) `show(i)` corta con `if (!items.length) return;` si `visibleItems()`
+      es `[]`.
 - ~~**T6 · Publish `@milpa/design@0.1.0`**~~ ✅ **PUBLICADO** (2026-07-02T05:00Z, por
   `teamx-devkit`): `npm i @milpa/design` — 59 archivos, 88 kB, los 8 exports verificados con
   install real. Flujo de release: `npm run release` (token en `.env` gitignoreado +

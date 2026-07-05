@@ -239,7 +239,7 @@
 .mui-chart {
   --_h: 10rem;                       /* alto del área de datos */
   display: flex; flex-direction: column; gap: var(--space-3);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   color: var(--text);
 }
 .mui-chart__title {
@@ -428,7 +428,7 @@
 .mui-quote {
   display: flex; flex-direction: column; gap: var(--space-3);
   margin: 0;                                   /* reset de <blockquote> */
-  font-family: var(--font-display);
+  font-family: var(--font-serif);
 }
 .mui-quote__mark {
   display: block;
@@ -469,7 +469,7 @@
 .mui-callout {
   display: flex; align-items: flex-start; gap: var(--space-3);
   padding: var(--space-4);
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-body); font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text); background: var(--surface);
   border: 1px solid var(--border); border-radius: var(--radius-base);
@@ -519,7 +519,7 @@
 .mui-steps {
   list-style: none; margin: 0; padding: 0;
   counter-reset: mui-step;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
 }
 .mui-steps__item {
   --_marker: 2rem;
@@ -693,7 +693,7 @@
    doc compone .mui-code; el <pre> de acá es el fallback sano. */
 .mui-prose {
   max-width: 65ch;
-  font-family: var(--font-display); font-size: var(--text-base);
+  font-family: var(--font-serif); font-size: var(--text-base);
   font-weight: var(--weight-regular); line-height: var(--leading-relaxed);
   color: var(--text);
 }
@@ -939,7 +939,7 @@
   max-height: var(--_max-h);
   overflow-y: auto; overscroll-behavior: contain;
   padding: var(--space-1);  /* aire: el anillo de foco sobrevive al scroll container */
-  font-family: var(--font-display);
+  font-family: var(--font-body);
 }
 .mui-toc__title {
   margin: 0 0 var(--space-2);
@@ -993,7 +993,7 @@
    conserva los suyos de .mui-table. */
 .mui-api {
   display: flex; flex-direction: column; gap: var(--space-3);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   color: var(--text);
 }
 /* la referencia se lee como lista: separador entre entradas consecutivas */
@@ -1095,7 +1095,7 @@
   display: flex; align-items: center; gap: var(--space-2);
   width: 100%; max-width: 16rem; height: 2.25rem;
   padding: 0 var(--space-2) 0 var(--space-3);
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-body); font-size: var(--text-sm);
   line-height: 1; white-space: nowrap;
   color: var(--text-muted);
   background: var(--bg);
@@ -1120,7 +1120,7 @@
 .mui-search {
   width: min(92vw, 36rem);
   margin-block-start: 10vh; /* el block-end queda auto (margin: auto del Modal) */
-  font-family: var(--font-display);
+  font-family: var(--font-body);
 }
 
 /* input — sin borde propio: el subrayado separa consulta de resultados.
@@ -1286,7 +1286,7 @@
 .mui-version-banner {
   display: flex; align-items: flex-start; gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
-  font-family: var(--font-display); font-size: var(--text-sm);
+  font-family: var(--font-body); font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text);
   background: var(--warning-bg);
@@ -1323,7 +1323,7 @@
    Los breaking llevan el prefijo "BREAKING" como TEXTO real (content
    textual del ::before: entra al árbol de accesibilidad). */
 .mui-changelog {
-  font-family: var(--font-display); color: var(--text);
+  font-family: var(--font-body); color: var(--text);
 }
 .mui-changelog__release { padding-block: var(--space-10); }
 .mui-changelog__release:first-child { padding-block-start: 0; }

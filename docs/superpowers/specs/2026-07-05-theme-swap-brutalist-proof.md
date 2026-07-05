@@ -112,8 +112,10 @@ floor. Los límites restantes son de nicho (border-style, iconos) o ya conocidos
 ### Glass (3er flavor, post-0.8): los 3 huecos, cerrados
 
 El 3er flavor (`proof/skins/glass-skin.css`, glassmorphism) fue elegido a propósito porque **ejercita
-exactamente los 3 límites que 0.7/0.8 vinieron a cerrar** — no son límites nuevos, son los mismos de arriba
-más el gap de `verify-theme` con superficies translúcidas:
+`border-style` (el mismo límite #1 de arriba) más dos gaps que 0.8 cerró (`--surface-backdrop`/`--blur-*`,
+y la composición alpha-sobre-`--bg` de `verify-theme`)** — solo el primero se solapa con los 3 "límites
+honestos" originales (que eran border-style, íconos SVG y carga de fuente); los otros dos son gaps propios
+de la era 0.8:
 
 1. **`--border-style` ahora SÍ es token** (era límite #1 de arriba). Glass lo fija a `solid` explícito junto
    a `--border-width: 1px` — el rim fino del vidrio es tan tokenizable como el borde grueso brutalista.

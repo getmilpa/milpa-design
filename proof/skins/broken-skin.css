@@ -1,0 +1,11 @@
+/* ════════════════════════════════════════════════════════════════════
+   Fixture NEGATIVA para verify-theme.mjs (THEMING.md §6). Cada token
+   no-color acá está mal formado a propósito — el gate debe rechazarlo
+   por FORMA (theme.contract.json.validation.form), sin importar que el
+   color sí sea válido:
+     --dur-base: rojo      → no es un <time> (grupo motion)
+     --font-body:          → vacío (grupo type, familia no-vacía)
+     --border-width: 3     → sin unidad, no es un <length> (grupo size)
+   ════════════════════════════════════════════════════════════════════ */
+:root, [data-theme="dark"] { --dur-base: rojo; --font-body: ; --border-width: 3; }
+[data-theme="light"] { --accent: #14603F; }

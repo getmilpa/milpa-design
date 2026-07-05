@@ -115,16 +115,31 @@ No importás `primitives.css`/`components.css`/`artifacts.css`/`layouts.css` y t
 npm run verify:theme -- mi-skin.css   # scripts/verify-theme.mjs
 ```
 
-Valida tu CSS de tokens (valores hex planos) contra `theme.contract.json`: reporta qué tokens
-de `requiredTokens.color` provee el skin (los que falten se heredan de Milpa — un skin parcial
-es un skin válido) y verifica TODOS los pares AA en ambos temas sobre la paleta resultante;
-sale con código 1 si algún par falla. Es la implementación de referencia de lo que `coa`
-correrá al instalar un plugin con theme propio: **nada se siembra sin contrato — tampoco un
-theme.**
+Un PASS garantiza dos cosas, y solo dos (`theme.contract.json.validation`):
 
-**Ejemplo vivo:** el skin "Nopal" (`proof/themed-skin.css`, 12 tokens + radios + cadencia,
-193/193 en el gate) vistiendo el blog completo en `proof/themed.html` — nivel 1 por link,
-nivel 2 en su `<style>` sin layer.
+1. **`hard` — contraste WCAG AA.** Todos los pares de `contrast.pairs` cumplen su umbral, en
+   dark y en light, sobre la paleta resultante (valores hex planos del skin sobre los defaults
+   de Milpa). Sale con código 1 si algún par falla.
+2. **`form` — buena forma de los tokens no-color que el skin fija.** Cualquier `--token` de los
+   grupos `type` / `space` / `radius` / `zIndex` / `motion` / `elevation` / `size` que el skin
+   declare se valida por TIPO y no-vacío (p. ej. `--dur-base` debe ser un `<time>`, `--font-body`
+   no puede quedar vacío, `--border-width` debe ser un `<length>`) — ver `validation.form.types`
+   para la tabla completa por grupo. Sale con código 1 si algún token declarado está mal formado.
+
+Lo que un PASS **no** garantiza: **completitud** (un skin parcial que no toca un grupo es válido
+igual — lo que no fijás se hereda de Milpa) ni **magnitudes con buen gusto** (un `--dur-base:
+5000ms` bien formado pasa el gate aunque sea una animación pésima; eso es criterio humano, no
+contrato). El gate reporta qué tokens de `requiredTokens.color` provee el skin (informativo) y
+qué grupos toca; nada de esto sustituye una revisión de diseño.
+
+Es la implementación de referencia de lo que `coa` correrá al instalar un plugin con theme
+propio: **nada se siembra sin contrato — tampoco un theme.**
+
+**Ejemplo vivo:** el skin "Nopal" (`proof/themed-skin.css`, 12 tokens de color + radios +
+cadencia, 193/193 en el gate, 0 malformados) vistiendo el blog completo en `proof/themed.html`
+— nivel 1 por link, nivel 2 en su `<style>` sin layer. Fixtures del gate de forma:
+`proof/skins/broken-skin.css` (3 tokens mal formados → FAIL) y
+`proof/skins/valid-partial-skin.css` (skin parcial bien formado → PASS).
 
 ## 7. Qué NO hacer
 

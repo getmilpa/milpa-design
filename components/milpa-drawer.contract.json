@@ -2,7 +2,7 @@
   "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
   "name": "drawer",
   "layer": "component",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "status": "stable",
   "class": "mui-drawer",
   "summary": "Panel lateral modal sobre <dialog> nativo, anclado al inline-end: alto completo, radio 0, definido por su borde inline-start (no consume --z-*: vive en el top layer). Mismo contrato de foco/teclado que Modal. Entra deslizando desde el borde (keyframe propio mui-drawer-in, solo transform+opacity). --docked reutiliza la misma piel sobre un <aside> estático — panel persistente, NO modal (ver variants.mode y a11y.behavior: docked ≠ dialog).",
@@ -19,7 +19,8 @@
   },
   "variants": {
     "placement": {
-      "end": "default y único en v0 — anclado al inline-end (derecha en LTR); un lado inline-start se agregaría como .mui-drawer--start con su propio keyframe"
+      "end": "default — anclado al inline-end (derecha en LTR)",
+      "start": ".mui-drawer--start — anclado al inline-start (izquierda) — espeja ancla/borde/slide; para navs con toggle a la izquierda"
     },
     "mode": {
       "default": "modal — <dialog> abierto con showModal(); top layer, focus trap, Esc y backdrop nativos",
@@ -59,7 +60,8 @@
     "element": "SIEMPRE <dialog> abierto con dialog.showModal() — top layer, focus trap, Esc y fondo inerte nativos; nunca show() ni un aside posicionado",
     "aria": [
       "aria-labelledby en el <dialog> apuntando al id del __title",
-      "el botón cerrar del header requiere aria-label (ej. \"Cerrar panel\")"
+      "el botón cerrar del header requiere aria-label (ej. \"Cerrar panel\")",
+      "docked (`--docked`): `<aside aria-label=\"…\">` — sin `aria-labelledby` de dialog ni botón de cierre (es una region, no un dialog)"
     ],
     "keyboard": [
       "Esc cierra (cancel/close nativos)",

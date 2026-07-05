@@ -1,0 +1,24 @@
+/* ════════════════════════════════════════════════════════════════════
+   Fixture NEGATIVA para la translucidez de verify-theme.mjs (THEMING.md
+   §6). Un glass skin donde `--surface` es una superficie translúcida
+   OSCURA (una "tarjeta de vidrio esmerilado" pensada para flotar sobre
+   fondos oscuros) que un consumidor reutiliza tal cual en el tema LIGHT
+   de Milpa. `--bg` sigue siendo el default de Milpa (#ECE6D8, opaco —
+   honra el invariante). Compuesta sobre ese `--bg` claro, la superficie
+   translúcida NO queda clara — sigue siendo casi negra (~#343431),
+   porque alpha=0.85 deja muy poco del fondo asomando. El texto por
+   defecto de Milpa en light (`--text`, `--text-secondary`,
+   `--text-muted`, `--accent`, `--accent-text`, `--border-strong`) está
+   pensado para leerse sobre una superficie CLARA — sobre este vidrio
+   compuesto, el contraste efectivo cae muy por debajo de AA en varios
+   pares reales (`--text`/`--surface` ~1.5:1, `--accent-text`/`--surface`
+   ~2:1, etc. — todos necesitan 4.5:1 o 3:1). Este es exactamente el
+   escenario que el invariante "--bg opaco" + composición sobre --bg
+   existe para atrapar: un glass mal calibrado no es opaco de forma
+   ilegal (eso lo cubre el invariante de --bg) sino translúcido y
+   LEGAL — y aun así, compuesto, rompe WCAG. El gate debe fallar
+   (exit 1).
+   ════════════════════════════════════════════════════════════════════ */
+[data-theme="light"] {
+  --surface: rgba(20, 20, 20, 0.85);
+}

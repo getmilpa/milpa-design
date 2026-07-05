@@ -19,10 +19,12 @@
  * fija (un skin parcial sigue siendo válido) y que pertenecen a un grupo
  * conocido; no se verifican magnitudes ni buen gusto.
  *
- * Limitación documentada: el contraste solo evalúa valores HEX planos
- * (--token:#RRGGBB) — es la referencia para `coa`; no resuelve var()
- * anidadas ni color-mix. Cero dependencias, mismas fórmulas WCAG que
- * verify-contrast.mjs.
+ * Limitación documentada: el contraste solo evalúa valores de color LITERALES
+ * (--token:#RRGGBB, #RRGGBBAA, rgb()/rgba()) — es la referencia para `coa`;
+ * no resuelve var() anidadas ni color-mix. Soporta alpha: una superficie
+ * translúcida se compone sobre `--bg` (el invariante exige `--bg` opaco)
+ * antes de medir el contraste efectivo — ver THEMING.md §6. Cero
+ * dependencias, mismas fórmulas WCAG que verify-contrast.mjs.
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -62,8 +64,8 @@ for (const m of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
   if (/\[data-theme="?light"?\]/.test(sel)) buckets.push('light');
   if (/:root/.test(sel)) buckets.push('base');
   if (!buckets.length) continue;
-  for (const d of m[2].matchAll(/--([\w-]+)\s*:\s*(#[0-9a-fA-F]{6})\b/g)) {
-    for (const b of buckets) skin[b][d[1]] = d[2].toUpperCase();
+  for (const d of m[2].matchAll(/--([\w-]+)\s*:\s*(#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?\b|rgba?\([^)]*\))/g)) {
+    for (const b of buckets) skin[b][d[1]] = d[2].trim();
   }
 }
 
@@ -79,10 +81,27 @@ for (const m of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
   }
 }
 
-// --- WCAG (idéntico a verify-contrast.mjs) ---
-const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+// --- parseo de color: #RRGGBB, #RRGGBBAA, rgb()/rgba() → {r,g,b,a} ---
+function parseColor(s) {
+  s = s.trim();
+  let m = /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.exec(s);
+  if (m) return { r: parseInt(m[1],16), g: parseInt(m[2],16), b: parseInt(m[3],16), a: m[4] !== undefined ? parseInt(m[4],16)/255 : 1 };
+  m = /^rgba?\(\s*([\d.]+)[ ,]+([\d.]+)[ ,]+([\d.]+)(?:[ ,/]+([\d.]+%?))?\s*\)$/.exec(s);
+  if (m) { const a = m[4] === undefined ? 1 : (m[4].endsWith('%') ? parseFloat(m[4])/100 : parseFloat(m[4])); return { r: +m[1], g: +m[2], b: +m[3], a }; }
+  return null;
+}
+
+// --- composición alpha de una superficie translúcida sobre un fondo opaco
+// (--bg, el invariante del contrato exige que sea opaco) ---
+const compose = (c, base) => c.a >= 1 ? c : {
+  r: Math.round(c.r * c.a + base.r * (1 - c.a)),
+  g: Math.round(c.g * c.a + base.g * (1 - c.a)),
+  b: Math.round(c.b * c.a + base.b * (1 - c.a)), a: 1,
+};
+
+// --- WCAG (idéntico a verify-contrast.mjs, ahora sobre {r,g,b} 0–255) ---
 const lin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
-const Y = (h) => { const [r, g, b] = hx(h).map(lin); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const Y = ({ r, g, b }) => { const [R, G, B] = [r / 255, g / 255, b / 255].map(lin); return 0.2126 * R + 0.7152 * G + 0.0722 * B; };
 const CR = (f, b) => { const a = Y(f), c = Y(b), hi = Math.max(a, c), lo = Math.min(a, c); return (hi + 0.05) / (lo + 0.05); };
 
 // --- paleta resuelta por tema: skin[tema] > skin.base > default ---
@@ -97,11 +116,32 @@ console.log(`tokens de color: ${provided.length}/${required.length} provistos po
 // --- pares ---
 let fails = 0, n = 0;
 for (const theme of ['dark', 'light']) {
+  // invariante del contrato: --bg es la referencia de composición y debe ser opaco.
+  const bgRaw = resolve(theme, 'bg');
+  const baseBg = parseColor(bgRaw);
+  if (!baseBg) {
+    console.log(`  [${theme[0].toUpperCase()}] ERROR --bg no es un color parseable: ${bgRaw}`);
+    fails++;
+  } else if (baseBg.a < 1) {
+    console.log(`  [${theme[0].toUpperCase()}] FAIL invariante: --bg debe ser opaco — alpha=${baseBg.a} (${bgRaw})`);
+    fails++;
+  }
   for (const p of contract.contrast.pairs) {
     if (p.themes && !p.themes.includes(theme)) continue;
-    const fg = resolve(theme, p.fg.replace(/^--/, ''));
-    const bg = resolve(theme, p.bg.replace(/^--/, ''));
-    const c = CR(fg, bg);
+    const fgRaw = resolve(theme, p.fg.replace(/^--/, ''));
+    const bgRawPair = resolve(theme, p.bg.replace(/^--/, ''));
+    let fgC = parseColor(fgRaw);
+    let bgC = parseColor(bgRawPair);
+    if (!fgC || !bgC) {
+      n++; fails++;
+      console.log(`  [${theme[0].toUpperCase()}] ERROR color no parseable  ${p.fg}=${fgRaw} / ${p.bg}=${bgRawPair}`);
+      continue;
+    }
+    // superficie translúcida → composición sobre --bg (o sobre el bg ya compuesto,
+    // si el bg del par en sí es translúcido) antes de medir el contraste efectivo.
+    if (bgC.a < 1) bgC = compose(bgC, baseBg ?? bgC);
+    if (fgC.a < 1) fgC = compose(fgC, bgC);
+    const c = CR(fgC, bgC);
     const ok = c >= p.min; n++; if (!ok) fails++;
     const touched = (skin[theme][p.fg.slice(2)] ?? skin.base[p.fg.slice(2)]) || (skin[theme][p.bg.slice(2)] ?? skin.base[p.bg.slice(2)]);
     if (!ok || touched) console.log(`  [${theme[0].toUpperCase()}] ${ok ? 'PASS' : 'FAIL'} ${c.toFixed(2)} (>=${p.min})  ${p.fg} / ${p.bg}`);

@@ -1,0 +1,147 @@
+/* ============================================================================
+   Brutalist skin — un reskin de MARCA de @milpa/design SOLO con tokens (L1).
+   Cero CSS estructural: únicamente overrides de custom properties bajo el 2º
+   eje [data-skin="brutalist"], por modo. CSS sin @layer → gana por origen de
+   capa sobre @layer milpa.tokens (THEMING.md).
+
+   Neo-brutalist: esquinas 0, bordes gruesos negros/blancos, sombras offset
+   duras (sin blur), tipografía monoespaciada, motion instantáneo, acento
+   gritón (magenta) + secundario eléctrico (azul). El opuesto de Milpa.
+
+   Se valida con:  npm run verify:theme -- proof/skins/brutalist-skin.css
+   (el parser lee [data-theme=...]; el prefijo [data-skin] no le molesta).
+   ============================================================================ */
+
+/* ---------- no-color: forma, tipo, motion (comparten ambos modos) ----------
+   :root[...] (no [data-skin] pelado) para que verify-theme —que solo lee
+   bloques :root/[data-theme]— también form-checkee estos tokens no-color. */
+:root[data-skin="brutalist"] {
+  /* esquinas duras */
+  --radius-none: 0; --radius-xs: 0; --radius-sm: 0; --radius-base: 0;
+  --radius-md: 0; --radius-lg: 0; --radius-xl: 0; --radius-2xl: 0; --radius-full: 0;
+
+  /* bordes gruesos — la firma brutalista */
+  --border-width: 3px;
+  --focus-width: 4px; --focus-offset: 0px;
+
+  /* tipografía: máquina de escribir en TODO (Milpa es Space Grotesk suave) */
+  --font-heading: 'Space Mono', ui-monospace, 'Courier New', monospace;
+  --font-body: 'Space Mono', ui-monospace, 'Courier New', monospace;
+  --font-serif: 'Space Mono', ui-monospace, 'Courier New', monospace;
+  --tracking-tight: 0em; --tracking-normal: 0em; --tracking-wide: 0.04em;
+  --tracking-display: 0em;
+  --measure: 78ch;
+
+  /* motion instantáneo — brutalism es abrupto, no hay easing suave */
+  --dur-instant: 0ms; --dur-fast: 0ms; --dur-base: 0ms; --dur-moderate: 0ms;
+  --dur-slow: 0ms; --dur-deliberate: 0ms;
+  --ease-standard: linear; --ease-settle: linear; --ease-grano: linear;
+  --ease-in: linear; --ease-linear: linear;
+  --stagger-tight: 0ms; --stagger-base: 0ms; --stagger-loose: 0ms;
+  --rise-sm: 0px; --rise-base: 0px; --rise-lg: 0px;
+}
+
+/* ============================ LIGHT ============================ */
+[data-skin="brutalist"][data-theme="light"] {
+  --bg: #F4F4EC;
+  --surface: #FFFFFF;
+  --surface-raised: #FFFFFF;
+  --overlay: #FFFFFF;
+  --border-subtle: #000000;
+  --border: #000000;
+  --border-strong: #000000;
+  --text: #000000;
+  --text-secondary: #1F1F1F;
+  --text-muted: #4A4A4A;
+  --text-on-accent: #000000;
+  --on-danger: #FFFFFF;
+  --on-secondary: #FFFFFF;
+
+  --accent: #FF1F8E;
+  --accent-hover: #FF57AB;
+  --accent-active: #C40068;
+  --accent-subtle: #FFF2F8;
+  --accent-text: #A8005B;
+
+  --secondary: #2222FF;
+  --secondary-hover: #4A4AFF;
+  --secondary-active: #0000CC;
+  --secondary-subtle: #DADAFF;
+  --secondary-border: #2222FF;
+  --secondary-text: #0000C4;
+
+  --success: #0A7A28;
+  --success-bg: #C7F5CE;
+  --success-border: #0A7A28;
+  --warning: #9A4A00;
+  --warning-bg: #FFE0B0;
+  --warning-border: #9A4A00;
+  --danger: #CC0000;
+  --danger-hover: #A80000;
+  --danger-active: #800000;
+  --danger-bg: #FFECEC;
+  --danger-border: #CC0000;
+  --info: #0047C4;
+  --info-bg: #CFE0FF;
+  --info-border: #0047C4;
+
+  --focus: #FF1F8E;
+
+  /* elevación: sombra offset dura sin blur (la "caja" brutalista) */
+  --shadow-sm: 2px 2px 0 0 var(--border);
+  --shadow-base: 4px 4px 0 0 var(--border);
+  --shadow-md: 6px 6px 0 0 var(--border);
+  --shadow-lg: 10px 10px 0 0 var(--border);
+}
+
+/* ============================ DARK ============================ */
+[data-skin="brutalist"][data-theme="dark"] {
+  --bg: #000000;
+  --surface: #0B0B0B;
+  --surface-raised: #141414;
+  --overlay: #141414;
+  --border-subtle: #FFFFFF;
+  --border: #FFFFFF;
+  --border-strong: #FFFFFF;
+  --text: #FFFFFF;
+  --text-secondary: #E0E0E0;
+  --text-muted: #B0B0B0;
+  --text-on-accent: #000000;
+  --on-danger: #000000;
+  --on-secondary: #000000;
+
+  --accent: #FF3D9E;
+  --accent-hover: #FF6FB8;
+  --accent-active: #FF1F8E;
+  --accent-subtle: #3D0A24;
+  --accent-text: #FF8AC2;
+
+  --secondary: #8A8AFF;
+  --secondary-hover: #ABABFF;
+  --secondary-active: #7A7AFF;
+  --secondary-subtle: #14143A;
+  --secondary-border: #6A6AFF;
+  --secondary-text: #A6A6FF;
+
+  --success: #3FD968;
+  --success-bg: #08240F;
+  --success-border: #3FD968;
+  --warning: #FFA23D;
+  --warning-bg: #2E1800;
+  --warning-border: #FFA23D;
+  --danger: #FF4D4D;
+  --danger-hover: #FF7070;
+  --danger-active: #FF2020;
+  --danger-bg: #330000;
+  --danger-border: #FF4D4D;
+  --info: #5C9BFF;
+  --info-bg: #001A45;
+  --info-border: #5C9BFF;
+
+  --focus: #FF3D9E;
+
+  --shadow-sm: 2px 2px 0 0 var(--border);
+  --shadow-base: 4px 4px 0 0 var(--border);
+  --shadow-md: 6px 6px 0 0 var(--border);
+  --shadow-lg: 10px 10px 0 0 var(--border);
+}

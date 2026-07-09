@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Milpa HQ — the marketplace is germinating</title>
+<meta name="description" content="The granary of the Milpa ecosystem: bundles of plugins that form applications — compatibility by contract, metadata only. Germinating.">
+<meta property="og:title" content="Milpa HQ — the marketplace is germinating">
+<meta property="og:description" content="Bundles of plugins that form applications — compatibility by contract, metadata only. Germinating.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://milpahq.com">
+<link rel="canonical" href="https://milpahq.com/">
+<link rel="icon" href="../logo/symbol/milpa-symbol-color.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../dist/milpa-tokens.css">
+<link rel="stylesheet" href="../motion/milpa-motion.css">
+<link rel="stylesheet" href="../primitives/milpa-primitives.css">
+<link rel="stylesheet" href="../components/milpa-components.css">
+<link rel="stylesheet" href="../artifacts/milpa-artifacts.css">
+<link rel="stylesheet" href="../layouts/milpa-layouts.css">
+<style>
+/* ===== milpahq (hq-*) — one-screen teaser: la troje, el registry germinando.
+   Todo tokens; el sistema pone page/header/footer, el hq-* pone el momento. ===== */
+* { box-sizing: border-box; }
+body { margin: 0; -webkit-font-smoothing: antialiased; }
+.hq-mono { font-family: var(--font-mono); }
+
+.mui-header__brand .wm { height: 1.05rem; width: auto; display: block; }
+
+/* logo vivo — mismo gesto que los docs generados (gen-docs Shell) */
+@media (prefers-reduced-motion: no-preference) {
+  .ld-plot rect { animation: ld-plot-twinkle 16s ease-in-out infinite; }
+  .ld-plot rect:nth-child(2n) { animation-delay: .4s; }
+  .ld-plot rect:nth-child(3n) { animation-delay: .9s; }
+  .ld-plot rect:nth-child(5n) { animation-delay: 1.3s; }
+}
+@keyframes ld-plot-twinkle { 0%, 80%, 100% { opacity: 1 } 87% { opacity: .35 } 93% { opacity: 1 } }
+
+/* ---- el teaser: una pantalla ---- */
+.hq-hero {
+  min-height: calc(100svh - 3.5rem);
+  display: grid; align-items: center;
+  padding-block: var(--space-12);
+}
+.hq-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(var(--space-8), 6vw, var(--space-16)); align-items: center;
+}
+.hq-grid > * { min-width: 0; } /* mui-code scrollea interno, no ensancha la página */
+.hq-grid > div:first-child { position: relative; z-index: 1; }
+.hq-tag {
+  margin-top: var(--space-5);
+  font-family: var(--font-mono); font-size: clamp(var(--text-sm), 2vw, var(--text-lg));
+  color: var(--text-secondary);
+}
+.hq-sub { margin-top: var(--space-4); color: var(--text-muted); max-width: 46ch; font-size: var(--text-base); line-height: var(--leading-relaxed); }
+.hq-cta { margin-top: var(--space-8); display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.hq-meta { margin-top: var(--space-5); display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.hq-coa {
+  margin-top: var(--space-6); display: inline-flex; gap: var(--space-2); align-items: baseline;
+  font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted);
+}
+.hq-coa .hq-prompt { color: var(--secondary-text); }
+
+/* ---- la troje: el registry llenándose (decoración, aria-hidden) ----
+   Granos "slot" tenues = lugares del registry; granos sembrados = bundles.
+   Una oleada de germinación recorre la parcela; reduced-motion = estado
+   estático (mezcla sembrada), cero movimiento. */
+.hq-troje { justify-self: center; width: min(56vmin, 26rem); }
+.hq-troje svg { width: 100%; height: auto; display: block; }
+.hq-troje .slot { fill: transparent; stroke: var(--border); stroke-width: 1; }
+.hq-troje .sown { fill: var(--oro-300); }
+@media (prefers-reduced-motion: no-preference) {
+  .hq-troje .sown { animation: hq-breathe 7s ease-in-out infinite; animation-delay: calc(var(--i) * .33s); }
+  .hq-troje .slot { animation: hq-sprout 21s ease-in-out infinite; animation-delay: calc(var(--i) * 1s); }
+}
+@keyframes hq-breathe { 0%, 100% { opacity: 1 } 50% { opacity: .55 } }
+@keyframes hq-sprout {
+  0%, 90%, 100% { fill: transparent; stroke: var(--border); }
+  94%, 96% { fill: var(--olivo-500); stroke: var(--olivo-500); }
+}
+.hq-caption {
+  margin-top: var(--space-4); text-align: center;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--text-muted);
+}
+
+/* el manifiesto del bundle (mui-code) respira abajo del texto */
+.hq-manifest { margin-top: var(--space-8); max-width: 34rem; }
+
+.wm { color: var(--text); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+
+@media (max-width: 880px) {
+  .hq-grid { grid-template-columns: 1fr; gap: var(--space-10); }
+  .hq-troje { order: -1; width: min(60vmin, 17rem); }
+  .hq-manifest { max-width: 100%; }
+}
+</style>
+</head>
+<body class="mui-page">
+
+<!-- kit wordmark as a reusable symbol (official snippet — logo/README.txt) -->
+<svg style="display:none" aria-hidden="true"><symbol id="wm-milpa" viewBox="0 0 2406.90 900.00"><g fill="currentColor"><path d="M76.299560546875 0V492.500244140625H177.201171875V435.00048828125H193.101318359375Q206.80126953125 460.700439453125 237.8511962890625 480.9503173828125Q268.901123046875 501.2001953125 322.100830078125 501.2001953125Q377.20068359375 501.2001953125 410.77557373046875 478.42535400390625Q444.3504638671875 455.6505126953125 461.00048828125 420.900634765625H476.900634765625Q493.900634765625 455.00048828125 526.6505126953125 478.100341796875Q559.400390625 501.2001953125 619.2001953125 501.2001953125Q666.60009765625 501.2001953125 703.9251098632812 481.3502197265625Q741.2501220703125 461.500244140625 763.2251586914062 423.0501708984375Q785.2001953125 384.60009765625 785.2001953125 328.4498291015625V0H682.298583984375V320.499755859375Q682.298583984375 365.3494873046875 657.6238403320312 389.69921875Q632.9490966796875 414.0489501953125 588.299560546875 414.0489501953125Q540.0499267578125 414.0489501953125 511.12530517578125 383.0491943359375Q482.20068359375 352.0494384765625 482.20068359375 293.699951171875V0H379.299072265625V320.499755859375Q379.299072265625 365.3494873046875 354.62432861328125 389.69921875Q329.9495849609375 414.0489501953125 285.300048828125 414.0489501953125Q237.0504150390625 414.0489501953125 208.12579345703125 383.0491943359375Q179.201171875 352.0494384765625 179.201171875 293.699951171875V0Z" transform="translate(-76.30,700.00) scale(1,-1)"/><path d="M76.299560546875 0V492.500244140625H179.201171875V0Z" transform="translate(760.70,700.00) scale(1,-1)"/><path d="M76.299560546875 0V700H179.201171875V0Z" transform="translate(996.70,700.00) scale(1,-1)"/><path d="M76.299560546875 -200V492.500244140625H177.201171875V422.3509521484375H193.101318359375Q211.501220703125 455.20068359375 250.47601318359375 480.8504638671875Q289.4508056640625 506.500244140625 361.00048828125 506.500244140625Q422.7503662109375 506.500244140625 474.4503173828125 476.6502685546875Q526.1502685546875 446.80029296875 557.3252563476562 390.1502685546875Q588.500244140625 333.500244140625 588.500244140625 253.5501708984375V238.9500732421875Q588.500244140625 159.3499755859375 557.500244140625 102.52496337890625Q526.500244140625 45.699951171875 474.80029296875 15.8499755859375Q423.100341796875 -14 361.00048828125 -14Q313.20068359375 -14 280.2508544921875 -2.10009765625Q247.301025390625 9.7998046875 227.0511474609375 28.57464599609375Q206.80126953125 47.3494873046875 195.101318359375 66.79931640625H179.201171875V-200ZM331.39990234375 76.4013671875Q398.79931640625 76.4013671875 441.8489990234375 119.32598876953125Q484.898681640625 162.2506103515625 484.898681640625 241.60009765625V250.900146484375Q484.898681640625 330.2496337890625 441.52398681640625 373.17425537109375Q398.1492919921875 416.098876953125 331.39990234375 416.098876953125Q265.00048828125 416.098876953125 221.4508056640625 373.17425537109375Q177.901123046875 330.2496337890625 177.901123046875 250.900146484375V241.60009765625Q177.901123046875 162.2506103515625 221.4508056640625 119.32598876953125Q265.00048828125 76.4013671875 331.39990234375 76.4013671875Z" transform="translate(1232.70,700.00) scale(1,-1)"/><path d="M228.5496826171875 -14Q176.2496337890625 -14 134.42462158203125 4.1500244140625Q92.599609375 22.300048828125 68.27459716796875 57.27508544921875Q43.9495849609375 92.2501220703125 43.9495849609375 142.2001953125Q43.9495849609375 192.500244140625 68.27459716796875 226.12530517578125Q92.599609375 259.7503662109375 135.22467041015625 276.72540283203125Q177.8497314453125 293.700439453125 231.7498779296875 293.700439453125H382.4488525390625V325.5501708984375Q382.4488525390625 368.9495849609375 356.2491455078125 395.12432861328125Q330.0494384765625 421.299072265625 276.099853515625 421.299072265625Q223.1502685546875 421.299072265625 195.07562255859375 396.29931640625Q167.0009765625 371.299560546875 157.901123046875 330.6500244140625L62.19970703125 361.9505615234375Q74.19970703125 401.700439453125 100.52471923828125 434.2503662109375Q126.8497314453125 466.80029296875 170.82476806640625 486.6502685546875Q214.7998046875 506.500244140625 277.39990234375 506.500244140625Q373.300048828125 506.500244140625 428.02520751953125 457.8502197265625Q482.7503662109375 409.2001953125 482.7503662109375 318.6500244140625V115.80126953125Q482.7503662109375 85.80126953125 510.7503662109375 85.80126953125H553.2001953125V0H476.19970703125Q441.299560546875 0 419.3994140625 18.17498779296875Q397.499267578125 36.3499755859375 397.499267578125 67.0499267578125V70.1497802734375H381.6490478515625Q374.499267578125 54.6500244140625 358.22442626953125 34.62506103515625Q341.9495849609375 14.60009765625 310.899658203125 0.300048828125Q279.8497314453125 -14 228.5496826171875 -14ZM244.2501220703125 71.201171875Q305.6495361328125 71.201171875 344.0491943359375 106.6507568359375Q382.4488525390625 142.100341796875 382.4488525390625 203.699462890625V214.3994140625H237.9500732421875Q197.00048828125 214.3994140625 171.92584228515625 196.77459716796875Q146.8511962890625 179.1497802734375 146.8511962890625 145.1502685546875Q146.8511962890625 111.1507568359375 172.92584228515625 91.17596435546875Q199.00048828125 71.201171875 244.2501220703125 71.201171875Z" transform="translate(1853.70,700.00) scale(1,-1)"/></g><rect x="818.99" y="40.80" width="138.92" height="138.92" rx="34.73" fill="var(--oro-300)"/></symbol></svg>
+
+<!-- ============ HEADER ============ -->
+<header class="mui-header" id="siteHeader">
+  <div class="mui-container mui-header__row">
+    <a class="mui-header__brand" href="#" aria-label="Milpa HQ — home">
+      <svg class="ld-plot" aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
+        <g fill="var(--oro-300)">
+          <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="25" width="10" height="10" rx="2.5"/><rect x="25" y="25" width="10" height="10" rx="2.5"/><rect x="50" y="25" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="37.5" width="10" height="10" rx="2.5"/><rect x="50" y="37.5" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="50" width="10" height="10" rx="2.5"/><rect x="50" y="50" width="10" height="10" rx="2.5"/>
+        </g>
+      </svg>
+      <svg class="wm" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+      <span class="mui-badge">hq</span>
+    </a>
+    <nav class="mui-header__nav" aria-label="primary">
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://milpa.lat">milpa.lat</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://getmilpa.com">getmilpa.com</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://github.com/getmilpa">GitHub</a>
+    </nav>
+    <div class="mui-header__actions">
+      <button class="mui-btn mui-btn--sm hq-mono" id="themeBtn" type="button" aria-label="Toggle theme">◐ dark</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ============ EL TEASER · la troje ============ -->
+  <section class="hq-hero" aria-label="Milpa HQ — the marketplace">
+    <div class="mui-container hq-grid">
+      <div>
+        <p class="mui-section__kicker">the marketplace · compatibility by contract</p>
+        <h1 style="margin:var(--space-4) 0 0; font-size:clamp(var(--text-3xl), 6vw, var(--text-5xl)); font-weight:var(--weight-medium); letter-spacing:var(--tracking-display); line-height:var(--leading-tight)">
+          The granary of the milpa
+        </h1>
+        <p class="hq-tag" lang="es">Donde se guarda la cosecha.</p>
+        <p class="hq-sub">Bundles of plugins that form applications. Every bundle declares what it
+          <b style="color:var(--text-secondary)">provides</b> and what it
+          <b style="color:var(--text-secondary)">requires</b> — so compatibility is a fact you can
+          check, not a promise you have to trust. Metadata only: the registry points, it doesn't hold.</p>
+        <div class="mui-code hq-manifest" aria-label="A bundle manifest, illustrative">
+          <div class="mui-code__header">
+            <span class="mui-code__file">bundle.json</span>
+            <span class="mui-code__lang">json</span>
+          </div>
+          <div class="mui-code__body"><pre><code><span class="mui-code__line"><span class="tok-punc">{</span></span><span class="mui-code__line">  <span class="tok-attr">"bundle"</span><span class="tok-punc">:</span> <span class="tok-str">"acme/shop"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"forms"</span><span class="tok-punc">:</span> <span class="tok-str">"an application"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"provides"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"catalog"</span><span class="tok-punc">,</span> <span class="tok-str">"cart"</span><span class="tok-punc">,</span> <span class="tok-str">"checkout"</span><span class="tok-punc">],</span></span><span class="mui-code__line">  <span class="tok-attr">"requires"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"database"</span><span class="tok-punc">,</span> <span class="tok-str">"mail"</span><span class="tok-punc">],</span></span><span class="mui-code__line">  <span class="tok-attr">"status"</span><span class="tok-punc">:</span> <span class="tok-str">"germinating"</span></span><span class="mui-code__line"><span class="tok-punc">}</span></span></code></pre></div>
+        </div>
+        <p class="hq-coa"><span class="hq-prompt">$</span> coa siembra acme/shop <span style="color:var(--text-muted)">· when the field is ready</span></p>
+        <div class="hq-cta">
+          <a class="mui-btn mui-btn--primary" href="https://github.com/getmilpa">Follow getmilpa</a>
+          <a class="mui-btn" href="https://milpa.lat">Meanwhile, visit the field</a>
+        </div>
+        <div class="hq-meta">
+          <span class="mui-badge mui-badge--secondary">germinating</span>
+          <span class="mui-badge">metadata only</span>
+          <span class="mui-badge">foundations first, scale after</span>
+        </div>
+      </div>
+      <!-- La troje: el registry llenándose. Slots tenues = lugares por sembrar;
+           granos de oro = bundles guardados; de vez en cuando un slot germina
+           (verde olivo) — la milpa viva entrando a la troje. Decorativo. -->
+      <div class="hq-troje" aria-hidden="true">
+        <svg id="troje" viewBox="0 0 122.5 85"></svg>
+        <p class="hq-caption">registry · filling as the field grows</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="mui-footer">
+  <div class="mui-footer__grid">
+    <div class="mui-footer__brand">
+      <span style="display:inline-flex; align-items:center; gap:var(--space-2)">
+        <svg class="ld-plot" aria-hidden="true" width="16" height="16" viewBox="0 0 60 60">
+          <g fill="var(--oro-300)">
+            <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="25" width="10" height="10" rx="2.5"/><rect x="25" y="25" width="10" height="10" rx="2.5"/><rect x="50" y="25" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="37.5" width="10" height="10" rx="2.5"/><rect x="50" y="37.5" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="50" width="10" height="10" rx="2.5"/><rect x="50" y="50" width="10" height="10" rx="2.5"/>
+          </g>
+        </svg>
+        <svg class="wm" style="height:1rem" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+      </span>
+      <p class="mui-footer__mantra" lang="es">Siembra módulos, cosecha aplicaciones.</p>
+    </div>
+    <nav aria-labelledby="ft-eco">
+      <p class="mui-footer__heading" id="ft-eco">Ecosystem</p>
+      <ul class="mui-footer__links">
+        <li><a href="https://milpa.lat">milpa.lat — the field</a></li>
+        <li><a href="https://getmilpa.com">getmilpa.com — the framework</a></li>
+        <li><a href="https://github.com/getmilpa">GitHub</a></li>
+        <li><a href="https://packagist.org/packages/milpa/">Packagist</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="mui-footer__legal">
+    <p>© 2026 Milpa · created by Rodrigo Vicente · with <a href="https://teamx.agency" style="color:inherit">TeamX Agency</a> · Apache-2.0</p>
+  </div>
+</footer>
+
+<script>
+/* ---------- tema ---------- */
+const root = document.documentElement, btn = document.getElementById('themeBtn');
+const setTheme = (t) => { root.dataset.theme = t; btn.textContent = t === 'dark' ? '◐ dark' : '◐ light'; localStorage.setItem('milpa-theme', t); };
+setTheme(localStorage.getItem('milpa-theme') || 'dark');
+btn.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+/* ---------- la troje: parcela 10×7, determinista (cero azar) ----------
+   Sembrado = patrón fijo por índice (i*7 % 11 < 4): ~1/3 de la troje tiene
+   grano; el resto son slots que esperan. Decorativo (aria-hidden); las
+   animaciones (breathe/sprout) viven en CSS tras prefers-reduced-motion. */
+(() => {
+  const COLS = 10, ROWS = 7, CELL = 10, GAP = 2.5;
+  const svg = document.getElementById('troje');
+  let out = '';
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const i = r * COLS + c;
+      const sown = (i * 7) % 11 < 4;
+      out += `<rect class="${sown ? 'sown' : 'slot'}" style="--i:${(i * 5) % 21}" x="${c * (CELL + GAP)}" y="${r * (CELL + GAP)}" width="${CELL}" height="${CELL}" rx="2.5"/>`;
+    }
+  }
+  svg.innerHTML = out;
+})();
+</script>
+</body>
+</html>

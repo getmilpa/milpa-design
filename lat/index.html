@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es" data-theme="dark">
+<html lang="es-MX" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,6 +34,15 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 
 /* ---- header (mui-header--overlay: transparente sobre el hero, se solidifica al scroll) ---- */
 .mui-header__brand .wm { height: 1.05rem; width: auto; display: block; }
+
+/* logo vivo — los granos parpadean, igual que en los docs generados (gen-docs Shell) */
+@media (prefers-reduced-motion: no-preference) {
+  .ld-plot rect { animation: ld-plot-twinkle 16s ease-in-out infinite; }
+  .ld-plot rect:nth-child(2n) { animation-delay: .4s; }
+  .ld-plot rect:nth-child(3n) { animation-delay: .9s; }
+  .ld-plot rect:nth-child(5n) { animation-delay: 1.3s; }
+}
+@keyframes ld-plot-twinkle { 0%, 80%, 100% { opacity: 1 } 87% { opacity: .35 } 93% { opacity: 1 } }
 
 /* ---- hero (pinned por ScrollTrigger — el momento firma) ---- */
 .ld-hero { min-height: calc(100svh - 3.5rem); display: grid; align-items: center; overflow: hidden; position: relative; }
@@ -111,7 +120,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 <header class="mui-header mui-header--overlay" id="siteHeader">
   <div class="mui-container mui-header__row">
     <a class="mui-header__brand" href="#" aria-label="Milpa — inicio">
-      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
+      <svg class="ld-plot" aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
         <g fill="var(--oro-300)">
           <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
           <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
@@ -170,7 +179,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           <button class="mui-btn ld-mono" type="button" data-copy="composer create-project milpa/skeleton mi-app">composer create-project milpa/skeleton</button>
         </div>
         <div class="ld-hero__meta">
-          <span class="mui-badge mui-badge--accent">17 paquetes · Packagist + npm</span>
+          <span class="mui-badge mui-badge--accent">publicado en Packagist + npm</span>
           <span class="mui-badge">Apache-2.0</span>
           <span class="mui-badge mui-badge--secondary">el campo está sembrado</span>
         </div>
@@ -266,10 +275,10 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
         <article class="mui-card" data-rise>
           <div class="mui-card__body">
             <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">el framework · getmilpa.com</p>
-            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Diecisiete paquetes, un campo</h3>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Un campo que sigue creciendo</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">PHP modular para dos tipos de
               caller: humanos y agentes sobre la misma superficie declarada. Del core sin dependencias a las
-              composiciones — runtime, tools, MCP, workflow.</p>
+              composiciones — runtime, tools, MCP, workflow, orquestación — y se siembran hileras nuevas todo el tiempo.</p>
             <ul class="ld-pkgs">
               <li><a href="https://getmilpa.com" hreflang="en">getmilpa.com</a></li>
               <li><a href="https://github.com/getmilpa">github.com/getmilpa</a></li>
@@ -334,10 +343,10 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           </footer>
         </blockquote>
         <p data-rise style="margin-top:var(--space-6); color:var(--text-secondary); font-size:var(--text-base); line-height:var(--leading-relaxed)">
-          Fue el primero de su región en apostarle al mango donde todos sembraban sorgo. Yo mismo sembré
-          los primeros injertos, a los doce años, con una <b style="color:var(--text)">coa</b> — el bastón
-          plantador: raíz dura abajo para aguantar más fruta, la rama que da injertada encima. Años después,
-          el tiempo le dio la razón — veinte hectáreas de mango ataulfo y tommy.
+          Fue el primero de su región en apostarle al mango donde todos sembraban sorgo o se dedicaban a la
+          pesca. Yo mismo sembré los primeros injertos, a los doce años, con una <b style="color:var(--text)">coa</b>
+          — el escarbahoyos: raíz dura abajo para aguantar más fruta, la rama que da injertada encima. Años
+          después, el tiempo le dio la razón — veinte hectáreas de mango ataulfo y tommy.
         </p>
         <p data-rise style="margin-top:var(--space-4); color:var(--text-secondary); font-size:var(--text-base); line-height:var(--leading-relaxed)">
           Eso es este framework, si lo miras bien. Una raíz determinista que sostiene. Módulos injertados
@@ -378,7 +387,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
   <div class="mui-footer__grid">
     <div class="mui-footer__brand">
       <span style="display:inline-flex; align-items:center; gap:var(--space-2)">
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 60 60">
+        <svg class="ld-plot" aria-hidden="true" width="16" height="16" viewBox="0 0 60 60">
           <g fill="var(--oro-300)">
             <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
             <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>

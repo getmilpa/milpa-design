@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Milpa — Sow modules, harvest applications</title>
-<meta name="description" content="Milpa is a modular, contract-first PHP framework built for humans and agents. The field is planted: seventeen packages on Packagist, the design system on npm.">
+<meta name="description" content="Milpa is a modular, contract-first PHP framework built for humans and agents. The field is planted and growing: packages on Packagist, the design system on npm.">
 <meta property="og:title" content="Milpa — Sow modules, harvest applications">
 <meta property="og:description" content="Modular, contract-first PHP framework built for humans and agents. The field is planted.">
 <meta property="og:type" content="website">
@@ -33,6 +33,15 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 
 /* ---- header (mui-header--overlay: transparent over the hero, solidifies on scroll) ---- */
 .mui-header__brand .wm { height: 1.05rem; width: auto; display: block; }
+
+/* logo vivo — los granos parpadean, igual que en los docs generados (gen-docs Shell) */
+@media (prefers-reduced-motion: no-preference) {
+  .ld-plot rect { animation: ld-plot-twinkle 16s ease-in-out infinite; }
+  .ld-plot rect:nth-child(2n) { animation-delay: .4s; }
+  .ld-plot rect:nth-child(3n) { animation-delay: .9s; }
+  .ld-plot rect:nth-child(5n) { animation-delay: 1.3s; }
+}
+@keyframes ld-plot-twinkle { 0%, 80%, 100% { opacity: 1 } 87% { opacity: .35 } 93% { opacity: 1 } }
 
 /* ---- hero (pinned by ScrollTrigger — the signature moment) ---- */
 .ld-hero { min-height: calc(100svh - 3.5rem); display: grid; align-items: center; overflow: hidden; position: relative; }
@@ -142,7 +151,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 <header class="mui-header mui-header--overlay" id="siteHeader">
   <div class="mui-container mui-header__row">
     <a class="mui-header__brand" href="#" aria-label="Milpa — home">
-      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
+      <svg class="ld-plot" aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
         <g fill="var(--oro-300)">
           <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
           <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
@@ -201,7 +210,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           <button class="mui-btn ld-mono" type="button" data-copy="composer create-project milpa/skeleton my-app">composer create-project milpa/skeleton</button>
         </div>
         <div class="ld-hero__meta">
-          <span class="mui-badge mui-badge--accent">17 packages · Packagist + npm</span>
+          <span class="mui-badge mui-badge--accent">published on Packagist + npm</span>
           <span class="mui-badge">Apache-2.0</span>
           <span class="mui-badge mui-badge--secondary">the field is planted</span>
         </div>
@@ -405,10 +414,10 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
   <section class="mui-section" aria-labelledby="h-field">
     <div class="mui-container">
       <p class="mui-section__kicker" data-rise>the harvest map</p>
-      <h2 class="mui-section__title" id="h-field" data-rise>Seventeen packages, one field</h2>
+      <h2 class="mui-section__title" id="h-field" data-rise>A field that keeps growing</h2>
       <p class="mui-section__lede" data-rise>The dependency graph <i>is</i> the milpa, literally: roots with zero
         dependencies, rows grown from the core, compositions that climb — and a skeleton where you harvest.
-        Every layer builds with the one below, and never couples downward.</p>
+        Every layer builds with the one below, never couples downward — and new rows are sown all the time.</p>
       <div class="mui-feature-grid">
         <article class="mui-card" data-rise>
           <div class="mui-card__body">
@@ -430,10 +439,11 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">tier 1 · the rows</p>
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Grown from the core</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Each one implements a seam of the
-              contracts: containers, events, routing, live components, tools, plugins, workflow.</p>
+              contracts: containers, events, routing, live components, tools, plugins, workflow, event log.</p>
             <ul class="ld-pkgs">
               <li><a href="https://github.com/getmilpa/container">container</a></li>
               <li><a href="https://github.com/getmilpa/events">events</a></li>
+              <li><a href="https://github.com/getmilpa/event-store">event-store</a></li>
               <li><a href="https://github.com/getmilpa/http">http</a></li>
               <li><a href="https://github.com/getmilpa/live">live</a></li>
               <li><a href="https://github.com/getmilpa/plugin">plugin</a></li>
@@ -447,12 +457,13 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">tier 2 · the climbers</p>
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Compositions</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">The rows composed into engines:
-              a bootable kernel, an LLM gateway, an MCP server, live HTML over the wire.</p>
+              a bootable kernel, an LLM gateway, an MCP server, live HTML, event-sourced process orchestration.</p>
             <ul class="ld-pkgs">
               <li><a href="https://github.com/getmilpa/runtime">runtime</a></li>
               <li><a href="https://github.com/getmilpa/ai-gateway">ai-gateway</a></li>
               <li><a href="https://github.com/getmilpa/mcp-server">mcp-server</a></li>
               <li><a href="https://github.com/getmilpa/live-web">live-web</a></li>
+              <li><a href="https://github.com/getmilpa/orchestrator">orchestrator</a></li>
             </ul>
           </div>
         </article>
@@ -656,7 +667,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
   <div class="mui-footer__grid">
     <div class="mui-footer__brand">
       <span style="display:inline-flex; align-items:center; gap:var(--space-2)">
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 60 60">
+        <svg class="ld-plot" aria-hidden="true" width="16" height="16" viewBox="0 0 60 60">
           <g fill="var(--oro-300)">
             <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
             <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>

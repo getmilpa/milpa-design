@@ -35,6 +35,15 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 /* ---- header (mui-header--overlay) ---- */
 .mui-header__brand .wm { height: 1.05rem; width: auto; display: block; }
 
+/* living logo — the granos twinkle, same as the generated repo docs (gen-docs Shell) */
+@media (prefers-reduced-motion: no-preference) {
+  .ld-plot rect { animation: ld-plot-twinkle 16s ease-in-out infinite; }
+  .ld-plot rect:nth-child(2n) { animation-delay: .4s; }
+  .ld-plot rect:nth-child(3n) { animation-delay: .9s; }
+  .ld-plot rect:nth-child(5n) { animation-delay: 1.3s; }
+}
+@keyframes ld-plot-twinkle { 0%, 80%, 100% { opacity: 1 } 87% { opacity: .35 } 93% { opacity: 1 } }
+
 /* ---- hero (pinned by ScrollTrigger — the signature moment) ---- */
 .ld-hero { min-height: calc(100svh - 3.5rem); display: grid; align-items: center; overflow: hidden; position: relative; }
 .ld-hero__grid {
@@ -111,7 +120,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 <header class="mui-header mui-header--overlay" id="siteHeader">
   <div class="mui-container mui-header__row">
     <a class="mui-header__brand" href="#" aria-label="Milpa — home">
-      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
+      <svg class="ld-plot" aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
         <g fill="var(--oro-300)">
           <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
           <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
@@ -170,7 +179,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           <button class="mui-btn ld-mono" type="button" data-copy="composer create-project milpa/skeleton my-app">composer create-project milpa/skeleton</button>
         </div>
         <div class="ld-hero__meta">
-          <span class="mui-badge mui-badge--accent">17 packages · Packagist + npm</span>
+          <span class="mui-badge mui-badge--accent">published on Packagist + npm</span>
           <span class="mui-badge">Apache-2.0</span>
           <span class="mui-badge mui-badge--secondary">the field is planted</span>
         </div>
@@ -267,10 +276,10 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
         <article class="mui-card" data-rise>
           <div class="mui-card__body">
             <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">the framework · getmilpa.com</p>
-            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Seventeen packages, one field</h3>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">A field that keeps growing</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Modular PHP for two kinds of
               callers: humans and agents on the same declared surface. From the zero-dependency core to the
-              compositions — runtime, tools, MCP, workflow.</p>
+              compositions — runtime, tools, MCP, workflow, orchestration — and new rows are sown all the time.</p>
             <ul class="ld-pkgs">
               <li><a href="https://getmilpa.com">getmilpa.com</a></li>
               <li><a href="https://github.com/getmilpa">github.com/getmilpa</a></li>
@@ -379,7 +388,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
   <div class="mui-footer__grid">
     <div class="mui-footer__brand">
       <span style="display:inline-flex; align-items:center; gap:var(--space-2)">
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 60 60">
+        <svg class="ld-plot" aria-hidden="true" width="16" height="16" viewBox="0 0 60 60">
           <g fill="var(--oro-300)">
             <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
             <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>

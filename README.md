@@ -14,6 +14,18 @@ ambos avanzan en paralelo sin pisarse. La costura entre los dos es un **contrato
 
 ## Estado
 
+**v0.9 — el almácigo: primitivas didácticas.** Cuatro piezas nuevas en *el elote* para material
+educativo de arquitectura, destiladas del battle-test de Milpa Academy: **`mui-plot`** (la
+parcela: módulos con contrato visible, estados slot/germinating/sown/wilted), **`mui-pipeline`**
+(el tubo de etapas con canica `--_pipeline-progress` y salidas tempranas denied/failed/skipped),
+**`mui-gate`** (la compuerta tri-estado — aprobar/rechazar/exonerar — con audit `role="log"`
+append-only y `self-denied` por construcción) y **`mui-replay`** (el log reproducible: eventos +
+corte con `<input range>` nativo + proyección). Cero JS publicado: estados por atributos y el
+comportamiento del consumidor documentado en `a11y.behavior` (lógica de referencia testeada en el
+repo hermano `academy`). Paleta didáctica desde la semántica existente (olivo=germinando,
+oro=sembrado, success=completado, danger=marchito, warning=exonerado). Contratos **68 → 72** ·
+**193/193 AA** — audit de cierre: **0 pares nuevos**. Battle-test: `proof/almacigo.html`.
+
 **v0.8 — el rocío: cierra los huecos de theming de marca (bordes, superficies, blur) + glass.**
 Grupo `effect` nuevo: `--border-style` (default `solid` — los ~83 bordes del bundle lo usan,
 dashed/double/none por token), `--surface-backdrop` (default `none`, expuesto en `.mui-card`/

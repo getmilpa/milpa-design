@@ -154,7 +154,27 @@ honestos anotados — no eran deuda de 0.7, eran el temario de 0.8:
   cierre: **0 pares nuevos** (release sin color, `scripts/contrast-pairs.mjs` `PAIRS` sin tocar;
   solo se agrega la invariante `--bg` opaco). Todo aditivo — cero cambio visual por defecto.
 
-⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.8). Backlog T9 **cerrado** desde 0.6.0.
+✅ **0.9.0 — el almácigo (primitivas didácticas):** la galería educativa de Milpa Academy
+(repo hermano `academy/artifacts/`, 2026-07-09) re-inventó con prefijo `wb-*` cuatro patrones
+repetibles de material didáctico — el sistema los adopta como piezas contratadas (mismo patrón
+que 0.3.0 «la plaza»): **`mui-plot`** (parcela: `__core`/`__cell` con `__name`/`__contract`/
+`__note`; estados `slot`/`germinating`/`sown`/`wilted` — olivo=vivo, oro=sembrado,
+danger=marchito), **`mui-pipeline`** (`__track` + rail + `__marker` por custom prop privada
+`--_pipeline-progress`; estados `idle`/`active`/`complete`/`denied`/`failed`/`skipped`;
+`--vertical`), **`mui-gate`** (`__request`/`__decisions` compone mui-btn/`__outcome`
+role=status/`__audit` role=log append-only con chips mui-badge; estados `pending`/`approved`/
+`rejected`/`waived`/`self-denied` — el rechazo por construcción de la auto-aprobación, espejo
+del orquestador), **`mui-replay`** (`__stream`/`__scrubber` estiliza `<input range>` NATIVO/
+`__projection` role=status; `data-applied` + `aria-current="step"`). CERO JS publicado — el
+comportamiento es del consumidor, documentado en `a11y.behavior` con lógica de referencia
+testeada en `academy/artifacts/artifacts-core.js`. Guard `[hidden]` en las 4 raíces. Contratos
+**68 → 72**. Gate: **193/193 AA** — audit de cierre: **0 pares nuevos** (todas las tintas
+reusan pares de callout --tip/--version/--danger, badge y base). Battle-test interno:
+`proof/almacigo.html` (las 4 en una historia: la parcela alimenta el pipeline, autorizar abre
+la compuerta, el proceso se relee en el replay). **Cierre externo pendiente:** refactor de la
+galería de academy para consumir las piezas (T6 del plan — vive en el repo academy).
+
+⚠️ **Falta:** Storybook formal (T5 — los proofs cubren v0.9). Backlog T9 **cerrado** desde 0.6.0.
 Los 3 huecos de theming de **marca** que 0.7 había dejado anotados (border-style, backdrop/blur
 tematizable, gate con translucidez) quedan **CERRADOS en 0.8** (ver arriba). Quedan, a propósito,
 como **futuro conocido** los ejes que NO son de marca — nunca prometidos para 0.8, son ejes

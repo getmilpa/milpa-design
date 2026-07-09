@@ -1,0 +1,74 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "replay",
+  "layer": "artifact",
+  "version": "0.9.0",
+  "status": "stable",
+  "class": "mui-replay",
+  "summary": "El log reproducible didáctico: eventos append-only, un corte (scrubber) y la proyección del estado en ese corte. Enseña event sourcing: el estado es una proyección del log — mueve el corte y mira el estado re-derivarse. Nada se reproduce solo: el tiempo lo controla la persona (o el agente). Pieza del cluster almácigo; el fold es del consumidor; referencia viva: academy/artifacts/artifacts-core.js (projectProcess).",
+  "element": [
+    "div.mui-replay · __stream como <ol> · el scrubber envuelve un <input type=\"range\"> NATIVO del consumidor · __projection con role=\"status\""
+  ],
+  "anatomy": {
+    "root": ".mui-replay — columna con gap space-4. Guard [hidden] incluido",
+    "stream": ".mui-replay__stream — <ol> sin viñetas, mono xs: el log en orden de llegada (append-only: no se reordena)",
+    "event": ".mui-replay__event — fila con borde inline-start (la espina del log): __type (weight-medium), __actor (muted) y __payload opcional",
+    "scrubber": ".mui-replay__scrubber — envuelve el <input type=\"range\"> nativo (min 0, max nº de eventos): la pieza SOLO lo estiliza (accent-color) — el range nativo trae teclado, AT y semántica gratis",
+    "projection": ".mui-replay__projection — el estado proyectado en el corte: card surface con pares __stat-label (mono 2xs uppercase muted) / __stat-value (mono, weight-medium)"
+  },
+  "variants": {
+    "none": "sin variantes visuales en 0.9 — la composición (lado a lado, apilado) la decide el consumidor"
+  },
+  "states": {
+    "applied": "default (sin atributo o data-applied=\"true\") — el evento está DENTRO del corte: tinta text-secondary, espina border",
+    "future": "[data-applied=\"false\"] — fuera del corte (aún no aplicado): tinta muted, espina subtle",
+    "current": "[aria-current=\"step\"] — el evento del corte: accent-subtle + espina accent + tinta accent-text (par callout --version)"
+  },
+  "tokens": [
+    "--surface",
+    "--border",
+    "--border-subtle",
+    "--border-width",
+    "--border-style",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--accent",
+    "--accent-subtle",
+    "--accent-text",
+    "--font-mono",
+    "--text-sm",
+    "--text-xs",
+    "--text-2xs",
+    "--tracking-wide",
+    "--weight-medium",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--radius-xs",
+    "--radius-md",
+    "--dur-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "element": "el range NATIVO es el control (flechas/Home/End gratis); lleva label del consumidor ('Corte del log: evento 4 de 7'). __projection es role=\"status\": al mover el corte se anuncia el estado proyectado",
+    "aria": [
+      "aria-current=\"step\" marca el evento del corte — semántica real, no clase",
+      "los eventos futuros siguen LEGIBLES (muted cumple AA): el corte atenúa, no esconde",
+      "el resumen del estado proyectado vive en texto en __projection ('evento 4/7 · estado: esperando verificación') — nunca solo en la posición del slider"
+    ],
+    "contrast": "text-secondary y text-muted sobre bg/surface (base); accent-text sobre accent-subtle + espina accent como indicador (par --version); stats text/text-muted sobre surface. 0 pares nuevos",
+    "behavior": "JS de referencia (consumidor): input del range → marcar data-applied por índice (i < corte), aria-current en el evento del corte, re-derivar la proyección con el fold y escribirla en __projection. Fold de referencia testeado: academy/artifacts/artifacts-core.js (projectProcess). Regla didáctica: la proyección SIEMPRE se recalcula desde el log — jamás se muta estado suelto (ese es el punto de la pieza)"
+  },
+  "motion": {
+    "transitions": "eventos: background/color con dur-fast al cruzar el corte — entra y se asienta",
+    "reducedMotion": "contrato global: cambio instantáneo; el estado final es idéntico"
+  },
+  "examples": [
+    {
+      "title": "Log con corte en el evento 3",
+      "html": "<div class=\"mui-replay\"><ol class=\"mui-replay__stream\" aria-label=\"Log del proceso\"><li class=\"mui-replay__event\"><span class=\"mui-replay__type\">process.requested</span><span class=\"mui-replay__actor\">agente:bot</span></li><li class=\"mui-replay__event\"><span class=\"mui-replay__type\">verification.requested</span><span class=\"mui-replay__actor\">runtime</span></li><li class=\"mui-replay__event\" aria-current=\"step\"><span class=\"mui-replay__type\">verification.waived</span><span class=\"mui-replay__actor\">delivery:ana</span></li><li class=\"mui-replay__event\" data-applied=\"false\"><span class=\"mui-replay__type\">execution.started</span><span class=\"mui-replay__actor\">runtime</span></li></ol><div class=\"mui-replay__scrubber\"><input type=\"range\" min=\"0\" max=\"4\" value=\"3\" aria-label=\"Corte del log: evento 3 de 4\"></div><div class=\"mui-replay__projection\" role=\"status\"><div class=\"mui-replay__stat\"><span class=\"mui-replay__stat-label\">estado</span><span class=\"mui-replay__stat-value\">listo para ejecutar</span></div><div class=\"mui-replay__stat\"><span class=\"mui-replay__stat-label\">verificación</span><span class=\"mui-replay__stat-value\">exonerada</span></div></div></div>"
+    }
+  ]
+}

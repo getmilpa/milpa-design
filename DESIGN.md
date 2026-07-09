@@ -37,6 +37,24 @@ Mapa metáfora → arquitectura (el corazón conceptual):
 | Frijol    | plugins (eventos)   | components que componen        |
 | Calabaza  | contratos / validación | gobernanza que protege      |
 
+**La raíz — por qué Milpa es Milpa.** El nombre no salió de un brainstorm: salió de un campo real.
+El padre del fundador fue agricultor en San Francisco del Mar (Oaxaca) — el primero de la región en
+apostarle al mango donde todos sembraban sorgo o vivían de la pesca. Los primeros injertos los
+sembró su hijo, a los doce años, con una **coa** (el escarbahoyos): raíz dura abajo para aguantar
+más fruta, rama productiva injertada arriba. Años después, el tiempo respaldó la apuesta: veinte hectáreas de
+ataulfo y tommy. Y la lección que financia todo esto la dio él, pagando un curso de ensamblaje de
+PCs: *"yo no sé de computadoras, pero sí sé de carros: si compras uno, vale la pena invertir en
+aprender a arreglarlo."* De ahí baja el sistema entero, como principio y no como decoración:
+
+- **El injerto es la arquitectura** — raíz determinista, aburrida a propósito, que aguanta; ramas
+  (módulos) que dan el fruto. La abundancia crece *encima* del core, no adentro.
+- **La coa es la herramienta** — la CLI se llama así porque con una coa se sembraron los injertos
+  reales. La herramienta con la que siembras es parte de la historia, no un accesorio.
+- **La lección del carro es el contrato** — lo que es tuyo debes poder entenderlo y repararlo. Por
+  eso el framework se explica a sí mismo y nada se siembra sin contrato.
+- **Apostar distinto** — mango donde todos veían sorgo. El tiempo respalda las apuestas bien
+  sembradas.
+
 ---
 
 ## 2. Fundamentos de marca

@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Milpa — Sow modules, harvest applications</title>
-<meta name="description" content="Milpa is a modular, AI-native, contract-first PHP framework. A milpa is not a crop — it's a system. The first harvest is already on npm: @milpa/design.">
+<meta name="description" content="Milpa is a modular, contract-first PHP framework built for humans and agents. The field is planted: seventeen packages on Packagist, the design system on npm.">
 <meta property="og:title" content="Milpa — Sow modules, harvest applications">
-<meta property="og:description" content="Modular, AI-native, contract-first PHP framework. It's germinating.">
+<meta property="og:description" content="Modular, contract-first PHP framework built for humans and agents. The field is planted.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://milpa.lat">
 <link rel="icon" href="../logo/symbol/milpa-symbol-color.svg" type="image/svg+xml">
@@ -17,7 +17,11 @@
 <link rel="stylesheet" href="../motion/milpa-motion.css">
 <link rel="stylesheet" href="../primitives/milpa-primitives.css">
 <link rel="stylesheet" href="../components/milpa-components.css">
+<link rel="stylesheet" href="../artifacts/milpa-artifacts.css">
 <link rel="stylesheet" href="../layouts/milpa-layouts.css">
+<!-- the real proof skins (theme-swap): inert until <html data-skin="…"> — L1 retokenize, zero structural CSS -->
+<link rel="stylesheet" href="../proof/skins/brutalist-skin.css">
+<link rel="stylesheet" href="../proof/skins/glass-skin.css">
 <style>
 /* ===== landing (ld-*) — tokens only; page/section/grid/footer/header now
    come from @milpa/design layouts (mui-*). What stays ld-* is the
@@ -65,8 +69,9 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 }
 @keyframes ld-drop { from { translate: 0 0; opacity: .5; } to { translate: 0 4px; opacity: 1; } }
 
-/* design system showcase */
-.ld-ds { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); align-items: start; margin-top: var(--space-10); }
+/* two-column showcases (design system · two callers) */
+.ld-ds, .ld-duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); align-items: start; margin-top: var(--space-10); }
+.ld-ds > *, .ld-duo > * { min-width: 0; } /* let mui-code/terminal scroll inside, not widen the page */
 .ld-demo-rows { display: flex; flex-direction: column; gap: var(--space-5); }
 .ld-demo-row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
 .ld-install {
@@ -78,15 +83,33 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 .ld-install .ld-prompt { color: var(--secondary-text); user-select: none; }
 .ld-install code { flex: 1; overflow-x: auto; white-space: nowrap; }
 
-/* contract */
-.ld-code {
-  margin-top: var(--space-8);
-  background: var(--bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
-  padding: var(--space-5) var(--space-6); overflow-x: auto;
+/* proof lines under the sister cards */
+.ld-proof { margin: var(--space-4) 0 0; font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--text-muted); }
+.ld-proof code { color: var(--accent-text); }
+
+/* the contract loop — one line of mono, the whole system */
+.ld-loop {
+  margin-top: var(--space-8); text-align: center;
+  font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-secondary);
+  overflow-x: auto; white-space: nowrap;
 }
-.ld-code pre { margin: 0; font-family: var(--font-mono); font-size: var(--text-xs); line-height: var(--leading-relaxed); color: var(--text-secondary); }
-.ld-code .k { color: var(--accent-text); }
-.ld-code .c { color: var(--text-muted); }
+
+/* contract tabs (three specs, one principle) */
+.ld-contract-tabs { margin-top: var(--space-8); }
+.ld-contract-tabs .mui-tabs__panel { margin-top: var(--space-4); }
+
+/* skin swap control — state via aria-pressed (attributes, never classes) */
+.ld-swap { margin-block-end: var(--space-4); }
+.ld-swap .mui-btn[aria-pressed="true"] { background: var(--accent-subtle); color: var(--accent-text); border-color: var(--accent-text); }
+
+/* package chips in the field map */
+.ld-pkgs { margin: var(--space-4) 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.ld-pkgs a {
+  font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--text-secondary);
+  text-decoration: none; padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border); border-radius: var(--radius-full);
+}
+.ld-pkgs a:hover { color: var(--accent-text); border-color: var(--border-strong); }
 
 /* final cta */
 .ld-final { text-align: center; }
@@ -106,7 +129,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 @media (max-width: 880px) {
   .ld-hero__grid { grid-template-columns: 1fr; gap: var(--space-10); }
   .ld-granoM { order: -1; width: min(44vmin, 15rem); margin-top: var(--space-16); }
-  .ld-ds { grid-template-columns: 1fr; }
+  .ld-ds, .ld-duo { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -119,13 +142,23 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 <header class="mui-header mui-header--overlay" id="siteHeader">
   <div class="mui-container mui-header__row">
     <a class="mui-header__brand" href="#" aria-label="Milpa — home">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 60 60">
+        <g fill="var(--oro-300)">
+          <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="25" width="10" height="10" rx="2.5"/><rect x="25" y="25" width="10" height="10" rx="2.5"/><rect x="50" y="25" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="37.5" width="10" height="10" rx="2.5"/><rect x="50" y="37.5" width="10" height="10" rx="2.5"/>
+          <rect x="0" y="50" width="10" height="10" rx="2.5"/><rect x="50" y="50" width="10" height="10" rx="2.5"/>
+        </g>
+      </svg>
       <svg class="wm" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
     </a>
     <button class="mui-btn mui-btn--ghost mui-btn--icon mui-header__toggle" id="navToggle"
             type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">☰</button>
     <nav class="mui-header__nav" id="siteNav" aria-label="primary">
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="/docs">Docs</a>
-      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://github.com/getmilpa/milpa-design">GitHub</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://github.com/getmilpa">GitHub</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://packagist.org/packages/milpa/">Packagist</a>
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://www.npmjs.com/package/@milpa/design">npm</a>
     </nav>
     <div class="mui-header__actions">
@@ -142,7 +175,8 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
   <div class="mui-drawer__body">
     <nav class="mui-stack" aria-label="Menu">
       <a class="mui-btn mui-btn--ghost" href="/docs">Docs</a>
-      <a class="mui-btn mui-btn--ghost" href="https://github.com/getmilpa/milpa-design">GitHub</a>
+      <a class="mui-btn mui-btn--ghost" href="https://github.com/getmilpa">GitHub</a>
+      <a class="mui-btn mui-btn--ghost" href="https://packagist.org/packages/milpa/">Packagist</a>
       <a class="mui-btn mui-btn--ghost" href="https://www.npmjs.com/package/@milpa/design">npm</a>
     </nav>
   </div>
@@ -153,7 +187,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
   <section class="ld-hero" id="hero" aria-label="Milpa">
     <div class="mui-container ld-hero__grid">
       <div>
-        <p class="mui-section__kicker">modular php framework · ai-native · contract-first</p>
+        <p class="mui-section__kicker">modular php framework · built for humans and agents · contract-first</p>
         <h1 style="margin:var(--space-4) 0 0">
           <svg class="wm-hero" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
         </h1>
@@ -163,13 +197,13 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           Modules that grow together and feed one another — on a deterministic core,
           with contracts that protect them.</p>
         <div class="ld-hero__cta">
-          <a class="mui-btn mui-btn--primary" href="https://github.com/getmilpa/milpa-design">Explore the design system</a>
-          <button class="mui-btn ld-mono" type="button" data-copy="npm i @milpa/design">npm i @milpa/design</button>
+          <a class="mui-btn mui-btn--primary" href="https://github.com/getmilpa">Explore getmilpa</a>
+          <button class="mui-btn ld-mono" type="button" data-copy="composer create-project milpa/skeleton my-app">composer create-project milpa/skeleton</button>
         </div>
         <div class="ld-hero__meta">
-          <span class="mui-badge mui-badge--accent">@milpa/design v0.2.0 · published</span>
+          <span class="mui-badge mui-badge--accent">17 packages · Packagist + npm</span>
           <span class="mui-badge">Apache-2.0</span>
-          <span class="mui-badge mui-badge--secondary">the core is germinating</span>
+          <span class="mui-badge mui-badge--secondary">the field is planted</span>
         </div>
       </div>
       <!-- The M assembling itself: 13 granos = 13 modules → one identity.
@@ -217,6 +251,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Deterministic kernel</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">The stalk that holds everything up.
               A small core, predictable and boring on purpose: abundance grows on top of it, not inside it.</p>
+            <p class="ld-proof"><code>milpa/core</code> · zero dependencies — contracts and primitives only</p>
           </div>
         </article>
         <article class="mui-card" data-rise>
@@ -231,6 +266,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Plugins that climb the stalk</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Modules that connect through
               events and compose with each other. They fix nitrogen: each one feeds the whole system.</p>
+            <p class="ld-proof"><code>provides / requires</code> in <code>milpa.json</code> — providers load before consumers</p>
           </div>
         </article>
         <article class="mui-card" data-rise>
@@ -243,6 +279,192 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Governance that protects</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">It covers the soil: machine-readable
               contracts that validate every piece. Nothing is sown without one.</p>
+            <p class="ld-proof"><code>*.contract.json</code> · validated at boot, gated in CI</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TWO CALLERS · the differentiator ============ -->
+  <section class="mui-section" aria-labelledby="h-callers">
+    <div class="mui-container">
+      <p class="mui-section__kicker" data-rise>one tool, every caller</p>
+      <h2 class="mui-section__title" id="h-callers" data-rise>Built for two kinds of callers</h2>
+      <p class="mui-section__lede" data-rise>Most PHP frameworks are built for one kind of caller: a human writing
+        code, or a browser sending requests. Milpa is built for <b style="color:var(--text-secondary)">two</b> —
+        humans <i>and</i> agents operating the same application through the same declared surface.</p>
+      <div class="ld-duo">
+        <div class="mui-code" data-rise>
+          <div class="mui-code__header">
+            <span class="mui-code__file">NoteTools.php</span>
+            <span class="mui-code__lang">php</span>
+          </div>
+          <div class="mui-code__body"><pre><code><span class="mui-code__line"><span class="tok-kw">final class</span> <span class="tok-fn">NoteTools</span></span><span class="mui-code__line"><span class="tok-punc">{</span></span><span class="mui-code__line">    <span class="tok-attr">#[Tool(</span><span class="tok-str">'list_notes'</span><span class="tok-punc">,</span> <span class="tok-str">'List saved notes'</span><span class="tok-punc">,</span> <span class="tok-attr">scopes:</span> <span class="tok-punc">[</span><span class="tok-str">'notes:read'</span><span class="tok-punc">]</span><span class="tok-attr">)]</span></span><span class="mui-code__line">    <span class="tok-kw">public function</span> <span class="tok-fn">listNotes</span><span class="tok-punc">(</span></span><span class="mui-code__line">        <span class="tok-attr">#[Param(</span><span class="tok-str">'Page number'</span><span class="tok-punc">,</span> <span class="tok-attr">clamp:</span> <span class="tok-punc">[</span>1<span class="tok-punc">,</span> 1000<span class="tok-punc">]</span><span class="tok-attr">)]</span> <span class="tok-kw">int</span> <span class="tok-var">$page</span> <span class="tok-punc">=</span> 1</span><span class="mui-code__line">    <span class="tok-punc">):</span> ToolResult <span class="tok-punc">{</span></span><span class="mui-code__line">        <span class="tok-kw">return</span> ToolResult<span class="tok-punc">::</span><span class="tok-fn">success</span><span class="tok-punc">([</span><span class="tok-str">'notes'</span> <span class="tok-punc">=&gt;</span> <span class="tok-punc">[],</span> <span class="tok-str">'page'</span> <span class="tok-punc">=&gt;</span> <span class="tok-var">$page</span><span class="tok-punc">]);</span></span><span class="mui-code__line">    <span class="tok-punc">}</span></span><span class="mui-code__line"><span class="tok-punc">}</span></span></code></pre></div>
+        </div>
+        <div data-rise>
+          <div class="mui-terminal">
+            <div class="mui-terminal__bar"></div>
+            <div class="mui-terminal__body" role="region" aria-label="the same tool from the CLI and over MCP" tabindex="0">
+              <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php coa coa:tools</span></div>
+              <div class="mui-terminal__line"><span class="mui-terminal__out">list_notes   List saved notes   notes:read</span></div>
+              <div class="mui-terminal__line"><span class="mui-terminal__out"># the same tool, discovered over MCP:</span></div>
+              <div class="mui-terminal__line"><span class="mui-terminal__out">{"method":"tools/list"} → ["list_notes", …]</span></div>
+            </div>
+          </div>
+          <p style="margin-top:var(--space-4); color:var(--text-muted); font-size:var(--text-sm)">
+            Declare it once with <code class="ld-mono" style="color:var(--accent-text)">#[Tool]</code>. The registry
+            runs the same pipeline on every call — resolve, validate, authorize, execute, audit — whether it came
+            from the CLI, an HTTP request, or an agent speaking MCP. And when a call is denied, the result says
+            exactly why.
+          </p>
+          <div style="margin-top:var(--space-5); display:flex; gap:var(--space-2); flex-wrap:wrap">
+            <a class="mui-btn mui-btn--sm" href="https://github.com/getmilpa/tool-runtime">milpa/tool-runtime</a>
+            <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://github.com/getmilpa/mcp-server">milpa/mcp-server</a>
+          </div>
+        </div>
+      </div>
+      <p class="ld-loop" data-rise aria-label="the contract loop">plugin → capability → tool → verification → event → result</p>
+    </div>
+  </section>
+
+  <!-- ============ BETTER RAILS · agent-native ============ -->
+  <section class="mui-section" aria-labelledby="h-rails">
+    <div class="mui-container">
+      <p class="mui-section__kicker" data-rise>agent-native · deterministic</p>
+      <h2 class="mui-section__title" id="h-rails" data-rise>Better rails, not more freedom</h2>
+      <p class="mui-section__lede" data-rise>Agents don't need more freedom — they need better rails.
+        <code class="ld-mono" style="color:var(--accent-text)">coa</code> is deterministic first: it inspects,
+        validates and diagnoses with machine-readable answers, and generators produce the file
+        <b style="color:var(--text-secondary)">in memory</b> — you can inspect, diff or dry-run a generation
+        before anything touches the filesystem.</p>
+      <div class="mui-terminal" data-rise style="margin-top:var(--space-8)">
+        <div class="mui-terminal__bar"></div>
+        <div class="mui-terminal__body" role="region" aria-label="coa generate-verify-inspect session" tabindex="0">
+          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php coa coa:make entity InventoryPlugin Product --fields "name:string:120,price:decimal:10,2" --dry-run</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">plan   plugins/InventoryPlugin/Entities/Product.php   (dry run — nothing written)</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php coa coa:validate</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ manifests valid · providers implement what they claim · boundaries clean</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ every requires satisfied · capability graph acyclic</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php coa coa:doctor</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ the framework, explained by itself</span></div>
+        </div>
+      </div>
+      <p style="margin-top:var(--space-5); color:var(--text-muted); font-size:var(--text-sm); max-width:64ch" data-rise>
+        The loop is <span style="color:var(--text-secondary)">generate → verify → inspect</span>: scaffolding follows
+        the same conventions the runtime enforces, verifiers reflect the real class against the real rules, and
+        validators read the whole plugin ecosystem — every hard <code class="ld-mono">requires</code> satisfied,
+        the graph acyclic — before it becomes a boot-time failure.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ VERIFIED BY HUMANS ============ -->
+  <section class="mui-section" aria-labelledby="h-verify">
+    <div class="mui-container">
+      <p class="mui-section__kicker" data-rise>trust, by design</p>
+      <h2 class="mui-section__title" id="h-verify" data-rise>Executed by agents, verified by humans</h2>
+      <p class="mui-section__lede" data-rise>Autonomy without brakes is a demo, not a system. In Milpa, verification
+        is a first-class primitive: a mutating action can be gated behind a deterministic check, a human approval,
+        or a pending async result — and every passage is recorded.</p>
+      <div class="mui-feature-grid">
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">the seam</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Pass, fail — or waived</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">A verifier gates the action; the
+              result is tri-state. Waiving a gate is an explicit, recorded decision — never a silent skip.</p>
+            <p class="ld-proof"><code>milpa/core</code> · the verification seam</p>
+          </div>
+        </article>
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">the flow</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">State machines as data</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">States, transitions and gates live
+              in data, not in constants — change a flow without redeploying code, and ask the machine which
+              transitions are legal right now.</p>
+            <p class="ld-proof"><code>milpa/workflow</code> · data-driven state machine</p>
+          </div>
+        </article>
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">the memory</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">An audit trail that outlives the run</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Every call is resolved, authorized
+              and audited; sensitive fields are redacted before they're logged. Identity is an opaque principal —
+              the host owns its domain.</p>
+            <p class="ld-proof"><code>milpa/tool-runtime</code> · audit built into the pipeline</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE FIELD · seventeen packages ============ -->
+  <section class="mui-section" aria-labelledby="h-field">
+    <div class="mui-container">
+      <p class="mui-section__kicker" data-rise>the harvest map</p>
+      <h2 class="mui-section__title" id="h-field" data-rise>Seventeen packages, one field</h2>
+      <p class="mui-section__lede" data-rise>The dependency graph <i>is</i> the milpa, literally: roots with zero
+        dependencies, rows grown from the core, compositions that climb — and a skeleton where you harvest.
+        Every layer builds with the one below, and never couples downward.</p>
+      <div class="mui-feature-grid">
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">tier 0 · the roots</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Zero dependencies</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">The contracts, and standalone
+              pieces that depend on nothing — not even on each other.</p>
+            <ul class="ld-pkgs">
+              <li><a href="https://github.com/getmilpa/core">core</a></li>
+              <li><a href="https://github.com/getmilpa/devtools">devtools</a></li>
+              <li><a href="https://github.com/getmilpa/mcp-client">mcp-client</a></li>
+              <li><a href="https://github.com/getmilpa/mercure">mercure</a></li>
+              <li><a href="https://github.com/getmilpa/oauth-providers">oauth-providers</a></li>
+            </ul>
+          </div>
+        </article>
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">tier 1 · the rows</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Grown from the core</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Each one implements a seam of the
+              contracts: containers, events, routing, live components, tools, plugins, workflow.</p>
+            <ul class="ld-pkgs">
+              <li><a href="https://github.com/getmilpa/container">container</a></li>
+              <li><a href="https://github.com/getmilpa/events">events</a></li>
+              <li><a href="https://github.com/getmilpa/http">http</a></li>
+              <li><a href="https://github.com/getmilpa/live">live</a></li>
+              <li><a href="https://github.com/getmilpa/plugin">plugin</a></li>
+              <li><a href="https://github.com/getmilpa/tool-runtime">tool-runtime</a></li>
+              <li><a href="https://github.com/getmilpa/workflow">workflow</a></li>
+            </ul>
+          </div>
+        </article>
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">tier 2 · the climbers</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Compositions</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">The rows composed into engines:
+              a bootable kernel, an LLM gateway, an MCP server, live HTML over the wire.</p>
+            <ul class="ld-pkgs">
+              <li><a href="https://github.com/getmilpa/runtime">runtime</a></li>
+              <li><a href="https://github.com/getmilpa/ai-gateway">ai-gateway</a></li>
+              <li><a href="https://github.com/getmilpa/mcp-server">mcp-server</a></li>
+              <li><a href="https://github.com/getmilpa/live-web">live-web</a></li>
+            </ul>
+          </div>
+        </article>
+        <article class="mui-card" data-rise>
+          <div class="mui-card__body">
+            <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">the harvest</p>
+            <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">One command to an app that runs</h3>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)"><code class="ld-mono" style="color:var(--accent-text)">composer create-project milpa/skeleton</code>
+              boots the kernel, serves a real response and answers <code class="ld-mono">coa</code> — with zero database.</p>
+            <ul class="ld-pkgs">
+              <li><a href="https://github.com/getmilpa/skeleton">skeleton</a></li>
+            </ul>
           </div>
         </article>
       </div>
@@ -255,9 +477,9 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
       <p class="mui-section__kicker" data-rise>the first harvest</p>
       <h2 class="mui-section__title" id="h-ds" data-rise>The design system is ready to sow</h2>
       <p class="mui-section__lede" data-rise><code class="ld-mono" style="color:var(--accent-text)">@milpa/design</code> is
-        published: dark-first tokens verified WCAG AA, motion with a reduced-motion contract, and 63
-        pieces, every one with a machine-readable contract. It's the visual face of the framework — and it
-        stands on its own.</p>
+        published: dark-first tokens verified WCAG AA, motion with a reduced-motion contract, and 68
+        pieces, every one with a machine-readable contract. It's the framework's thesis proven small —
+        and it stands on its own.</p>
       <div class="ld-ds">
         <div data-rise>
           <div class="ld-install">
@@ -269,13 +491,21 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             Pure CSS + JSON contracts: no framework in between, no dependencies. The quality floor —
             AA contrast, light/dark parity, reduced-motion parity, keyboard — runs under
             <span class="ld-mono">npm test</span> on every change: <b style="color:var(--text-secondary)">193 AA pairs verified in CI</b>.
+            And theming is a contract too: swap the skin — down to glass — without touching structure.
           </p>
           <div style="margin-top:var(--space-5); display:flex; gap:var(--space-2); flex-wrap:wrap">
             <a class="mui-btn mui-btn--sm" href="https://github.com/getmilpa/milpa-design/blob/main/DESIGN.md">Read DESIGN.md</a>
-            <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://github.com/getmilpa/milpa-design/releases/tag/v0.2.0">Release v0.2.0</a>
+            <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://github.com/getmilpa/milpa-design/releases">Releases</a>
           </div>
         </div>
-        <div class="mui-card" data-rise>
+        <div data-rise>
+          <div class="mui-cluster mui-cluster--sm ld-swap" role="group" aria-label="Swap the skin — the real skins from the theme-swap proof">
+            <span class="ld-mono" style="font-size:var(--text-2xs); color:var(--text-muted); text-transform:uppercase; letter-spacing:var(--tracking-wide)">swap the skin</span>
+            <button class="mui-btn mui-btn--sm" type="button" data-skin="milpa" aria-pressed="true">milpa</button>
+            <button class="mui-btn mui-btn--sm" type="button" data-skin="brutalist" aria-pressed="false">brutalist</button>
+            <button class="mui-btn mui-btn--sm" type="button" data-skin="glass" aria-pressed="false">glass</button>
+          </div>
+          <div class="mui-card">
           <div class="mui-card__body ld-demo-rows">
             <div class="ld-demo-row">
               <button class="mui-btn mui-btn--primary mui-btn--sm" type="button">Sow</button>
@@ -287,7 +517,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
               <span class="mui-badge mui-badge--success mui-badge--dot">active</span>
               <span class="mui-badge mui-badge--warning mui-badge--dot">germinating</span>
               <span class="mui-badge mui-badge--info">info</span>
-              <span class="mui-badge mui-badge--accent">v0.2.0</span>
+              <span class="mui-badge mui-badge--accent">v0.8.0</span>
               <span class="mui-kbd">⌘K</span>
             </div>
             <div class="ld-demo-row">
@@ -305,6 +535,12 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
               </div>
             </div>
           </div>
+          </div>
+          <p style="margin-top:var(--space-4); color:var(--text-muted); font-size:var(--text-sm)">
+            Those buttons swap <b style="color:var(--text-secondary)">this entire page</b>, not just the card —
+            the real skins from the <a href="../proof/theme-swap.html" style="color:var(--accent-text)">theme-swap proof</a>:
+            same structure, same pieces, only tokens change. That's theming as a contract.
+          </p>
         </div>
       </div>
     </div>
@@ -315,22 +551,81 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
     <div class="mui-container">
       <p class="mui-section__kicker" data-rise>milpa applied to itself</p>
       <h2 class="mui-section__title" id="h-contract" data-rise>Nothing is sown without a contract</h2>
-      <p class="mui-section__lede" data-rise>Every piece declares what it exposes: props, states, tokens,
-        accessibility and motion requirements — in a <b style="color:var(--text-secondary)">machine-readable</b> spec.
-        A human <i>or an agent</i> can assemble UI knowing exactly what's there, without guessing.</p>
-      <div class="ld-code" data-rise>
-        <pre aria-label="Excerpt from milpa-button.contract.json"><code><span class="c">// primitives/milpa-button.contract.json</span>
-{
-  <span class="k">"name"</span>: "button",
-  <span class="k">"layer"</span>: "primitive",
-  <span class="k">"class"</span>: "mui-btn",
-  <span class="k">"states"</span>: {
-    <span class="k">"loading"</span>: "[aria-busy=\"true\"] — ::before spinner; the text stays visible",
-    <span class="k">"disabled"</span>: "[disabled] — state is styled via ARIA attributes, never classes"
-  },
-  <span class="k">"a11y"</span>: { <span class="k">"contrast"</span>: "every pair verified in npm test" },
-  <span class="k">"motion"</span>: { <span class="k">"reducedMotion"</span>: "global contract — nothing moves against the user" }
-}</code></pre>
+      <p class="mui-section__lede" data-rise>A component, a plugin, a theme — every piece declares what it exposes
+        and what it demands, in a <b style="color:var(--text-secondary)">machine-readable</b> spec. A human
+        <i>or an agent</i> can assemble the system knowing exactly what's there, without guessing.</p>
+      <div class="ld-contract-tabs" data-rise>
+        <div class="mui-tabs" role="tablist" aria-label="The same principle: a component, a plugin, a theme">
+          <button type="button" class="mui-tabs__tab" role="tab" id="ct-component" aria-controls="ct-panel-component" aria-selected="true">component</button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="ct-plugin" aria-controls="ct-panel-plugin" aria-selected="false" tabindex="-1">plugin</button>
+          <button type="button" class="mui-tabs__tab" role="tab" id="ct-theme" aria-controls="ct-panel-theme" aria-selected="false" tabindex="-1">theme</button>
+        </div>
+        <div class="mui-tabs__panel" role="tabpanel" id="ct-panel-component" aria-labelledby="ct-component">
+          <div class="mui-code">
+            <div class="mui-code__header">
+              <span class="mui-code__file">primitives/milpa-button.contract.json</span>
+              <span class="mui-code__lang">json</span>
+            </div>
+            <div class="mui-code__body"><pre><code><span class="mui-code__line"><span class="tok-punc">{</span></span><span class="mui-code__line">  <span class="tok-attr">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"button"</span><span class="tok-punc">,</span> <span class="tok-attr">"layer"</span><span class="tok-punc">:</span> <span class="tok-str">"primitive"</span><span class="tok-punc">,</span> <span class="tok-attr">"class"</span><span class="tok-punc">:</span> <span class="tok-str">"mui-btn"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"states"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span></span><span class="mui-code__line">    <span class="tok-attr">"loading"</span><span class="tok-punc">:</span> <span class="tok-str">"[aria-busy=\"true\"] — ::before spinner; the text stays visible"</span><span class="tok-punc">,</span></span><span class="mui-code__line">    <span class="tok-attr">"disabled"</span><span class="tok-punc">:</span> <span class="tok-str">"[disabled] — state is styled via ARIA attributes, never classes"</span></span><span class="mui-code__line">  <span class="tok-punc">},</span></span><span class="mui-code__line">  <span class="tok-attr">"a11y"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span> <span class="tok-attr">"contrast"</span><span class="tok-punc">:</span> <span class="tok-str">"every pair verified in npm test"</span> <span class="tok-punc">},</span></span><span class="mui-code__line">  <span class="tok-attr">"motion"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span> <span class="tok-attr">"reducedMotion"</span><span class="tok-punc">:</span> <span class="tok-str">"global contract — nothing moves against the user"</span> <span class="tok-punc">}</span></span><span class="mui-code__line"><span class="tok-punc">}</span></span></code></pre></div>
+          </div>
+        </div>
+        <div class="mui-tabs__panel" role="tabpanel" id="ct-panel-plugin" aria-labelledby="ct-plugin" hidden>
+          <div class="mui-code">
+            <div class="mui-code__header">
+              <span class="mui-code__file">milpa.json</span>
+              <span class="mui-code__lang">json</span>
+            </div>
+            <div class="mui-code__body"><pre><code><span class="mui-code__line"><span class="tok-punc">{</span></span><span class="mui-code__line">  <span class="tok-attr">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"acme/mail-plugin"</span><span class="tok-punc">,</span> <span class="tok-attr">"version"</span><span class="tok-punc">:</span> <span class="tok-str">"2.1.0"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"namespace"</span><span class="tok-punc">:</span> <span class="tok-str">"Acme\\MailPlugin"</span><span class="tok-punc">,</span> <span class="tok-attr">"entrypoint"</span><span class="tok-punc">:</span> <span class="tok-str">"MailPlugin.php"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"contracts"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span></span><span class="mui-code__line">    <span class="tok-attr">"provides"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"mail"</span><span class="tok-punc">],</span></span><span class="mui-code__line">    <span class="tok-attr">"requires"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"database"</span><span class="tok-punc">]</span></span><span class="mui-code__line">  <span class="tok-punc">}</span></span><span class="mui-code__line"><span class="tok-punc">}</span></span><span class="mui-code__line"></span><span class="mui-code__line"><span class="tok-attr">// providers load before consumers — Kahn's algorithm, the graph must be acyclic</span></span></code></pre></div>
+          </div>
+        </div>
+        <div class="mui-tabs__panel" role="tabpanel" id="ct-panel-theme" aria-labelledby="ct-theme" hidden>
+          <div class="mui-code">
+            <div class="mui-code__header">
+              <span class="mui-code__file">theme.contract.json</span>
+              <span class="mui-code__lang">json</span>
+            </div>
+            <div class="mui-code__body"><pre><code><span class="mui-code__line"><span class="tok-punc">{</span></span><span class="mui-code__line">  <span class="tok-attr">"requiredTokens"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span> <span class="tok-attr">"color"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"--bg"</span><span class="tok-punc">,</span> <span class="tok-str">"--surface"</span><span class="tok-punc">,</span> <span class="tok-str">"--accent"</span><span class="tok-punc">,</span> <span class="tok-str">"…"</span><span class="tok-punc">]</span> <span class="tok-punc">},</span></span><span class="mui-code__line">  <span class="tok-attr">"contrast"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span> <span class="tok-attr">"pairs"</span><span class="tok-punc">:</span> <span class="tok-str">"193 WCAG AA pairs — dark and light"</span> <span class="tok-punc">},</span></span><span class="mui-code__line">  <span class="tok-attr">"invariants"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span></span><span class="mui-code__line">    <span class="tok-str">"reduced-motion parity — nothing moves against the user"</span><span class="tok-punc">,</span></span><span class="mui-code__line">    <span class="tok-str">"--bg must be opaque (the composition reference)"</span></span><span class="mui-code__line">  <span class="tok-punc">]</span></span><span class="mui-code__line"><span class="tok-punc">}</span></span></code></pre></div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:var(--space-5); color:var(--text-muted); font-size:var(--text-sm); max-width:64ch" data-rise>
+        Drift fails CI. A theme is validated before it ships — the gate even composes translucent surfaces over
+        <code class="ld-mono">--bg</code> and measures the <i>effective</i> contrast. Nothing is sown without a
+        contract; not even a skin.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ THE ROOT · why milpa is milpa ============ -->
+  <section class="mui-section" aria-labelledby="h-root">
+    <div class="mui-container">
+      <div style="max-width:var(--measure); margin-inline:auto">
+        <p class="mui-section__kicker" data-rise>the root</p>
+        <h2 class="mui-section__title" id="h-root" data-rise>Why Milpa is Milpa</h2>
+        <blockquote class="mui-quote" data-rise style="margin-top:var(--space-8)">
+          <span class="mui-quote__mark" aria-hidden="true">&ldquo;</span>
+          <p class="mui-quote__text">I don't know computers — but I do know cars. If you buy one,
+            it's worth learning how to fix it.</p>
+          <footer class="mui-quote__attr">
+            <cite class="mui-quote__name">My father, paying for my first hardware course</cite>
+            <span class="mui-quote__role">farmer · San Francisco del Mar, Oaxaca</span>
+          </footer>
+        </blockquote>
+        <p data-rise style="margin-top:var(--space-6); color:var(--text-secondary); font-size:var(--text-base); line-height:var(--leading-relaxed)">
+          He was the first in his region to bet on mango where everyone sowed sorghum. I planted the
+          first grafts myself, at twelve, with a <b style="color:var(--text)">coa</b> — the planting
+          stick: hard rootstock below to hold more fruit, the bearing branch grafted above. Years
+          later, time proved him right — twenty hectares of ataulfo and tommy mangos.
+        </p>
+        <p data-rise style="margin-top:var(--space-4); color:var(--text-secondary); font-size:var(--text-base); line-height:var(--leading-relaxed)">
+          That's this framework, if you look at it right. A deterministic root that holds. Modules
+          grafted on top that bear the fruit. A CLI named after the tool that sowed the real thing.
+          And his lesson as the contract under it all: <b style="color:var(--text)">what's yours,
+          you should be able to understand and repair.</b>
+        </p>
+        <p data-rise style="margin-top:var(--space-6); color:var(--text-muted); font-size:var(--text-sm)">
+          He never saw this framework. The field it grows from is his.
+        </p>
       </div>
     </div>
   </section>
@@ -338,14 +633,19 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
   <!-- ============ FINAL CTA ============ -->
   <section class="mui-section ld-final" aria-labelledby="h-final">
     <div class="mui-container">
-      <p class="mui-section__kicker" data-rise>what's next</p>
-      <h2 class="mui-section__title" id="h-final" data-rise>The framework is germinating</h2>
+      <p class="mui-section__kicker" data-rise>the first sowing</p>
+      <h2 class="mui-section__title" id="h-final" data-rise>Harvest your first app</h2>
       <p class="mui-section__lede" data-rise style="margin-inline:auto">A modular PHP core, event-driven modules,
-        contracts at the root — and a CLI to sow it all.</p>
-      <p class="ld-coa" data-rise><span class="ld-prompt">$</span> coa siembra mail-module <span style="color:var(--text-muted)">· coming soon</span></p>
+        contracts at the root — published on Packagist, Apache-2.0. Pre-1.0 and honest about it:
+        the field is planted, and it grows in the open.</p>
+      <div class="mui-stack mui-stack--sm" style="align-items:center" data-rise>
+        <p class="ld-coa" style="margin:0"><span class="ld-prompt">$</span> composer create-project milpa/skeleton my-app
+          <button class="mui-btn mui-btn--ghost mui-btn--sm" type="button" data-copy="composer create-project milpa/skeleton my-app">copy</button></p>
+        <p class="ld-coa" style="margin:0"><span class="ld-prompt">$</span> coa siembra mail-module <span style="color:var(--text-muted)">· coming soon</span></p>
+      </div>
       <div class="ld-final__cta" data-rise>
         <a class="mui-btn mui-btn--primary" href="https://github.com/getmilpa">Follow getmilpa</a>
-        <a class="mui-btn" href="https://www.npmjs.com/package/@milpa/design">@milpa/design on npm</a>
+        <a class="mui-btn" href="https://packagist.org/packages/milpa/skeleton">milpa/skeleton on Packagist</a>
       </div>
     </div>
   </section>
@@ -355,13 +655,25 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 <footer class="mui-footer">
   <div class="mui-footer__grid">
     <div class="mui-footer__brand">
-      <svg class="wm" style="height:1rem" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+      <span style="display:inline-flex; align-items:center; gap:var(--space-2)">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 60 60">
+          <g fill="var(--oro-300)">
+            <rect x="0" y="0" width="10" height="10" rx="2.5"/><rect x="50" y="0" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="12.5" width="10" height="10" rx="2.5"/><rect x="12.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="37.5" y="12.5" width="10" height="10" rx="2.5"/><rect x="50" y="12.5" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="25" width="10" height="10" rx="2.5"/><rect x="25" y="25" width="10" height="10" rx="2.5"/><rect x="50" y="25" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="37.5" width="10" height="10" rx="2.5"/><rect x="50" y="37.5" width="10" height="10" rx="2.5"/>
+            <rect x="0" y="50" width="10" height="10" rx="2.5"/><rect x="50" y="50" width="10" height="10" rx="2.5"/>
+          </g>
+        </svg>
+        <svg class="wm" style="height:1rem" viewBox="0 0 2406.90 900.00" role="img" aria-label="milpa"><use href="#wm-milpa"/></svg>
+      </span>
       <p class="mui-footer__mantra" lang="es">Siembra módulos, cosecha aplicaciones.</p>
     </div>
     <nav aria-labelledby="ft-project">
       <p class="mui-footer__heading" id="ft-project">Project</p>
       <ul class="mui-footer__links">
-        <li><a href="https://github.com/getmilpa/milpa-design">GitHub</a></li>
+        <li><a href="https://github.com/getmilpa">GitHub</a></li>
+        <li><a href="https://packagist.org/packages/milpa/">Packagist</a></li>
         <li><a href="https://www.npmjs.com/package/@milpa/design">npm</a></li>
         <li><a href="https://github.com/getmilpa/milpa-design/blob/main/LICENSE">Apache-2.0</a></li>
       </ul>
@@ -395,6 +707,42 @@ mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) mobil
 const header = document.getElementById('siteHeader');
 const onScroll = () => header.toggleAttribute('data-scrolled', window.scrollY > header.offsetHeight);
 addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+/* ---------- skin swap: the theme-swap proof, live on this page ----------
+   milpa = no attribute (the default brand); brutalist/glass = the real
+   proof skins linked in <head>, keyed to [data-skin] on the root. */
+const skinBtns = [...document.querySelectorAll('.ld-swap [data-skin]')];
+skinBtns.forEach((b) => b.addEventListener('click', () => {
+  if (b.dataset.skin === 'milpa') root.removeAttribute('data-skin');
+  else root.setAttribute('data-skin', b.dataset.skin);
+  skinBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+}));
+
+/* ---------- contract tabs: aria-selected + roving tabindex + arrows ---------- */
+document.querySelectorAll('[role="tablist"]').forEach((list) => {
+  const tabs = [...list.querySelectorAll('[role="tab"]')];
+  const select = (tab, focus = true) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  };
+  list.addEventListener('click', (e) => {
+    const t = e.target.closest('[role="tab"]');
+    if (t) select(t, false);
+  });
+  list.addEventListener('keydown', (e) => {
+    const i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); select(tabs[(i + 1) % tabs.length]); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); select(tabs[(i - 1 + tabs.length) % tabs.length]); }
+    else if (e.key === 'Home') { e.preventDefault(); select(tabs[0]); }
+    else if (e.key === 'End') { e.preventDefault(); select(tabs[tabs.length - 1]); }
+  });
+});
 
 /* ---------- copiar al portapapeles ---------- */
 document.querySelectorAll('[data-copy]').forEach((b) => {

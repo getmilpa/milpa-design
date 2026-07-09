@@ -429,9 +429,9 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script type="module">
-import { motion } from '../../motion/milpa-motion.js';
-
+<!-- Critical UI in a PLAIN script: theme, drawer, header, copy — it lives
+     outside the module so it works even if ES modules fail to load (e.g. file://). -->
+<script>
 /* ---------- theme ---------- */
 const root = document.documentElement, btn = document.getElementById('themeBtn');
 const setTheme = (t) => { root.dataset.theme = t; btn.textContent = t === 'dark' ? '◐ dark' : '◐ light'; localStorage.setItem('milpa-theme', t); };
@@ -460,6 +460,11 @@ document.querySelectorAll('[data-copy]').forEach((b) => {
     setTimeout(() => (b.textContent = original), 1600);
   });
 });
+</script>
+
+<!-- Only the animation lives in a module: if it fails, the fallback is the assembled M. -->
+<script type="module">
+import { motion } from '../../motion/milpa-motion.js';
 
 /* ---------- the signature moment ----------
    13 scattered granos (loose modules) settle into the M on scroll.

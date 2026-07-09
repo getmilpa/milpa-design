@@ -274,7 +274,8 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
   futuro: trusted publishing OIDC desde GitHub Actions cuando el repo viva en `github.com/getmilpa`.
   Nota 0.1.1: agregar `"./package.json": "./package.json"` a exports (compat con tooling).
 - ~~**T7 · LICENSE**~~ ✅ **Hecho** — texto completo de Apache-2.0 (canónico) con copyright
-  Rod Vince / TeamX (StudioWeb MX).
+  Rodrigo Vicente Gómez / TeamX Agency (actualizado 2026-07-09: línea editorial — el creador
+  firma con su nombre real; StudioWeb era la agencia anterior, ya no aparece).
 - ~~**T8 · Feedback del battle-test**~~ ✅ **Hecho:**
   1. `mui-stat__delta` desacoplado: `--up/--down` = solo dirección (flecha); `--positive/--negative`
      = valencia (color). "Tiempo de build −8s" ahora es `--down --positive` (baja Y mejora).

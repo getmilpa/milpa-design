@@ -4,6 +4,50 @@ Formato: [Keep a Changelog](https://keepachangelog.com/) · SemVer.
 
 ## [Unreleased]
 
+## [0.9.0] — 2026-07-09
+
+> **El almácigo:** cuatro primitivas didácticas para material educativo de arquitectura,
+> destiladas del battle-test de Milpa Academy (mismo patrón que 0.3.0 "la plaza": lo que un
+> battle-test re-inventa con prefijo propio, el sistema lo adopta como pieza contratada) —
+> **`mui-plot`** (la parcela: módulos con contrato visible y estados de siembra),
+> **`mui-pipeline`** (el tubo de etapas con canica y salidas tempranas), **`mui-gate`** (la
+> compuerta tri-estado con registro append-only; `self-denied` representa el rechazo por
+> construcción de la auto-aprobación, espejo del orquestador real) y **`mui-replay`** (el log
+> reproducible: eventos + corte + proyección). CERO JS publicado: estados por atributos
+> (`data-state`/`data-status`/`aria-current`), comportamiento del consumidor documentado en
+> `a11y.behavior` con lógica de referencia testeada en el repo academy. Paleta didáctica desde
+> la semántica existente — olivo=germinando (la milpa viva), oro=sembrado/activo,
+> success=completado, danger=marchito/denegado, warning=exonerado ("la exoneración también es
+> un dato"). Contratos **68 → 72** · **193 pares AA** — audit de cierre: **0 pares nuevos**
+> (todas las tintas reusan pares de callout/badge/base). Battle-test propio:
+> `proof/almacigo.html` — las 4 piezas compuestas en una historia (la parcela alimenta el
+> pipeline, autorizar abre la compuerta, el proceso se relee en el replay).
+
+### Added
+- **`mui-plot`** — la parcela: `__core` (el tallo), `__cell` (button o div) con `__name`,
+  `__contract` y `__note`; estados `slot` (default) / `germinating` / `sown` / `wilted`. El
+  accessible name de la celda ES su contrato — un lector de pantalla (o un agente) recibe el
+  grafo sin ver colores.
+- **`mui-pipeline`** — `__track` con rail + `__marker` (canica decorativa posicionada por la
+  custom property privada `--_pipeline-progress`), `__stage` con `__label`/`__note`; estados
+  `idle`/`active`/`complete`/`denied`/`failed`/`skipped`; variante `--vertical` (el rail de la
+  radiografía). El track es presentacional: el recorrido vive además en un `role="status"`.
+- **`mui-gate`** — `__request` (`__actor`/`__action`/`__facts`), `__decisions` (compone
+  `.mui-btn`), `__outcome` (`role="status"`) y `__audit` (`<ol role="log">` append-only, chips
+  que componen `.mui-badge`); estados `pending`/`approved`/`rejected`/`waived`/`self-denied`.
+- **`mui-replay`** — `__stream` de eventos con espina lateral, `__scrubber` (estiliza un
+  `<input type="range">` NATIVO del consumidor con `accent-color`), `__projection`
+  (`role="status"`) con `__stat-label`/`__stat-value`; estados `data-applied` y
+  `aria-current="step"`.
+- **`proof/almacigo.html`** — battle-test de las 4 piezas con el JS de referencia de cada
+  contrato en vivo (siembra con validación de requires, recorrido con denegación auditada,
+  compuerta con auto-aprobación rebotada, fold re-derivando proyección).
+
+### Notes
+- Guard `[hidden]` incluido en las 4 raíces (DESIGN §6).
+- La lógica de referencia (Kahn, traza, decisión, fold) vive testeada en el repo hermano
+  `academy` (`artifacts/artifacts-core.js`) — el paquete sigue publicando cero JS.
+
 ## [0.8.0] — 2026-07-05
 
 > **El rocío:** cierra los tres huecos de theming de marca que reveló el proof Milpa⇄Brutalist

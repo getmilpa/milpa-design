@@ -280,9 +280,9 @@ la cruce. Sin scrim, `--overlay` sobre foto es un uso indebido del contrato, no 
 | `primitives/milpa-*.contract.json`| contratos de las primitivas (plantilla: `milpa-button.contract.json`) |
 | `components/milpa-components.css` | *el frijol*: Tooltip, Menu, Card (+`__media`), Stat, Empty, Skeleton, Table, Pagination, Tabs, Breadcrumbs, Alert, Toast, Modal, Drawer, Shell/Sidebar/Topbar/PageHeader, Byline + commerce (ProductCard, Price, Rating, MediaGallery, CartLine) |
 | `components/milpa-*.contract.json`| contratos de los componentes (comportamiento JS del consumidor en `a11y.behavior`) |
-| `artifacts/milpa-artifacts.css`   | *el elote*: Code (tokens `--syntax-*`), Terminal, CodeGroup, Chart (`--viz-*`), Quote, Callout, Api, Steps, FileTree, Prose, Toc, Search + kit de versionado (VersionSwitcher, VersionBanner, Changelog) |
+| `artifacts/milpa-artifacts.css`   | *el elote*: Code (tokens `--syntax-*`), Terminal, CodeGroup, Chart (`--viz-*`), Quote, Callout, Api, Steps, FileTree, Prose, Toc, Search + kit de versionado (VersionSwitcher, VersionBanner, Changelog) + el almácigo didáctico (Plot, Pipeline, Gate, Replay — 0.9.0) |
 | `layouts/milpa-layouts.css`       | *la parcela*: Docs (shell de documentación versionada), Header (el header público — barra + off-canvas + overlay), Page/Section/Container, Hero, FeatureGrid, CtaBand, Pricing, Faq, Testimonial, Footer, MediaGrid, Lightbox |
-| `proof/docs.html` · `blog` · `commerce` · `gallery` · `saas` | battle-tests de casos de uso — compuestos SOLO del sistema |
+| `proof/docs.html` · `blog` · `commerce` · `gallery` · `saas` · `almacigo` | battle-tests de casos de uso — compuestos SOLO del sistema |
 | `proof/themed.html` + `themed-skin.css` | la prueba del contrato de theming: el blog con el skin "Nopal" (193/193) |
 | `logo/*`                          | kit de logo: símbolo Grano, wordmark grano-i, lockups h/v, app icon (mono-oro) |
 

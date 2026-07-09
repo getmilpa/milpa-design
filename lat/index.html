@@ -428,9 +428,9 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script type="module">
-import { motion } from '../motion/milpa-motion.js';
-
+<!-- UI crítica en script PLANO: tema, drawer, header, copiar — vive fuera del
+     módulo para funcionar aunque los módulos ES no carguen (p. ej. file://). -->
+<script>
 /* ---------- tema ---------- */
 const root = document.documentElement, btn = document.getElementById('themeBtn');
 const setTheme = (t) => { root.dataset.theme = t; btn.textContent = t === 'dark' ? '◐ dark' : '◐ light'; localStorage.setItem('milpa-theme', t); };
@@ -459,6 +459,11 @@ document.querySelectorAll('[data-copy]').forEach((b) => {
     setTimeout(() => (b.textContent = original), 1600);
   });
 });
+</script>
+
+<!-- Solo la animación va en módulo: si no carga, el fallback es la M ensamblada. -->
+<script type="module">
+import { motion } from '../motion/milpa-motion.js';
 
 /* ---------- el momento firma ----------
    13 granos dispersos (módulos sueltos) se asientan en la M al hacer scroll.

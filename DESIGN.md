@@ -39,7 +39,7 @@ Mapa metáfora → arquitectura (el corazón conceptual):
 
 **La raíz — por qué Milpa es Milpa.** El nombre no salió de un brainstorm: salió de un campo real.
 El padre de **Rodrigo Vicente** — el creador de Milpa — fue agricultor en San Francisco del Mar
-(Oaxaca), el primero de la región en
+(Oaxaca, México), el primero de la región en
 apostarle al mango donde todos sembraban sorgo o vivían de la pesca. Los primeros injertos los
 sembró su hijo, a los doce años, con una **coa** (el escarbahoyos): raíz dura abajo para aguantar
 más fruta, rama productiva injertada arriba. Años después, el tiempo respaldó la apuesta: veinte hectáreas de

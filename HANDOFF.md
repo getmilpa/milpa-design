@@ -315,6 +315,9 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
   CSS sin layer del consumidor SIEMPRE gana — no "arregles" eso, es el mecanismo de theming.
 - **El verde de marca (olivo ~124°) vive lejos de success (~150°)** — no los acerques.
 - Cambiar la forma/semántica de un token o contrato = **bump semver** (el framework depende de esto).
+- **La regla de entrada (DESIGN §6):** nada entra por verse bien — caso real, ≥2 apariciones (o
+  alta probabilidad), describible con contrato, pasa gates, consumible del paquete sin hacks.
+  Los consumidores (Academy incluida) inventan con prefijo propio; el DS decide qué sobrevive.
 
 ## 6. Referencias cruzadas
 

@@ -187,6 +187,43 @@ Primitives  · el grano      → Button, Input, Select, Switch, Checkbox, Radio,
 Foundations · el suelo      → color ✓, type, spacing, radius, elevation, z-index, motion ✓
 ```
 
+**La regla de entrada — nada entra al design system solo por verse bien.** Entra porque:
+
+1. **nació en un caso real** (un proof, un producto, la academia — no un mood board);
+2. **apareció al menos dos veces** o tiene alta probabilidad de repetirse;
+3. **puede describirse con contrato** (si no cabe en un `*.contract.json`, no es una pieza — es
+   una composición del consumidor);
+4. **pasa gates** (AA, gobernanza, capas, drift);
+5. **puede consumirse desde el paquete publicado sin hacks** (por versión, por CDN o npm, sin
+   parches del consumidor).
+
+Precedentes del pipeline completo: `mui-header` (0.3.0 — cuatro proofs lo re-inventaban con
+prefijo propio) y el cluster almácigo (0.9.0 — la galería de Academy lo inventó como `wb-*`).
+Ese es el camino: **caso real con prefijo propio → repite → spec → contrato + gates → paquete.**
+
+**El mapa del ecosistema — tres palabras.** La taxonomía de capas de arriba es para quien
+*construye* el sistema; hacia afuera, el ecosistema se explica con tres roles, y cada nombre
+propio del proyecto vive dentro de uno:
+
+```
+Milpa Design   = el LENGUAJE visual
+  Primitives · piezas base                        → foundations + primitives (el suelo, el grano)
+  Patterns   · reutilizables con comportamiento    → components + artifacts (el frijol, el elote)
+  Recipes    · composiciones productivas/educativas → layouts + proofs/surfaces (la parcela, la cosecha)
+
+Milpa Live     = el RUNTIME de render (framework: milpa/live · live-web — HTML/TUI/ANSI)
+  consume el lenguaje; no lo define
+
+Milpa Academy  = la APLICACIÓN / el laboratorio
+  consume Patterns + Recipes · produce candidatos nuevos (con prefijo propio, p.ej. wb-*)
+```
+
+**La regla del laboratorio:** *Academy puede inventar patrones. Design System decide cuáles
+sobreviven.* Lo que Academy (o cualquier consumidor) inventa vive en su prefijo propio hasta
+pasar la regla de entrada; el design system no persigue novedades — las cosecha cuando maduran.
+
+Si este mapa está claro, la complejidad es arquitectura. Si no, es niebla.
+
 **El contrato de componente — Milpa aplicado a sí mismo.** Nada entra al sistema sin su contrato:
 un spec **legible por máquina** que declara `props, variantes, estados, slots, tokens consumidos,
 requisitos de a11y y comportamiento de motion`. Es **introspectable**: un humano *o un agente* puede

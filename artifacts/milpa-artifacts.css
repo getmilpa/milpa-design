@@ -1391,4 +1391,263 @@
   color: var(--danger);
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   cluster · almácigo (didácticas)
+   Cuatro piezas para material educativo de arquitectura, destiladas del
+   battle-test de Milpa Academy: la parcela (plot), el tubo de etapas
+   (pipeline), la compuerta (gate) y el log reproducible (replay).
+   CERO JS publicado: los estados son atributos (data-state/data-status/
+   aria-current) y el comportamiento es del consumidor — el JS de
+   referencia vive en a11y.behavior de cada contrato.
+   Paleta didáctica desde la semántica existente (0 pares nuevos):
+   olivo=germinando · oro=sembrado/activo · success=completado ·
+   danger=marchito/denegado · warning=exonerado · neutro=slot/skipped.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Plot · .mui-plot ----------
+   La parcela: módulos como celdas con contrato visible y estado de
+   siembra. La celda interactiva es un <button> del consumidor (hereda
+   focus-visible del sistema); su label accesible ES el contrato
+   ("Sembrar X. Provee p. Requiere q"). El resultado de cada intento se
+   anuncia en un role="status" del consumidor — nunca solo por color. */
+.mui-plot {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--space-3);
+}
+.mui-plot[hidden] { display: none; }
+.mui-plot__core {
+  grid-column: 1 / -1;
+  display: flex; align-items: baseline; gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  color: var(--text-secondary);
+  background: var(--surface); border: var(--border-width) var(--border-style) var(--border-strong);
+  border-radius: var(--radius-base);
+}
+.mui-plot__cell {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  padding: var(--space-3);
+  font-family: var(--font-body); font-size: var(--text-sm); text-align: start;
+  color: var(--text);
+  background: var(--surface); border: var(--border-width) var(--border-style) var(--border);
+  border-radius: var(--radius-md);
+  transition: background var(--dur-fast) var(--ease-standard),
+              border-color var(--dur-fast) var(--ease-standard),
+              translate var(--dur-base) var(--ease-grano);
+}
+button.mui-plot__cell { cursor: pointer; font: inherit; }
+button.mui-plot__cell[disabled] { cursor: not-allowed; color: var(--text-muted); }
+.mui-plot__name { font-weight: var(--weight-medium); }
+.mui-plot__contract {
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  color: var(--text-muted);
+}
+.mui-plot__note { margin: 0; font-size: var(--text-xs); color: var(--text-secondary); }
+/* germinando — la milpa viva (olivo; par callout --tip) */
+.mui-plot__cell[data-state="germinating"] {
+  background: var(--secondary-subtle); border-color: var(--secondary-border);
+}
+.mui-plot__cell[data-state="germinating"] .mui-plot__name,
+.mui-plot__cell[data-state="germinating"] .mui-plot__contract { color: var(--secondary-text); }
+/* sembrado — el grano guardado (oro; par callout --version) */
+.mui-plot__cell[data-state="sown"] {
+  background: var(--accent-subtle); border-color: var(--accent);
+}
+.mui-plot__cell[data-state="sown"] .mui-plot__name { color: var(--accent-text); }
+.mui-plot__cell[data-state="sown"] .mui-plot__contract { color: var(--text); }
+/* marchito — falta una capacidad (par callout --danger) */
+.mui-plot__cell[data-state="wilted"] {
+  background: var(--danger-bg); border-color: var(--danger-border);
+}
+.mui-plot__cell[data-state="wilted"] .mui-plot__name { color: var(--danger); }
+.mui-plot__cell[data-state="wilted"] .mui-plot__contract,
+.mui-plot__cell[data-state="wilted"] .mui-plot__note { color: var(--text-secondary); }
+
+/* ---------- Pipeline · .mui-pipeline ----------
+   El tubo de etapas que toda llamada recorre. El track es
+   presentacional: el estado del recorrido SIEMPRE se refleja además en
+   un role="status" textual del consumidor. La canica (__marker) se
+   posiciona con --_pipeline-progress (0..1), custom property que setea
+   el consumidor — decorativa, aria-hidden. */
+.mui-pipeline { display: flex; flex-direction: column; gap: var(--space-3); }
+.mui-pipeline[hidden] { display: none; }
+.mui-pipeline__track {
+  position: relative;
+  display: flex; align-items: stretch; gap: var(--space-2);
+  padding-block-start: var(--space-3);
+}
+.mui-pipeline__track::before {
+  content: "";
+  position: absolute; inset-inline: 0; inset-block-start: var(--space-1);
+  height: 0.125rem; border-radius: var(--radius-full);
+  background: var(--border);
+}
+.mui-pipeline__marker {
+  position: absolute;
+  inset-block-start: calc(var(--space-1) - 0.1875rem);
+  inset-inline-start: clamp(0%, calc(var(--_pipeline-progress, 0) * 100%), calc(100% - 0.5rem));
+  width: 0.5rem; height: 0.5rem; border-radius: var(--radius-full);
+  background: var(--accent);
+  transition: inset-inline-start var(--dur-moderate) var(--ease-settle);
+}
+.mui-pipeline__stage {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: var(--space-0_5);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface); border: var(--border-width) var(--border-style) var(--border);
+  border-radius: var(--radius-base);
+  transition: background var(--dur-fast) var(--ease-standard),
+              border-color var(--dur-fast) var(--ease-standard);
+}
+.mui-pipeline__label {
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide); text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.mui-pipeline__note { margin: 0; font-size: var(--text-xs); color: var(--text-muted); }
+.mui-pipeline__stage[data-status="active"] {
+  background: var(--accent-subtle); border-color: var(--accent);
+}
+.mui-pipeline__stage[data-status="active"] .mui-pipeline__label { color: var(--accent-text); }
+.mui-pipeline__stage[data-status="complete"] {
+  background: var(--success-bg); border-color: var(--success-border);
+}
+.mui-pipeline__stage[data-status="complete"] .mui-pipeline__label { color: var(--success); }
+/* denied (la política dijo NO) y failed (la ejecución tronó): misma
+   familia, borde distinto — la diferencia la NOMBRA el __note en texto */
+.mui-pipeline__stage[data-status="denied"],
+.mui-pipeline__stage[data-status="failed"] {
+  background: var(--danger-bg); border-color: var(--danger-border);
+}
+.mui-pipeline__stage[data-status="failed"] { border-color: var(--danger); }
+.mui-pipeline__stage[data-status="denied"] .mui-pipeline__label,
+.mui-pipeline__stage[data-status="failed"] .mui-pipeline__label { color: var(--danger); }
+.mui-pipeline__stage[data-status="denied"] .mui-pipeline__note,
+.mui-pipeline__stage[data-status="failed"] .mui-pipeline__note { color: var(--text-secondary); }
+.mui-pipeline__stage[data-status="skipped"] { border-color: var(--border-subtle); }
+.mui-pipeline__stage[data-status="skipped"] .mui-pipeline__label,
+.mui-pipeline__stage[data-status="skipped"] .mui-pipeline__note { color: var(--text-muted); }
+/* vertical — el rail de la radiografía */
+.mui-pipeline--vertical .mui-pipeline__track {
+  flex-direction: column;
+  padding-block-start: 0; padding-inline-start: var(--space-3);
+}
+.mui-pipeline--vertical .mui-pipeline__track::before {
+  inset-inline: auto; inset-block: 0; inset-inline-start: var(--space-1);
+  width: 0.125rem; height: auto;
+}
+.mui-pipeline--vertical .mui-pipeline__marker {
+  inset-inline-start: calc(var(--space-1) - 0.1875rem);
+  inset-block-start: clamp(0%, calc(var(--_pipeline-progress, 0) * 100%), calc(100% - 0.5rem));
+  transition: inset-block-start var(--dur-moderate) var(--ease-settle);
+}
+
+/* ---------- Gate · .mui-gate ----------
+   La compuerta: una solicitud, una decisión tri-estado (aprobar /
+   rechazar / exonerar) y su registro. Las decisiones son botones REALES
+   del consumidor (compone .mui-btn); el outcome se anuncia
+   (role="status") y el audit es role="log" append-only — las entradas
+   no se reordenan ni desaparecen, y la exoneración lleva su marca
+   ámbar: la exoneración también es un dato. self-denied representa el
+   rechazo por construcción de la auto-aprobación (espejo del
+   orquestador real). */
+.mui-gate { display: flex; flex-direction: column; gap: var(--space-4); }
+.mui-gate[hidden] { display: none; }
+.mui-gate__request {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--surface); border: var(--border-width) var(--border-style) var(--border);
+  border-radius: var(--radius-md);
+}
+.mui-gate__actor {
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide); text-transform: uppercase;
+  color: var(--text-muted);
+}
+.mui-gate__action { font-size: var(--text-base); font-weight: var(--weight-medium); color: var(--text); }
+.mui-gate__facts { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-secondary); }
+.mui-gate__decisions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.mui-gate__outcome {
+  display: none;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  border: var(--border-width) var(--border-style) var(--border);
+  border-radius: var(--radius-base);
+}
+.mui-gate[data-status="approved"] .mui-gate__outcome {
+  display: block;
+  background: var(--success-bg); border-color: var(--success-border); color: var(--success);
+}
+.mui-gate[data-status="rejected"] .mui-gate__outcome,
+.mui-gate[data-status="self-denied"] .mui-gate__outcome {
+  display: block;
+  background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger);
+}
+.mui-gate[data-status="waived"] .mui-gate__outcome {
+  display: block;
+  background: var(--warning-bg); border-color: var(--warning-border); color: var(--warning);
+}
+.mui-gate__audit {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  margin: 0; padding: var(--space-3) 0 0; list-style: none;
+  border-block-start: var(--border-width) var(--border-style) var(--border-subtle);
+  font-family: var(--font-mono); font-size: var(--text-xs);
+}
+.mui-gate__entry {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2);
+  color: var(--text-secondary);
+}
+.mui-gate__entry-time { color: var(--text-muted); }
+/* la chip de decisión de cada entrada COMPONE .mui-badge (success/
+   danger/warning) — cero tinta nueva, cero pares nuevos */
+
+/* ---------- Replay · .mui-replay ----------
+   El log reproducible: eventos append-only, un corte (scrubber) y la
+   proyección del estado en ese corte. Nada se reproduce solo — el
+   tiempo lo controla la persona (o el agente) con un <input
+   type="range"> NATIVO del consumidor (teclado gratis); la pieza lo
+   estiliza con accent-color. La __projection es role="status". */
+.mui-replay { display: flex; flex-direction: column; gap: var(--space-4); }
+.mui-replay[hidden] { display: none; }
+.mui-replay__stream {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  margin: 0; padding: 0; list-style: none;
+  font-family: var(--font-mono); font-size: var(--text-xs);
+}
+.mui-replay__event {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-inline-start: var(--border-width) var(--border-style) var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--text-secondary);
+  transition: background var(--dur-fast) var(--ease-standard),
+              color var(--dur-fast) var(--ease-standard);
+}
+.mui-replay__event[data-applied="false"] { color: var(--text-muted); border-inline-start-color: var(--border-subtle); }
+.mui-replay__event[aria-current="step"] {
+  background: var(--accent-subtle);
+  border-inline-start-color: var(--accent);
+  color: var(--accent-text);
+}
+.mui-replay__type { font-weight: var(--weight-medium); }
+.mui-replay__actor { color: var(--text-muted); }
+.mui-replay__event[aria-current="step"] .mui-replay__actor { color: var(--accent-text); }
+.mui-replay__scrubber { display: flex; align-items: center; gap: var(--space-3); }
+.mui-replay__scrubber input[type="range"] { inline-size: 100%; accent-color: var(--accent); }
+.mui-replay__projection {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--surface); border: var(--border-width) var(--border-style) var(--border);
+  border-radius: var(--radius-md);
+}
+.mui-replay__stat { display: flex; justify-content: space-between; gap: var(--space-3); font-size: var(--text-sm); }
+.mui-replay__stat-label {
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide); text-transform: uppercase;
+  color: var(--text-muted);
+}
+.mui-replay__stat-value { font-family: var(--font-mono); color: var(--text); font-weight: var(--weight-medium); }
+
 } /* @layer milpa.artifacts */

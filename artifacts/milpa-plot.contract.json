@@ -1,0 +1,88 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "plot",
+  "layer": "artifact",
+  "version": "0.9.0",
+  "status": "stable",
+  "class": "mui-plot",
+  "summary": "La parcela didáctica: módulos como celdas con su contrato visible (provee/requiere) y estado de siembra. Enseña grafos de dependencias sin decir 'grafo': una celda germina cuando sus requires están satisfechos, se marchita cuando no. Pieza del cluster almácigo — la lógica (validación de capacidades, Kahn, ciclos) es del CONSUMIDOR; referencia viva: academy/artifacts/artifacts-core.js.",
+  "element": [
+    "div.mui-plot (contenedor; el consumidor le da role=\"group\" + aria-label)",
+    "button.mui-plot__cell para celdas interactivas · div para celdas expositivas"
+  ],
+  "anatomy": {
+    "root": ".mui-plot — grid auto-fill minmax(11rem, 1fr) con gap space-3; el consumidor puede reemplazar el layout (su CSS gana por capas). Guard [hidden] incluido",
+    "core": ".mui-plot__core — opcional, ocupa la fila completa (grid-column 1/-1): el tallo/núcleo del sistema ('core · provee: config'). Mono, surface, borde strong",
+    "cell": ".mui-plot__cell — la unidad: columna con gap space-1, padding space-3, surface + borde, radius-md. Como <button> hereda focus-visible del sistema y transiciona background/borde con dur-fast",
+    "name": ".mui-plot__name — weight-medium; toma la tinta del estado",
+    "contract": ".mui-plot__contract — la línea mono 2xs del contrato ('+ provee · ← requiere'); toma la tinta del estado",
+    "note": ".mui-plot__note — motivo del estado ('falta: pagos'); text-xs; presente sobre todo en wilted"
+  },
+  "variants": {
+    "interactivity": {
+      "expositiva": "div.mui-plot__cell — solo muestra estado (diagramas estáticos)",
+      "interactiva": "button.mui-plot__cell — sembrable; [disabled] por atributo, jamás clase"
+    }
+  },
+  "states": {
+    "slot": "default (sin data-state) — lugar esperando siembra: surface + borde neutro, tinta text/text-muted",
+    "germinating": "[data-state=\"germinating\"] — vivo, en proceso: secondary-subtle + secondary-border, tinta secondary-text (olivo = la milpa viva; NUNCA success: germinar es marca-viva, no 'operación exitosa')",
+    "sown": "[data-state=\"sown\"] — sembrado/estable: accent-subtle + borde accent (≥3:1, gate), name accent-text, contract text (par callout --version)",
+    "wilted": "[data-state=\"wilted\"] — requires insatisfechos: danger-bg + danger-border, name danger, contract/note text-secondary (par callout --danger)",
+    "disabled": "[disabled] en la celda-botón — cursor not-allowed + tinta muted; por atributo, jamás clase"
+  },
+  "tokens": [
+    "--surface",
+    "--border",
+    "--border-strong",
+    "--border-width",
+    "--border-style",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--secondary-subtle",
+    "--secondary-border",
+    "--secondary-text",
+    "--accent",
+    "--accent-subtle",
+    "--accent-text",
+    "--danger",
+    "--danger-bg",
+    "--danger-border",
+    "--font-body",
+    "--font-mono",
+    "--text-sm",
+    "--text-xs",
+    "--text-2xs",
+    "--weight-medium",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--radius-base",
+    "--radius-md",
+    "--dur-fast",
+    "--dur-base",
+    "--ease-standard",
+    "--ease-grano"
+  ],
+  "a11y": {
+    "element": "las celdas interactivas son <button> reales — foco, teclado y estados nativos gratis. El contenedor lleva role=\"group\" + aria-label del consumidor",
+    "aria": [
+      "el accessible name de la celda ES su contrato: 'Sembrar Correo. Provee correo. Requiere cola.' — un lector de pantalla (o un agente) recibe el grafo completo sin ver colores",
+      "el resultado de cada intento de siembra se anuncia en un role=\"status\" del consumidor ('Correo germinó' / 'Tienda se marchitó: falta pagos') — el estado JAMÁS se comunica solo por color",
+      "__note nombra en texto el motivo del estado"
+    ],
+    "contrast": "todas las tintas por estado reusan pares del gate: secondary-text/secondary-subtle (--tip), accent-text y text sobre accent-subtle + borde accent ≥3:1 (--version), danger y text-secondary sobre danger-bg (--danger), text/text-muted sobre surface (base). 0 pares nuevos",
+    "behavior": "JS de referencia (consumidor): click/Enter en celda → evaluar requires contra capacidades sembradas → set data-state + escribir __note + anunciar en status. El drag es ENHANCEMENT opcional y nunca el único camino (paridad teclado obligatoria). Orden de arranque: Kahn sobre provides/requires; ciclo → anunciar la cadena completa. Lógica de referencia testeada: academy/artifacts/artifacts-core.js (evaluatePlanting, resolveModuleOrder)"
+  },
+  "motion": {
+    "transitions": "background/border-color con dur-fast ease-standard; translate reservado con dur-base ease-grano (germina y se asienta — sin rebote)",
+    "reducedMotion": "contrato global de milpa-motion.css: los cambios de estado son instantáneos; el estado final es idéntico"
+  },
+  "examples": [
+    {
+      "title": "Parcela con núcleo y tres estados",
+      "html": "<div class=\"mui-plot\" role=\"group\" aria-label=\"La milpa de la tienda\"><div class=\"mui-plot__core\"><strong>core</strong> provee: config</div><button class=\"mui-plot__cell\" data-state=\"sown\" aria-label=\"Base de datos sembrada. Provee bd.\"><span class=\"mui-plot__name\">Base de datos</span><span class=\"mui-plot__contract\">+ bd · ← nada</span></button><button class=\"mui-plot__cell\" data-state=\"germinating\" aria-label=\"Sembrar Correo. Provee correo. Requiere cola.\"><span class=\"mui-plot__name\">Correo</span><span class=\"mui-plot__contract\">+ correo · ← cola</span></button><button class=\"mui-plot__cell\" data-state=\"wilted\" aria-label=\"Tienda marchita. Falta: pagos.\"><span class=\"mui-plot__name\">Tienda</span><span class=\"mui-plot__contract\">+ tienda · ← correo, pagos</span><p class=\"mui-plot__note\">falta: pagos</p></button></div>"
+    }
+  ]
+}

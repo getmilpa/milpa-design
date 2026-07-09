@@ -1,0 +1,85 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "pipeline",
+  "layer": "artifact",
+  "version": "0.9.0",
+  "status": "stable",
+  "class": "mui-pipeline",
+  "summary": "El tubo de etapas didáctico: visualiza un recorrido (resolver→validar→autorizar→ejecutar→auditar, o el que sea) con estados por etapa y una canica opcional que marca el avance. Enseña pipelines y salidas tempranas: dónde se detuvo algo y POR QUÉ. Pieza del cluster almácigo — el avance lo decide el consumidor; referencia viva: academy/artifacts/artifacts-core.js (runtimeTrace).",
+  "element": [
+    "div.mui-pipeline (el consumidor acompaña SIEMPRE con un role=\"status\" textual del recorrido)"
+  ],
+  "anatomy": {
+    "root": ".mui-pipeline — columna con gap space-3. Guard [hidden] incluido",
+    "track": ".mui-pipeline__track — fila de etapas con el rail (::before, línea de 0.125rem en border) arriba; padding-top space-3 le hace lugar a la canica",
+    "stage": ".mui-pipeline__stage — flex:1 min-width:0; surface + borde, radius-base; transiciona background/borde con dur-fast",
+    "label": ".mui-pipeline__label — mono 2xs uppercase tracking-wide; toma la tinta del estado",
+    "note": ".mui-pipeline__note — text-xs; nombra en TEXTO la diferencia semántica (p.ej. denied vs failed) y el motivo ('falta scope correo:enviar')",
+    "marker": ".mui-pipeline__marker — la canica (0.5rem, accent, decorativa aria-hidden): posición por --_pipeline-progress (0..1), custom property de PIEZA que setea el consumidor (inline style) — NO es token del tema y no entra al contrato de theming; clamp evita que se salga del rail"
+  },
+  "variants": {
+    "direction": {
+      "horizontal": "default — fila con rail superior",
+      "vertical": ".mui-pipeline--vertical — columna con rail lateral (el patrón 'radiografía del runtime'); la canica viaja por inset-block-start"
+    }
+  },
+  "states": {
+    "idle": "default (sin data-status) — etapa aún no alcanzada: surface + borde neutro, label text-secondary",
+    "active": "[data-status=\"active\"] — la etapa en curso: accent-subtle + borde accent, label accent-text",
+    "complete": "[data-status=\"complete\"] — etapa superada: success-bg + success-border, label success (success es ESTADO de operación; el oro queda para 'activo/sembrado')",
+    "denied": "[data-status=\"denied\"] — la política dijo NO: danger-bg + danger-border, label danger, note text-secondary",
+    "failed": "[data-status=\"failed\"] — la ejecución tronó: misma familia danger pero borde var(--danger) (más fuerte); la diferencia denied/failed la NOMBRA el __note en texto, nunca solo el borde",
+    "skipped": "[data-status=\"skipped\"] — etapa saltada por salida temprana: borde subtle + tinta muted"
+  },
+  "tokens": [
+    "--surface",
+    "--border",
+    "--border-subtle",
+    "--border-width",
+    "--border-style",
+    "--text-secondary",
+    "--text-muted",
+    "--accent",
+    "--accent-subtle",
+    "--accent-text",
+    "--success",
+    "--success-bg",
+    "--success-border",
+    "--danger",
+    "--danger-bg",
+    "--danger-border",
+    "--font-mono",
+    "--text-xs",
+    "--text-2xs",
+    "--tracking-wide",
+    "--space-0_5",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--radius-base",
+    "--radius-full",
+    "--dur-fast",
+    "--dur-moderate",
+    "--ease-standard",
+    "--ease-settle"
+  ],
+  "a11y": {
+    "element": "el track y la canica son PRESENTACIONALES (marker con aria-hidden=\"true\"): el estado del recorrido vive además en un role=\"status\" textual del consumidor ('detenido en autorizar: falta scope X' / 'completado: tool.executed')",
+    "aria": [
+      "cada etapa nombra su estado en texto vía __label + __note — nunca solo por color o posición de canica",
+      "si el pipeline es el contenido principal, el contenedor lleva aria-label del consumidor ('Pipeline de ejecución de tools')"
+    ],
+    "contrast": "todas las tintas por estado reusan pares del gate: accent-text/accent-subtle, success/success-bg, danger y text-secondary sobre danger-bg, text-secondary y text-muted sobre surface. El rail y la canica son indicadores gráficos (accent ≥3:1 como indicador, regla sancionada DESIGN §3.2). 0 pares nuevos",
+    "behavior": "JS de referencia (consumidor): recorrer etapas seteando data-status en orden; en salida temprana, marcar la etapa culpable (denied/failed), las restantes skipped, y anunciar el motivo en el status. La canica: root.style.setProperty('--_pipeline-progress', i / (n - 1)). Traza de referencia testeada: academy/artifacts/artifacts-core.js (runtimeTrace, conceptualPipelineResult)"
+  },
+  "motion": {
+    "transitions": "etapas: background/border-color con dur-fast; canica: inset con dur-moderate ease-settle (avanza y se asienta — sin rebote)",
+    "reducedMotion": "contrato global: la canica salta instantáneo y los estados cambian sin transición; el estado final es idéntico"
+  },
+  "examples": [
+    {
+      "title": "Recorrido detenido en autorizar",
+      "html": "<div class=\"mui-pipeline\" aria-label=\"Pipeline de ejecución\"><div class=\"mui-pipeline__track\" style=\"--_pipeline-progress: 0.5\"><span class=\"mui-pipeline__marker\" aria-hidden=\"true\"></span><div class=\"mui-pipeline__stage\" data-status=\"complete\"><span class=\"mui-pipeline__label\">resolver</span></div><div class=\"mui-pipeline__stage\" data-status=\"complete\"><span class=\"mui-pipeline__label\">validar</span></div><div class=\"mui-pipeline__stage\" data-status=\"denied\"><span class=\"mui-pipeline__label\">autorizar</span><p class=\"mui-pipeline__note\">denegado: falta correo:enviar</p></div><div class=\"mui-pipeline__stage\" data-status=\"skipped\"><span class=\"mui-pipeline__label\">ejecutar</span></div><div class=\"mui-pipeline__stage\" data-status=\"complete\"><span class=\"mui-pipeline__label\">auditar</span><p class=\"mui-pipeline__note\">lo denegado también se registra</p></div></div><p role=\"status\" class=\"mui-sr-only\">Detenido en autorizar: falta el scope correo:enviar. Lo denegado también se audita.</p></div>"
+    }
+  ]
+}

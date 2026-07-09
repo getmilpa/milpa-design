@@ -1,0 +1,82 @@
+{
+  "$schema": "https://milpa.lat/schemas/component-contract.v1.json",
+  "name": "gate",
+  "layer": "artifact",
+  "version": "0.9.0",
+  "status": "stable",
+  "class": "mui-gate",
+  "summary": "La compuerta didáctica: una solicitud, una decisión tri-estado (aprobar/rechazar/exonerar) y su registro append-only. Enseña human_verify: la exoneración también es un dato (ámbar explícito), y self-denied representa el rechazo POR CONSTRUCCIÓN de la auto-aprobación — espejo del orquestador real. Pieza del cluster almácigo; la decisión es del consumidor; referencia viva: academy/artifacts/artifacts-core.js (decideVerification).",
+  "element": [
+    "div.mui-gate[data-status] · __outcome con role=\"status\" · __audit como <ol role=\"log\">"
+  ],
+  "anatomy": {
+    "root": ".mui-gate — columna con gap space-4; el data-status vive AQUÍ (la compuerta entera tiene un estado). Guard [hidden] incluido",
+    "request": ".mui-gate__request — la solicitud: card surface + borde, radius-md, con __actor (mono 2xs uppercase muted: quién pide), __action (la acción mutante, weight-medium) y __facts (mono xs: los datos duros — '500 usuarios · irreversible')",
+    "decisions": ".mui-gate__decisions — fila de botones REALES del consumidor: compone .mui-btn (--primary aprobar · --danger rechazar · default exonerar). La pieza solo da el layout",
+    "outcome": ".mui-gate__outcome — el veredicto; display:none hasta que el root tenga data-status decidido; role=\"status\" para que se anuncie. El texto lo escribe el consumidor — el color refuerza, no sustituye",
+    "audit": ".mui-gate__audit — <ol role=\"log\"> append-only: borde superior sutil, mono xs. Las entradas NO se reordenan ni desaparecen",
+    "entry": ".mui-gate__entry — quién decidió + chip de decisión + __entry-time (muted). La chip COMPONE .mui-badge (--success aprobada / --danger rechazada / --warning exonerada) — cero tinta nueva"
+  },
+  "variants": {
+    "none": "sin variantes visuales — la variación es el estado"
+  },
+  "states": {
+    "pending": "default (sin data-status o data-status=\"pending\") — la solicitud espera; __outcome oculto",
+    "approved": "[data-status=\"approved\"] — __outcome visible en familia success (success sobre success-bg)",
+    "rejected": "[data-status=\"rejected\"] — __outcome visible en familia danger",
+    "waived": "[data-status=\"waived\"] — __outcome visible en familia warning: exonerado EXPLÍCITO, ni éxito ni error — queda marcado en ámbar",
+    "self-denied": "[data-status=\"self-denied\"] — quien abrió la compuerta intentó resolverla: misma familia danger; el __outcome del consumidor nombra la regla ('rechazado por construcción: nadie se aprueba a sí mismo')"
+  },
+  "tokens": [
+    "--surface",
+    "--border",
+    "--border-subtle",
+    "--border-width",
+    "--border-style",
+    "--text",
+    "--text-secondary",
+    "--text-muted",
+    "--success",
+    "--success-bg",
+    "--success-border",
+    "--danger",
+    "--danger-bg",
+    "--danger-border",
+    "--warning",
+    "--warning-bg",
+    "--warning-border",
+    "--font-mono",
+    "--text-base",
+    "--text-sm",
+    "--text-xs",
+    "--text-2xs",
+    "--tracking-wide",
+    "--weight-medium",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--radius-base",
+    "--radius-md"
+  ],
+  "a11y": {
+    "element": "decisiones = <button> reales (mui-btn); __outcome = role=\"status\" (se anuncia al aparecer); __audit = role=\"log\" (anuncia solo lo nuevo, jamás relee todo)",
+    "aria": [
+      "el color del outcome REFUERZA un texto que nombra el veredicto — nunca comunicar la decisión solo por color",
+      "las chips del audit componen mui-badge con su texto ('aprobada'/'rechazada'/'exonerada') — legibles sin color",
+      "tras decidir, el consumidor deshabilita los botones vía [disabled] (nunca clase) para que la compuerta sea de un solo paso"
+    ],
+    "contrast": "familias completas ya gateadas: success/success-bg, danger/danger-bg, warning/warning-bg (+ sus *-border como refuerzo decorativo, precedente callout); tintas de request text/text-secondary/text-muted sobre surface. 0 pares nuevos",
+    "behavior": "JS de referencia (consumidor): click en decisión → si requester === decider, forzar data-status=\"self-denied\" (la regla no es opcional: espejo del orquestador); si no, set data-status con la decisión → escribir __outcome → append __entry al audit (actor + chip + hora) → deshabilitar decisiones. Lógica de referencia testeada: academy/artifacts/artifacts-core.js (decideVerification)"
+  },
+  "motion": {
+    "transitions": "ninguna propia — el outcome aparece por display (instantáneo, es un veredicto, no una animación); las entradas del audit pueden entrar con m-rise del consumidor",
+    "reducedMotion": "n/a propio; el contrato global rige para cualquier motion que el consumidor agregue"
+  },
+  "examples": [
+    {
+      "title": "Compuerta exonerada, con registro",
+      "html": "<div class=\"mui-gate\" data-status=\"waived\"><div class=\"mui-gate__request\"><span class=\"mui-gate__actor\">agente · bot-severo</span><span class=\"mui-gate__action\">borrar 500 usuarios inactivos</span><span class=\"mui-gate__facts\">irreversible · afecta producción</span></div><div class=\"mui-gate__decisions\"><button class=\"mui-btn mui-btn--primary\" disabled>Aprobar</button><button class=\"mui-btn mui-btn--danger\" disabled>Rechazar</button><button class=\"mui-btn\" disabled>Exonerar</button></div><p class=\"mui-gate__outcome\" role=\"status\">Compuerta exonerada explícitamente por delivery:ana — queda registrado.</p><ol class=\"mui-gate__audit\" role=\"log\" aria-label=\"Registro de pasajes\"><li class=\"mui-gate__entry\"><span>delivery:ana</span><span class=\"mui-badge mui-badge--warning\">exonerada</span><span class=\"mui-gate__entry-time\">14:32:07</span></li></ol></div>"
+    }
+  ]
+}

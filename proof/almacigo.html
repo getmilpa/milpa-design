@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="es-MX" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proof · el almácigo — primitivas didácticas</title>
+<meta name="description" content="Battle-test de las 4 piezas didácticas de 0.9.0: mui-plot, mui-pipeline, mui-gate y mui-replay, compuestas en una sola historia.">
+<link rel="icon" href="../logo/symbol/milpa-symbol-color.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../dist/milpa-tokens.css">
+<link rel="stylesheet" href="../motion/milpa-motion.css">
+<link rel="stylesheet" href="../primitives/milpa-primitives.css">
+<link rel="stylesheet" href="../components/milpa-components.css">
+<link rel="stylesheet" href="../artifacts/milpa-artifacts.css">
+<link rel="stylesheet" href="../layouts/milpa-layouts.css">
+<style>
+/* proof-local (pf-*): solo composición/ritmo — cero piel nueva */
+* { box-sizing: border-box; }
+body { margin: 0; -webkit-font-smoothing: antialiased; }
+.pf-topbar {
+  display: flex; align-items: center; gap: var(--space-3);
+  max-width: 72rem; margin-inline: auto;
+  padding: var(--space-4) clamp(var(--space-4), 3vw, var(--space-8));
+  border-block-end: var(--border-width) var(--border-style) var(--border-subtle);
+}
+.pf-topbar h1 { margin: 0; font-size: var(--text-base); font-weight: var(--weight-medium); }
+.pf-topbar .mui-badge { margin-inline-start: var(--space-1); }
+.pf-topbar__actions { margin-inline-start: auto; display: flex; gap: var(--space-2); }
+.pf-wrap { max-width: 72rem; margin-inline: auto; padding: var(--space-8) clamp(var(--space-4), 3vw, var(--space-8)) var(--space-16); display: flex; flex-direction: column; gap: var(--space-12); }
+.pf-section { display: flex; flex-direction: column; gap: var(--space-4); }
+.pf-section > h2 { margin: 0; font-size: var(--text-xl); font-weight: var(--weight-medium); }
+.pf-section > p { margin: 0; color: var(--text-muted); font-size: var(--text-sm); max-width: 64ch; }
+.pf-controls { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.pf-status { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-secondary); min-height: 1.5em; }
+.pf-mono { font-family: var(--font-mono); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+</style>
+</head>
+<body class="mui-page">
+
+<header class="pf-topbar">
+  <h1>el almácigo <span class="mui-badge mui-badge--accent">0.9.0</span> <span class="mui-badge">proof</span></h1>
+  <div class="pf-topbar__actions">
+    <button class="mui-btn mui-btn--sm pf-mono" id="theme-toggle" type="button" aria-label="Cambiar tema">◐ dark</button>
+  </div>
+</header>
+
+<main class="pf-wrap">
+
+  <!-- ════════ 1 · mui-plot — la parcela ════════ -->
+  <section class="pf-section" aria-labelledby="h-plot">
+    <h2 id="h-plot">1 · La parcela <span class="pf-mono" style="color:var(--text-muted); font-size:var(--text-sm)">mui-plot</span></h2>
+    <p>Siembra los módulos. Una celda germina solo si sus <em>requires</em> ya están en el campo;
+      si no, se marchita y la nota dice qué falta. Al completar la tienda, todo se asienta en oro.</p>
+    <div class="mui-plot" id="plot" role="group" aria-label="La milpa de la tienda">
+      <div class="mui-plot__core"><strong>core</strong> provee: config</div>
+      <button class="mui-plot__cell" type="button" data-id="bd" data-provides="bd" data-requires="" aria-label="Sembrar Base de datos. Provee bd. Requiere nada.">
+        <span class="mui-plot__name">Base de datos</span>
+        <span class="mui-plot__contract">+ bd · ← nada</span>
+        <p class="mui-plot__note" hidden></p>
+      </button>
+      <button class="mui-plot__cell" type="button" data-id="cola" data-provides="cola" data-requires="" aria-label="Sembrar Cola. Provee cola. Requiere nada.">
+        <span class="mui-plot__name">Cola</span>
+        <span class="mui-plot__contract">+ cola · ← nada</span>
+        <p class="mui-plot__note" hidden></p>
+      </button>
+      <button class="mui-plot__cell" type="button" data-id="correo" data-provides="correo" data-requires="cola" aria-label="Sembrar Correo. Provee correo. Requiere cola.">
+        <span class="mui-plot__name">Correo</span>
+        <span class="mui-plot__contract">+ correo · ← cola</span>
+        <p class="mui-plot__note" hidden></p>
+      </button>
+      <button class="mui-plot__cell" type="button" data-id="tienda" data-provides="tienda" data-requires="correo,bd" aria-label="Sembrar Tienda. Provee tienda. Requiere correo y bd.">
+        <span class="mui-plot__name">Tienda</span>
+        <span class="mui-plot__contract">+ tienda · ← correo, bd</span>
+        <p class="mui-plot__note" hidden></p>
+      </button>
+    </div>
+    <div class="pf-controls"><button class="mui-btn mui-btn--sm" id="plot-reset" type="button">Reiniciar parcela</button></div>
+    <p class="pf-status" role="status" id="plot-status">El campo está listo — provee: config.</p>
+  </section>
+
+  <!-- ════════ 2 · mui-pipeline — el tubo ════════ -->
+  <section class="pf-section" aria-labelledby="h-pipe">
+    <h2 id="h-pipe">2 · El tubo de etapas <span class="pf-mono" style="color:var(--text-muted); font-size:var(--text-sm)">mui-pipeline</span></h2>
+    <p>La misma acción recorre el mismo tubo venga de donde venga. Sin permiso, se detiene en
+      <em>autorizar</em> — y fíjate: <em>auditar</em> se enciende igual. Lo denegado también se registra.</p>
+    <div class="mui-pipeline" id="pipe" aria-label="Pipeline de ejecución de tools">
+      <div class="mui-pipeline__track" style="--_pipeline-progress: 0">
+        <span class="mui-pipeline__marker" aria-hidden="true"></span>
+        <div class="mui-pipeline__stage" data-stage="resolver"><span class="mui-pipeline__label">resolver</span><p class="mui-pipeline__note"></p></div>
+        <div class="mui-pipeline__stage" data-stage="validar"><span class="mui-pipeline__label">validar</span><p class="mui-pipeline__note"></p></div>
+        <div class="mui-pipeline__stage" data-stage="autorizar"><span class="mui-pipeline__label">autorizar</span><p class="mui-pipeline__note"></p></div>
+        <div class="mui-pipeline__stage" data-stage="ejecutar"><span class="mui-pipeline__label">ejecutar</span><p class="mui-pipeline__note"></p></div>
+        <div class="mui-pipeline__stage" data-stage="auditar"><span class="mui-pipeline__label">auditar</span><p class="mui-pipeline__note"></p></div>
+      </div>
+    </div>
+    <div class="pf-controls">
+      <button class="mui-btn mui-btn--primary mui-btn--sm" id="pipe-ok" type="button">Llamar CON permiso</button>
+      <button class="mui-btn mui-btn--danger mui-btn--sm" id="pipe-denied" type="button">Llamar SIN permiso</button>
+    </div>
+    <p class="pf-status" role="status" id="pipe-status">Esperando caller — humano o agente, la puerta es la misma.</p>
+  </section>
+
+  <!-- ════════ 3 · mui-gate — la compuerta ════════ -->
+  <section class="pf-section" aria-labelledby="h-gate">
+    <h2 id="h-gate">3 · La compuerta <span class="pf-mono" style="color:var(--text-muted); font-size:var(--text-sm)">mui-gate</span></h2>
+    <p>Un agente pide algo irreversible. Decide tú — o marca "decido como el solicitante" y mira a
+      la compuerta rebotarlo sola: nadie se aprueba a sí mismo, por construcción.</p>
+    <div class="mui-gate" id="gate">
+      <div class="mui-gate__request">
+        <span class="mui-gate__actor">agente · bot-severo</span>
+        <span class="mui-gate__action">borrar 500 usuarios inactivos</span>
+        <span class="mui-gate__facts">irreversible · afecta producción · scope: usuarios:borrar</span>
+      </div>
+      <label class="mui-choice"><input type="checkbox" class="mui-checkbox" id="gate-self"><span class="mui-choice__text">decido como el solicitante (bot-severo)</span></label>
+      <div class="mui-gate__decisions">
+        <button class="mui-btn mui-btn--primary" type="button" data-decision="approved">Aprobar</button>
+        <button class="mui-btn mui-btn--danger" type="button" data-decision="rejected">Rechazar</button>
+        <button class="mui-btn" type="button" data-decision="waived">Exonerar</button>
+      </div>
+      <p class="mui-gate__outcome" role="status" id="gate-outcome"></p>
+      <ol class="mui-gate__audit" role="log" aria-label="Registro de pasajes" id="gate-audit"></ol>
+    </div>
+    <div class="pf-controls"><button class="mui-btn mui-btn--sm" id="gate-reset" type="button">Nueva solicitud</button></div>
+  </section>
+
+  <!-- ════════ 4 · mui-replay — el log reproducible ════════ -->
+  <section class="pf-section" aria-labelledby="h-replay">
+    <h2 id="h-replay">4 · El log reproducible <span class="pf-mono" style="color:var(--text-muted); font-size:var(--text-sm)">mui-replay</span></h2>
+    <p>El estado es una proyección del log. Mueve el corte y mira el estado re-derivarse — nada se
+      muta suelto: todo se recalcula desde los eventos.</p>
+    <div class="mui-replay" id="replay">
+      <ol class="mui-replay__stream" aria-label="Log del proceso" id="replay-stream"></ol>
+      <div class="mui-replay__scrubber">
+        <input type="range" min="0" max="6" value="6" id="replay-range" aria-label="Corte del log">
+      </div>
+      <div class="mui-replay__projection" role="status" id="replay-projection">
+        <div class="mui-replay__stat"><span class="mui-replay__stat-label">corte</span><span class="mui-replay__stat-value" id="rp-corte"></span></div>
+        <div class="mui-replay__stat"><span class="mui-replay__stat-label">estado</span><span class="mui-replay__stat-value" id="rp-estado"></span></div>
+        <div class="mui-replay__stat"><span class="mui-replay__stat-label">verificación</span><span class="mui-replay__stat-value" id="rp-verif"></span></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ---------- tema (patrón admin proof) ---------- */
+  const root = document.documentElement, themeBtn = document.getElementById('theme-toggle');
+  const applyTheme = (t) => { root.dataset.theme = t; themeBtn.textContent = '◐ ' + t; try { localStorage.setItem('milpa-theme', t); } catch {} };
+  let saved = null; try { saved = localStorage.getItem('milpa-theme'); } catch {}
+  applyTheme(saved === 'light' || saved === 'dark' ? saved : root.dataset.theme);
+  themeBtn.addEventListener('click', () => applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+  /* ════════ 1 · plot — JS de referencia del contrato ════════ */
+  const plot = document.getElementById('plot');
+  const plotStatus = document.getElementById('plot-status');
+  const cells = [...plot.querySelectorAll('.mui-plot__cell')];
+  const sownCaps = () => new Set(['config', ...cells.filter((c) => c.dataset.state === 'sown' || c.dataset.state === 'germinating').flatMap((c) => c.dataset.provides.split(',').filter(Boolean))]);
+  cells.forEach((cell) => cell.addEventListener('click', () => {
+    const requires = cell.dataset.requires.split(',').filter(Boolean);
+    const missing = requires.filter((r) => !sownCaps().has(r));
+    const note = cell.querySelector('.mui-plot__note');
+    if (missing.length) {
+      cell.dataset.state = 'wilted';
+      note.textContent = 'falta: ' + missing.join(', ');
+      note.hidden = false;
+      plotStatus.textContent = cell.querySelector('.mui-plot__name').textContent + ' se marchitó — falta: ' + missing.join(', ') + '. Siembra primero quien provee esa capacidad.';
+      return;
+    }
+    cell.dataset.state = 'germinating';
+    note.hidden = true;
+    plotStatus.textContent = cell.querySelector('.mui-plot__name').textContent + ' germinó. El campo provee: ' + [...sownCaps()].join(', ') + '.';
+    if (cells.every((c) => c.dataset.state === 'germinating' || c.dataset.state === 'sown')) {
+      cells.forEach((c) => { c.dataset.state = 'sown'; });
+      plotStatus.textContent = 'Cosecha completa: los contratos se satisfacen y todo se asienta en oro. Orden válido de arranque encontrado.';
+    }
+  }));
+  document.getElementById('plot-reset').addEventListener('click', () => {
+    cells.forEach((c) => { delete c.dataset.state; const n = c.querySelector('.mui-plot__note'); n.hidden = true; n.textContent = ''; });
+    plotStatus.textContent = 'El campo está listo — provee: config.';
+  });
+
+  /* ════════ 2 · pipeline — JS de referencia del contrato ════════ */
+  const pipe = document.getElementById('pipe');
+  const pipeStatus = document.getElementById('pipe-status');
+  const track = pipe.querySelector('.mui-pipeline__track');
+  const stages = [...pipe.querySelectorAll('.mui-pipeline__stage')];
+  const setStage = (el, status, note) => { if (status) el.dataset.status = status; else delete el.dataset.status; el.querySelector('.mui-pipeline__note').textContent = note || ''; };
+  const runPipe = (denied) => {
+    stages.forEach((s) => setStage(s, null, ''));
+    const trace = denied
+      ? [['complete'], ['complete'], ['denied', 'denegado: falta usuarios:borrar'], ['skipped'], ['complete', 'lo denegado también se registra']]
+      : [['complete'], ['complete'], ['complete'], ['complete'], ['complete', 'tool.executed emitido']];
+    trace.forEach(([status, note], i) => setStage(stages[i], status, note));
+    const stopIndex = denied ? 2 : stages.length - 1;
+    track.style.setProperty('--_pipeline-progress', String(stopIndex / (stages.length - 1)));
+    pipeStatus.textContent = denied
+      ? 'Detenido en autorizar: falta el scope usuarios:borrar. La denegación explica su causa — y quedó auditada.'
+      : 'Recorrido completo: resolver → validar → autorizar → ejecutar → auditar. tool.executed emitido.';
+  };
+  document.getElementById('pipe-ok').addEventListener('click', () => runPipe(false));
+  document.getElementById('pipe-denied').addEventListener('click', () => runPipe(true));
+
+  /* ════════ 3 · gate — JS de referencia del contrato ════════ */
+  const gate = document.getElementById('gate');
+  const outcome = document.getElementById('gate-outcome');
+  const audit = document.getElementById('gate-audit');
+  const selfCheck = document.getElementById('gate-self');
+  const decisions = [...gate.querySelectorAll('.mui-gate__decisions .mui-btn')];
+  const BADGE = { approved: ['mui-badge--success', 'aprobada'], rejected: ['mui-badge--danger', 'rechazada'], waived: ['mui-badge--warning', 'exonerada'], 'self-denied': ['mui-badge--danger', 'auto-aprobación rechazada'] };
+  const OUTCOME_TEXT = {
+    approved: 'Aprobada por delivery:ana — la acción puede ejecutarse. Quedó registrado.',
+    rejected: 'Rechazada por delivery:ana — la acción no procede. Quedó registrado.',
+    waived: 'Compuerta exonerada explícitamente por delivery:ana. La exoneración también es un dato.',
+    'self-denied': 'Rechazado por construcción: quien abrió la compuerta no puede resolverla. Nadie se aprueba a sí mismo.',
+  };
+  const appendEntry = (status, decider) => {
+    const li = document.createElement('li');
+    li.className = 'mui-gate__entry';
+    const who = document.createElement('span'); who.textContent = decider;
+    const chip = document.createElement('span'); chip.className = 'mui-badge ' + BADGE[status][0]; chip.textContent = BADGE[status][1];
+    const time = document.createElement('span'); time.className = 'mui-gate__entry-time'; time.textContent = new Date().toLocaleTimeString();
+    li.append(who, chip, time);
+    audit.append(li);
+  };
+  decisions.forEach((b) => b.addEventListener('click', () => {
+    const decider = selfCheck.checked ? 'agente:bot-severo' : 'delivery:ana';
+    const status = selfCheck.checked ? 'self-denied' : b.dataset.decision;
+    gate.dataset.status = status;
+    outcome.textContent = OUTCOME_TEXT[status];
+    appendEntry(status, decider);
+    if (!selfCheck.checked) decisions.forEach((x) => { x.disabled = true; });
+  }));
+  document.getElementById('gate-reset').addEventListener('click', () => {
+    delete gate.dataset.status;
+    outcome.textContent = '';
+    decisions.forEach((x) => { x.disabled = false; });
+    selfCheck.checked = false;
+  });
+
+  /* ════════ 4 · replay — JS de referencia del contrato (fold) ════════ */
+  const EVENTS = [
+    { type: 'process.requested', actor: 'agente:bot' },
+    { type: 'verification.requested', actor: 'runtime' },
+    { type: 'verification.waived', actor: 'delivery:ana' },
+    { type: 'execution.started', actor: 'runtime' },
+    { type: 'execution.progress', actor: 'runtime' },
+    { type: 'process.completed', actor: 'runtime' },
+  ];
+  const fold = (until) => {
+    const p = { estado: 'sin iniciar', verificacion: 'ninguna' };
+    EVENTS.slice(0, until).forEach((e) => {
+      if (e.type === 'process.requested') p.estado = 'solicitado';
+      if (e.type === 'verification.requested') { p.estado = 'esperando verificación'; p.verificacion = 'pendiente'; }
+      if (e.type === 'verification.waived') { p.estado = 'listo para ejecutar'; p.verificacion = 'exonerada'; }
+      if (e.type === 'execution.started' || e.type === 'execution.progress') p.estado = 'ejecutando';
+      if (e.type === 'process.completed') p.estado = 'completado';
+    });
+    return p;
+  };
+  const stream = document.getElementById('replay-stream');
+  EVENTS.forEach((e) => {
+    const li = document.createElement('li');
+    li.className = 'mui-replay__event';
+    const t = document.createElement('span'); t.className = 'mui-replay__type'; t.textContent = e.type;
+    const a = document.createElement('span'); a.className = 'mui-replay__actor'; a.textContent = e.actor;
+    li.append(t, a);
+    stream.append(li);
+  });
+  const range = document.getElementById('replay-range');
+  const renderCut = () => {
+    const cut = Number(range.value);
+    [...stream.children].forEach((li, i) => {
+      li.dataset.applied = String(i < cut);
+      if (i === cut - 1) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+    });
+    const p = fold(cut);
+    document.getElementById('rp-corte').textContent = 'evento ' + cut + ' / ' + EVENTS.length;
+    document.getElementById('rp-estado').textContent = p.estado;
+    document.getElementById('rp-verif').textContent = p.verificacion;
+    range.setAttribute('aria-label', 'Corte del log: evento ' + cut + ' de ' + EVENTS.length);
+  };
+  range.addEventListener('input', renderCut);
+  renderCut();
+})();
+</script>
+</body>
+</html>

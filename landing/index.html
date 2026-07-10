@@ -8,17 +8,19 @@
 <meta property="og:title" content="Milpa — Sow modules, harvest applications">
 <meta property="og:description" content="Modular, contract-first PHP framework built for humans and agents. The field is planted.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://milpa.lat">
-<link rel="icon" href="../logo/symbol/milpa-symbol-color.svg" type="image/svg+xml">
+<meta property="og:url" content="https://getmilpa.com">
+<link rel="canonical" href="https://getmilpa.com">
+<link rel="icon" href="https://cdn.jsdelivr.net/npm/@milpa/design@0.9.0/logo/symbol/milpa-symbol-color.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../dist/milpa-tokens.css">
-<link rel="stylesheet" href="../motion/milpa-motion.css">
-<link rel="stylesheet" href="../primitives/milpa-primitives.css">
-<link rel="stylesheet" href="../components/milpa-components.css">
-<link rel="stylesheet" href="../artifacts/milpa-artifacts.css">
-<link rel="stylesheet" href="../layouts/milpa-layouts.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@milpa/design@0.9.0/dist/milpa-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@milpa/design@0.9.0/motion/milpa-motion.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@milpa/design@0.9.0/primitives/milpa-primitives.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@milpa/design@0.9.0/components/milpa-components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@milpa/design@0.9.0/artifacts/milpa-artifacts.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@milpa/design@0.9.0/layouts/milpa-layouts.css">
+<link rel="stylesheet" href="https://academy.milpa.lat/artifacts/artifacts.css">
 <!-- the real proof skins (theme-swap): inert until <html data-skin="…"> — L1 retokenize, zero structural CSS -->
 <link rel="stylesheet" href="../proof/skins/brutalist-skin.css">
 <link rel="stylesheet" href="../proof/skins/glass-skin.css">
@@ -169,6 +171,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://github.com/getmilpa">GitHub</a>
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://packagist.org/packages/milpa/">Packagist</a>
       <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://www.npmjs.com/package/@milpa/design">npm</a>
+      <a class="mui-btn mui-btn--ghost mui-btn--sm" href="https://academy.milpa.lat/">Academy</a>
     </nav>
     <div class="mui-header__actions">
       <button class="mui-btn mui-btn--sm ld-mono" id="themeBtn" type="button" aria-label="Toggle theme">◐ dark</button>
@@ -187,6 +190,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
       <a class="mui-btn mui-btn--ghost" href="https://github.com/getmilpa">GitHub</a>
       <a class="mui-btn mui-btn--ghost" href="https://packagist.org/packages/milpa/">Packagist</a>
       <a class="mui-btn mui-btn--ghost" href="https://www.npmjs.com/package/@milpa/design">npm</a>
+      <a class="mui-btn mui-btn--ghost" href="https://academy.milpa.lat/">Academy</a>
     </nav>
   </div>
 </dialog>
@@ -333,6 +337,120 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           </div>
         </div>
       </div>
+      <div data-rise style="margin-top:var(--space-8)">
+        <p class="ld-proof" style="margin:0 0 var(--space-3)">try it — the same operation, projected to three doors:</p>
+        <milpa-artifact id="atomo-artifact" lang="en">
+        <header class="wb-artifact__header">
+          <div class="wb-artifact__meta">
+            <span class="mui-badge mui-badge--accent">Artifact 09</span>
+            <span class="mui-badge mui-badge--secondary">Engineering · inspect</span>
+          </div>
+          <h1 id="atomo-title">The atom and its doors</h1>
+          <p>An operation is declared once. <code>coa</code>, MCP and HTTP are adapters of the same handler — but changing doors can change the policy.</p>
+        </header>
+
+        <article class="wb-atom-card" aria-label="The declared operation">
+          <p class="wb-atom-card__name"><code>crear:tarea</code></p>
+          <ul class="wb-atom-card__chips">
+            <li class="mui-badge mui-badge--warning">mutating</li>
+            <li class="mui-badge mui-badge--warning">requiresConfirmation</li>
+            <li class="mui-badge mui-badge--secondary">scopes: tarea:crear</li>
+            <li class="mui-badge mui-badge--secondary">handler: TaskService::create</li>
+          </ul>
+        </article>
+
+        <div class="wb-surface-controls" role="group" aria-label="Choose surface">
+          <button class="mui-btn mui-btn--lg mui-btn--primary wb-surface" type="button" data-surface="cli">coa · CLI</button>
+          <button class="mui-btn mui-btn--lg mui-btn--secondary wb-surface" type="button" data-surface="mcp">MCP · agent</button>
+          <button class="mui-btn mui-btn--lg mui-btn--secondary wb-surface" type="button" data-surface="http">POST · HTTP</button>
+          <label class="mui-choice wb-scope-toggle">
+            <input class="mui-switch" id="scope-toggle" type="checkbox" role="switch">
+            <span>Chaos mode · remove scope <code>tarea:crear</code></span>
+          </label>
+        </div>
+
+        <div class="mui-callout mui-callout--warning" role="note">
+          <p><strong>Honest coverage gap:</strong> This is not a desirable HTTP guarantee. It is a radiography of the current implementation. MCP enforces scopes today; HTTP does not yet read scopes from <code>Operation</code>. This gap must be closed in runtime/policy before production. See Runtime x-ray. Source: <code>Operation.php</code>.</p>
+        </div>
+
+        <div class="wb-projection">
+          <section class="wb-surface-column" data-surface="cli" aria-label="Projection to coa (CLI)">
+            <h2 class="wb-surface-column__title">coa · CLI</h2>
+            <p class="wb-surface-column__invocation" id="inv-cli"><code>coa crear:tarea --titulo=… --yes</code></p>
+            <div class="mui-pipeline mui-pipeline--vertical" id="pipe-cli" aria-label="Pipeline resolve, validate, authorize, execute, audit (coa)">
+              <div class="mui-pipeline__track" style="--_pipeline-progress: 0">
+                <span class="mui-pipeline__marker" aria-hidden="true"></span>
+                <div class="mui-pipeline__stage" data-stage="resolve"><span class="mui-pipeline__label">resolve</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="validate"><span class="mui-pipeline__label">validate</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="authorize"><span class="mui-pipeline__label">authorize</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="execute"><span class="mui-pipeline__label">execute</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="audit"><span class="mui-pipeline__label">audit</span><p class="mui-pipeline__note"></p></div>
+              </div>
+            </div>
+            <p class="wb-surface-column__status" id="status-cli" role="status" aria-live="polite">Pick a door to project.</p>
+          </section>
+          <section class="wb-surface-column" data-surface="mcp" aria-label="Projection to MCP (agent)">
+            <h2 class="wb-surface-column__title">MCP · agent</h2>
+            <p class="wb-surface-column__invocation" id="inv-mcp"><code>tools/call · crear:tarea</code></p>
+            <div class="mui-pipeline mui-pipeline--vertical" id="pipe-mcp" aria-label="Pipeline resolve, validate, authorize, execute, audit (MCP)">
+              <div class="mui-pipeline__track" style="--_pipeline-progress: 0">
+                <span class="mui-pipeline__marker" aria-hidden="true"></span>
+                <div class="mui-pipeline__stage" data-stage="resolve"><span class="mui-pipeline__label">resolve</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="validate"><span class="mui-pipeline__label">validate</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="authorize"><span class="mui-pipeline__label">authorize</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="execute"><span class="mui-pipeline__label">execute</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="audit"><span class="mui-pipeline__label">audit</span><p class="mui-pipeline__note"></p></div>
+              </div>
+            </div>
+            <p class="wb-surface-column__status" id="status-mcp" role="status" aria-live="polite">Pick a door to project.</p>
+          </section>
+          <section class="wb-surface-column" data-surface="http" aria-label="Projection to POST (HTTP)">
+            <h2 class="wb-surface-column__title">POST · HTTP</h2>
+            <p class="wb-surface-column__invocation" id="inv-http"><code>POST /crear/tarea</code></p>
+            <div class="mui-pipeline mui-pipeline--vertical" id="pipe-http" aria-label="Pipeline resolve, validate, authorize, execute, audit (POST)">
+              <div class="mui-pipeline__track" style="--_pipeline-progress: 0">
+                <span class="mui-pipeline__marker" aria-hidden="true"></span>
+                <div class="mui-pipeline__stage" data-stage="resolve"><span class="mui-pipeline__label">resolve</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="validate"><span class="mui-pipeline__label">validate</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="authorize"><span class="mui-pipeline__label">authorize</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="execute"><span class="mui-pipeline__label">execute</span><p class="mui-pipeline__note"></p></div>
+                <div class="mui-pipeline__stage" data-stage="audit"><span class="mui-pipeline__label">audit</span><p class="mui-pipeline__note"></p></div>
+              </div>
+            </div>
+            <p class="wb-surface-column__status" id="status-http" role="status" aria-live="polite">Pick a door to project.</p>
+          </section>
+        </div>
+
+        <table class="mui-table mui-table--compact wb-guarantees">
+          <caption>Guarantees by surface</caption>
+          <thead><tr><th scope="col">Surface</th><th scope="col">Confirm</th><th scope="col">Scopes applied</th></tr></thead>
+          <tbody id="atomo-matrix">
+            <tr><td>coa</td><td>flag <code>--yes</code></td><td>no (local/trusted)</td></tr>
+            <tr><td>MCP</td><td>inherited gate (tool-runtime)</td><td><strong>yes</strong> (PolicyGate)</td></tr>
+            <tr><td>POST</td><td>token <code>428→201</code></td><td>no (pending · middleware)</td></tr>
+          </tbody>
+        </table>
+
+        <div class="wb-lesson mui-callout" role="note">
+          <p>The handler never changed. You changed doors and the framework synthesized the invocation — but the door can change the policy, and today not all of them apply the same scopes.</p>
+        </div>
+
+        <details class="wb-source">
+          <summary>Evidence and scope</summary>
+          <p><strong>Didactic</strong> model over an <strong>audited</strong> implementation. This artifact does not claim that HTTP applies scopes, nor that the in-memory token store is production-grade.</p>
+          <h3>Audited sources</h3>
+          <ul>
+            <li>Published contract <code>milpa/command</code>: <code>getmilpa-command/src/Operation.php</code>, <code>CommandProvider.php</code>, <code>SurfaceProjector.php</code>.</li>
+            <li>Reference projectors (<code>skeleton</code>, ns <code>App\Command</code>, not part of the package): <code>getmilpa-skeleton/src/Command/{CliProjector,McpProjector,HttpProjector}.php</code>.</li>
+            <li>Didactic stand-ins: <code>ConfirmTokenStore.php</code> (in-memory, single-process — not production), <code>SchemaCoercer.php</code>.</li>
+            <li>Junior seed: <code>docs/GUION-WEBINAR-JUNIORS.md</code> (Artifact 2).</li>
+          </ul>
+        </details>
+      </milpa-artifact>
+      </div>
+      <p style="margin-top:var(--space-6); text-align:center" data-rise>
+        <a class="mui-btn mui-btn--ghost" href="https://academy.milpa.lat/en/">→ the full lesson in the Academy</a>
+      </p>
       <p class="ld-loop" data-rise aria-label="the contract loop">plugin → capability → tool → verification → event → result</p>
     </div>
   </section>
@@ -365,6 +483,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
         validators read the whole plugin ecosystem — every hard <code class="ld-mono">requires</code> satisfied,
         the graph acyclic — before it becomes a boot-time failure.
       </p>
+      <p class="ld-mono" data-rise style="margin-top:var(--space-4); font-size:var(--text-xs); color:var(--text-muted)">next: every failure links to the concept it broke · <span class="mui-badge mui-badge--secondary">coming soon</span></p>
     </div>
   </section>
 
@@ -441,6 +560,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Each one implements a seam of the
               contracts: containers, events, routing, live components, tools, plugins, workflow, event log.</p>
             <ul class="ld-pkgs">
+              <li><a href="https://packagist.org/packages/milpa/command">command</a></li>
               <li><a href="https://github.com/getmilpa/container">container</a></li>
               <li><a href="https://github.com/getmilpa/events">events</a></li>
               <li><a href="https://github.com/getmilpa/event-store">event-store</a></li>
@@ -516,6 +636,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <button class="mui-btn mui-btn--sm" type="button" data-skin="brutalist" aria-pressed="false">brutalist</button>
             <button class="mui-btn mui-btn--sm" type="button" data-skin="glass" aria-pressed="false">glass</button>
           </div>
+          <p class="ld-proof" style="margin:0 0 var(--space-3)">no layer pretends — theming is a contract (<code>theme.contract.json</code>), live.</p>
           <div class="mui-card">
           <div class="mui-card__body ld-demo-rows">
             <div class="ld-demo-row">
@@ -634,6 +755,10 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           And his lesson as the contract under it all: <b style="color:var(--text)">what's yours,
           you should be able to understand and repair.</b>
         </p>
+        <blockquote class="mui-quote mui-quote--pull" data-rise style="margin-top:var(--space-6)">
+          <p class="mui-quote__text">Milpa doesn't promise to save you from thinking; it promises to teach
+            you to think while you build.</p>
+        </blockquote>
         <p data-rise style="margin-top:var(--space-6); color:var(--text-muted); font-size:var(--text-sm)">
           He never saw this framework. The field it grows from is his.
         </p>
@@ -689,6 +814,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
         <li><a href="https://github.com/getmilpa">GitHub</a></li>
         <li><a href="https://packagist.org/packages/milpa/">Packagist</a></li>
         <li><a href="https://www.npmjs.com/package/@milpa/design">npm</a></li>
+        <li><a href="https://academy.milpa.lat/">Academy</a></li>
         <li><a href="https://github.com/getmilpa/milpa-design/blob/main/LICENSE">Apache-2.0</a></li>
       </ul>
     </nav>
@@ -771,7 +897,7 @@ document.querySelectorAll('[data-copy]').forEach((b) => {
 
 <!-- Solo la animación va en módulo: si no carga, el fallback es la M ensamblada. -->
 <script type="module">
-import { motion } from '../motion/milpa-motion.js';
+import { motion } from 'https://cdn.jsdelivr.net/npm/@milpa/design@0.9.0/motion/milpa-motion.js';
 
 /* ---------- el momento firma ----------
    13 granos dispersos (módulos sueltos) se asientan en la M al hacer scroll.
@@ -826,5 +952,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
 // posiciones correctas cuando las fuentes terminan de cargar
 document.fonts?.ready.then(() => ScrollTrigger.refresh());
 </script>
+<script src="https://academy.milpa.lat/artifacts/artifacts-core.js" defer></script>
+<script src="https://academy.milpa.lat/artifacts/milpa-artifact.js" defer></script>
 </body>
 </html>

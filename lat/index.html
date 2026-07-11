@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNEP9JEQ2V"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('set',{language:'es',page_type:'landing'});gtag('config','G-TNEP9JEQ2V');</script>
 <title>Milpa — Siembra módulos, cosecha aplicaciones</title>
 <meta name="description" content="Milpa es un ecosistema de software modular, contract-first, para humanos y agentes. Una milpa no es un cultivo: es un sistema. El campo está sembrado.">
 <meta property="og:title" content="Milpa — Siembra módulos, cosecha aplicaciones">
@@ -662,5 +664,34 @@ document.fonts?.ready.then(() => ScrollTrigger.refresh());
 </script>
 <script src="https://academy.milpa.lat/artifacts/artifacts-core.js" defer></script>
 <script src="https://academy.milpa.lat/artifacts/milpa-artifact.js" defer></script>
+
+<!-- GA4: eventos clave — delegación en document, guarded, nunca preventDefault -->
+<script>
+(function () {
+  function track(name, params) {
+    try { if (typeof window.gtag === 'function') window.gtag('event', name, params); } catch (e) {}
+  }
+  document.addEventListener('click', function (e) {
+    try {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var cta = t.closest('a.mui-btn--primary');
+      if (cta) track('cta_click', { cta: (cta.textContent || '').trim() });
+      var cp = t.closest('[data-copy]');
+      if (cp && cp.dataset.copy) track('copy_command', { command: cp.dataset.copy });
+      var lang = t.closest('a[hreflang]');
+      if (lang && !/^https?:/i.test(lang.getAttribute('href') || '')) track('lang_switch', { from: 'es', to: lang.getAttribute('hreflang') });
+      var a = t.closest('a[href]');
+      if (a) {
+        var href = a.href, kind = null;
+        if (href.indexOf('academy.milpa.lat') > -1) kind = 'academy';
+        else if (href.indexOf('github.com/getmilpa') > -1) kind = 'package';
+        else if (href.indexOf('npmjs.com') > -1) kind = 'package';
+        if (kind) track('outbound_click', { href: href, kind: kind });
+      }
+    } catch (e) {}
+  });
+})();
+</script>
 </body>
 </html>

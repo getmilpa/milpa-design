@@ -485,7 +485,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
       <p style="margin-top:var(--space-5); color:var(--text-muted); font-size:var(--text-sm); max-width:64ch" data-rise>
         The loop is <span style="color:var(--text-secondary)">generate → verify → inspect</span>: scaffolding follows
         the same conventions the runtime enforces, verifiers reflect the real class against the real rules, and
-        the CLI and the boot read the same resolver report — every hard <code class="ld-mono">requires</code> satisfied,
+        the boot resolves the whole graph before anything runs — every hard <code class="ld-mono">requires</code> satisfied,
         the graph acyclic. If the architecture doesn't close, the runtime refuses to boot:
         <code class="ld-mono">ArchitectureBlockedException</code>, with the report attached.
       </p>

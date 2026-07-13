@@ -281,7 +281,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Plugins that climb the stalk</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Modules that connect through
               events and compose with each other. They fix nitrogen: each one feeds the whole system.</p>
-            <p class="ld-proof"><code>provides / requires</code> in <code>milpa.json</code> — providers load before consumers</p>
+            <p class="ld-proof"><code>provides / requires</code> in <code>milpa.json</code> — <code>milpa/resolver</code> computes the load order: providers before consumers, and a cycle is an error that teaches you</p>
           </div>
         </article>
         <article class="mui-card" data-rise>
@@ -470,22 +470,26 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
       <div class="mui-terminal" data-rise style="margin-top:var(--space-8)">
         <div class="mui-terminal__bar"></div>
         <div class="mui-terminal__body" role="region" aria-label="coa generate-verify-inspect session" tabindex="0">
-          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php coa coa:make entity InventoryPlugin Product --fields "name:string:120,price:decimal:10,2" --dry-run</span></div>
-          <div class="mui-terminal__line"><span class="mui-terminal__out">plan   plugins/InventoryPlugin/Entities/Product.php   (dry run — nothing written)</span></div>
-          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php coa coa:validate</span></div>
-          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ manifests valid · providers implement what they claim · boundaries clean</span></div>
-          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ every requires satisfied · capability graph acyclic</span></div>
-          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php coa coa:doctor</span></div>
-          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ the framework, explained by itself</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php bin/coa make:entity HelloPlugin Product --fields="name:string:120,price:decimal:10,2"</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ wrote src/Plugins/HelloPlugin/Entities/Product.php</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">PASS: Product — runtime entity — 0 errors</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php bin/coa validate</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">milpa · coa validate — static pre-boot capability check (boot() never runs)</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ 1 plugin(s) instantiate cleanly and satisfy every #[PluginMetadata] requires/provides.</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php bin/coa doctor</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ 1 plugin(s) configured, 1 booted: HelloPlugin</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__out">✔ kernel booted — zero database queries.</span></div>
         </div>
       </div>
+      <p class="ld-proof" data-rise>real output — a clean <code>composer create-project milpa/skeleton</code>, skeleton 0.6.2</p>
       <p style="margin-top:var(--space-5); color:var(--text-muted); font-size:var(--text-sm); max-width:64ch" data-rise>
         The loop is <span style="color:var(--text-secondary)">generate → verify → inspect</span>: scaffolding follows
         the same conventions the runtime enforces, verifiers reflect the real class against the real rules, and
-        validators read the whole plugin ecosystem — every hard <code class="ld-mono">requires</code> satisfied,
-        the graph acyclic — before it becomes a boot-time failure.
+        the CLI and the boot read the same resolver report — every hard <code class="ld-mono">requires</code> satisfied,
+        the graph acyclic. If the architecture doesn't close, the runtime refuses to boot:
+        <code class="ld-mono">ArchitectureBlockedException</code>, with the report attached.
       </p>
-      <p class="ld-mono" data-rise style="margin-top:var(--space-4); font-size:var(--text-xs); color:var(--text-muted)">next: every failure links to the concept it broke · <span class="mui-badge mui-badge--secondary">coming soon</span></p>
+      <p class="ld-mono" data-rise style="margin-top:var(--space-4); font-size:var(--text-xs); color:var(--text-muted)">every failure links to the concept it broke — code, why and fix · <a href="https://academy.milpa.lat/learn/fundamentos/contratos-grafo/" style="color:var(--accent-text)">the lesson, at the Academy</a></p>
     </div>
   </section>
 
@@ -531,7 +535,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
     </div>
   </section>
 
-  <!-- ============ THE FIELD · seventeen packages ============ -->
+  <!-- ============ THE FIELD · the package map ============ -->
   <section class="mui-section" aria-labelledby="h-field">
     <div class="mui-container">
       <p class="mui-section__kicker" data-rise>the harvest map</p>
@@ -548,6 +552,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
               pieces that depend on nothing — not even on each other.</p>
             <ul class="ld-pkgs">
               <li><a href="https://github.com/getmilpa/core">core</a></li>
+              <li><a href="https://github.com/getmilpa/data">data</a></li>
               <li><a href="https://github.com/getmilpa/devtools">devtools</a></li>
               <li><a href="https://github.com/getmilpa/mcp-client">mcp-client</a></li>
               <li><a href="https://github.com/getmilpa/mercure">mercure</a></li>
@@ -560,7 +565,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">tier 1 · the rows</p>
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Grown from the core</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Each one implements a seam of the
-              contracts: containers, events, routing, live components, tools, plugins, workflow, event log.</p>
+              contracts: containers, events, routing, live components, tools, plugins, graph resolution, workflow, event log.</p>
             <ul class="ld-pkgs">
               <li><a href="https://packagist.org/packages/milpa/command">command</a></li>
               <li><a href="https://github.com/getmilpa/container">container</a></li>
@@ -569,6 +574,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
               <li><a href="https://github.com/getmilpa/http">http</a></li>
               <li><a href="https://github.com/getmilpa/live">live</a></li>
               <li><a href="https://github.com/getmilpa/plugin">plugin</a></li>
+              <li><a href="https://github.com/getmilpa/resolver">resolver</a></li>
               <li><a href="https://github.com/getmilpa/tool-runtime">tool-runtime</a></li>
               <li><a href="https://github.com/getmilpa/workflow">workflow</a></li>
             </ul>
@@ -610,7 +616,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
       <p class="mui-section__kicker" data-rise>the first harvest</p>
       <h2 class="mui-section__title" id="h-ds" data-rise>The design system is ready to sow</h2>
       <p class="mui-section__lede" data-rise><code class="ld-mono" style="color:var(--accent-text)">@milpa/design</code> is
-        published: dark-first tokens verified WCAG AA, motion with a reduced-motion contract, and 68
+        published: dark-first tokens verified WCAG AA, motion with a reduced-motion contract, and 72
         pieces, every one with a machine-readable contract. It's the framework's thesis proven small —
         and it stands on its own.</p>
       <div class="ld-ds">
@@ -651,7 +657,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
               <span class="mui-badge mui-badge--success mui-badge--dot">active</span>
               <span class="mui-badge mui-badge--warning mui-badge--dot">germinating</span>
               <span class="mui-badge mui-badge--info">info</span>
-              <span class="mui-badge mui-badge--accent">v0.8.0</span>
+              <span class="mui-badge mui-badge--accent">v0.9.0</span>
               <span class="mui-kbd">⌘K</span>
             </div>
             <div class="ld-demo-row">
@@ -709,7 +715,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
               <span class="mui-code__file">milpa.json</span>
               <span class="mui-code__lang">json</span>
             </div>
-            <div class="mui-code__body"><pre><code><span class="mui-code__line"><span class="tok-punc">{</span></span><span class="mui-code__line">  <span class="tok-attr">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"acme/mail-plugin"</span><span class="tok-punc">,</span> <span class="tok-attr">"version"</span><span class="tok-punc">:</span> <span class="tok-str">"2.1.0"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"namespace"</span><span class="tok-punc">:</span> <span class="tok-str">"Acme\\MailPlugin"</span><span class="tok-punc">,</span> <span class="tok-attr">"entrypoint"</span><span class="tok-punc">:</span> <span class="tok-str">"MailPlugin.php"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"contracts"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span></span><span class="mui-code__line">    <span class="tok-attr">"provides"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"mail"</span><span class="tok-punc">],</span></span><span class="mui-code__line">    <span class="tok-attr">"requires"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"database"</span><span class="tok-punc">]</span></span><span class="mui-code__line">  <span class="tok-punc">}</span></span><span class="mui-code__line"><span class="tok-punc">}</span></span><span class="mui-code__line"></span><span class="mui-code__line"><span class="tok-attr">// providers load before consumers — Kahn's algorithm, the graph must be acyclic</span></span></code></pre></div>
+            <div class="mui-code__body"><pre><code><span class="mui-code__line"><span class="tok-punc">{</span></span><span class="mui-code__line">  <span class="tok-attr">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"acme/mail-plugin"</span><span class="tok-punc">,</span> <span class="tok-attr">"version"</span><span class="tok-punc">:</span> <span class="tok-str">"2.1.0"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"namespace"</span><span class="tok-punc">:</span> <span class="tok-str">"Acme\\MailPlugin"</span><span class="tok-punc">,</span> <span class="tok-attr">"entrypoint"</span><span class="tok-punc">:</span> <span class="tok-str">"MailPlugin.php"</span><span class="tok-punc">,</span></span><span class="mui-code__line">  <span class="tok-attr">"contracts"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span></span><span class="mui-code__line">    <span class="tok-attr">"provides"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"mail"</span><span class="tok-punc">],</span></span><span class="mui-code__line">    <span class="tok-attr">"requires"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"database"</span><span class="tok-punc">]</span></span><span class="mui-code__line">  <span class="tok-punc">}</span></span><span class="mui-code__line"><span class="tok-punc">}</span></span><span class="mui-code__line"></span><span class="mui-code__line"><span class="tok-attr">// milpa/resolver computes the load order — providers before consumers; a cycle is a learnable error</span></span></code></pre></div>
           </div>
         </div>
         <div class="mui-tabs__panel" role="tabpanel" id="ct-panel-theme" aria-labelledby="ct-theme" hidden>

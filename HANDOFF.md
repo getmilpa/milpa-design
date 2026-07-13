@@ -329,7 +329,7 @@ npm run verify:theme -- mi-skin.css   # valida un skin contra theme.contract.jso
 
 ## 7. Ojo / no hacer
 
-- **No** toques identificadores del framework (namespace `Milpa\`, `php coa`, etc.) — son
+- **No** toques identificadores del framework (namespace `Milpa\`, binario `coa`) — se consumen tal cual; cualquier rename es decisión del framework, no de este repo.
   legacy a propósito hasta *Phase R* (rename atómico). El binario `coa` también es post-Phase R.
 - **No** rompas el contrato de tokens/contratos sin bump semver.
 - **No** conviertas el oro en fill primario sólido en light (queda ilegible; usá ghost).

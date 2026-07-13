@@ -250,7 +250,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">Plugins que trepan el tallo</h3>
             <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">Módulos que se conectan por
               eventos y componen entre sí. Fijan nitrógeno: cada uno alimenta al sistema entero.</p>
-            <p class="ld-proof"><code>provides / requires</code> en <code>milpa.json</code> — los proveedores cargan antes que los consumidores</p>
+            <p class="ld-proof"><code>provides / requires</code> en <code>milpa.json</code> — <code>milpa/resolver</code> computa el orden de carga: proveedores antes que consumidores, y un ciclo es un error que te enseña</p>
           </div>
         </article>
         <article class="mui-card" data-rise>
@@ -422,7 +422,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           <div class="mui-card__body">
             <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">el design system · @milpa/design</p>
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">La primera cosecha</h3>
-            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">68 piezas, cada una con su
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)">72 piezas, cada una con su
               contrato legible por máquina; 193 pares WCAG AA verificados en CI; theming por contrato — hasta
               glass — sin tocar la estructura.</p>
             <ul class="ld-pkgs">
@@ -524,7 +524,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
         <p class="ld-coa" style="margin:0"><span class="ld-prompt">$</span> composer create-project milpa/skeleton mi-app
           <button class="mui-btn mui-btn--ghost mui-btn--sm" type="button" data-copy="composer create-project milpa/skeleton mi-app">copiar</button></p>
       </div>
-      <p class="ld-mono" data-rise style="margin-top:var(--space-4); font-size:var(--text-xs); color:var(--text-muted)">cada error, un link a lo que rompiste · <span class="mui-badge mui-badge--secondary">próximamente</span></p>
+      <p class="ld-mono" data-rise style="margin-top:var(--space-4); font-size:var(--text-xs); color:var(--text-muted)">cada error, un link a lo que rompiste — código, por qué y fix · <a href="https://academy.milpa.lat/learn/fundamentos/contratos-grafo/" style="color:var(--accent-text)">la lección, en la Academy</a></p>
       <div class="ld-final__cta" data-rise>
         <a class="mui-btn mui-btn--primary" href="https://github.com/getmilpa">Sigue a getmilpa</a>
         <a class="mui-btn" href="https://packagist.org/packages/milpa/skeleton">milpa/skeleton en Packagist</a>

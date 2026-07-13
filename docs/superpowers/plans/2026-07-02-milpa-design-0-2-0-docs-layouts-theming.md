@@ -32,7 +32,7 @@
 - Orden canónico de capas (cada archivo CSS publicado lo declara íntegro en su primera línea de código):
   `@layer milpa.tokens, milpa.motion, milpa.primitives, milpa.components, milpa.artifacts, milpa.layouts;`
 - Idioma: proofs/landing/docs en **inglés**; el tagline "Siembra módulos, cosecha aplicaciones." queda en español, verbatim. Docs internos del repo en español.
-- Cada tarea termina con `npm test` en verde y commit. No tocar identificadores legacy del framework (`Milpa\`, `php coa`).
+- Cada tarea termina con `npm test` en verde y commit. No tocar identificadores del framework (namespace `Milpa\`, binario `coa`).
 - `landing/index.html` está **staged de otra sesión**: commitear siempre por path explícito (`git commit <paths>`), nunca `git commit -a` ni `git commit` a secas.
 
 ## Mapa de archivos (quién es responsable de qué)

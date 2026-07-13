@@ -472,7 +472,7 @@ Storybook T5, salidas multiplataforma).
 - **`DESIGN.md`** — la constitución (alma, reglas de color, gobernanza de contratos-de-componente).
 - Página de prueba `proof/milpa-ds-proof.html` (swatches, contraste, light/dark, selector de verde).
 
-### Fixed (vs. borrador inicial "Milpa DS")
+### Fixed (vs. borrador inicial del DS)
 - Tema **light** reparado: 9 fallos WCAG AA resueltos (semánticos → -700, bordes → tierra-600/700,
   muted → tierra-700, focus → oro-700, primario = **ghost** porque el oro no contrasta como fill
   sobre crema). **32/32 pares AA** (dark + light).

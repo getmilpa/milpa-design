@@ -372,7 +372,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
         </div>
 
         <div class="mui-callout mui-callout--warning" role="note">
-          <p><strong>Honest coverage gap:</strong> This is not a desirable HTTP guarantee. It is a radiography of the current implementation. MCP enforces scopes today; HTTP does not yet read scopes from <code>Operation</code>. This gap must be closed in runtime/policy before production. See Runtime x-ray. Source: <code>Operation.php</code>.</p>
+          <p><strong>Honest coverage gap:</strong> This is not a desirable HTTP guarantee. It is a radiography of the current implementation. MCP enforces scopes today; HTTP does not yet read scopes from <code>Operation</code>. This gap must be closed in runtime/policy before production. <a href="#runtime">See Runtime x-ray.</a> Source: <code>Operation.php</code>.</p>
         </div>
 
         <div class="wb-projection">
@@ -448,6 +448,106 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
             <li>Junior seed: <code>docs/GUION-WEBINAR-JUNIORS.md</code> (Artifact 2).</li>
           </ul>
         </details>
+      </milpa-artifact>
+      </div>
+      <div id="runtime" data-rise style="margin-top:var(--space-8)">
+        <p class="ld-proof" style="margin:0 0 var(--space-3)">then the runtime that has to make good on it — walk the failure paths and the eleven-step invocation plan:</p>
+        <milpa-artifact id="runtime-artifact" lang="en">
+        <header class="wb-artifact__header">
+          <div class="wb-artifact__meta"><span class="mui-badge mui-badge--accent">Artifact 05</span><span class="mui-badge mui-badge--info">audited code</span></div>
+          <h1 id="runtime-title">Runtime x-ray</h1>
+          <p>The eleven-step walk is a good entry point. The real implementation adds boundaries that matter for security, cost, confirmation, and interception.</p>
+        </header>
+
+        <div class="mui-tabs wb-runtime-tabs" role="tablist" aria-label="Runtime views">
+          <button class="mui-tabs__tab" id="runtime-tab-failure" type="button" role="tab" aria-selected="true" aria-controls="runtime-panel-failure" data-runtime-tab="failure">Failure walk</button>
+          <button class="mui-tabs__tab" id="runtime-tab-plan" type="button" role="tab" aria-selected="false" aria-controls="runtime-panel-plan" data-runtime-tab="plan" tabindex="-1">Invocation plan</button>
+        </div>
+
+        <div class="wb-runtime-panel" id="runtime-panel-failure" data-runtime-panel="failure" role="tabpanel" aria-labelledby="runtime-tab-failure" tabindex="0">
+        <div class="wb-runtime-controls">
+          <div class="mui-field">
+            <label class="mui-field__label" for="runtime-scenario">Output to inspect</label>
+            <select class="mui-select" id="runtime-scenario">
+              <option value="none">successful callback</option>
+              <option value="validation">invalid arguments</option>
+              <option value="authorization">policy denied</option>
+              <option value="rate-limit">rate limit exhausted</option>
+              <option value="confirmation">pending confirmation</option>
+              <option value="veto">listener vetoes execution</option>
+              <option value="execution">callback throws exception</option>
+            </select>
+          </div>
+          <button class="mui-btn mui-btn--primary" id="run-runtime" type="button">Walk the implementation</button>
+          <button class="mui-btn mui-btn--ghost" id="reset-runtime" type="button">Clear</button>
+        </div>
+
+        <div class="wb-runtime-layout">
+          <div class="mui-pipeline mui-pipeline--vertical" id="runtime-rail" aria-label="Real stages of ToolRegistry call">
+            <div class="mui-pipeline__track" style="--_pipeline-progress: 0"></div>
+          </div>
+
+          <div class="wb-runtime-evidence">
+          <div class="mui-alert mui-alert--info" id="runtime-result" role="status" aria-live="polite">
+            <span class="mui-alert__icon" aria-hidden="true">i</span>
+            <div class="mui-alert__content"><p class="mui-alert__title">Select a path</p><p class="mui-alert__desc">Audit coverage changes depending on the return point.</p></div>
+          </div>
+
+          <div class="mui-table-wrap" role="region" aria-label="Runtime guarantees matrix" tabindex="0">
+            <table class="mui-table mui-table--compact wb-runtime-table">
+              <thead><tr><th>Output</th><th>Callback</th><th>Audit evidence</th></tr></thead>
+              <tbody>
+                <tr><td>Nonexistent tool</td><td>No</td><td><span class="mui-badge">no explicit log</span></td></tr>
+                <tr><td>Invalid args</td><td>No</td><td><span class="mui-badge mui-badge--success">validation failure</span></td></tr>
+                <tr><td>Policy denied</td><td>No</td><td><span class="mui-badge mui-badge--success">auth failure</span></td></tr>
+                <tr><td>Plan / confirmation</td><td>No</td><td><span class="mui-badge">no explicit log</span></td></tr>
+                <tr><td>Cache short-circuit</td><td>No</td><td><span class="mui-badge mui-badge--success">tool.executed</span></td></tr>
+                <tr><td>Pure veto</td><td>No</td><td><span class="mui-badge mui-badge--warning">known gap</span></td></tr>
+                <tr><td>Callback / throw</td><td>Yes</td><td><span class="mui-badge mui-badge--success">executed / failed</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+        </div>
+
+        <div class="wb-runtime-panel" id="runtime-panel-plan" data-runtime-panel="plan" role="tabpanel" aria-labelledby="runtime-tab-plan" tabindex="0" hidden>
+          <div class="wb-runtime-channels" role="group" aria-label="Invocation channel">
+            <span class="mui-field__label">Invocation channel</span>
+            <div class="wb-runtime-channels__buttons">
+              <button class="mui-btn mui-btn--sm" type="button" id="runtime-channel-cli" data-runtime-channel="cli" aria-pressed="false">coa</button>
+              <button class="mui-btn mui-btn--sm" type="button" id="runtime-channel-mcp" data-runtime-channel="mcp" aria-pressed="false">MCP</button>
+              <button class="mui-btn mui-btn--sm mui-btn--primary" type="button" id="runtime-channel-http" data-runtime-channel="http" aria-pressed="true">POST</button>
+            </div>
+          </div>
+
+          <div class="mui-table-wrap" role="region" aria-label="Eleven-step invocation plan" tabindex="0">
+            <table class="mui-table mui-table--compact wb-runtime-plan-table">
+              <thead><tr><th>Step</th><th>Role</th><th>Presence</th><th>Source</th></tr></thead>
+              <tbody id="runtime-plan-body">
+                <tr data-step="resolve"><td>Resolve</td><td>Guard</td><td><span class="mui-badge wb-runtime-plan-presence mui-badge--success">Active</span></td><td class="wb-runtime-plan-source">registry lookup</td></tr>
+                <tr data-step="validate"><td>Validate</td><td>Guard</td><td><span class="mui-badge wb-runtime-plan-presence mui-badge--success">Active</span></td><td class="wb-runtime-plan-source">tool declares inputSchema</td></tr>
+                <tr data-step="clamp"><td>Clamp</td><td>Transform</td><td><span class="mui-badge wb-runtime-plan-presence">Skipped</span></td><td class="wb-runtime-plan-source">tool declares no clamps</td></tr>
+                <tr data-step="authorize"><td>Authorize</td><td>Guard</td><td><span class="mui-badge wb-runtime-plan-presence mui-badge--success">Active</span></td><td class="wb-runtime-plan-source">channel 'web': require_auth=true, allow_all=false; tool declares no scopes; DB rules: skipped (no provider)</td></tr>
+                <tr data-step="rate-limit"><td>Rate limit</td><td>Guard</td><td><span class="mui-badge wb-runtime-plan-presence">Skipped</span></td><td class="wb-runtime-plan-source">host wiring: rateLimiter absent; cost mutating?5:1 (mutating=false → cost 1)</td></tr>
+                <tr data-step="plan-mode"><td>Plan mode</td><td>Branch</td><td><span class="mui-badge wb-runtime-plan-presence mui-badge--warning">Conditional</span></td><td class="wb-runtime-plan-source">fires if ctx.mode is 'plan'; current value: execute</td></tr>
+                <tr data-step="confirm"><td>Confirm</td><td>Branch</td><td><span class="mui-badge wb-runtime-plan-presence mui-badge--secondary">Dormant</span></td><td class="wb-runtime-plan-source">neither tool.requiresConfirmation nor the channel policy require confirmation for this tool</td></tr>
+                <tr data-step="emit-executing"><td>Emit executing</td><td>Hook</td><td><span class="mui-badge wb-runtime-plan-presence">Skipped</span></td><td class="wb-runtime-plan-source">host wiring: dispatcher absent (anchor + cache/veto)</td></tr>
+                <tr data-step="execute"><td>Execute</td><td>Execution</td><td><span class="mui-badge wb-runtime-plan-presence mui-badge--success">Active</span></td><td class="wb-runtime-plan-source">callback; _ctx injected</td></tr>
+                <tr data-step="contain-exception"><td>Contain exception</td><td>Boundary</td><td><span class="mui-badge wb-runtime-plan-presence mui-badge--success">Active</span></td><td class="wb-runtime-plan-source">wraps execute; \Throwable → INTERNAL_ERROR</td></tr>
+                <tr data-step="audit"><td>Audit</td><td>Outcome</td><td><span class="mui-badge wb-runtime-plan-presence mui-badge--success">Active</span></td><td class="wb-runtime-plan-source">audits: validate-fail, authz-fail, rate-limit, cache-hit, execute-success, execute-failure; does NOT audit: resolve-miss, plan-mode, confirm, veto</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <ul class="wb-runtime-plan-legend">
+            <li><span class="mui-badge mui-badge--secondary">Dormant</span> — the rule exists but can't fire</li>
+            <li><span class="mui-badge">Skipped</span> — the subsystem isn't wired in</li>
+          </ul>
+        </div>
+
+        <div class="mui-callout mui-callout--warning wb-lesson" role="note"><span class="mui-callout__icon" aria-hidden="true">!</span><div class="mui-callout__content"><p class="mui-callout__title">The guarantee reads per branch</p><p class="mui-callout__body">“Everything is audited” doesn't describe every early return today. This artifact makes both the implemented guarantees and the gaps visible.</p></div></div>
+        <details class="wb-source"><summary>Evidence and scope</summary><p><code>getmilpa-tool-runtime/src/ToolRegistry.php:348-570</code> · wording in <code>ToolAuditLogger.php:45-57,204-232</code>.</p></details>
       </milpa-artifact>
       </div>
       <p style="margin-top:var(--space-6); text-align:center" data-rise>

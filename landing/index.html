@@ -372,7 +372,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
         </div>
 
         <div class="mui-callout mui-callout--warning" role="note">
-          <p><strong>Honest coverage gap:</strong> This is not a desirable HTTP guarantee. It is a radiography of the current implementation. MCP enforces scopes today; HTTP does not yet read scopes from <code>Operation</code>. This gap must be closed in runtime/policy before production. <a href="#runtime">See Runtime x-ray.</a> Source: <code>Operation.php</code>.</p>
+          <p><strong>Coverage by surface:</strong> MCP and HTTP now enforce the same scopes: HTTP runs <code>RequireScopeMiddleware</code> and then the same <code>PolicyGate</code> MCP uses. <code>coa</code> does not enforce scopes — it's the local/trusted surface, by design. This was a real coverage gap; it closed when <code>HttpProjector</code> started requiring scopes. <a href="#runtime">See the Runtime x-ray</a> for the full, now-governed pipeline. Source: <code>Operation.php</code>, <code>HttpProjector.php</code>.</p>
         </div>
 
         <div class="wb-projection">
@@ -429,7 +429,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           <tbody id="atomo-matrix">
             <tr><td>coa</td><td>flag <code>--yes</code></td><td>no (local/trusted)</td></tr>
             <tr><td>MCP</td><td>inherited gate (tool-runtime)</td><td><strong>yes</strong> (PolicyGate)</td></tr>
-            <tr><td>POST</td><td>token <code>428→201</code></td><td>no (pending · middleware)</td></tr>
+            <tr><td>POST</td><td>token <code>428→201</code></td><td><strong>yes</strong> (RequireScopeMiddleware + PolicyGate)</td></tr>
           </tbody>
         </table>
 
@@ -439,11 +439,12 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 
         <details class="wb-source">
           <summary>Evidence and scope</summary>
-          <p><strong>Didactic</strong> model over an <strong>audited</strong> implementation. This artifact does not claim that HTTP applies scopes, nor that the in-memory token store is production-grade.</p>
+          <p><strong>Didactic</strong> model over an <strong>audited</strong> implementation. This artifact does claim that HTTP applies scopes (via <code>HttpProjector</code> + <code>PolicyGate</code>) — it does not claim that the in-memory token store is production-grade.</p>
           <h3>Audited sources</h3>
           <ul>
             <li>Published contract <code>milpa/command</code>: <code>getmilpa-command/src/Operation.php</code>, <code>CommandProvider.php</code>, <code>SurfaceProjector.php</code>.</li>
-            <li>Reference projectors (<code>skeleton</code>, ns <code>App\Command</code>, not part of the package): <code>getmilpa-skeleton/src/Command/{CliProjector,McpProjector,HttpProjector}.php</code>.</li>
+            <li>Reference projectors (<code>skeleton</code> ≥0.7.0, ns <code>App\Command</code>, not part of the package): <code>getmilpa-skeleton/src/Command/{CliProjector,McpProjector,HttpProjector}.php</code>.</li>
+            <li>HTTP scope enforcement: <code>milpa/auth</code> ≥0.1, <code>RequireScopeMiddleware.php</code> + the same <code>PolicyGate</code> MCP uses.</li>
             <li>Didactic stand-ins: <code>ConfirmTokenStore.php</code> (in-memory, single-process — not production), <code>SchemaCoercer.php</code>.</li>
             <li>Junior seed: <code>docs/GUION-WEBINAR-JUNIORS.md</code> (Artifact 2).</li>
           </ul>

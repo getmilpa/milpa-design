@@ -213,7 +213,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           with contracts that protect them.</p>
         <div class="ld-hero__cta">
           <a class="mui-btn mui-btn--primary" href="https://github.com/getmilpa">Explore getmilpa</a>
-          <button class="mui-btn ld-mono" type="button" data-copy="composer create-project milpa/skeleton my-app">composer create-project milpa/skeleton</button>
+          <button class="mui-btn ld-mono" type="button" data-copy="composer create-project milpa/framework my-app">composer create-project milpa/framework</button>
         </div>
         <div class="ld-hero__meta">
           <span class="mui-badge mui-badge--accent">published on Packagist + npm</span>
@@ -321,7 +321,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           <div class="mui-terminal">
             <div class="mui-terminal__bar"></div>
             <div class="mui-terminal__body" role="region" aria-label="the same tool from the CLI and over MCP" tabindex="0">
-              <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php coa coa:tools</span></div>
+              <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php bin/coa agent:catalogue</span></div>
               <div class="mui-terminal__line"><span class="mui-terminal__out">list_notes   List saved notes   notes:read</span></div>
               <div class="mui-terminal__line"><span class="mui-terminal__out"># the same tool, discovered over MCP:</span></div>
               <div class="mui-terminal__line"><span class="mui-terminal__out">{"method":"tools/list"} → ["list_notes", …]</span></div>
@@ -443,7 +443,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           <h3>Audited sources</h3>
           <ul>
             <li>Published contract <code>milpa/command</code>: <code>getmilpa-command/src/Operation.php</code>, <code>CommandProvider.php</code>, <code>SurfaceProjector.php</code>.</li>
-            <li>Reference projectors (<code>skeleton</code> ≥0.7.0, ns <code>App\Command</code>, not part of the package): <code>getmilpa-skeleton/src/Command/{CliProjector,McpProjector,HttpProjector}.php</code>.</li>
+            <li>Reference projectors (<code>milpa/console</code> ≥0.7, shipped with the package): <code>getmilpa-console/src/{CliProjector,McpProjector,Http/HttpProjector}.php</code>.</li>
             <li>HTTP scope enforcement: <code>milpa/auth</code> ≥0.1, <code>RequireScopeMiddleware.php</code> + the same <code>PolicyGate</code> MCP uses.</li>
             <li>Didactic stand-ins: <code>ConfirmTokenStore.php</code> (in-memory, single-process — not production), <code>SchemaCoercer.php</code>.</li>
             <li>Junior seed: <code>docs/GUION-WEBINAR-JUNIORS.md</code> (Artifact 2).</li>
@@ -571,7 +571,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
       <div class="mui-terminal" data-rise style="margin-top:var(--space-8)">
         <div class="mui-terminal__bar"></div>
         <div class="mui-terminal__body" role="region" aria-label="coa generate-verify-inspect session" tabindex="0">
-          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php bin/coa make:entity HelloPlugin Product --fields="name:string:120,price:decimal:10,2"</span></div>
+          <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php bin/coa make --what=entity --plugin=HelloPlugin --name=Product --fields="name:string:120,price:decimal:10,2"</span></div>
           <div class="mui-terminal__line"><span class="mui-terminal__out">✔ wrote src/Plugins/HelloPlugin/Entities/Product.php</span></div>
           <div class="mui-terminal__line"><span class="mui-terminal__out">PASS: Product — runtime entity — 0 errors</span></div>
           <div class="mui-terminal__line"><span class="mui-terminal__prompt" aria-hidden="true">$</span><span class="mui-terminal__out">php bin/coa validate</span></div>
@@ -582,7 +582,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           <div class="mui-terminal__line"><span class="mui-terminal__out">✔ kernel booted — zero database queries.</span></div>
         </div>
       </div>
-      <p class="ld-proof" data-rise>real output — a clean <code>composer create-project milpa/skeleton</code>, skeleton 0.6.2</p>
+      <p class="ld-proof" data-rise>real output — captured on a clean <code>milpa/skeleton</code> 0.6.2, the package <code>milpa/framework</code> replaced</p>
       <p style="margin-top:var(--space-5); color:var(--text-muted); font-size:var(--text-sm); max-width:64ch" data-rise>
         The loop is <span style="color:var(--text-secondary)">generate → verify → inspect</span>: scaffolding follows
         the same conventions the runtime enforces, verifiers reflect the real class against the real rules, and
@@ -642,7 +642,7 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
       <p class="mui-section__kicker" data-rise>the harvest map</p>
       <h2 class="mui-section__title" id="h-field" data-rise>A field that keeps growing</h2>
       <p class="mui-section__lede" data-rise>The dependency graph <i>is</i> the milpa, literally: roots with zero
-        dependencies, rows grown from the core, compositions that climb — and a skeleton where you harvest.
+        dependencies, rows grown from the core, compositions that climb — and a framework where you harvest.
         Every layer builds with the one below, never couples downward — and new rows are sown all the time.</p>
       <div class="mui-feature-grid">
         <article class="mui-card" data-rise>
@@ -700,10 +700,10 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
           <div class="mui-card__body">
             <p class="mui-feature-grid__rol" style="margin:0 0 var(--space-1)">the harvest</p>
             <h3 style="margin:0 0 var(--space-2); font-size:var(--text-lg); font-weight:var(--weight-medium)">One command to an app that runs</h3>
-            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)"><code class="ld-mono" style="color:var(--accent-text)">composer create-project milpa/skeleton</code>
+            <p style="margin:0; color:var(--text-muted); font-size:var(--text-sm)"><code class="ld-mono" style="color:var(--accent-text)">composer create-project milpa/framework</code>
               boots the kernel, serves a real response and answers <code class="ld-mono">coa</code> — with zero database.</p>
             <ul class="ld-pkgs">
-              <li><a href="https://github.com/getmilpa/skeleton">skeleton</a></li>
+              <li><a href="https://github.com/getmilpa/framework">framework</a></li>
             </ul>
           </div>
         </article>
@@ -887,13 +887,13 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
         contracts at the root — published on Packagist, Apache-2.0. Pre-1.0 and honest about it:
         the field is planted, and it grows in the open.</p>
       <div class="mui-stack mui-stack--sm" style="align-items:center" data-rise>
-        <p class="ld-coa" style="margin:0"><span class="ld-prompt">$</span> composer create-project milpa/skeleton my-app
-          <button class="mui-btn mui-btn--ghost mui-btn--sm" type="button" data-copy="composer create-project milpa/skeleton my-app">copy</button></p>
+        <p class="ld-coa" style="margin:0"><span class="ld-prompt">$</span> composer create-project milpa/framework my-app
+          <button class="mui-btn mui-btn--ghost mui-btn--sm" type="button" data-copy="composer create-project milpa/framework my-app">copy</button></p>
         <p class="ld-coa" style="margin:0"><span class="ld-prompt">$</span> coa siembra mail-module <span style="color:var(--text-muted)">· coming soon</span></p>
       </div>
       <div class="ld-final__cta" data-rise>
         <a class="mui-btn mui-btn--primary" href="https://github.com/getmilpa">Follow getmilpa</a>
-        <a class="mui-btn" href="https://packagist.org/packages/milpa/skeleton">milpa/skeleton on Packagist</a>
+        <a class="mui-btn" href="https://packagist.org/packages/milpa/framework">milpa/framework on Packagist</a>
       </div>
     </div>
   </section>

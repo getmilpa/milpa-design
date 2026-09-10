@@ -26,7 +26,9 @@
     "nest-menu": ".mui-sidebar__nest-menu — the sub-items, in flow below the row, indented to the item's icon column",
     "subitem": ".mui-sidebar__subitem — <a> for a sub-item: 2xs mono-adjacent label, muted, aria-current=\"page\" when it is the one open (never a class)",
     "item-badge": ".mui-sidebar__item-badge — margin-inline-start auto; compone .mui-badge — contrato badge PENDIENTE (HANDOFF): hasta que aterrice, el span rinde sin estilo propio",
-    "footer": ".mui-sidebar__footer — border-top subtle, padding space-3; slot para user-card mini"
+    "footer": ".mui-sidebar__footer — slot at the bottom: a user card, or the versions the panel runs",
+    "version": ".mui-sidebar__version — one provenance row: `__version-name` gives, `__version-value` takes what it needs (tabular-nums, so numbers line up between rows without a table). Muted on purpose: provenance, not navigation",
+    "version-more": ".mui-sidebar__version-more — the rest as a COUNT, an <a> when there is a section that lists them all and a <p> when there is not; never a second list of what another screen already lists"
   },
   "variants": {
     "context": {

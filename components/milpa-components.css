@@ -89,7 +89,6 @@
   transform-origin: top;
   animation: milpa-scale-in var(--dur-fast) var(--ease-grano) both;
 }
-.mui-menu[hidden] { display: none; }         /* al quitar [hidden] la entrada se re-ejecuta */
 
 /* item — <button> o <a>; el estado activo es ARIA, nunca una clase */
 .mui-menu__item {
@@ -565,7 +564,6 @@
 /* slot de conteo: compone .mui-badge dentro del tab — el gap lo separa */
 
 .mui-tabs__panel { padding-top: var(--space-5); }
-.mui-tabs__panel[hidden] { display: none; }
 /* panel enfocable (tabindex=0 cuando no tiene contenido focusable) */
 .mui-tabs__panel:focus-visible { outline: var(--focus-width) solid var(--focus); outline-offset: var(--focus-offset); }
 
@@ -648,9 +646,6 @@
   color: var(--text); background: var(--surface);
   border: var(--border-width) var(--border-style) var(--border); border-radius: var(--radius-md);
 }
-/* guard: el display:flex de arriba pisaría el [hidden] del UA — el
-   contrato descarta con hidden (o removiendo el nodo) y debe funcionar */
-.mui-alert[hidden] { display: none; }
 .mui-alert__icon {
   flex: none; display: inline-flex; align-items: center; justify-content: center;
   inline-size: 1.25em; block-size: 1.25em; line-height: 1;

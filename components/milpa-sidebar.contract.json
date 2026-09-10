@@ -20,6 +20,11 @@
     "item": ".mui-sidebar__item — <a> flex con gap space-3, radius-base, texto sm var(--text-secondary)",
     "item-icon": ".mui-sidebar__item-icon — slot 1.25rem flex none (SVG aria-hidden)",
     "item-label": ".mui-sidebar__item-label — texto del item (ellipsis); en rail queda sr-only pero los lectores lo siguen anunciando",
+    "nest": ".mui-sidebar__nest — an item that owns sub-items; position relative, so the gear can sit in the row while the menu stays in flow. The nav scrolls (overflow-y auto), which would clip an absolutely positioned menu — measured, so only the small toggle is positioned and the list is not",
+    "more": ".mui-sidebar__more — <details> holding the gear and its menu; no JS, the disclosure state is the browser's. Carries `open` when one of its sub-items is the current page, so a person lands with the group already showing where they are",
+    "gear": ".mui-sidebar__gear — <summary> in the row's trailing corner; the UA marker is removed, the accessible name comes from its title. Interactive content is NOT nested inside it: the item's <a> is a sibling, so a click navigates and never toggles by accident",
+    "nest-menu": ".mui-sidebar__nest-menu — the sub-items, in flow below the row, indented to the item's icon column",
+    "subitem": ".mui-sidebar__subitem — <a> for a sub-item: 2xs mono-adjacent label, muted, aria-current=\"page\" when it is the one open (never a class)",
     "item-badge": ".mui-sidebar__item-badge — margin-inline-start auto; compone .mui-badge — contrato badge PENDIENTE (HANDOFF): hasta que aterrice, el span rinde sin estilo propio",
     "footer": ".mui-sidebar__footer — border-top subtle, padding space-3; slot para user-card mini"
   },

@@ -1,7 +1,31 @@
 # design-sync notes — @milpa/design
 
-Repo-specific facts a re-sync needs. Config lives in `config.json`; the design-agent-facing
-header in `conventions.md`; this file is for everything else.
+Repo-specific facts a re-sync needs. The design-agent-facing header lives in `conventions.md`; this
+file is for everything else.
+
+## `config.json` is local and never versioned
+
+`.design-sync/config.json` holds the id of the Claude Design project this system syncs to, and this
+repository is public. The id is not a credential, but publishing it cannot be undone — so the file is
+gitignored and each machine that re-syncs creates its own. `gen.mjs` does not read it; only the re-sync
+tool below does, so the generator runs without it.
+
+Recreate it before a re-sync, with your own project id:
+
+```json
+{
+  "projectId": "<your Claude Design project id>",
+  "pkg": "@milpa/design",
+  "globalName": "MilpaDesign",
+  "shape": "package",
+  "buildCmd": "npm run build && node .design-sync/gen.mjs",
+  "cssEntry": ".design-sync/.cache/milpa.css",
+  "tokensPkg": "@milpa/design",
+  "tokensGlob": "dist/*.css",
+  "guidelinesGlob": ["DESIGN.md", "THEMING.md", "milpa-contracts/**/*.md"],
+  "readmeHeader": ".design-sync/conventions.md"
+}
+```
 
 ## Shape of this repo (why the sync looks the way it does)
 
@@ -51,6 +75,8 @@ mkdir -p .ds-sync/node_modules/@milpa && ln -sfn ../../.. .ds-sync/node_modules/
   build, or `npx playwright install chromium`.
 
 ## Re-sync (one command after the toolchain exists)
+
+Needs a local `.design-sync/config.json` first — see the section above.
 
 ```sh
 npm run build && node .design-sync/gen.mjs

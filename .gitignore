@@ -12,5 +12,6 @@ npm-debug.log*
 ds-bundle/
 .design-sync/.cache/
 .design-sync/learnings/
+.design-sync/config.json
 .design-sync/node_modules
 milpa-contracts/

@@ -8,3 +8,10 @@ npm-debug.log*
 .npmrc
 # dist/ SÍ se versiona: es generado (npm run build) pero el drift gate de npm test
 # garantiza que siempre coincide con tokens/milpa-tokens.json.
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/config.json
+.design-sync/node_modules
+milpa-contracts/
